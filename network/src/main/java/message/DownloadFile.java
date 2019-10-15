@@ -13,7 +13,7 @@ public class DownloadFile extends Message {
     }
 
     @Override
-    public void process(Datacore datacore, Socket socket){
+    public void process(DataInterface data, Socket socket){
         //To be define
     }
 
