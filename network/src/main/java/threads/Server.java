@@ -13,20 +13,20 @@ import provider.NetworkProvider;
  */
 public class Server extends Thread {
 
-	private ServerSocket listeningSocket;
-	private NetworkProvider netProvider;
-	
-	public Server(NetworkProvider n) {
-		this.netProvider = n;
-	}
-	
-	public void kill() {
-        //To be define
-    }
-	
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-	}
+  private ServerSocket listeningSocket;
+  private NetworkProvider netProvider;
+  
+  public Server(NetworkProvider n) {
+    this.netProvider = n;
+  }
+  
+  public void kill() {
+    //To be define
+  }
+  
+  @Override
+  public void run() {
+    // TODO Auto-generated method stub
+  }
 
 }
