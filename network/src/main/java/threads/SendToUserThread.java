@@ -5,11 +5,12 @@ import message.Message;
 import java.net.InetAddress;
 
 public class SendToUserThread extends ThreadExtend {
-    private Payload p;
-    private InetAddress ip;
+    private Payload payload;
+    private InetAddress ipDest;
 
-    public SendToUserThread(Payload p){
-        //To be define
+    public SendToUserThread(Payload p, InetAddress ip){
+        this.payload = p;
+        this.ipDest = ip;
     }
 
     @Override

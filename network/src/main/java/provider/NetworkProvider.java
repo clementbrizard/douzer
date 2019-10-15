@@ -1,9 +1,11 @@
 package provider;
 
 import message.Message;
+import threads.Server;
 
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 public class NetworkProvider {
@@ -17,7 +19,7 @@ public class NetworkProvider {
 
     }
 
-    public Network createNetwork(){
+    public NetworkImpl createNetwork(){
         return null;
     }
 
