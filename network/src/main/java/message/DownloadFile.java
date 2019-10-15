@@ -1,5 +1,6 @@
 package message;
 import java.net.InetAddress;
+import java.net.Socket;
 
 public class DownloadFile extends Message {
 

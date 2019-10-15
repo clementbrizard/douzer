@@ -1,5 +1,7 @@
 package message;
 
+import java.net.Socket;
+
 public class Message {
 
     private Payload payload;
