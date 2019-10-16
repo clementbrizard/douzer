@@ -1,45 +1,40 @@
 package controllers;
 
-
 //replace by javadocs
 //central view with all user music
 public class MyMusicsController implements Controller {
 
-	private NewMusicController newMusicController;
-	private SearchMusicController searchMusicController;
-	
-	private CentralFrameController centralFrameController;
-	
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+  private NewMusicController newMusicController;
+  private SearchMusicController searchMusicController;
 
-	}
+  private CentralFrameController centralFrameController;
 
-	public NewMusicController getNewMusicController() {
-		return newMusicController;
-	}
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+  }
 
-	public void setNewMusicController(NewMusicController newMusicController) {
-		this.newMusicController = newMusicController;
-	}
+  public NewMusicController getNewMusicController() {
+    return newMusicController;
+  }
 
-	public SearchMusicController getSearchMusicController() {
-		return searchMusicController;
-	}
+  public void setNewMusicController(NewMusicController newMusicController) {
+    this.newMusicController = newMusicController;
+  }
 
-	public void setSearchMusicController(SearchMusicController searchMusicController) {
-		this.searchMusicController = searchMusicController;
-	}
+  public SearchMusicController getSearchMusicController() {
+    return searchMusicController;
+  }
 
-	public CentralFrameController getCentralFrameController() {
-		return centralFrameController;
-	}
+  public void setSearchMusicController(SearchMusicController searchMusicController) {
+    this.searchMusicController = searchMusicController;
+  }
 
-	public void setCentralFrameController(CentralFrameController centralFrameController) {
-		this.centralFrameController = centralFrameController;
-	}
-	
-	
+  public CentralFrameController getCentralFrameController() {
+    return centralFrameController;
+  }
 
+  public void setCentralFrameController(CentralFrameController centralFrameController) {
+    this.centralFrameController = centralFrameController;
+  }
 }
