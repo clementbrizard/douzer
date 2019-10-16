@@ -12,6 +12,15 @@ public class NewMusicController implements Controller {
 		// TODO Auto-generated method stub
 
 	}
+
+	public MyMusicsController getMyMusicsController() {
+		return myMusicsController;
+	}
+
+	public void setMyMusicsController(MyMusicsController myMusicsController) {
+		this.myMusicsController = myMusicsController;
+	}
+	
 	
 	
 
