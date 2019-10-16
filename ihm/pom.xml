@@ -11,6 +11,13 @@
 
     <artifactId>ihm</artifactId>
     <dependencies>
+        	  
+        <dependency>
+            <groupId>lo23</groupId>
+            <artifactId>data-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>lo23</groupId>
             <artifactId>interfaces</artifactId>
@@ -18,10 +25,30 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>lo23</groupId>
-            <artifactId>data-model</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-controls</artifactId>
+		    <version>13</version>
+	  </dependency>
+	  <dependency>
+	    <groupId>org.controlsfx</groupId>
+	    <artifactId>controlsfx</artifactId>
+	    <version>8.40.15</version>
+	  </dependency>
+	  <dependency>
+		    <groupId>org.openjfx</groupId>
+		    <artifactId>javafx-fxml</artifactId>
+		    <version>13</version>
+		</dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                </includes>
+            </resource>
+        </resources>
+    </build>
 </project>
