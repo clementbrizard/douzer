@@ -2,7 +2,7 @@ package controllers;
 
 //Replace by javadocs
 //view whith search bar and other search option
-//a voir si on ne créer pas un interface qui regroupe toute les vues qui auront besoin de faire une recherche (dans le cas présent il y a plusieurs parents ça peux etre bizarre)
+//Let's see if we can create an interface who regroup all the view that will be needed to do a research (in our case, there are several parents, wich can be weird)
 public class SearchMusicController implements Controller {
 
 	

@@ -30,13 +30,11 @@ public class TestController {
         
         label.setText("Hello, JavaFX " + javafxVersion + "\nRunning on Java " + javaVersion + ".");
     }
-	
     
-    
-	public Label getLabel() {
-		return label;
-	}
-	@FXML
+    public Label getLabel() {
+      return label;
+    }
+    @FXML
     private void test(ActionEvent event)
     {        
     	count++;
@@ -54,7 +52,7 @@ public class TestController {
         n[0]++;
         
         
-        //demarrage d'un service 
+        //start a service (like a thread) 
     	Service<Void> service = new Service<Void>(){
     		@Override
     		protected Task<Void> createTask(){
@@ -66,9 +64,9 @@ public class TestController {
     	                Thread.sleep(n[0]*1000);
     	                System.out.println("après " + n[0] + " secondes");
     	                
-    	                //la fonction runLater qui permet de lancer la notification dans le thread 
+    	                //function runLater who permit to run a task in thread
     	                Platform.runLater(()->{
-    	                	//une notification
+    	                	//one notification
 	    	                Notifications.create()
 	    	                .title("Title Text")
 	    	                .text("pop up n° " + countCopy + " après  : " + n[0] +  " secondes")
