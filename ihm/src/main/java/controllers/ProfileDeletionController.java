@@ -4,22 +4,18 @@ package controllers;
 //popupview when user whant to delete his profile
 public class ProfileDeletionController implements Controller {
 
-	private ProfileEditController profileEditController;
-	
-	@Override
-	public void initialize() {
-		// TODO Auto-generated method stub
+  private ProfileEditController profileEditController;
+  
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+  }
+  
+  public ProfileEditController getProfileEditController() {
+    return profileEditController;
+  }
 
-	}
-
-	public ProfileEditController getProfileEditController() {
-		return profileEditController;
-	}
-
-	public void setProfileEditController(ProfileEditController profileEditController) {
-		this.profileEditController = profileEditController;
-	}
-	
-	
-
+  public void setProfileEditController(ProfileEditController profileEditController) {
+    this.profileEditController = profileEditController;
+  }
 }
