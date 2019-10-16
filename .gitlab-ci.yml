@@ -1,0 +1,17 @@
+image: maven:3-jdk-8
+
+cache:
+  paths:
+    - .m2/repository/
+    - target/
+
+test:
+  stage: test
+  script:
+    - mvn checkstyle:check
+  only:
+    - /develop$/
+    - /^master$/
+  tags:
+    - docker
+
