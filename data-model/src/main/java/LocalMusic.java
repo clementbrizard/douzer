@@ -1,6 +1,3 @@
-import java.util.HashSet;
-import java.util.UUID;
-
 public class LocalMusic implements java.io.Serializable {
   private Boolean shared;
   private String mp3Path;
