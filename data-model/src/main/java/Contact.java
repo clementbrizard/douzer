@@ -1,4 +1,4 @@
-public class Contact {
-    Boolean shared;
-    String mp3Path;
+public class Contact implements java.io.Serializable {
+  Boolean shared;
+  String mp3Path;
 }

@@ -1,29 +1,29 @@
 public class SearchQueryBuilder {
-    SearchQueryBuilder() {
+  SearchQueryBuilder() {
 
-    }
+  }
 
-    void withText() {
+  void withText() {
 
-    }
+  }
 
-    void withTitle() {
+  void withTitle() {
 
-    }
+  }
 
-    void withArtist() {
+  void withArtist() {
 
-    }
+  }
 
-    void withAlbum() {
+  void withAlbum() {
 
-    }
+  }
 
-    void withTags() {
+  void withTags() {
 
-    }
+  }
 
-    void build() {
+  void build() {
 
-    }
+  }
 }

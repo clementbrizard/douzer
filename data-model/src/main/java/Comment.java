@@ -1,6 +1,6 @@
 import java.util.UUID;
 
-public class Comment {
-    String comment;
-    UUID owner;
+public class Comment implements java.io.Serializable {
+  String comment;
+  UUID owner;
 }
