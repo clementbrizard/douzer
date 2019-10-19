@@ -4,12 +4,76 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class MusicMetadata implements java.io.Serializable {
-  String hash;
-  String tittle;
-  String artist;
-  String album;
-  Date releaseDate;
-  HashSet<String> tags;
-  HashMap<UUID, Integer> ratings;
-  HashSet<Comment> comments;
+  private String hash;
+  private String tittle;
+  private String artist;
+  private String album;
+  private Date releaseDate;
+  private HashSet<String> tags;
+  private transient HashMap<User, Integer> ratings;
+  private HashSet<Comment> comments;
+
+  public String getHash() {
+    return hash;
+  }
+
+  public void setHash(String hash) {
+    this.hash = hash;
+  }
+
+  public String getTittle() {
+    return tittle;
+  }
+
+  public void setTittle(String tittle) {
+    this.tittle = tittle;
+  }
+
+  public String getArtist() {
+    return artist;
+  }
+
+  public void setArtist(String artist) {
+    this.artist = artist;
+  }
+
+  public String getAlbum() {
+    return album;
+  }
+
+  public void setAlbum(String album) {
+    this.album = album;
+  }
+
+  public Date getReleaseDate() {
+    return releaseDate;
+  }
+
+  public void setReleaseDate(Date releaseDate) {
+    this.releaseDate = releaseDate;
+  }
+
+  public HashSet<String> getTags() {
+    return tags;
+  }
+
+  public void setTags(HashSet<String> tags) {
+    this.tags = tags;
+  }
+
+  public HashMap<User, Integer> getRatings() {
+    return ratings;
+  }
+
+  public void setRatings(HashMap<User, Integer> ratings) {
+    this.ratings = ratings;
+  }
+
+  public HashSet<Comment> getComments() {
+    return comments;
+  }
+
+  public void setComments(HashSet<Comment> comments) {
+    this.comments = comments;
+  }
 }
