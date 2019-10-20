@@ -1,12 +1,12 @@
 public class LocalMusic implements java.io.Serializable {
-  private Boolean shared;
+  private boolean shared;
   private String mp3Path;
 
-  public Boolean getShared() {
+  public boolean getShared() {
     return shared;
   }
 
-  public void setShared(Boolean shared) {
+  public void setShared(boolean shared) {
     this.shared = shared;
   }
 

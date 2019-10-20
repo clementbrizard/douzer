@@ -35,7 +35,7 @@ public class LocalUser implements java.io.Serializable {
    * @param pass Password to verify
    * @return Whether the password is correct or not
    */
-  Boolean verifyPassword(String pass) {
+  boolean verifyPassword(String pass) {
     messageDigest.update(pass.getBytes());
     return (new String(messageDigest.digest())).equals(this.pwdHash);
   }

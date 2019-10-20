@@ -10,7 +10,7 @@ public class User implements java.io.Serializable {
   private String firstName;
   private String lastName;
   private Date dateOfBirth;
-  private Boolean connected;
+  private boolean connected;
   private InetAddress ip;
 
   public User() {
@@ -61,11 +61,11 @@ public class User implements java.io.Serializable {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public Boolean getConnected() {
+  public boolean getConnected() {
     return connected;
   }
 
-  public void setConnected(Boolean connected) {
+  public void setConnected(boolean connected) {
     this.connected = connected;
   }
 
