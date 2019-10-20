@@ -13,12 +13,12 @@ public class User implements java.io.Serializable {
   private Boolean connected;
   private InetAddress ip;
 
-  public UUID getUuid() {
-    return uuid;
+  public User() {
+    this.uuid = UUID.randomUUID();
   }
 
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
+  public UUID getUuid() {
+    return uuid;
   }
 
   public String getUsername() {
