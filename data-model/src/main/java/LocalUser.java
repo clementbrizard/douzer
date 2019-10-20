@@ -5,7 +5,7 @@ public class LocalUser implements java.io.Serializable {
   private String pwdHash;
   private HashSet<Contact> contacts;
   private transient HashSet<LocalMusic> musics;
-  private transient List<LocalMusic> playlists;
+  private transient List<LocalMusic> playlist;
 
   public String getPwdHash() {
     return pwdHash;
@@ -31,11 +31,11 @@ public class LocalUser implements java.io.Serializable {
     this.musics = musics;
   }
 
-  public List<LocalMusic> getPlaylists() {
-    return playlists;
+  public List<LocalMusic> getPlaylist() {
+    return playlist;
   }
 
-  public void setPlaylists(List<LocalMusic> playlists) {
-    this.playlists = playlists;
+  public void setPlaylist(List<LocalMusic> playlist) {
+    this.playlist = playlist;
   }
 }
