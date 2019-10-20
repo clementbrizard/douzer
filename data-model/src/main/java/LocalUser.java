@@ -1,19 +1,43 @@
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.List;
 
 public class LocalUser implements java.io.Serializable {
+  private MessageDigest messageDigest;
   private String pwdHash;
   private HashSet<Contact> contacts;
   private transient HashSet<LocalMusic> musics;
   private transient List<LocalMusic> playlist;
 
-  public boolean verifyPassword(String password) {
-    return false;
+  /**
+   * Default constructor.
+   */
+  public LocalUser() {
+    try {
+      messageDigest = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
   }
 
-  public void setPassword(String password) {
-    // compute secure hash and store it
-    this.pwdHash = "";
+  /**
+   * Set a new password.
+   * @param pass New password
+   */
+  void setPassword(String pass) {
+    messageDigest.update(pass.getBytes());
+    this.pwdHash = new String(messageDigest.digest());
+  }
+
+  /**
+   * Verify that the provided password match the stored one.
+   * @param pass Password to verify
+   * @return Whether the password is correct or not
+   */
+  Boolean verifyPassword(String pass) {
+    messageDigest.update(pass.getBytes());
+    return (new String(messageDigest.digest())).equals(this.pwdHash);
   }
 
   public HashSet<Contact> getContacts() {
