@@ -1,4 +1,4 @@
-public class LocalMusic implements java.io.Serializable {
+public class LocalMusic extends Music {
   private boolean shared;
   private String mp3Path;
 

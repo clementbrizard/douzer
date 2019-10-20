@@ -3,7 +3,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.List;
 
-public class LocalUser implements java.io.Serializable {
+public class LocalUser extends User {
   private MessageDigest messageDigest;
   private String pwdHash;
   private HashSet<Contact> contacts;
