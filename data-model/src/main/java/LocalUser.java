@@ -7,12 +7,13 @@ public class LocalUser implements java.io.Serializable {
   private transient HashSet<LocalMusic> musics;
   private transient List<LocalMusic> playlist;
 
-  public String getPwdHash() {
-    return pwdHash;
+  public boolean verifyPassword(String password) {
+    return false;
   }
 
-  public void setPwdHash(String pwdHash) {
-    this.pwdHash = pwdHash;
+  public void setPassword(String password) {
+    // compute secure hash and store it
+    this.pwdHash = "";
   }
 
   public HashSet<Contact> getContacts() {
