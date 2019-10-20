@@ -4,7 +4,7 @@ import java.util.HashSet;
 
 public class MusicMetadata implements java.io.Serializable {
   private String hash;
-  private String tittle;
+  private String title;
   private String artist;
   private String album;
   private Date releaseDate;
@@ -20,12 +20,12 @@ public class MusicMetadata implements java.io.Serializable {
     this.hash = hash;
   }
 
-  public String getTittle() {
-    return tittle;
+  public String getTitle() {
+    return title;
   }
 
-  public void setTittle(String tittle) {
-    this.tittle = tittle;
+  public void setTitle(String title) {
+    this.title = title;
   }
 
   public String getArtist() {
