@@ -1,3 +1,5 @@
+package datamodel;
+
 import java.awt.Image;
 import java.net.InetAddress;
 import java.util.Date;

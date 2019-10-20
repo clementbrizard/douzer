@@ -1,3 +1,5 @@
+package datamodel;
+
 import java.util.HashSet;
 
 public class Music implements java.io.Serializable {

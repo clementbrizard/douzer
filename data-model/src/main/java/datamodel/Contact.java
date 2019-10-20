@@ -1,3 +1,5 @@
+package datamodel;
+
 import java.util.HashSet;
 
 public class Contact implements java.io.Serializable {

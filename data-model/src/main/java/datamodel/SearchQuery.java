@@ -1,3 +1,5 @@
+package datamodel;
+
 import java.util.Collection;
 
 public class SearchQuery {

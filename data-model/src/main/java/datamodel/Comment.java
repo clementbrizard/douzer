@@ -1,3 +1,5 @@
+package datamodel;
+
 public class Comment implements java.io.Serializable {
   private String comment;
   private transient User owner;
