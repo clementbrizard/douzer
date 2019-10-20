@@ -61,7 +61,7 @@ public class User implements java.io.Serializable {
     this.dateOfBirth = dateOfBirth;
   }
 
-  public boolean getConnected() {
+  public boolean isConnected() {
     return connected;
   }
 

@@ -2,7 +2,7 @@ public class LocalMusic implements java.io.Serializable {
   private boolean shared;
   private String mp3Path;
 
-  public boolean getShared() {
+  public boolean isShared() {
     return shared;
   }
 
