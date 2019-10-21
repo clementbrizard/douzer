@@ -3,10 +3,10 @@ package threads;
 import java.net.InetAddress;
 
 public class SendToUserThread extends ThreadExtend {
-  private Payload payload;
+  private String payload;
   private InetAddress ipDest;
 
-  public SendToUserThread(Payload p, InetAddress ip) {
+  public SendToUserThread(String p, InetAddress ip) {
     this.payload = p;
     this.ipDest = ip;
   }

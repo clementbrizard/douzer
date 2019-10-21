@@ -8,7 +8,7 @@ public class DownloadFile extends Message {
   private String hashMusic;
   private InetAddress ip;
 
-  public DownloadFile(Payload p) {
+  public DownloadFile(String p) {
     super(p); //Call constructor for mother class
     // To be define initialisation for hashMusic and ip
   }

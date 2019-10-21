@@ -44,11 +44,11 @@ public class NetworkProvider {
     return null;
   }
 
-  public SendToUserThread createSendToUserThread(Payload p, InetAddress ip) {
+  public SendToUserThread createSendToUserThread(String p, InetAddress ip) {
     return null;
   }
 
-  public SendToUsersThread createSendToUsersThread(Payload p, Stream<InetAddress> userIps) {
+  public SendToUsersThread createSendToUsersThread(String p, Stream<InetAddress> userIps) {
     return null;
   }
 

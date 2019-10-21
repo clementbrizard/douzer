@@ -4,9 +4,9 @@ import java.net.Socket;
 
 public class Message {
 
-  private Payload payload;
+  private String payload;
 
-  public Message(Payload p) {
+  public Message(String p) {
     this.payload = p;
   }
 
@@ -14,7 +14,7 @@ public class Message {
     //To be define
   }
 
-  public Payload getPayload() {
+  public String getPayload() {
     return payload;
   }
 }

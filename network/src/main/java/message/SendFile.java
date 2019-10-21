@@ -5,7 +5,7 @@ import java.net.Socket;
 public class SendFile extends Message {
   private String hashMusic;
 
-  public SendFile(Payload p) {
+  public SendFile(String p) {
     super(p);
     // To be define
   }

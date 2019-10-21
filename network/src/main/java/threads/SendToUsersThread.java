@@ -5,10 +5,10 @@ import java.util.stream.Stream;
 
 public class SendToUsersThread extends ThreadExtend {
 
-  private Payload payload;
+  private String payload;
   private Stream<InetAddress> usersIps;
 
-  public SendToUsersThread(Payload p, Stream<InetAddress> s) {
+  public SendToUsersThread(String p, Stream<InetAddress> s) {
     this.payload = p;
     this.usersIps = s;
   }
