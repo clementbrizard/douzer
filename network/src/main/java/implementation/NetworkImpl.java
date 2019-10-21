@@ -1,4 +1,4 @@
-package networkImplementation;
+package implementation;
 
 import java.net.InetAddress;
 import java.util.Collection;
