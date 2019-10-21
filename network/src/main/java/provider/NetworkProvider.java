@@ -31,7 +31,7 @@ public class NetworkProvider {
   private Collection<ThreadExtend> threads;
 
   public NetworkProvider() {
-    this.netImpl = new NetworkImpl();
+    this.netImpl = new NetworkImpl(this);
     this.threads = new ArrayList<ThreadExtend>();
   }
 

@@ -4,9 +4,18 @@ import java.net.InetAddress;
 import java.util.Collection;
 import java.util.stream.Stream;
 
+import provider.NetworkProvider;
+
 public class NetworkImpl implements Net {
 
+  private NetworkProvider netProvider;
+  
+  public NetworkImpl(NetworkProvider np) {
+    this.netProvider = np;
+  }
+  
   public void sendToUser(String payload, InetAddress ipDets) {
+    
     return;
   }
   
