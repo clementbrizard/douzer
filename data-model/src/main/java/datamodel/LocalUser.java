@@ -1,5 +1,6 @@
 package datamodel;
 
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
@@ -9,6 +10,7 @@ public class LocalUser extends User {
   private MessageDigest messageDigest;
   private String pwdHash;
   private HashSet<Contact> contacts;
+  private Path savePath;
   private transient HashSet<LocalMusic> musics;
   private transient List<LocalMusic> playlist;
 
@@ -25,6 +27,7 @@ public class LocalUser extends User {
 
   /**
    * Set a new password.
+   *
    * @param pass New password
    */
   void setPassword(String pass) {
@@ -34,6 +37,7 @@ public class LocalUser extends User {
 
   /**
    * Verify that the provided password match the stored one.
+   *
    * @param pass Password to verify
    * @return Whether the password is correct or not
    */
@@ -64,5 +68,13 @@ public class LocalUser extends User {
 
   public void setPlaylist(List<LocalMusic> playlist) {
     this.playlist = playlist;
+  }
+
+  public Path getSavePath() {
+    return savePath;
+  }
+
+  public void setSavePath(Path savePath) {
+    this.savePath = savePath;
   }
 }
