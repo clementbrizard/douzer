@@ -1,3 +1,5 @@
+package interfaces;
+
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
