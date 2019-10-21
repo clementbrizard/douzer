@@ -1,3 +1,5 @@
+package interfaces;
+
 import java.net.InetAddress;
 import java.util.Collection;
 import java.util.stream.Stream;

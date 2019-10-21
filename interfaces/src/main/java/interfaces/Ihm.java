@@ -1,3 +1,5 @@
+package interfaces;
+
 import datamodel.Music;
 import datamodel.User;
 import java.util.Collection;
