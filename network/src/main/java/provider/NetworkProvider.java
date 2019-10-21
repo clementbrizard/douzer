@@ -51,7 +51,7 @@ public class NetworkProvider {
    * @return current instance of the server thread
    */
   public Server createServer() {
-    if (server == null) {
+    if (server == null || !server.isAlive()) {
       this.server = new Server(this);
       this.server.start();
     }
@@ -134,5 +134,14 @@ public class NetworkProvider {
   public RequestDownloadThread createRequestDownloadThread(Stream<InetAddress> ownersIps,
       String musicHash) {
     return null;
+  }
+  
+  /**
+   * Simple getter for threads.
+   * 
+   * @return collection of the current running threads
+   */
+  public Collection<ThreadExtend> getThreads() {
+    return this.threads;
   }
 }

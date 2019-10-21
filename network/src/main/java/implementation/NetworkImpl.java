@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.stream.Stream;
 
 import provider.NetworkProvider;
+import threads.ThreadExtend;
 
 /**
  * Implements the Net interface that provides useful mathods to send messages through the
@@ -69,12 +70,27 @@ public class NetworkImpl implements Net {
   }
   
   /**
-   * TODO.
+   * Stop all interactions between user and network and notifies the network that
+   * the user has been disconnected.
    * 
    * @param payload data to inform the network we are disconnected
    * @param knownIPs known ips in the network
    */
   public void disconnect(String payload, Stream<InetAddress> knownIPs) {
-    return;
+    //Kill server thread (we don't want to receive any messages)
+    this.netProvider.createServer().kill();
+    
+    //Wait for the network to be fully notified
+    this.netProvider.createSendToUsersThread(payload, knownIPs).join();
+    
+    //Then kill every running threads
+    for (ThreadExtend thread : this.netProvider.getThreads()) {
+      if (thread.isAlive()) {
+        thread.kill();
+      }
+    }
+    
+    //Clears the list of threads
+    this.netProvider.getThreads().clear();
   }
 }
