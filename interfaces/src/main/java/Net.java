@@ -7,7 +7,7 @@ public interface Net {
 
   void sendToUsers(String payload, Stream<InetAddress> ips);
 
-  void requestDownload(Stream<InetAddress> ownerIPs, String musicHash);
+  void requestDownload(Stream<InetAddress> ownerIps, String musicHash);
 
   void connect(String payload, Collection<InetAddress> ips);
 
