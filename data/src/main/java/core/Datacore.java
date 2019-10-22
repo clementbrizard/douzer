@@ -44,7 +44,7 @@ public class Datacore {
     }
   }
 
-  public HashMap<UUID, User> getUsers() {
+  private HashMap<UUID, User> getUsers() {
     return users;
   }
 

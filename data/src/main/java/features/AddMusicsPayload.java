@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 /**
- * Example feature
+ * Example feature.
  */
 public class AddMusicsPayload extends Payload {
   Collection<MusicMetadata> musicMetadatas;

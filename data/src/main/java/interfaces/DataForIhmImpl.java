@@ -1,7 +1,11 @@
 package interfaces;
 
-import datamodel.*;
-
+import datamodel.LocalMusic;
+import datamodel.LocalUser;
+import datamodel.Music;
+import datamodel.MusicMetadata;
+import datamodel.SearchQuery;
+import datamodel.User;
 import java.util.List;
 import java.util.stream.Stream;
 

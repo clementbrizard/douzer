@@ -8,7 +8,7 @@ import datamodel.MusicMetadata;
 import java.util.Collection;
 
 /**
- * Example feature
+ * Example feature.
  */
 public class AddMusics {
   void run(Datacore dc, Collection<MusicMetadata> musicMetadatas) {
