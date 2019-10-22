@@ -11,7 +11,7 @@
 
     <artifactId>ihm</artifactId>
     <dependencies>
-        	  
+
         <dependency>
             <groupId>lo23</groupId>
             <artifactId>data-model</artifactId>
@@ -25,20 +25,10 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-		    <groupId>org.openjfx</groupId>
-		    <artifactId>javafx-controls</artifactId>
-		    <version>13</version>
-	  </dependency>
-	  <dependency>
-	    <groupId>org.controlsfx</groupId>
-	    <artifactId>controlsfx</artifactId>
-	    <version>8.40.15</version>
-	  </dependency>
-	  <dependency>
-		    <groupId>org.openjfx</groupId>
-		    <artifactId>javafx-fxml</artifactId>
-		    <version>13</version>
-		</dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.15</version>
+        </dependency>
     </dependencies>
 
     <build>
