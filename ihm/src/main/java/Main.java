@@ -13,7 +13,7 @@ public class Main extends Application {
   
   @Override
   public void start(Stage primaryStage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("/fxml/TestView.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("/fxml/ContactsView.fxml"));
     primaryStage.setTitle("first test");
     primaryStage.setScene(new Scene(root,witdh,height));
     primaryStage.setMaximized(true);
