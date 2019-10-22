@@ -62,7 +62,7 @@ public class IhmCore extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/TestView.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TestView.fxml"));
     Parent root = (Parent) loader.load();
     primaryStage.setTitle("first test");
     primaryStage.setScene(new Scene(root,witdh,height));
