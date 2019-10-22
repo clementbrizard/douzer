@@ -3,6 +3,7 @@ package core;
 import controllers.LoginController;
 import controllers.MainController;
 import controllers.SignUpController;
+import controllers.TestController;
 
 import java.awt.Toolkit;
 
@@ -20,6 +21,8 @@ public class IhmCore extends Application {
   private LoginController loginController;
   private SignUpController signUpController;
 
+  private TestController testController;
+
   double witdh = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
 
@@ -27,6 +30,10 @@ public class IhmCore extends Application {
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+  }
+
+  public void setTestController(TestController testController) {
+    this.testController = testController;
   }
 
   public void setLoginController(LoginController loginController) {
@@ -49,13 +56,21 @@ public class IhmCore extends Application {
     return this.signUpController;
   }
 
+  public TestController getTestController() {
+    return testController;
+  }
+
   @Override
   public void start(Stage primaryStage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("/views/TestView.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/TestView.fxml"));
+    Parent root = (Parent) loader.load();
     primaryStage.setTitle("first test");
     primaryStage.setScene(new Scene(root,witdh,height));
     primaryStage.setMaximized(true);
     primaryStage.show();
+    TestController ctrl = loader.getController();
+    setTestController(ctrl);
+    System.out.println(testController.getLabel().getText());
   }
 
   public void run(String[] args) {
