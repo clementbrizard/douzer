@@ -4,6 +4,11 @@ public class Comment implements java.io.Serializable {
   private String comment;
   private transient User owner;
 
+  public Comment(String comment, User user) {
+    this.comment = comment;
+    this.owner = user;
+  }
+
   public User getOwner() {
     return owner;
   }

@@ -1,8 +1,18 @@
 package datamodel;
 
+import java.util.Collection;
+
 public class LocalMusic extends Music {
   private boolean shared;
   private String mp3Path;
+
+  public LocalMusic(MusicMetadata metadata, Collection<User> owners) {
+    super(metadata, owners);
+  }
+
+  public Music toMusic() {
+    return new Music(this.getMetadata(), this.getOwners());
+  }
 
   public boolean isShared() {
     return shared;

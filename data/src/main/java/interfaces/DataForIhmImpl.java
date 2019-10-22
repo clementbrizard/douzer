@@ -1,15 +1,23 @@
 package interfaces;
 
+import core.Datacore;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import drydatamodel.DryMusic;
+import features.ShareMusicsPayload;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataForIhmImpl implements DataForIhm {
+  private Datacore dc;
+
   @Override
   public void addMusic(MusicMetadata music, String path) {
     throw new UnsupportedOperationException("Not implemented yet");
@@ -72,7 +80,18 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void shareMusic(LocalMusic music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    this.shareMusics(Collections.singleton(music));
+  }
+
+  @Override
+  public void shareMusics(Collection<LocalMusic> musics) {
+    Collection<DryMusic> sharedMusics = musics.stream()
+        .map(DryMusic::new)
+        .collect(Collectors.toList());
+
+    ShareMusicsPayload payload = new ShareMusicsPayload(sharedMusics);
+
+    this.dc.net.sendToUsers(payload.toString(), this.dc.getIps());
   }
 
   @Override

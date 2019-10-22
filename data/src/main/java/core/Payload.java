@@ -11,7 +11,7 @@ public abstract class Payload implements java.io.Serializable {
   private UUID senderUuid;
 
   /**
-   * Will be overriden for login only in order to access the IP.
+   * Will be overridden for login only in order to access the IP.
    *
    * @param dc       the datacore of the remote application.
    * @param senderIp the IP of the sender passed by network.

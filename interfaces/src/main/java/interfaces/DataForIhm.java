@@ -6,6 +6,7 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -35,6 +36,8 @@ public interface DataForIhm {
   void rateMusic(Music music, int rating);
 
   void shareMusic(LocalMusic music);
+
+  void shareMusics(Collection<LocalMusic> musics);
 
   void unshareMusic(LocalMusic music);
 

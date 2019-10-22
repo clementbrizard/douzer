@@ -44,7 +44,7 @@ public class Datacore {
     }
   }
 
-  private HashMap<UUID, User> getUsers() {
+  public HashMap<UUID, User> getUsers() {
     return users;
   }
 
@@ -69,7 +69,7 @@ public class Datacore {
     throw new UnsupportedOperationException("Merge with between musics is not implemented yet");
   }
 
-  public User mergeUsers(User music1, User music2) {
+  public User mergeUsers(User user1, User user2) {
     // TODO: do a proper merge
     throw new UnsupportedOperationException("Merge with between users is not implemented yet");
   }
