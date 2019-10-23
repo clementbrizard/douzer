@@ -24,7 +24,7 @@ public class IhmCore extends Application {
 
   private TestController testController;
 
-  double witdh = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
+  double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
 
   public IhmCore() {}
@@ -66,7 +66,7 @@ public class IhmCore extends Application {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TestView.fxml"));
     Parent root = (Parent) loader.load();
     primaryStage.setTitle("first test");
-    primaryStage.setScene(new Scene(root,witdh,height));
+    primaryStage.setScene(new Scene(root, width, height));
     primaryStage.setMaximized(true);
     primaryStage.show();
     TestController ctrl = loader.getController();
