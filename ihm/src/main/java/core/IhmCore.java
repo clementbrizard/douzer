@@ -13,8 +13,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-//replace by javadocs
-//start the FX application
+/**
+ * TODO replace with proper javadoc.
+ */
 public class IhmCore extends Application {
 
   private MainController mainController;
