@@ -69,8 +69,8 @@ public class IhmCore extends Application {
     primaryStage.setScene(new Scene(root, width, height));
     primaryStage.setMaximized(true);
     primaryStage.show();
-    TestController ctrl = loader.getController();
-    setTestController(ctrl);
+    TestController controller = loader.getController();
+    setTestController(controller);
     System.out.println(testController.getLabel().getText());
   }
 
