@@ -15,6 +15,7 @@ public class ShareMusicsPayload extends Payload {
 
   public ShareMusicsPayload(Collection<LocalMusic> musics) {
     this.musics = musics.stream()
+        .peek(m -> m.setShared(true))
         .map(DryMusic::new)
         .collect(Collectors.toList());
   }
