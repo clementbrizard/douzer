@@ -1,9 +1,6 @@
 package core;
 
-import datamodel.User;
-
 import exceptions.DataException;
-
 import java.net.InetAddress;
 import java.util.UUID;
 
