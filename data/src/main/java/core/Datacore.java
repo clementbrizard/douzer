@@ -74,6 +74,14 @@ public class Datacore {
         .filter(m -> !(m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
+  public void removeOwner(User user) {
+    this.musics.values().forEach(m -> m.getOwners().remove(user));
+  }
+
+  public void removeOwner(Music music, User user) {
+    music.getOwners().remove(user);
+  }
+
   /**
    * Merge music2 into music1.
    *
