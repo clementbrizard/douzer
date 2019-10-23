@@ -19,6 +19,9 @@ public class ShareMusicsPayload extends Payload {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Add the carried musics to the available musics.
+   */
   @Override
   public void run(Datacore dc) {
     this.musics.forEach(dryMusic -> {

@@ -26,6 +26,10 @@ public class Datacore {
     this.musics = new HashMap<>();
   }
 
+  /**
+   * Add the music by either creating a new entry if it doesn't exist already
+   * or by merging it into the existing music.
+   */
   public void addMusic(Music music) {
     Music original = this.musics.get(music.getMetadata().getHash());
     if (original != null) {
@@ -35,6 +39,10 @@ public class Datacore {
     }
   }
 
+  /**
+   * Add the user by either creating a new entry if it doesn't exist already
+   * or by merging it into the existing user.
+   */
   public void addUser(User user) {
     User original = this.users.get(user.getUuid());
     if (original != null) {
@@ -74,6 +82,10 @@ public class Datacore {
         .filter(m -> !(m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
+  /**
+   * Remove the user from all the owners lists
+   * and remove the music if it has no more owners.
+   */
   public void removeOwner(User user) {
     this.musics.values().forEach(m -> {
       m.getOwners().remove(user);
@@ -83,6 +95,10 @@ public class Datacore {
     });
   }
 
+  /**
+   * Remove the user from the music's owner set
+   * and remove the music if it has no more owners.
+   */
   public void removeOwner(Music music, User user) {
     music.getOwners().remove(user);
     if (music.getOwners().isEmpty()) {
