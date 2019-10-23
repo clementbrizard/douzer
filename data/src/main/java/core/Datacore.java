@@ -27,20 +27,20 @@ public class Datacore {
   }
 
   public void addMusic(Music music) {
-    String hash = music.getMetadata().getHash();
-    if (this.musics.containsKey(hash)) {
-      this.musics.put(hash, this.mergeMusics(music, this.musics.get(hash)));
+    Music original = this.musics.get(music.getMetadata().getHash());
+    if (original != null) {
+      this.mergeMusics(original, music);
     } else {
-      this.musics.put(hash, music);
+      this.musics.put(music.getMetadata().getHash(), music);
     }
   }
 
   public void addUser(User user) {
-    UUID uuid = user.getUuid();
-    if (this.users.containsKey(uuid)) {
-      this.users.put(uuid, this.mergeUsers(user, this.users.get(uuid)));
+    User original = this.users.get(user.getUuid());
+    if (original != null) {
+      this.mergeUsers(original, user);
     } else {
-      this.users.put(uuid, user);
+      this.users.put(user.getUuid(), user);
     }
   }
 
@@ -74,12 +74,24 @@ public class Datacore {
         .filter(m -> !(m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
-  private Music mergeMusics(Music music1, Music music2) {
+  /**
+   * Merge music2 into music1.
+   *
+   * @param music1 the reference that will be updated.
+   * @param music2 the reference that will not be updated.
+   */
+  private void mergeMusics(Music music1, Music music2) {
     // TODO: do a proper merge
     throw new UnsupportedOperationException("Merge with between musics is not implemented yet");
   }
 
-  private User mergeUsers(User user1, User user2) {
+  /**
+   * Merge user2 into user1.
+   *
+   * @param user1 the reference that will be updated.
+   * @param user2 the reference that will not be updated.
+   */
+  private void mergeUsers(User user1, User user2) {
     // TODO: do a proper merge
     throw new UnsupportedOperationException("Merge with between users is not implemented yet");
   }
