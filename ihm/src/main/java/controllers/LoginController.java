@@ -25,6 +25,12 @@ public class LoginController implements Controller {
   private Button buttonLogin;
   @FXML
   private Button buttonSignup;
+  @FXML
+  private Button buttonForgottenPassword;
+  @FXML
+  private Button buttonImportProfile;
+
+
 
 
   @Override
