@@ -9,8 +9,11 @@ public class Music implements java.io.Serializable {
   private transient HashSet<User> owners;
 
   public Music(MusicMetadata metadata, Collection<User> owners) {
-    this. metadata = metadata;
+    this.metadata = metadata;
     this.owners = new HashSet<User>(owners);
+  }
+
+  public Music() {
   }
 
   public MusicMetadata getMetadata() {

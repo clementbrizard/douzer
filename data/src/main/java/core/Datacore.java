@@ -1,11 +1,11 @@
 package core;
 
+import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
-
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public class Datacore {
   public Net net;
   public Ihm ihm;
 
-  public Datacore(Net net, Ihm ihm) {
+  Datacore(Net net, Ihm ihm) {
     this.net = net;
     this.ihm = ihm;
     this.users = new HashMap<>();
@@ -64,19 +64,29 @@ public class Datacore {
     return currentUser;
   }
 
-  public Music mergeMusics(Music music1, Music music2) {
+  public LocalMusic getLocalMusic(String hash) {
+    Music m = this.musics.get(hash);
+    return m instanceof LocalMusic ? (LocalMusic) m : null;
+  }
+
+  public Stream<LocalMusic> getLocalMusics() {
+    return this.musics.values().stream()
+        .filter(m -> !(m instanceof LocalMusic)).map(m -> (LocalMusic) m);
+  }
+
+  private Music mergeMusics(Music music1, Music music2) {
     // TODO: do a proper merge
     throw new UnsupportedOperationException("Merge with between musics is not implemented yet");
   }
 
-  public User mergeUsers(User user1, User user2) {
+  private User mergeUsers(User user1, User user2) {
     // TODO: do a proper merge
     throw new UnsupportedOperationException("Merge with between users is not implemented yet");
   }
 
   public Stream<InetAddress> getIps() {
     return this.users.values().stream()
-        .map(user -> user.getIp()).filter(ip -> ip != this.currentUser.getIp());
+        .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
   }
 
 }

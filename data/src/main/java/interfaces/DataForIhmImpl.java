@@ -110,6 +110,11 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
+  public Stream<LocalMusic> getLocalMusics() {
+    return this.dc.getLocalMusics();
+  }
+
+  @Override
   public List<LocalMusic> getPlaylist() {
     throw new UnsupportedOperationException("Not implemented yet");
   }

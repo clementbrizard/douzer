@@ -9,7 +9,7 @@ import java.util.List;
 public class LocalUser extends User {
   private MessageDigest messageDigest;
   private String pwdHash;
-  private HashSet<Contact> contacts;
+  private transient HashSet<Contact> contacts;
   private Path savePath;
   private transient HashSet<LocalMusic> musics;
   private transient List<LocalMusic> playlist;

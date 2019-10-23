@@ -45,6 +45,8 @@ public interface DataForIhm {
 
   Stream<Music> getAvailableMusics();
 
+  Stream<LocalMusic> getLocalMusics();
+
   List<LocalMusic> getPlaylist();
 
   LocalUser getLocalUser();

@@ -6,6 +6,10 @@ public class LocalMusic extends Music {
   private boolean shared;
   private String mp3Path;
 
+  public LocalMusic() {
+    super();
+  }
+
   public LocalMusic(MusicMetadata metadata, Collection<User> owners) {
     super(metadata, owners);
   }

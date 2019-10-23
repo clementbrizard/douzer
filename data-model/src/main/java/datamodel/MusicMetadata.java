@@ -13,7 +13,7 @@ public class MusicMetadata implements java.io.Serializable {
   private Date releaseDate;
   private Set<String> tags;
   private transient Map<User, Integer> ratings;
-  private List<Comment> comments;
+  private transient List<Comment> comments;
 
   public String getHash() {
     return hash;
