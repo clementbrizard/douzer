@@ -21,6 +21,8 @@ public class ShareMusicsPayload extends Payload {
 
   @Override
   public void run(Datacore dc) {
-    this.musics.forEach(dryMusic -> dc.addMusic(dryMusic.hydrate(dc)));
+    this.musics.forEach(dryMusic -> {
+      dc.addMusic(dryMusic.hydrate(dc));
+    });
   }
 }
