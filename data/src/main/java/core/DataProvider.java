@@ -1,7 +1,6 @@
 package core;
 
 import exceptions.DataException;
-
 import interfaces.DataForIhm;
 import interfaces.DataForIhmImpl;
 import interfaces.DataForNet;

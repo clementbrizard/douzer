@@ -7,12 +7,10 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
-import drydatamodel.DryMusic;
 import features.ShareMusicsPayload;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DataForIhmImpl implements DataForIhm {

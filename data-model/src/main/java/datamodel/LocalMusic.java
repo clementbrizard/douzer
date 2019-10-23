@@ -10,10 +10,6 @@ public class LocalMusic extends Music {
     super(metadata, owners);
   }
 
-  public Music toMusic() {
-    return new Music(this.getMetadata(), this.getOwners());
-  }
-
   public boolean isShared() {
     return shared;
   }

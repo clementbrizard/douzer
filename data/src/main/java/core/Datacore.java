@@ -83,7 +83,7 @@ public class Datacore {
   }
 
   /**
-   * Remove the user from all the owners lists
+   * Remove the user from all the owners sets
    * and remove the music if it has no more owners.
    */
   public void removeOwner(User user) {
