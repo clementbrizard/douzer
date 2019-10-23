@@ -3,6 +3,7 @@ package features;
 import core.Datacore;
 import core.Payload;
 import datamodel.LocalMusic;
+import datamodel.Music;
 import drydatamodel.DryMusic;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -26,7 +27,9 @@ public class ShareMusicsPayload extends Payload {
   @Override
   public void run(Datacore dc) {
     this.musics.forEach(dryMusic -> {
-      dc.addMusic(dryMusic.hydrate(dc));
+      Music music = dryMusic.hydrate(dc);
+      dc.addMusic(music);
+      dc.ihm.updateMusic(music);
     });
   }
 }

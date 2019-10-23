@@ -85,9 +85,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void shareMusics(Collection<LocalMusic> musics) {
-
     ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-
     this.dc.net.sendToUsers(payload.toString(), this.dc.getIps());
   }
 
