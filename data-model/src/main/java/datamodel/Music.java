@@ -1,10 +1,15 @@
 package datamodel;
 
-import java.util.HashSet;
+import java.util.Set;
 
 public class Music implements java.io.Serializable {
-  private MusicMetadata metadata;
-  private transient HashSet<User> owners;
+  private transient MusicMetadata metadata;
+  private transient Set<User> owners;
+
+  public Music(MusicMetadata metadata, Set<User> owners) {
+    this.metadata = metadata;
+    this.owners = owners;
+  }
 
   public MusicMetadata getMetadata() {
     return metadata;
@@ -14,11 +19,11 @@ public class Music implements java.io.Serializable {
     this.metadata = metadata;
   }
 
-  public HashSet<User> getOwners() {
+  public Set<User> getOwners() {
     return owners;
   }
 
-  public void setOwners(HashSet<User> owners) {
+  public void setOwners(Set<User> owners) {
     this.owners = owners;
   }
 }

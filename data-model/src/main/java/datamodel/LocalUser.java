@@ -1,15 +1,17 @@
 package datamodel;
 
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LocalUser extends User {
   private MessageDigest messageDigest;
   private String pwdHash;
-  private HashSet<Contact> contacts;
-  private transient HashSet<LocalMusic> musics;
+  private transient Set<Contact> contacts;
+  private Path savePath;
+  private transient Set<LocalMusic> musics;
   private transient List<LocalMusic> playlist;
 
   /**
@@ -25,6 +27,7 @@ public class LocalUser extends User {
 
   /**
    * Set a new password.
+   *
    * @param pass New password
    */
   void setPassword(String pass) {
@@ -34,6 +37,7 @@ public class LocalUser extends User {
 
   /**
    * Verify that the provided password match the stored one.
+   *
    * @param pass Password to verify
    * @return Whether the password is correct or not
    */
@@ -42,19 +46,19 @@ public class LocalUser extends User {
     return (new String(messageDigest.digest())).equals(this.pwdHash);
   }
 
-  public HashSet<Contact> getContacts() {
+  public Set<Contact> getContacts() {
     return contacts;
   }
 
-  public void setContacts(HashSet<Contact> contacts) {
+  public void setContacts(Set<Contact> contacts) {
     this.contacts = contacts;
   }
 
-  public HashSet<LocalMusic> getMusics() {
+  public Set<LocalMusic> getMusics() {
     return musics;
   }
 
-  public void setMusics(HashSet<LocalMusic> musics) {
+  public void setMusics(Set<LocalMusic> musics) {
     this.musics = musics;
   }
 
@@ -64,5 +68,13 @@ public class LocalUser extends User {
 
   public void setPlaylist(List<LocalMusic> playlist) {
     this.playlist = playlist;
+  }
+
+  public Path getSavePath() {
+    return savePath;
+  }
+
+  public void setSavePath(Path savePath) {
+    this.savePath = savePath;
   }
 }

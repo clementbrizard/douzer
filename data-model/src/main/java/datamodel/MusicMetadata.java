@@ -1,8 +1,9 @@
 package datamodel;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MusicMetadata implements java.io.Serializable {
   private String hash;
@@ -10,9 +11,9 @@ public class MusicMetadata implements java.io.Serializable {
   private String artist;
   private String album;
   private Date releaseDate;
-  private HashSet<String> tags;
-  private transient HashMap<User, Integer> ratings;
-  private HashSet<Comment> comments;
+  private Set<String> tags;
+  private transient Map<User, Integer> ratings;
+  private transient List<Comment> comments;
 
   public String getHash() {
     return hash;
@@ -54,27 +55,27 @@ public class MusicMetadata implements java.io.Serializable {
     this.releaseDate = releaseDate;
   }
 
-  public HashSet<String> getTags() {
+  public Set<String> getTags() {
     return tags;
   }
 
-  public void setTags(HashSet<String> tags) {
+  public void setTags(Set<String> tags) {
     this.tags = tags;
   }
 
-  public HashMap<User, Integer> getRatings() {
+  public Map<User, Integer> getRatings() {
     return ratings;
   }
 
-  public void setRatings(HashMap<User, Integer> ratings) {
+  public void setRatings(Map<User, Integer> ratings) {
     this.ratings = ratings;
   }
 
-  public HashSet<Comment> getComments() {
+  public List<Comment> getComments() {
     return comments;
   }
 
-  public void setComments(HashSet<Comment> comments) {
+  public void setComments(List<Comment> comments) {
     this.comments = comments;
   }
 }

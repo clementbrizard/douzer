@@ -3,7 +3,7 @@ package datamodel;
 import java.util.HashSet;
 
 public class Contact implements java.io.Serializable {
-  private User user;
+  private transient User user;
   private String group;
   private transient HashSet<LocalMusic> sharedMusics;
 
