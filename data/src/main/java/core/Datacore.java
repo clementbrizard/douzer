@@ -75,11 +75,19 @@ public class Datacore {
   }
 
   public void removeOwner(User user) {
-    this.musics.values().forEach(m -> m.getOwners().remove(user));
+    this.musics.values().forEach(m -> {
+      m.getOwners().remove(user);
+      if (m.getOwners().isEmpty()) {
+        this.musics.remove(m.getMetadata().getHash());
+      }
+    });
   }
 
   public void removeOwner(Music music, User user) {
     music.getOwners().remove(user);
+    if (music.getOwners().isEmpty()) {
+      this.musics.remove(music.getMetadata().getHash());
+    }
   }
 
   /**
