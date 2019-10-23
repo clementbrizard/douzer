@@ -13,9 +13,6 @@ public class Music implements java.io.Serializable {
     this.owners = new HashSet<User>(owners);
   }
 
-  public Music() {
-  }
-
   public MusicMetadata getMetadata() {
     return metadata;
   }
