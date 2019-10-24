@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -70,9 +71,11 @@ public abstract class Login {
    */
   public static void run(Datacore dc, String username, String password)
       throws IOException, LoginException {
-    Path savePath = dc.getCurrentUser().getSavePath();
-    LocalUser user = loadUserFromDisk(savePath.resolve("users.ser"), username, password);
+    Path savePath = Paths.get(".").toAbsolutePath();
+    LocalUser user = loadUserFromDisk(savePath.resolve("lo23-users.ser"), username, password);
+    dc.setCurrentUser(user);
+    dc.addUser(user);
     LoginPayload payload = new LoginPayload(user);
-    dc.net.connect(payload, getInitialIpsFromConfig(savePath.resolve("config.properties")));
+    dc.net.connect(payload, getInitialIpsFromConfig(user.getSavePath().resolve("config.properties")));
   }
 }
