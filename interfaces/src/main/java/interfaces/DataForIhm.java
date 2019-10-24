@@ -6,9 +6,11 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.security.auth.login.LoginException;
 
 public interface DataForIhm {
   void addMusic(MusicMetadata music, String path);
@@ -29,7 +31,7 @@ public interface DataForIhm {
 
   void importProfile(String path);
 
-  void login(String username, String password);
+  void login(String username, String password) throws IOException, LoginException;
 
   void modifyUser(LocalUser user);
 

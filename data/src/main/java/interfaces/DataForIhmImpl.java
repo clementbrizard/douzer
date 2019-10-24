@@ -7,11 +7,14 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import features.Login;
 import features.ShareMusicsPayload;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.security.auth.login.LoginException;
 
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
@@ -62,8 +65,9 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void login(String username, String password) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void login(String username, String password)
+      throws IOException, LoginException {
+    Login.run(this.dc, username, password);
   }
 
   @Override
