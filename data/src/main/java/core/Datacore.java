@@ -7,9 +7,7 @@ import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
 import java.net.InetAddress;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -38,10 +36,6 @@ public class Datacore {
     } else {
       this.musics.put(music.getMetadata().getHash(), music);
     }
-  }
-
-  public void addMusics(Collection<Music> musics) {
-    musics.forEach(this::addMusic);
   }
 
   /**

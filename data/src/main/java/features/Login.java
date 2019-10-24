@@ -88,11 +88,7 @@ public abstract class Login {
       throws IOException {
     dc.setCurrentUser(user);
     dc.addUser(user);
-    dc.addMusics(
-        user.getMusics().stream()
-            .map(Music.class::cast)
-            .collect(Collectors.toList())
-    );
+    user.getMusics().forEach(dc::addMusic);
 
     LoginPayload payload = new LoginPayload(user);
     Path configPath = user.getSavePath().resolve("config.properties");
