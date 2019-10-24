@@ -88,6 +88,7 @@ public abstract class Login {
     dc.setCurrentUser(user);
     dc.addUser(user);
     LoginPayload payload = new LoginPayload(user);
-    dc.net.connect(payload, getInitialIpsFromConfig(user.getSavePath().resolve("config.properties")));
+    Path configPath = user.getSavePath().resolve("config.properties");
+    dc.net.connect(payload, getInitialIpsFromConfig(configPath));
   }
 }
