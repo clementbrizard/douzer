@@ -62,7 +62,7 @@ public abstract class Login {
 
   /**
    * Load the requested user from the "users.ser" file and send login handshakes to every ips
-   * in the "config.properties" file
+   * in the "config.properties" file.
    *
    * @param username Username of the requested user
    * @param password Password of the requested user
@@ -73,6 +73,18 @@ public abstract class Login {
       throws IOException, LoginException {
     Path savePath = Paths.get(".").toAbsolutePath();
     LocalUser user = loadUserFromDisk(savePath.resolve("lo23-users.ser"), username, password);
+    run(dc, user);
+  }
+
+  /**
+   * Log the given user in send login handshakes to every ips in the "config.properties" file.
+   * This method should be called after an account creation.
+   *
+   * @param user The local user that is logging in
+   * @throws IOException When the config file can't be read
+   */
+  public static void run(Datacore dc, LocalUser user)
+      throws IOException {
     dc.setCurrentUser(user);
     dc.addUser(user);
     LoginPayload payload = new LoginPayload(user);
