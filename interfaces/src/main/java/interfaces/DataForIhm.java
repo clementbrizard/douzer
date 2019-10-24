@@ -6,6 +6,8 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -15,7 +17,7 @@ public interface DataForIhm {
 
   void addComment(Music music, String comment);
 
-  void createUser(LocalUser user);
+  void createUser(LocalUser user) throws IOException;
 
   void deleteAccount();
 

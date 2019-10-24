@@ -8,6 +8,12 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
 import features.ShareMusicsPayload;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -27,18 +33,18 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void createUser(LocalUser user) {
-    User newUser = new User();
-    newUser.setUsername(user.getUsername());
-    newUser.setAvatar(user.getAvatar());
-    newUser.setFirstName(user.getFirstName());
-    newUser.setLastName(user.getLastName());
-    newUser.setDateOfBirth(user.getDateOfBirth());
-    newUser.setConnected(false);
-    newUser.setIp(user.getIp());
+  public void createUser(LocalUser user) throws IOException {
+    //Create file config.properties
+    Properties prop = new Properties();
 
-    //Add User into collection (Datacore object dc)
-    dc.addUser(newUser);
+    //Initialize with localhost (might remove later)
+    prop.setProperty("ips", "127.0.0.1");
+
+    prop.store(new FileOutputStream("config.properties"), null);
+    System.out.println("Saving properties: " + prop);
+
+    //Log user immediately after creation
+    Login.run(dc, user);
   }
 
   @Override
