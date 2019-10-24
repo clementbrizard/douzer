@@ -28,7 +28,17 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void createUser(LocalUser user) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    User newUser = new User();
+    newUser.setUsername(user.getUsername());
+    newUser.setAvatar(user.getAvatar());
+    newUser.setFirstName(user.getFirstName());
+    newUser.setLastName(user.getLastName());
+    newUser.setDateOfBirth(user.getDateOfBirth());
+    newUser.setConnected(false);
+    newUser.setIp(user.getIp());
+
+    //Add User into collection (Datacore object dc)
+    dc.addUser(newUser);
   }
 
   @Override
