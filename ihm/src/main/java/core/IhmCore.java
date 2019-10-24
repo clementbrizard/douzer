@@ -63,12 +63,22 @@ public class IhmCore extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/TestView.fxml"));
+    //FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
+    //FXMLLoader loaderSignUp = new FXMLLoader(getClass().getResource("/views/SignUpView.fxml"));
+    //FXMLLoader loaderMain = new FXMLLoader(getClass().getResource("/views/MainView.fxml"));
     Parent root = (Parent) loader.load();
     primaryStage.setTitle("first test");
+    //primaryStage.setTitle("login");
     primaryStage.setScene(new Scene(root,witdh,height));
     primaryStage.setMaximized(true);
     primaryStage.show();
+    //LoginController ctrl = loader.getController();
+    //LoginController signUpCtrl = loaderSignUp.getController();
+    //LoginController mainCtrl = loaderMain.getController();
     TestController ctrl = loader.getController();
+    //setLoginController(ctrl);
+    //setLoginController(signUpCtrl);
+    //setLoginController(mainCtrl);
     setTestController(ctrl);
     System.out.println(testController.getLabel().getText());
   }
