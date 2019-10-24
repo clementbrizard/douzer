@@ -1,12 +1,12 @@
 package datamodel;
 
-import java.util.Collection;
+import java.util.Set;
 
 public class LocalMusic extends Music {
   private boolean shared;
   private String mp3Path;
 
-  public LocalMusic(MusicMetadata metadata, Collection<User> owners) {
+  public LocalMusic(MusicMetadata metadata, Set<User> owners) {
     super(metadata, owners);
   }
 
