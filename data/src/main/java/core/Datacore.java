@@ -80,6 +80,10 @@ public class Datacore {
     return currentUser;
   }
 
+  public void setCurrentUser(LocalUser user) {
+    this.currentUser = user;
+  }
+
   public LocalMusic getLocalMusic(String hash) {
     Music m = this.musics.get(hash);
     return m instanceof LocalMusic ? (LocalMusic) m : null;
