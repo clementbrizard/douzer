@@ -71,7 +71,7 @@ public abstract class Login {
    */
   public static void run(Datacore dc, String username, String password)
       throws IOException, LoginException {
-    Path savePath = Paths.get(".").toAbsolutePath();
+    Path savePath = Paths.get("").toAbsolutePath();
     LocalUser user = loadUserFromDisk(savePath.resolve("lo23-users.ser"), username, password);
     run(dc, user);
   }
