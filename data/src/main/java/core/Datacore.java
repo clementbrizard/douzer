@@ -12,12 +12,11 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Datacore {
+  public Net net;
+  public Ihm ihm;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
-
-  public Net net;
-  public Ihm ihm;
 
   Datacore(Net net, Ihm ihm) {
     this.net = net;
@@ -54,6 +53,15 @@ public class Datacore {
 
   public HashMap<UUID, User> getUsers() {
     return users;
+  }
+
+  /**
+   * Get the connected known users (current user excluded).
+   */
+  public Stream<User> getOnlineUsers() {
+    return users.values().stream()
+        .filter(User::isConnected)
+        .filter(u -> !(u instanceof LocalUser));
   }
 
   public HashMap<String, Music> getMusics() {
