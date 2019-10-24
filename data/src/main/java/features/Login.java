@@ -2,6 +2,7 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
+import datamodel.Music;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -61,7 +62,7 @@ public abstract class Login {
   }
 
   /**
-   * Load the requested user from the "users.ser" file and send login handshakes to every ips
+   * Load the requested user from the "users.ser" file and send login handshakes to every ip
    * in the "config.properties" file.
    *
    * @param username Username of the requested user
@@ -77,8 +78,8 @@ public abstract class Login {
   }
 
   /**
-   * Log the given user in send login handshakes to every ips in the "config.properties" file.
-   * This method should be called after an account creation.
+   * Log the given user in and send login handshakes to every ip in the "config.properties" file.
+   * This method should  be called after an account creation.
    *
    * @param user The local user that is logging in
    * @throws IOException When the config file can't be read
@@ -87,6 +88,12 @@ public abstract class Login {
       throws IOException {
     dc.setCurrentUser(user);
     dc.addUser(user);
+    dc.addMusics(
+        user.getMusics().stream()
+            .map(Music.class::cast)
+            .collect(Collectors.toList())
+    );
+
     LoginPayload payload = new LoginPayload(user);
     Path configPath = user.getSavePath().resolve("config.properties");
     dc.net.connect(payload, getInitialIpsFromConfig(configPath));
