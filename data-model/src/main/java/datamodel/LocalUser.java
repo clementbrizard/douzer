@@ -9,10 +9,10 @@ import java.util.Set;
 public class LocalUser extends User {
   private MessageDigest messageDigest;
   private String pwdHash;
-  private transient Set<Contact> contacts;
+  private Set<Contact> contacts;
   private Path savePath;
-  private transient Set<LocalMusic> musics;
-  private transient List<LocalMusic> playlist;
+  private Set<LocalMusic> musics;
+  private List<LocalMusic> playlist;
 
   /**
    * Default constructor.
