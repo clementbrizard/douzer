@@ -19,6 +19,17 @@ public class User implements java.io.Serializable {
     this.uuid = UUID.randomUUID();
   }
 
+  public User(User user) {
+    this.uuid = user.uuid;
+    this.username = user.username;
+    this.avatar = user.avatar;
+    this.firstName = user.firstName;
+    this.lastName = user.lastName;
+    this.dateOfBirth = user.dateOfBirth;
+    this.connected = user.connected;
+    this.ip = user.ip;
+  }
+
   public UUID getUuid() {
     return uuid;
   }

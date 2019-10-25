@@ -7,17 +7,17 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import features.Login;
 import features.ShareMusicsPayload;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
+import javax.security.auth.login.LoginException;
 
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
@@ -35,16 +35,36 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void createUser(LocalUser user) throws IOException {
     //Create file config.properties
-    Properties prop = new Properties();
+    Properties defaultProp = new Properties();
+    Properties userProp = new Properties();
+    String defaultPropFilePath = "default-config.properties";
+    String userPropFilePath = user.getSavePath() + user.getUsername() + "-config.properties";
 
-    //Initialize with localhost (might remove later)
-    prop.setProperty("ips", "127.0.0.1");
+    //Create properties file for our new user
+    new File(userPropFilePath);
 
-    prop.store(new FileOutputStream("config.properties"), null);
-    System.out.println("Saving properties: " + prop);
+    InputStream defaultPropInputStream = getClass().getClassLoader().getResourceAsStream(defaultPropFilePath);
+    InputStream userPropInputStream = getClass().getClassLoader().getResourceAsStream(userPropFilePath);
+
+    if (defaultPropInputStream != null) {
+      defaultProp.load(defaultPropInputStream);
+    } else {
+      throw new FileNotFoundException("Warning: default property file not found in the resources path");
+    }
+
+    if (userPropInputStream != null) {
+      userProp.load(userPropInputStream);
+    } else {
+      throw new FileNotFoundException("Warning: there is no config properties file for user " + user.getUsername());
+    }
+
+    //Copy and write from default-config into new properties for our user
+    defaultProp.forEach((key, value) -> userProp.setProperty(key.toString(), value.toString()));
+
+    userProp.store(new FileOutputStream(userPropFilePath), null);
 
     //Log user immediately after creation
-    Login.run(dc, user);
+    Login.run(this.dc, user);
   }
 
   @Override
@@ -78,8 +98,9 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void login(String username, String password) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void login(String username, String password)
+      throws IOException, LoginException {
+    Login.run(this.dc, username, password);
   }
 
   @Override
