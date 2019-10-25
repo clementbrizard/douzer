@@ -3,12 +3,10 @@ package controllers;
 import core.IhmCore;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 
 
 //replace by javadocs
@@ -18,38 +16,36 @@ public class LoginController implements Controller {
   private IhmCore ihmcore;
   private ImportController importController;
 
-  @FXML
-  private Label labelLogin;
+  private Scene signUpScene;
 
   @FXML
-  private Button buttonLogin;
+  private TextField textFieldPseudo;
   @FXML
-  private Button buttonSignup;
-  @FXML
-  private Button buttonForgottenPassword;
-  @FXML
-  private Button buttonImportProfile;
+  private TextField textFieldPassword;
 
 
-
+  public void setSignUpScene(Scene sceneSignUp) {
+    signUpScene = sceneSignUp;
+  }
 
   @Override
   public void initialize() {
-    labelLogin.setText("Time to connect");
+
   }
 
   @FXML
   private void actionLogin(ActionEvent event) {
-    labelLogin.setText("Connecting");
 
-    /*
+
+
     // TODO try with the real view, connect to data
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
+    System.out.println("Pseudo:" + userName + ", pass: " + password);
+    /*
     try {
-      getIhmcore().getDataForIhm().login(userName, password);
-      Stage mainControllerStage = getIhmcore().getMainController().getScene().getWindow();
-      mainControllerStage.setScene(new Scene(new Pane()));
+      ihmcore.getDataForIhm().login(userName, password);
+      //Go to Main view
 
     } catch (LoginException le) {
 
@@ -64,17 +60,9 @@ public class LoginController implements Controller {
 
   @FXML
   private void actionSignup(ActionEvent event) {
-    labelLogin.setText("Sign up");
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    primaryStage.setScene(signUpScene);
 
-    /*
-      Stage signUpStage = getIhmcore().getSignUpController().getScene().getWindow();
-      signUpStage.setScene(new Scene(new Pane()));
-
-     */
-  }
-
-  public IhmCore getIhmcore() {
-    return ihmcore;
   }
 
   public void setIhmcore(IhmCore ihmcore) {

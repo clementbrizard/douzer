@@ -21,6 +21,10 @@ public class IhmCore extends Application {
   private LoginController loginController;
   private SignUpController signUpController;
 
+  private Scene loginScene;
+  private Scene signupScene;
+  private Scene mainScene;
+
   private TestController testController;
 
   double witdh = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
@@ -62,15 +66,35 @@ public class IhmCore extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ContactsView.fxml"));
-    Parent root = (Parent) loader.load();
-    primaryStage.setTitle("first test");
-    primaryStage.setScene(new Scene(root,witdh,height));
+    FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
+    Parent loginParent = loginLoader.load();
+    Scene loginScene = new Scene(loginParent,witdh,height);
+
+
+    FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
+    Parent signupParent = signupLoader.load();
+    Scene signupScene = new Scene(signupParent,witdh,height);
+
+    LoginController loginController = loginLoader.getController();
+    SignUpController signUpController = signupLoader.getController();
+
+    loginController.setSignUpScene(signupScene);
+    signUpController.setLoginScene(loginScene);
+
+    loginController.setIhmcore(this);
+    signUpController.setIhmCore(this);
+
+    //FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
+    //Parent root = (Parent) login.load();
+    //primaryStage.setScene(new Scene(root,witdh,height));
+
+
     primaryStage.setMaximized(true);
+    primaryStage.setScene(loginScene);
     primaryStage.show();
-    TestController ctrl = loader.getController();
-    setTestController(ctrl);
-    System.out.println(testController.getLabel().getText());
+    //TestController ctrl = loader.getController();
+    //setTestController(ctrl);
+    //System.out.println(testController.getLabel().getText());
   }
 
   public void run(String[] args) {
