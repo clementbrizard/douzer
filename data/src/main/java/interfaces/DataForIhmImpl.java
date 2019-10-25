@@ -10,12 +10,15 @@ import datamodel.User;
 import features.Login;
 import features.ShareMusicsPayload;
 
-import java.io.*;
-import java.util.Properties;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.Properties;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -43,19 +46,23 @@ public class DataForIhmImpl implements DataForIhm {
     //Create properties file for our new user
     new File(userPropFilePath);
 
-    InputStream defaultPropInputStream = getClass().getClassLoader().getResourceAsStream(defaultPropFilePath);
-    InputStream userPropInputStream = getClass().getClassLoader().getResourceAsStream(userPropFilePath);
+    InputStream defaultPropInputStream = getClass().getClassLoader()
+            .getResourceAsStream(defaultPropFilePath);
+    InputStream userPropInputStream = getClass().getClassLoader()
+            .getResourceAsStream(userPropFilePath);
 
     if (defaultPropInputStream != null) {
       defaultProp.load(defaultPropInputStream);
     } else {
-      throw new FileNotFoundException("Warning: default property file not found in the resources path");
+      throw new FileNotFoundException(
+              "Warning: default property file not found in the resources path");
     }
 
     if (userPropInputStream != null) {
       userProp.load(userPropInputStream);
     } else {
-      throw new FileNotFoundException("Warning: there is no config properties file for user " + user.getUsername());
+      throw new FileNotFoundException("Warning: there is no config properties file for user "
+              + user.getUsername());
     }
 
     //Copy and write from default-config into new properties for our user
