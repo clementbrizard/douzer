@@ -28,23 +28,23 @@
             <Label fx:id="labelTitle" alignment="CENTER" contentDisplay="CENTER" text="Titre" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
             <Label fx:id="labelArtist" text="Artiste" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
             <Label fx:id="labelAlbum" text="Album" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-            <TextField fx:id="textTitle" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="textArtist" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="textAlbum" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="textTitle" GridPane.columnIndex="1" GridPane.rowIndex="1" onKeyPressed="#titleEdited"/>
+            <TextField fx:id="textArtist" GridPane.columnIndex="1" GridPane.rowIndex="2" onKeyPressed="#artistEdited"/>
+            <TextField fx:id="textAlbum" GridPane.columnIndex="1" GridPane.rowIndex="3" onKeyPressed="#albumEdited"/>
             <TextField fx:id="textUploader" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-            <DatePicker fx:id="dateYear" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Spinner fx:id="dateYear" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="labelYear" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Année" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label fx:id="labelUploader" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Uploader" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <HBox fx:id="hboxRadioButton" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <RadioButton fx:id="radioPublique" mnemonicParsing="false" text="Publique" />
-                  <RadioButton fx:id="radioPrivee" mnemonicParsing="false" text="Privée" />
+                  <RadioButton fx:id="radioPublic" mnemonicParsing="false" text="Public"/>
+                  <RadioButton fx:id="radioPrivate" mnemonicParsing="false" text="Private"/>
                </children>
             </HBox>
             <HBox fx:id="hboxFileChoice" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
                   <Label fx:id="labelFileChoice" text="Choisir le fichier" />
-                  <Button fx:id="buttonFileChoice" mnemonicParsing="false">
+                  <Button fx:id="buttonFileChoice" mnemonicParsing="false" onAction="#chooseFile">
                      <graphic>
                         <ImageView fx:id="imageFileChoice" fitHeight="217.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -55,7 +55,7 @@
                   </Button>
                </children>
             </HBox>
-            <Button alignment="CENTER" mnemonicParsing="false" text="Ajouter le nouveau morceau" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <Button fx:id="buttonAdd" alignment="CENTER" mnemonicParsing="false" text="Ajouter le nouveau morceau" GridPane.columnIndex="2" GridPane.rowIndex="5" onAction="#add"/>
             <VBox fx:id="vboxTags" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
                   <Label fx:id="labelTags" text="Tags" />
