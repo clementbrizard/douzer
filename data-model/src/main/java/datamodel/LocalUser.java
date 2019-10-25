@@ -9,10 +9,10 @@ import java.util.Set;
 public class LocalUser extends User {
   private MessageDigest messageDigest;
   private String pwdHash;
-  private transient Set<Contact> contacts;
+  private Set<Contact> contacts;
   private Path savePath;
-  private transient Set<LocalMusic> musics;
-  private transient List<LocalMusic> playlist;
+  private Set<LocalMusic> musics;
+  private List<LocalMusic> playlist;
 
   /**
    * Default constructor.
@@ -30,7 +30,7 @@ public class LocalUser extends User {
    *
    * @param pass New password
    */
-  void setPassword(String pass) {
+  public void setPassword(String pass) {
     messageDigest.update(pass.getBytes());
     this.pwdHash = new String(messageDigest.digest());
   }
@@ -41,7 +41,7 @@ public class LocalUser extends User {
    * @param pass Password to verify
    * @return Whether the password is correct or not
    */
-  boolean verifyPassword(String pass) {
+  public boolean verifyPassword(String pass) {
     messageDigest.update(pass.getBytes());
     return (new String(messageDigest.digest())).equals(this.pwdHash);
   }
