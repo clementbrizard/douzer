@@ -34,14 +34,14 @@ public class SignUpController implements Controller {
 
     /*
     // TODO try with the real view, connect to data
-    String userName = userTextField.getText();
-    String password = passwordTextField.getText();
-    String name = nameTextField.getText();
-    String surname = surnameTextField.getText();
-    //Date birthdate = birthdate???.getDate();
+    String userName = textFieldUsername.getText();
+    String password = textFieldPassword.getText();
+    String name = textFieldFirstName.getText();
+    String surname = textFieldLastName.getText();
+    //Date birthdate = datePickerBirth.getDate();
     //Avatar ???
-    String secretQuestion = secretQuestionTextField.getText();
-    String secretAnswer = secretAnswerTextField.getText();
+    String secretQuestion = textFieldSecretQuestion.getText();
+    String secretAnswer = textFieldSecretAnswer.getText();
 
     //LocalUser user = new LocalUser(...);
 

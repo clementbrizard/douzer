@@ -44,8 +44,8 @@ public class LoginController implements Controller {
 
     /*
     // TODO try with the real view, connect to data
-    String userName = userTextField.getText();
-    String password = passwordTextField.getText();
+    String userName = textFieldPseudo.getText();
+    String password = textFieldPassword.getText();
     try {
       getIhmcore().getDataForIhm().login(userName, password);
       Stage mainControllerStage = getIhmcore().getMainController().getScene().getWindow();
