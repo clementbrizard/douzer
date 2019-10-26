@@ -61,8 +61,9 @@
                   <Label fx:id="labelTags" text="Tags" />
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="listViewTags" prefHeight="200.0" prefWidth="200.0" />
-                        <Button fx:id="buttonAddTags" mnemonicParsing="false">
+                        <ListView fx:id="listViewTags" prefHeight="200.0" prefWidth="200.0" onKeyPressed="#tagListKeyPressed"/>
+                         <TextField fx:id="textNewTag" prefHeight="200.0" prefWidth="200.0" onAction="#addTag"/>
+                        <Button fx:id="buttonAddTags" mnemonicParsing="false" onAction="#addTag">
                            <graphic>
                               <ImageView fx:id="imageAddTags" fitHeight="204.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
