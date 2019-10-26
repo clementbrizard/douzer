@@ -5,19 +5,26 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 
+import java.io.File;
 import java.time.LocalDate;
 
 /**
  * Pop-up a view when the user want to add a music from a local file
+ * TODO : Do a popup
  */
 public class NewMusicController implements Controller {
 
     /** Reference to parent controller */
     private MyMusicsController myMusicsController;
+
+    @FXML
+    private TextField textFile;
 
     /** TextField containing the music title */
     @FXML
@@ -52,6 +59,10 @@ public class NewMusicController implements Controller {
     private ListView<String> listViewTags;
     /** List of tags */
     private ObservableList tags;
+    /** Mp3 file */
+    private File file;
+    /** Is a file chosen */
+    private Boolean fileChose;
 
     /**
      * Initialize the controller
@@ -76,6 +87,9 @@ public class NewMusicController implements Controller {
 
         this.tags = FXCollections.observableArrayList();
         this.listViewTags.setItems(tags);
+
+        this.textFile.setEditable(false);
+        this.fileChose = false;
     }
 
     /**
@@ -103,6 +117,18 @@ public class NewMusicController implements Controller {
     @FXML
     private void chooseFile(ActionEvent event) {
         System.out.println("Choose file");
+        Stage stage = new Stage();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Ouvrir un fichier de musique");
+        /** TODO Fix extension filter not working (on linux at least) */
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("Fichier musique", "*.mp3"));
+
+        this.file = fileChooser.showOpenDialog(stage);
+        if (this.file != null) {
+            this.fileChose = true;
+            this.textFile.setText(this.file.getAbsolutePath());
+            this.textFile.setStyle(null);
+        }
     }
 
     /**
@@ -182,6 +208,7 @@ public class NewMusicController implements Controller {
     private void add(ActionEvent event) {
         // Print the informations
         System.out.println("Add new music :");
+        System.out.println("File : " + (fileChose ? file.getAbsolutePath() : "Not set"));
         System.out.println("Title : " + textTitle.getText());
         System.out.println("Artist : " + textArtist.getText());
         System.out.println("Album : " + textAlbum.getText());
@@ -215,12 +242,16 @@ public class NewMusicController implements Controller {
             textAlbum.setStyle("-fx-control-inner-background: red");
             valid = false;
         }
+        if (!fileChose) {
+            textFile.setStyle("-fx-control-inner-background: red");
+            valid = false;
+        }
 
         // Add music if valid
         if (valid) {
             System.out.println("Entry valid");
 
-            /*
+            /**
             TODO : Fill the MusicMetadata and send it to data
             TODO : Exit the window
             */

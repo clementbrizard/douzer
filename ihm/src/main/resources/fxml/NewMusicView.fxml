@@ -44,6 +44,7 @@
             <HBox fx:id="hboxFileChoice" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
                   <Label fx:id="labelFileChoice" text="Choisir le fichier" />
+                   <TextField fx:id="textFile" />
                   <Button fx:id="buttonFileChoice" mnemonicParsing="false" onAction="#chooseFile">
                      <graphic>
                         <ImageView fx:id="imageFileChoice" fitHeight="217.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
