@@ -15,7 +15,7 @@
     <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
         <children>
             <TextField fx:id="textFieldPseudo" layoutX="331.0" layoutY="131.0" prefHeight="31.0" prefWidth="188.0" />
-            <Button fx:id="buttonForgottenPassword" layoutX="202.0" layoutY="263.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Mot de passe oublié"/>
+            <Button fx:id="buttonForgottenPassword" layoutX="202.0" layoutY="263.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Mot de passe oublié" onAction="#actionForgottenPassword"/>
             <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Connexion" textFill="WHITE">
                 <font>
                     <Font size="24.0" />

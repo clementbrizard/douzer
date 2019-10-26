@@ -17,6 +17,7 @@ public class LoginController implements Controller {
   private ImportController importController;
 
   private Scene signUpScene;
+  private Scene forgottenPasswordScene;
 
   @FXML
   private TextField textFieldPseudo;
@@ -24,8 +25,9 @@ public class LoginController implements Controller {
   private TextField textFieldPassword;
 
 
-  public void setSignUpScene(Scene sceneSignUp) {
+  public void setAdjacentScenes(Scene sceneSignUp, Scene sceneForgottenPassword) {
     signUpScene = sceneSignUp;
+    forgottenPasswordScene =  sceneForgottenPassword;
   }
 
   @Override
@@ -62,6 +64,13 @@ public class LoginController implements Controller {
   private void actionSignup(ActionEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     primaryStage.setScene(signUpScene);
+
+  }
+
+  @FXML
+  private void actionForgottenPassword(ActionEvent event) {
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    primaryStage.setScene(forgottenPasswordScene);
 
   }
 

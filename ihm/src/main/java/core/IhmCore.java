@@ -1,5 +1,6 @@
 package core;
 
+import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
 import controllers.SignUpController;
@@ -20,10 +21,6 @@ public class IhmCore extends Application {
   private MainController mainController;
   private LoginController loginController;
   private SignUpController signUpController;
-
-  private Scene loginScene;
-  private Scene signupScene;
-  private Scene mainScene;
 
   private TestController testController;
 
@@ -75,14 +72,23 @@ public class IhmCore extends Application {
     Parent signupParent = signupLoader.load();
     Scene signupScene = new Scene(signupParent,witdh,height);
 
+    FXMLLoader forgottenPasswordLoader =
+        new FXMLLoader(getClass().getResource("/fxml/ForgottenPasswordView.fxml"));
+    Parent forgottenPasswordParent = forgottenPasswordLoader.load();
+    Scene forgottenPasswordScene = new Scene(forgottenPasswordParent,witdh,height);
+
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
+    ForgottenPasswordController forgottenPasswordController =
+        forgottenPasswordLoader.getController();
 
-    loginController.setSignUpScene(signupScene);
+    loginController.setAdjacentScenes(signupScene, forgottenPasswordScene);
     signUpController.setLoginScene(loginScene);
+    forgottenPasswordController.setLoginScene(loginScene);
 
     loginController.setIhmcore(this);
     signUpController.setIhmCore(this);
+    forgottenPasswordController.setIhmCore(this);
 
     //FXMLLoader mainLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     //Parent root = (Parent) login.load();
