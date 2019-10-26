@@ -10,7 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-//remplace by javadocs when implementation
+/**
+ * Controller used for the sign up form.
+ */
 public class SignUpController implements Controller {
   
   private IhmCore ihmCore;

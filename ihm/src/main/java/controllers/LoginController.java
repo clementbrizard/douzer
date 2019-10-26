@@ -5,8 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
 
-//replace by javadocs
-//login view
+/**
+ * Controller used for the login view.
+ */
 public class LoginController implements Controller {
 
   private IhmCore ihmcore;

@@ -4,7 +4,6 @@ import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
 import controllers.SignUpController;
-import controllers.TestController;
 
 import java.awt.Toolkit;
 
@@ -14,8 +13,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-//replace by javadocs
-//start the FX application
+/**
+ * IHM Core, manages controllers and stage changes.
+ */
 public class IhmCore extends Application {
 
   private Scene loginScene;

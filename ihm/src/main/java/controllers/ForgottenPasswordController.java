@@ -5,7 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-//remplace by javadocs when implementation
+/**
+ * Controller used for the forgotten password form.
+ */
 public class ForgottenPasswordController implements Controller {
 
   private IhmCore ihmCore;
