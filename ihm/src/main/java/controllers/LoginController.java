@@ -1,12 +1,8 @@
 package controllers;
 
 import core.IhmCore;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 
 //replace by javadocs
@@ -14,21 +10,11 @@ import javafx.stage.Stage;
 public class LoginController implements Controller {
 
   private IhmCore ihmcore;
-  private ImportController importController;
-
-  private Scene signUpScene;
-  private Scene forgottenPasswordScene;
 
   @FXML
   private TextField textFieldPseudo;
   @FXML
   private TextField textFieldPassword;
-
-
-  public void setAdjacentScenes(Scene sceneSignUp, Scene sceneForgottenPassword) {
-    signUpScene = sceneSignUp;
-    forgottenPasswordScene =  sceneForgottenPassword;
-  }
 
   @Override
   public void initialize() {
@@ -36,7 +22,7 @@ public class LoginController implements Controller {
   }
 
   @FXML
-  private void actionLogin(ActionEvent event) {
+  private void actionLogin() {
 
 
 
@@ -61,16 +47,14 @@ public class LoginController implements Controller {
   }
 
   @FXML
-  private void actionSignup(ActionEvent event) {
-    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    primaryStage.setScene(signUpScene);
+  private void actionSignup() {
+    ihmcore.showSignupScene();
 
   }
 
   @FXML
-  private void actionForgottenPassword(ActionEvent event) {
-    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    primaryStage.setScene(forgottenPasswordScene);
+  private void actionForgottenPassword() {
+    ihmcore.showForgottenPasswordScene();
 
   }
 
@@ -78,11 +62,4 @@ public class LoginController implements Controller {
     this.ihmcore = ihmcore;
   }
 
-  public ImportController getImportController() {
-    return importController;
-  }
-
-  public void setImportController(ImportController importController) {
-    this.importController = importController;
-  }
 }

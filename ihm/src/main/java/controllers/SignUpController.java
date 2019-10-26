@@ -5,12 +5,10 @@ import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.Notifications;
 
 //remplace by javadocs when implementation
 public class SignUpController implements Controller {
@@ -41,14 +39,6 @@ public class SignUpController implements Controller {
   @FXML
   private FileChooser avatarFileChooser = new FileChooser();
   private File avatarFile = null;
-
-
-  private Scene loginScene;
-
-
-  public void setLoginScene(Scene sceneLogin) {
-    loginScene = sceneLogin;
-  }
   
   @Override
   public void initialize()  {
@@ -59,10 +49,9 @@ public class SignUpController implements Controller {
    * Called upon clicking the button to confirm sign up.
    * Retrieves relevant data from the sign up form fields, creates a LocalUser with
    * them and forwards it to data for further process
-   * @param event The event inducing the button click
    */
   @FXML
-  public void actionSignup(ActionEvent event) {
+  public void actionSignup() {
 
     //TODO: connect to data + sanity checks
     String userName = textFieldUsername.getText();
@@ -99,11 +88,9 @@ public class SignUpController implements Controller {
   /**
    * Called upon clicking the cancel button from the sign up form.
    * Switches back to the login window.
-   * @param event The event inducing the button click
    */
-  public void actionCancel(ActionEvent event) {
-    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    primaryStage.setScene(loginScene);
+  public void actionCancel() {
+    ihmCore.showLoginScene();
   }
 
   /**
@@ -114,8 +101,7 @@ public class SignUpController implements Controller {
   public void actionAvatarChoice(ActionEvent event) {
     //TODO: add extension filter
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    File chosenFile = avatarFileChooser.showOpenDialog(primaryStage);
-    avatarFile = chosenFile;
+    avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
   }
   
   public void setIhmCore(IhmCore ihmCore) {

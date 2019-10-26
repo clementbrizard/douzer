@@ -1,13 +1,9 @@
 package controllers;
 
 import core.IhmCore;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 //remplace by javadocs when implementation
 public class ForgottenPasswordController implements Controller {
@@ -29,14 +25,6 @@ public class ForgottenPasswordController implements Controller {
   @FXML
   private Label labelSecretQuestion;
 
-
-  private Scene loginScene;
-
-
-  public void setLoginScene(Scene sceneLogin) {
-    loginScene = sceneLogin;
-  }
-
   @Override
   public void initialize()  {
     textFieldUsername.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -49,10 +37,9 @@ public class ForgottenPasswordController implements Controller {
   /**
    * Called upon clicking the button to confirm password renewal.
    * Checks if secret answer matches secret question for specified user.
-   * @param event The event inducing the button click
    */
   @FXML
-  public void actionPasswordChange(ActionEvent event) {
+  public void actionPasswordChange() {
 
     //TODO: connect to data + sanity checks
     String userName = textFieldUsername.getText();
@@ -64,6 +51,7 @@ public class ForgottenPasswordController implements Controller {
     //if(newPassword.equals(newPassword2) &&
     // secretAnswer.equals(localUsersList.get(userName).getSecretAnswer()))
     //...
+    // back to login or straight to main ?
     //else
     //Notifications.create()
     //              .title("Password change failed")
@@ -75,11 +63,9 @@ public class ForgottenPasswordController implements Controller {
   /**
    * Called upon clicking the cancel button from the forgotten password form.
    * Switches back to the login window.
-   * @param event The event inducing the button click
    */
-  public void actionCancel(ActionEvent event) {
-    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    primaryStage.setScene(loginScene);
+  public void actionCancel() {
+    ihmCore.showLoginScene();
   }
 
 
