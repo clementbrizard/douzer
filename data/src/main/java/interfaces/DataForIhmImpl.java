@@ -11,10 +11,13 @@ import features.Login;
 import features.ShareMusicsPayload;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -40,35 +43,28 @@ public class DataForIhmImpl implements DataForIhm {
     //Create file config.properties
     Properties defaultProp = new Properties();
     Properties userProp = new Properties();
-    String defaultPropFilePath = "default-config.properties";
-    String userPropFilePath = user.getSavePath() + user.getUsername() + "-config.properties";
+    Path defaultPropFilePath = Paths.get("resources/default-config.properties");
+    Path userPropFilePath = user.getSavePath().resolve("config.properties");
+    File userConfigFile = new File(userPropFilePath.toString());
 
-    //Create properties file for our new user
-    new File(userPropFilePath);
+    //If there is no config file for our user in the his path
+    if (!userConfigFile.exists()) {
+      InputStream defaultPropInputStream = new FileInputStream(defaultPropFilePath.toFile());
+      InputStream userPropInputStream = new FileInputStream(userPropFilePath.toFile());
 
-    InputStream defaultPropInputStream = getClass().getClassLoader()
-            .getResourceAsStream(defaultPropFilePath);
-    InputStream userPropInputStream = getClass().getClassLoader()
-            .getResourceAsStream(userPropFilePath);
-
-    if (defaultPropInputStream != null) {
-      defaultProp.load(defaultPropInputStream);
-    } else {
-      throw new FileNotFoundException(
-              "Warning: default property file not found in the resources path");
-    }
-
-    if (userPropInputStream != null) {
+      if (defaultPropInputStream != null) {
+        defaultProp.load(defaultPropInputStream);
+      } else {
+        throw new FileNotFoundException(
+                "Warning: default property file not found in the resources path");
+      }
       userProp.load(userPropInputStream);
-    } else {
-      throw new FileNotFoundException("Warning: there is no config properties file for user "
-              + user.getUsername());
+
+      //Copy and write from default-config into new properties for our user
+      defaultProp.forEach((key, value) -> userProp.setProperty(key.toString(), value.toString()));
+
+      userProp.store(new FileOutputStream(userPropFilePath.toString()), null);
     }
-
-    //Copy and write from default-config into new properties for our user
-    defaultProp.forEach((key, value) -> userProp.setProperty(key.toString(), value.toString()));
-
-    userProp.store(new FileOutputStream(userPropFilePath), null);
 
     //Log user immediately after creation
     Login.run(this.dc, user);
