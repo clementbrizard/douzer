@@ -1,15 +1,17 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
 
-//Replace by javadocs
-//the left middle list of all User 
+/**
+ * The left middle view containing all connected users.
+ */
 public class OnlineUsersListController implements Controller {
 
   private OnlineUsersListController onlineUsersListController;
@@ -32,8 +34,8 @@ public class OnlineUsersListController implements Controller {
    * Fills the view with the given list of users.
    * @param users list of connected users to display (pseudos)
    */
-  public void updateOnlineUsers(List<String> users){
-    ObservableList<String> items = FXCollections.observableArrayList (users);
+  public void updateOnlineUsers(List<String> users) {
+    ObservableList<String> items = FXCollections.observableArrayList(users);
     lvwOnlineUsers.setItems(items);
   }
 
