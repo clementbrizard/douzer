@@ -42,7 +42,6 @@ public class DataForIhmImpl implements DataForIhm {
   public void createUser(LocalUser user) throws IOException {
     //Create file config.properties
     Properties defaultProp = new Properties();
-    Properties userProp = new Properties();
     Path defaultPropFilePath = Paths.get("resources/default-config.properties");
     Path userPropFilePath = user.getSavePath().resolve("config.properties");
     File userConfigFile = new File(userPropFilePath.toString());
@@ -58,12 +57,7 @@ public class DataForIhmImpl implements DataForIhm {
         throw new FileNotFoundException(
                 "Warning: default property file not found in the resources path");
       }
-      userProp.load(userPropInputStream);
-
-      //Copy and write from default-config into new properties for our user
-      defaultProp.forEach((key, value) -> userProp.setProperty(key.toString(), value.toString()));
-
-      userProp.store(new FileOutputStream(userPropFilePath.toString()), null);
+      defaultProp.store(new FileOutputStream(userPropFilePath.toString()), null);
     }
 
     //Log user immediately after creation
