@@ -49,7 +49,6 @@ public class DataForIhmImpl implements DataForIhm {
     //If there is no config file for our user in the his path
     if (!userConfigFile.exists()) {
       InputStream defaultPropInputStream = new FileInputStream(defaultPropFilePath.toFile());
-      InputStream userPropInputStream = new FileInputStream(userPropFilePath.toFile());
 
       if (defaultPropInputStream != null) {
         defaultProp.load(defaultPropInputStream);
