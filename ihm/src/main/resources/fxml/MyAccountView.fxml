@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IHM.Controller">
+    <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
+        <children>
+            <TextField fx:id="textFieldFirstName" layoutX="349.0" layoutY="416.0" prefHeight="31.0" prefWidth="188.0" />
+            <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Modification du profil" textFill="WHITE">
+                <font>
+                    <Font size="24.0" />
+                </font>
+            </Label>
+         <Button fx:id="buttonSave" layoutX="161.0" layoutY="535.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="405.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Sauvegarder" />
+         <Label layoutX="209.0" layoutY="418.0" text="Prénom">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <TextField fx:id="textFieldLastName" layoutX="349.0" layoutY="368.0" prefHeight="31.0" prefWidth="188.0" />
+         <Label fx:id="labelPseudo" layoutX="335.0" layoutY="323.0" text="Pseudo">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <Label layoutX="220.0" layoutY="370.0" text="Nom">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <DatePicker fx:id="datePickerBirth" layoutX="349.0" layoutY="471.0" prefHeight="25.0" prefWidth="188.0" />
+         <Label layoutX="181.0" layoutY="470.0" text="Date de naissance">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
+         <Line endX="343.66668701171875" endY="-7.62939453125E-6" layoutX="323.0" layoutY="97.0" startX="-304.33331298828125" startY="-7.62939453125E-6" />
+         <Rectangle fx:id="imageViewAvatar" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="200.0" layoutX="264.0" layoutY="123.0" stroke="BLACK" strokeType="INSIDE" width="200.0" />
+         <ImageView fitHeight="200.0" fitWidth="200.0" layoutX="264.0" layoutY="123.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../development/ihm/src/main/resources/images/ProfileImageSymbol.png" />
+            </image>
+         </ImageView>
+         <ImageView fx:id="imageViewAddAvatar" fitHeight="31.0" fitWidth="32.0" layoutX="429.0" layoutY="128.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../development/ihm/src/main/resources/images/plusSymbol.png" />
+            </image>
+         </ImageView>
+         <ImageView fx:id="imageViewTrashCan" fitHeight="31.0" fitWidth="26.0" layoutX="433.0" layoutY="165.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../development/ihm/src/main/resources/images/trashCanSymbol.png" />
+            </image>
+         </ImageView>
+         <Button fx:id="buttonChangePassword" layoutX="29.0" layoutY="56.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Modifier le mot de passe" />
+         <Button fx:id="buttonDeleteAccount" layoutX="288.0" layoutY="56.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Supprimer le compte" />
+         <Button fx:id="buttonExportAccount" layoutX="508.0" layoutY="56.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Exporter le compte" />
+         <ImageView fx:id="imageViewReturn" fitHeight="27.0" fitWidth="25.0" layoutX="6.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+               <Image url="@../development/ihm/src/main/resources/images/returnSymbol.png" />
+            </image>
+         </ImageView>
+        </children>
+    </Pane>
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
+</GridPane>
