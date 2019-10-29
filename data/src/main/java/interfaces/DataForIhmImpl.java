@@ -96,6 +96,12 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
+  public MusicMetadata parseMusicMetadata(String path) {
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+
+  @Override
   public void rateMusic(Music music, int rating) {
     throw new UnsupportedOperationException("Not implemented yet");
   }
