@@ -24,6 +24,9 @@ public class IhmCore extends Application {
   private Scene signupScene;
   private Scene forgottenPasswordScene;
   
+  /**
+   * the general scene
+   */
   private Stage primaryStage;
 
   
@@ -33,13 +36,28 @@ public class IhmCore extends Application {
   private ForgottenPasswordController forgottenPasswordController;
   
   //private DataInterface dataInterface
+  
+  private IhmForData ihmForData;
+  
 
 
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
+  
+  public IhmCore() {
+    this.ihmForData = new IhmForData(this);
+  }
 
-  public IhmCore() {}
+  
 
+  /**
+   *  Setter of @see MainController.
+   *  @param mainController the main Controller
+  */
+  public void setIhmForData(IhmForData ihmForData) {
+    this.ihmForData = ihmForData;
+  }
+  
   /**
    *  Setter of @see MainController.
    *  @param mainController the main Controller
@@ -72,6 +90,14 @@ public class IhmCore extends Application {
     this.forgottenPasswordController = forgottenPwdController;
   }
 
+  /**
+   * Getter of @see IhmForData
+   * @return @see IhmForData
+   */
+  public IhmForData getIhmForData() {
+    return ihmForData;
+  }
+  
   /**
    * Getter of @see MainController.
    * @return @see MainController
