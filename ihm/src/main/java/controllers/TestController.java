@@ -40,7 +40,7 @@ public class TestController implements Controller {
     count++;
     launchThread(count);
     buttonClick.setText("click " + count + " time");
-    label.setText("appuyé");        
+    label.setText("appuyï¿½");        
   }
 
   private void launchThread(int countCopy) {
@@ -57,20 +57,20 @@ public class TestController implements Controller {
           protected Void call() throws Exception {
             System.out.println("dans le thread");
             Thread.sleep(n[0] * 1000);
-            System.out.println("après " + n[0] + " secondes");
+            System.out.println("aprï¿½s " + n[0] + " secondes");
             
             //function runLater who permit to run a task in thread
             Platform.runLater(() -> {
               //one notification
               Notifications.create()
                            .title("Title Text")
-                           .text("pop up n° " + countCopy + " après  : " + n[0] +  " secondes")
+                           .text("pop up nï¿½ " + countCopy + " aprï¿½s  : " + n[0] +  " secondes")
                            .darkStyle()
                            .position(Pos.TOP_LEFT)
                            .showWarning();
             });
             count++;
-            System.out.println("après la notification");
+            System.out.println("aprï¿½s la notification");
             return null;
             }
           };

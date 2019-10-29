@@ -213,6 +213,10 @@ public class IhmCore extends Application {
 
     //primaryStage.initStyle(StageStyle.UNDECORATED);
     
+    //add the root scene (login)
+    primaryStage.setScene(new Scene(root,width,height));
+    primaryStage.setMaximized(true);
+    
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
     primaryStage.show();
