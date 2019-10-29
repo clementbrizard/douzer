@@ -152,18 +152,18 @@ public class IhmCore extends Application {
     //get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
-    loginScene = new Scene(loginParent,width,height);
+    loginScene = new Scene(loginParent);
 
     //get the loader for SignUpView
     FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
     Parent signupParent = signupLoader.load();
-    signupScene = new Scene(signupParent,width,height);
+    signupScene = new Scene(signupParent);
 
     //get the loader for ForgottenPasswordView
     FXMLLoader forgottenPasswordLoader =
         new FXMLLoader(getClass().getResource("/fxml/ForgottenPasswordView.fxml"));
     Parent forgottenPasswordParent = forgottenPasswordLoader.load();
-    forgottenPasswordScene = new Scene(forgottenPasswordParent,width,height);
+    forgottenPasswordScene = new Scene(forgottenPasswordParent);
 
     //get Controllers from loader
     LoginController loginController = loginLoader.getController();
@@ -172,7 +172,6 @@ public class IhmCore extends Application {
         forgottenPasswordLoader.getController();
     
     //set the Controllers link to acces from the controllers
-    
     setLoginController(loginController);
     setSignUpController(signUpController);
     setForgottenPasswordController(forgottenPasswordController);
@@ -184,11 +183,16 @@ public class IhmCore extends Application {
 
     //initialize the first View
     this.primaryStage = primaryStage;
+
+    //primaryStage.initStyle(StageStyle.UNDECORATED);
+    
+    primaryStage.setScene(loginScene);
+    primaryStage.setResizable(false);
+    primaryStage.show();
+    
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-    primaryStage.setScene(loginScene);
-    primaryStage.show();
   }
 
   /**
