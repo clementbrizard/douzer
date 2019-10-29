@@ -9,8 +9,10 @@ import java.awt.Toolkit;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -21,8 +23,14 @@ public class IhmCore extends Application {
   private Scene loginScene;
   private Scene signupScene;
   private Scene forgottenPasswordScene;
+  
   private Stage primaryStage;
 
+  
+  private MainController mainController;
+  private LoginController loginController;
+  private SignUpController signUpController;
+  private ForgottenPasswordController forgottenPasswordController;
   
   //private DataInterface dataInterface
 
@@ -34,19 +42,15 @@ public class IhmCore extends Application {
   /**
    *  Setter of @see MainController.
    *  @param mainController the main Controller
-   
+  */
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
-  }
-  
-  public void setTestController(TestController testController) {
-    this.testController = testController;
   }
 
   /**
    * Setter of @see LoginController.
    * @param loginController the login Controller
-   
+  */
   public void setLoginController(LoginController loginController) {
     this.loginController = loginController;
   }
@@ -54,15 +58,23 @@ public class IhmCore extends Application {
   /**
    * Setter of @see SignUpController.
    * @param signUpController the signup Controller
-   
+  */
   public void setSignUpController(SignUpController signUpController) {
     this.signUpController = signUpController;
   }
 
   /**
+   * Setter of @see ForgottenPasswordController.
+   * @param forgottenPasswordController the forgotten password Controller
+   */
+  public void setForgottenPasswordController(ForgottenPasswordController forgottenPasswordController) {
+    this.forgottenPasswordController = forgottenPasswordController;
+  }
+  
+  /**
    * Getter of @see MainController.
    * @return @see MainController
-   
+  */ 
   public MainController getMainController() {
     return this.mainController;
   }
@@ -70,99 +82,113 @@ public class IhmCore extends Application {
   /**
    * Getter of @see LoginController.
    * @return @see LoginController
-   
+  */
   public LoginController getLoginController() {
     return this.loginController;
   }
-
+  
   /**
    * Getter of @see SignUpController.
    * @return @see SignUpController
-   
+  */ 
   public SignUpController getSignUpController() {
     return this.signUpController;
   }
-  */
+  
+  /**
+   * Getter of @see ForgottenPasswordController.
+   * @return @see ForgottenPasswordController
+   */
+  public ForgottenPasswordController getForgottenPasswordController() {
+    return this.forgottenPasswordController;
+  }
 
+  
+  /**
+   * change the mainScene into LoginScene
+   */
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
-  }
-
-  public void showSignupScene() {
-    primaryStage.setScene(signupScene);
-  }
-
-  public void showForgottenPasswordScene() {
-    primaryStage.setScene(forgottenPasswordScene);
+    
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    
+    primaryStage.setTitle("Connexion");
   }
 
   /**
-   * start method who load the first views and get their Controllers .
+   * change the mainScene into SignupScene
+   */
+  public void showSignupScene() {
+    primaryStage.setScene(signupScene);
+    
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    
+    primaryStage.setTitle("Inscription");
+  }
+
+  /**
+   * change the mainScene into ForgottenPasswordScene
+   */
+  public void showForgottenPasswordScene() {
+    primaryStage.setScene(forgottenPasswordScene);
+    
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    
+    primaryStage.setTitle("Mot de passe oublié");
+  }
+
+  /**
+   * start method who initialize and load the first views and manage theirs controllers.
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
+    
+    //get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
     loginScene = new Scene(loginParent,width,height);
 
-
+    //get the loader for SignUpView
     FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
     Parent signupParent = signupLoader.load();
     signupScene = new Scene(signupParent,width,height);
 
+    //get the loader for ForgottenPasswordView
     FXMLLoader forgottenPasswordLoader =
         new FXMLLoader(getClass().getResource("/fxml/ForgottenPasswordView.fxml"));
     Parent forgottenPasswordParent = forgottenPasswordLoader.load();
     forgottenPasswordScene = new Scene(forgottenPasswordParent,width,height);
 
+    //get Controllers from loader
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
-
-/*
-    //load the view from fxml  
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/TestView.fxml"));
-    //FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
-    //FXMLLoader loaderSignUp = new FXMLLoader(getClass().getResource("/views/SignUpView.fxml"));
-    //FXMLLoader loaderMain = new FXMLLoader(getClass().getResource("/views/MainView.fxml"));
     
-    //get the first view (login)
-    Parent root = (Parent) loader.load();
+    //set the Controllers link to acces from the controllers
     
-    //set the Title
-    primaryStage.setTitle("first test");
-    //primaryStage.setTitle("login");
+    setLoginController(loginController);
+    setSignUpController(signUpController);
+    setForgottenPasswordController(forgottenPasswordController);
     
-    //add the root scene (login)
-    primaryStage.setScene(new Scene(root,witdh,height));
-    primaryStage.setMaximized(true);
-    
-    primaryStage.show();
-    
-    //get the different Controllers
-    //LoginController ctrl = loader.getController();
-    //LoginController signUpCtrl = loaderSignUp.getController();
-    //LoginController mainCtrl = loaderMain.getController();
-    TestController ctrl = loader.getController();
-    
-    //set Controllers
-    //setLoginController(ctrl);
-    //setLoginController(signUpCtrl);
-    //setLoginController(mainCtrl);
-    setTestController(ctrl);
-    
-    //check into the console if we can get the Label from the testController
-    System.out.println(testController.getLabel().getText());
+    //set the IgmCore link into Controllers
     loginController.setIhmcore(this);
     signUpController.setIhmCore(this);
     forgottenPasswordController.setIhmCore(this);
 
+    //initialize the first View
     this.primaryStage = primaryStage;
-    primaryStage.setMaximized(true);
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
     primaryStage.setScene(loginScene);
     primaryStage.show();
-    */
   }
 
   /**
