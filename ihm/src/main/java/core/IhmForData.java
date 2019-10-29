@@ -1,7 +1,9 @@
 package core;
 
-//replace by javadocs
-//start IhmForData class
+/**
+ * integration for Ihm interface.
+ *
+ */
 public class IhmForData implements Ihm {
 
   private IhmCore ihmCore;

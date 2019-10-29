@@ -25,7 +25,7 @@ public class IhmCore extends Application {
   private Scene forgottenPasswordScene;
   
   /**
-   * the general scene
+   * the general scene.
    */
   private Stage primaryStage;
 
@@ -51,8 +51,8 @@ public class IhmCore extends Application {
   
 
   /**
-   *  Setter of @see MainController.
-   *  @param mainController the main Controller
+   *  Setter for @see IhmForData.
+   *  @param ihmForData the integration of ihm interface
   */
   public void setIhmForData(IhmForData ihmForData) {
     this.ihmForData = ihmForData;
@@ -91,7 +91,7 @@ public class IhmCore extends Application {
   }
 
   /**
-   * Getter of @see IhmForData
+   * Getter of @see IhmForData.
    * @return @see IhmForData
    */
   public IhmForData getIhmForData() {
