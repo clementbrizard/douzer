@@ -6,7 +6,6 @@ import interfaces.Ihm;
 
 /**
  * integration for Ihm interface.
- *
  */
 public class IhmForData implements Ihm {
 
@@ -15,7 +14,7 @@ public class IhmForData implements Ihm {
   public IhmForData(IhmCore ihmCore) {
     this.ihmCore = ihmCore;
   }
-    
+
   public IhmCore getIhmCore() {
     return this.ihmCore;
   }
@@ -23,27 +22,29 @@ public class IhmForData implements Ihm {
   /**
    * Notify IHM that a new User is connected. This is just a change update, there is no user list
    * exchange.
+   *
    * @param user User recently connected.
-   * @throws Exception 
    */
   @Override
-  public void notifyUserConnection(User user){
+  public void notifyUserConnection(User user) {
     throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
    * Notify IHM that a User disconnected. This is just a change update, there is no user list
    * exchange.
+   *
    * @param user User recently disconnected.
    */
   @Override
-   public void notifyUserDisconnection(User user) {
+  public void notifyUserDisconnection(User user) {
     throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
    * Update the IHM progress bar by giving the percentage of the download progression.
-   * @param music Music considered.
+   *
+   * @param music   Music considered.
    * @param integer Percentage progression, between 0 and 100.
    */
   @Override
@@ -53,6 +54,7 @@ public class IhmForData implements Ihm {
 
   /**
    * Trigger the update of all the occurrences of the modified music.
+   *
    * @param music Music to update.
    */
   @Override
@@ -62,6 +64,7 @@ public class IhmForData implements Ihm {
 
   /**
    * Notify that a music has been deleted.
+   *
    * @param music Deleted music.
    */
   @Override
@@ -71,6 +74,7 @@ public class IhmForData implements Ihm {
 
   /**
    * Trigger the update of all the occurrences of the modified user.
+   *
    * @param user User to update
    */
   @Override
@@ -80,6 +84,7 @@ public class IhmForData implements Ihm {
 
   /**
    * Notify that a User has been deleted.
+   *
    * @param user Deleted user.
    */
   @Override

@@ -19,6 +19,7 @@
         <module>ihm</module>
         <module>interfaces</module>
         <module>data-model</module>
+        <module>main</module>
     </modules>
 
     <build>

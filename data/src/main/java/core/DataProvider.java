@@ -11,19 +11,19 @@ import interfaces.Net;
 public class DataProvider {
   private static volatile Datacore dc;
 
-  void initData(Net net, Ihm ihm) throws DataException {
-    if (DataProvider.dc != null) {
+  public void initData(Net net, Ihm ihm) throws DataException {
+    if (DataProvider.dc == null) {
       DataProvider.dc = new Datacore(net, ihm);
     } else {
       throw new DataException("Datacore already initialized.");
     }
   }
 
-  DataForNet getDataForNet() {
+  public DataForNet getDataForNet() {
     return new DataForNetImpl();
   }
 
-  DataForIhm getDataForIhm() {
+  public DataForIhm getDataForIhm() {
     return new DataForIhmImpl();
   }
 }
