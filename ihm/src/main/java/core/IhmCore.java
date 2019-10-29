@@ -34,9 +34,10 @@ public class IhmCore extends Application {
   
   //private DataInterface dataInterface
 
+
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
-  
+
   public IhmCore() {}
 
   /**
@@ -70,11 +71,11 @@ public class IhmCore extends Application {
   public void setForgottenPasswordController(ForgottenPasswordController forgottenPasswordController) {
     this.forgottenPasswordController = forgottenPasswordController;
   }
-  
+
   /**
    * Getter of @see MainController.
    * @return @see MainController
-  */ 
+  */
   public MainController getMainController() {
     return this.mainController;
   }
@@ -86,15 +87,15 @@ public class IhmCore extends Application {
   public LoginController getLoginController() {
     return this.loginController;
   }
-  
+
   /**
    * Getter of @see SignUpController.
    * @return @see SignUpController
-  */ 
+  */
   public SignUpController getSignUpController() {
     return this.signUpController;
   }
-  
+
   /**
    * Getter of @see ForgottenPasswordController.
    * @return @see ForgottenPasswordController
@@ -103,17 +104,17 @@ public class IhmCore extends Application {
     return this.forgottenPasswordController;
   }
 
-  
+
   /**
    * change the mainScene into LoginScene
    */
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
-    
+
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-    
+
     primaryStage.setTitle("Connexion");
   }
 
@@ -122,11 +123,11 @@ public class IhmCore extends Application {
    */
   public void showSignupScene() {
     primaryStage.setScene(signupScene);
-    
+
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-    
+
     primaryStage.setTitle("Inscription");
   }
 
@@ -135,12 +136,12 @@ public class IhmCore extends Application {
    */
   public void showForgottenPasswordScene() {
     primaryStage.setScene(forgottenPasswordScene);
-    
+
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-    
-    primaryStage.setTitle("Mot de passe oublié");
+
+    primaryStage.setTitle("Mot de passe oubliï¿½");
   }
 
   /**
@@ -148,7 +149,6 @@ public class IhmCore extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    
     //get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
@@ -170,6 +170,7 @@ public class IhmCore extends Application {
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
+
     
     //set the Controllers link to acces from the controllers
     setLoginController(loginController);
