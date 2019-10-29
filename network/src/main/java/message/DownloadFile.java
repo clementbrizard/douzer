@@ -1,5 +1,6 @@
 package message;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -8,7 +9,7 @@ public class DownloadFile extends Message {
   private String hashMusic;
   private InetAddress ip;
 
-  public DownloadFile(Payload p) {
+  public DownloadFile(Serializable p) {
     super(p); //Call constructor for mother class
     // To be define initialisation for hashMusic and ip
   }

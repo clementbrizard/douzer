@@ -1,12 +1,13 @@
 package message;
 
+import java.io.Serializable;
 import java.net.Socket;
 
 public class Message {
 
-  private Payload payload;
+  private Serializable payload;
 
-  public Message(Payload p) {
+  public Message(Serializable p) {
     this.payload = p;
   }
 
@@ -14,7 +15,7 @@ public class Message {
     //To be define
   }
 
-  public Payload getPayload() {
+  public Serializable getPayload() {
     return payload;
   }
 }

@@ -1,12 +1,13 @@
 package threads;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 
 public class SendToUserThread extends ThreadExtend {
-  private Payload payload;
+  private Serializable payload;
   private InetAddress ipDest;
 
-  public SendToUserThread(Payload p, InetAddress ip) {
+  public SendToUserThread(Serializable p, InetAddress ip) {
     this.payload = p;
     this.ipDest = ip;
   }
