@@ -24,7 +24,9 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addMusic(MusicMetadata music, String path) {
-    dc.addMusic(new LocalMusic(music, new HashSet<User>(Collections.singleton(dc.getCurrentUser())), path));
+    dc.addMusic(new LocalMusic(music,
+        new HashSet<User>(Collections.singleton(dc.getCurrentUser())),
+        path));
   }
 
   @Override
