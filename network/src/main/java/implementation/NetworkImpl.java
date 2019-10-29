@@ -45,7 +45,7 @@ public class NetworkImpl implements Net {
    * @param ipsDest ip addresses of the receivers
    */
   public void sendToUsers(Serializable payload, Stream<InetAddress> ipsDest) {
-    this.netProvider.createSendToUsersThread(payload, ipsDest);
+    ipsDest.forEach((ip) -> netProvider.createSendToUserThread(payload, ip));
   }
   
   /**

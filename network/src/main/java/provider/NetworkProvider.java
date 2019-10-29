@@ -111,21 +111,6 @@ public class NetworkProvider {
   }
 
   /**
-   * Create a new dedicated thread to send a message to a given set of users, and returns the
-   * instance of the newly created thread.
-   * 
-   * @param p payload to be sent in the message
-   * @param userIps ips addresses of the receivers
-   * @return instance of the newly created thread
-   */
-  public SendToUsersThread createSendToUsersThread(Serializable p, Stream<InetAddress> userIps) {
-    SendToUsersThread newThread = new SendToUsersThread(p, userIps);
-    threads.add(newThread);
-    newThread.start();
-    return newThread;
-  }
-
-  /**
    * Create a new dedicated thread to send a download request to a given set of users,
    * and returns the instance of the newly created thread.
    * 
