@@ -16,19 +16,22 @@ message=$'Désolé ! Ton commit n\'est pas passé car ta branche est mal nommée
   - branche propre à ton module : <module>/feature|bugfix/objectif-de-ta-branche. Ex : ihm/feature/new-music-view
   - branche de release : release/<version>. Ex : release/1.0
 
-Voici comment renommer ta branche :
+Pour renommer ta branche :
 1) Tu lui donnes un nouveau nom correct :
 $ git branch -m new-name
-2) Tu refais ton commit : cette-fois ci il va passer.
+2) Tu refais ton commit : cette-fois ci il va passer. Si tu n\'avais pas encore push sur ta branche, tu peux maintenant le faire.
+
+Sinon, il te reste deux étapes :
 3) Tu supprimes la branche distante, qui a l\'ancien nom, et tu push ta branche locale, qui a le nouveau nom :
 $ git push origin :old-name new-name
 4) Ta branche locale est toujours basée sur l\'ancienne branche distante, que tu viens de supprimer. Il faut donc la lier à la nouvelle branche distante :
 $ git push origin -u new-name
 
+Si ta branche était déjà liée à une merge-request, elle a été fermée à l\'étape 3, quand tu as supprimé l\'ancienne branche distante. Il te faut en rouvrir une depuis la nouvelle branche.
+
 Merci !
 
-PS1 : si ta branche était déjà liée à une merge-request, elle a été fermée à l\'étape 3, quand tu as supprimé l\'ancienne branche distante. Il te faut en rouvrir une depuis la nouvelle branche.
-PS2 : si tu as une bonne raison de garder ton nom de branche, tu peux faire ton commit avec l\'option --no-verify.'
+PS : si tu as une bonne raison de garder ton nom de branche, tu peux faire ton commit avec l\'option --no-verify.'
 
 if [[ ! $local_branch =~ $module_regex &&  ! $local_branch =~ $release_regex ]]
 then
