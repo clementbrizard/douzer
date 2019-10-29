@@ -34,17 +34,18 @@ public class DataForIhmImpl implements DataForIhm {
       // Creating LocalMusic object
       LocalMusic newMusic = new LocalMusic(
           music,
-          new HashSet<User>(Collections.singleton(dc.getCurrentUser())),
           path
       );
+
+      // Add current user to music owners
+      newMusic.getOwners().add(dc.getCurrentUser());
 
       // Add music to LocalUser list
       dc.getCurrentUser().getMusics().add(newMusic);
 
       // Add music to Music List
       dc.addMusic(newMusic);
-    }
-    else {
+    } else {
       throw new FileNotFoundException("This file doesn't exist");
     }
   }

@@ -10,8 +10,8 @@ public class LocalMusic extends Music {
     super(metadata, owners);
   }
 
-  public LocalMusic(MusicMetadata metadata, Set<User> owners, String mp3Path) {
-    super(metadata, owners);
+  public LocalMusic(MusicMetadata metadata, String mp3Path) {
+    super(metadata);
     this.mp3Path = mp3Path;
   }
 
