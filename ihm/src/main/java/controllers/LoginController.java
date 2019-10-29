@@ -59,7 +59,7 @@ public class LoginController implements Controller {
 
   }
 
-  public void setIhmcore(IhmCore ihmcore) {
+  public void setIhmCore(IhmCore ihmcore) {
     this.ihmcore = ihmcore;
   }
 

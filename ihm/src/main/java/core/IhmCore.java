@@ -204,7 +204,7 @@ public class IhmCore extends Application {
     setForgottenPasswordController(forgottenPasswordController);
     
     //set the IgmCore link into Controllers
-    loginController.setIhmcore(this);
+    loginController.setIhmCore(this);
     signUpController.setIhmCore(this);
     forgottenPasswordController.setIhmCore(this);
 
@@ -213,10 +213,7 @@ public class IhmCore extends Application {
 
     //primaryStage.initStyle(StageStyle.UNDECORATED);
     
-    //add the root scene (login)
-    primaryStage.setScene(new Scene(root,width,height));
-    primaryStage.setMaximized(true);
-    
+    //add the root scene (login)    
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
     primaryStage.show();
