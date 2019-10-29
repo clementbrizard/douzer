@@ -1,5 +1,6 @@
 package datamodel;
 
+import java.time.Duration;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ public class MusicMetadata implements java.io.Serializable {
   private String title;
   private String artist;
   private String album;
+  private Duration duration;
   private Date releaseDate;
   private Set<String> tags;
   private transient Map<User, Integer> ratings;
@@ -77,5 +79,13 @@ public class MusicMetadata implements java.io.Serializable {
 
   public void setComments(List<Comment> comments) {
     this.comments = comments;
+  }
+
+  public Duration getDuration() {
+    return duration;
+  }
+
+  public void setDuration(Duration duration) {
+    this.duration = duration;
   }
 }
