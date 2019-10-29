@@ -49,7 +49,7 @@ public class Server extends Thread {
   @Override
   public void run() {
     try {
-      this.listeningSocket = new ServerSocket(6549);
+      this.listeningSocket = new ServerSocket(NetworkProvider.N_PORT);
       while (this.serverRunning) {
         System.out.println("Waiting for connection...");
         

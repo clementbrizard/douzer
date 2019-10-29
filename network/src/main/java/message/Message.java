@@ -1,5 +1,7 @@
 package message;
 
+import interfaces.DataForNet;
+
 import java.io.Serializable;
 import java.net.Socket;
 
@@ -11,7 +13,7 @@ public class Message {
     this.payload = p;
   }
 
-  public void process(DataInterface data, Socket socket){
+  public void process(DataForNet data, Socket socket){
     //To be define
   }
 
