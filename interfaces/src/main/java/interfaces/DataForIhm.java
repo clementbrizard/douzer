@@ -49,7 +49,8 @@ public interface DataForIhm {
    * @param path : path of the mp3 file
    * @return MusicMetaData object containing metadata
    */
-  MusicMetadata parseMusicMetadata(String path) throws IOException, UnsupportedTagException, InvalidDataException;
+  MusicMetadata parseMusicMetadata(String path)
+          throws IOException, UnsupportedTagException, InvalidDataException;
 
   void rateMusic(Music music, int rating);
 
