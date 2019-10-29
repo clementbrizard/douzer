@@ -10,9 +10,12 @@ import datamodel.User;
 import features.Login;
 import features.ShareMusicsPayload;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -21,7 +24,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addMusic(MusicMetadata music, String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    dc.addMusic(new LocalMusic(music, new HashSet<User>(Collections.singleton(dc.getCurrentUser())), path));
   }
 
   @Override
