@@ -26,6 +26,7 @@ import threads.ThreadExtend;
  */
 public class NetworkProvider {
 
+  public static final int N_PORT = 1026;
   private DataInterface dataInterface;
   private Server server;
   private NetworkImpl netImpl;
