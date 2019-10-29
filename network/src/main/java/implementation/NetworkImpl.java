@@ -7,7 +7,7 @@ import provider.NetworkProvider;
 import threads.ThreadExtend;
 
 /**
- * Implements the Net interface that provides useful mathods to send messages through the
+ * Implements the Net interface that provides useful methods to send messages through the
  * network. Most of the times, simply redirect the request to the network provider because
  * every thread-management is processed in provider.
  * 
@@ -19,7 +19,7 @@ public class NetworkImpl implements Net {
   private NetworkProvider netProvider;
   
   /**
-   * COnstructor that initializes the networkprovider, used to create the threads.
+   * Constructor that initializes the networkprovider, used to create the threads.
    * 
    * @param np current instance of the network provider
    */
