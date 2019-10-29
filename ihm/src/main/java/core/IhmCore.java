@@ -1,9 +1,9 @@
 package core;
 
+import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
 import controllers.SignUpController;
-import controllers.TestController;
 
 import java.awt.Toolkit;
 
@@ -14,27 +14,27 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *  the IhmCore will start the HCI of the Application and get the main Controllers.
+ *  the IhmCore will start the HCI of the Application, manages controllers and stage changes
  */
 public class IhmCore extends Application {
 
-  private MainController mainController;
-  private LoginController loginController;
-  private SignUpController signUpController;
+  private Scene loginScene;
+  private Scene signupScene;
+  private Scene forgottenPasswordScene;
+  private Stage primaryStage;
 
-  private TestController testController;
   
   //private DataInterface dataInterface
 
-  double witdh = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
-  double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
-
+  private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
+  private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
+  
   public IhmCore() {}
 
   /**
    *  Setter of @see MainController.
    *  @param mainController the main Controller
-   */
+   
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
@@ -46,7 +46,7 @@ public class IhmCore extends Application {
   /**
    * Setter of @see LoginController.
    * @param loginController the login Controller
-   */
+   
   public void setLoginController(LoginController loginController) {
     this.loginController = loginController;
   }
@@ -54,7 +54,7 @@ public class IhmCore extends Application {
   /**
    * Setter of @see SignUpController.
    * @param signUpController the signup Controller
-   */
+   
   public void setSignUpController(SignUpController signUpController) {
     this.signUpController = signUpController;
   }
@@ -62,7 +62,7 @@ public class IhmCore extends Application {
   /**
    * Getter of @see MainController.
    * @return @see MainController
-   */
+   
   public MainController getMainController() {
     return this.mainController;
   }
@@ -70,7 +70,7 @@ public class IhmCore extends Application {
   /**
    * Getter of @see LoginController.
    * @return @see LoginController
-   */
+   
   public LoginController getLoginController() {
     return this.loginController;
   }
@@ -78,22 +78,49 @@ public class IhmCore extends Application {
   /**
    * Getter of @see SignUpController.
    * @return @see SignUpController
-   */
+   
   public SignUpController getSignUpController() {
     return this.signUpController;
   }
+  */
 
-  public TestController getTestController() {
-    return testController;
+  public void showLoginScene() {
+    primaryStage.setScene(loginScene);
   }
 
+  public void showSignupScene() {
+    primaryStage.setScene(signupScene);
+  }
+
+  public void showForgottenPasswordScene() {
+    primaryStage.setScene(forgottenPasswordScene);
+  }
 
   /**
    * start method who load the first views and get their Controllers .
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    
+    FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
+    Parent loginParent = loginLoader.load();
+    loginScene = new Scene(loginParent,width,height);
+
+
+    FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
+    Parent signupParent = signupLoader.load();
+    signupScene = new Scene(signupParent,width,height);
+
+    FXMLLoader forgottenPasswordLoader =
+        new FXMLLoader(getClass().getResource("/fxml/ForgottenPasswordView.fxml"));
+    Parent forgottenPasswordParent = forgottenPasswordLoader.load();
+    forgottenPasswordScene = new Scene(forgottenPasswordParent,width,height);
+
+    LoginController loginController = loginLoader.getController();
+    SignUpController signUpController = signupLoader.getController();
+    ForgottenPasswordController forgottenPasswordController =
+        forgottenPasswordLoader.getController();
+
+/*
     //load the view from fxml  
     FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/TestView.fxml"));
     //FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/LoginView.fxml"));
@@ -127,9 +154,17 @@ public class IhmCore extends Application {
     
     //check into the console if we can get the Label from the testController
     System.out.println(testController.getLabel().getText());
+    loginController.setIhmcore(this);
+    signUpController.setIhmCore(this);
+    forgottenPasswordController.setIhmCore(this);
+
+    this.primaryStage = primaryStage;
+    primaryStage.setMaximized(true);
+    primaryStage.setScene(loginScene);
+    primaryStage.show();
+    */
   }
 
-  
   /**
    * function who is called from Main to start the HCI.
    * @param args the arguments of the Application from Main method
