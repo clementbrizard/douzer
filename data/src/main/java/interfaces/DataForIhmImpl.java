@@ -7,8 +7,11 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import exceptions.DataException;
 import features.Login;
 import features.ShareMusicsPayload;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,12 +26,27 @@ public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
 
   @Override
-  public void addMusic(MusicMetadata music, String path) {
-    LocalMusic newMusic = new LocalMusic(music,
-        new HashSet<User>(Collections.singleton(dc.getCurrentUser())),
-        path);
-    dc.getCurrentUser().setMusics(new HashSet<LocalMusic>(Collections.singleton(newMusic)));
-    dc.addMusic(newMusic);
+  public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
+    // Checking if file exists
+    File f = new File(path);
+    if (f.exists() && !f.isDirectory()) {
+
+      // Creating LocalMusic object
+      LocalMusic newMusic = new LocalMusic(
+          music,
+          new HashSet<User>(Collections.singleton(dc.getCurrentUser())),
+          path
+      );
+
+      // Add music to LocalUser list
+      dc.getCurrentUser().getMusics().add(newMusic);
+
+      // Add music to Music List
+      dc.addMusic(newMusic);
+    }
+    else {
+      throw new FileNotFoundException("This file doesn't exist");
+    }
   }
 
   @Override
