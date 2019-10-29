@@ -32,8 +32,7 @@ public abstract class CreateUser {
       throws IOException, LoginException {
     //Create file config.properties
     Properties defaultProp = new Properties();
-    Path userPropFilePath = Paths.get(user.getSavePath()
-        + user.getUsername() + "-config.properties");
+    Path userPropFilePath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     File userConfigFile = new File(userPropFilePath.toString());
 
     //If there is no config file for our user in the his path
