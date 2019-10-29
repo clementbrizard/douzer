@@ -14,6 +14,12 @@ import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
 public interface DataForIhm {
+  /**
+   * Add new local music to the current owner and to the local list
+   * @param music New music metadata
+   * @param path Path of local mp3
+   * @throws FileNotFoundException Throws if MP3 file doesn't exist
+   */
   void addMusic(MusicMetadata music, String path) throws FileNotFoundException;
 
   void addComment(Music music, String comment);

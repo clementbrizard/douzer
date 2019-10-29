@@ -7,18 +7,14 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
-import exceptions.DataException;
 import features.Login;
 import features.ShareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -27,23 +23,16 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
-    // Checking if file exists
     File f = new File(path);
     if (f.exists() && !f.isDirectory()) {
-
-      // Creating LocalMusic object
       LocalMusic newMusic = new LocalMusic(
           music,
           path
       );
 
-      // Add current user to music owners
       newMusic.getOwners().add(dc.getCurrentUser());
 
-      // Add music to LocalUser list
       dc.getCurrentUser().getMusics().add(newMusic);
-
-      // Add music to Music List
       dc.addMusic(newMusic);
     } else {
       throw new FileNotFoundException("This file doesn't exist");
