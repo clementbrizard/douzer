@@ -6,6 +6,7 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +14,13 @@ import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
 public interface DataForIhm {
-  void addMusic(MusicMetadata music, String path);
+  /**
+   * Add new local music to the current owner and to the local list.
+   * @param music New music metadata
+   * @param path Path of local mp3
+   * @throws FileNotFoundException Throws if MP3 file doesn't exist
+   */
+  void addMusic(MusicMetadata music, String path) throws FileNotFoundException;
 
   void addComment(Music music, String comment);
 
@@ -42,6 +49,8 @@ public interface DataForIhm {
   void login(String username, String password) throws IOException, LoginException;
 
   void modifyUser(LocalUser user);
+
+  MusicMetadata parseMusicMetadata(String path);
 
   void rateMusic(Music music, int rating);
 

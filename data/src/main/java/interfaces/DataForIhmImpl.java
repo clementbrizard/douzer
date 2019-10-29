@@ -10,7 +10,8 @@ import datamodel.User;
 import features.CreateUser;
 import features.Login;
 import features.ShareMusicsPayload;
-
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
@@ -24,8 +25,21 @@ public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
 
   @Override
-  public void addMusic(MusicMetadata music, String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
+    File f = new File(path);
+    if (f.exists() && !f.isDirectory()) {
+      LocalMusic newMusic = new LocalMusic(
+          music,
+          path
+      );
+
+      newMusic.getOwners().add(dc.getCurrentUser());
+
+      dc.getCurrentUser().getMusics().add(newMusic);
+      dc.addMusic(newMusic);
+    } else {
+      throw new FileNotFoundException("This file doesn't exist");
+    }
   }
 
   @Override
