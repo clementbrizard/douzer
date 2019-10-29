@@ -27,8 +27,8 @@ public class IhmForData implements Ihm {
    * @throws Exception 
    */
   @Override
-  public void notifyUserConnection(User user) throws Exception {
-    throw new Exception("La fonction n'est pas encore implémentée");
+  public void notifyUserConnection(User user){
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
@@ -37,8 +37,8 @@ public class IhmForData implements Ihm {
    * @param user User recently disconnected.
    */
   @Override
-   public void notifyUserDisconnection(User user) throws Exception {
-    throw new Exception("La fonction n'est pas encore implémentée");
+   public void notifyUserDisconnection(User user) {
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
@@ -47,8 +47,8 @@ public class IhmForData implements Ihm {
    * @param integer Percentage progression, between 0 and 100.
    */
   @Override
-  public void notifyDownloadProgress(Music music, int integer) throws Exception {
-    throw new Exception("La fonction n'est pas encore implémentée");
+  public void notifyDownloadProgress(Music music, int integer) {
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
@@ -56,8 +56,8 @@ public class IhmForData implements Ihm {
    * @param music Music to update.
    */
   @Override
-  public void updateMusic(Music music) throws Exception{
-    throw new Exception("La fonction n'est pas encore implémentée");
+  public void updateMusic(Music music) {
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
@@ -65,8 +65,8 @@ public class IhmForData implements Ihm {
    * @param music Deleted music.
    */
   @Override
-  public void notifyMusicDeletion(Music music) throws Exception {
-    throw new Exception("La fonction n'est pas encore implémentée");
+  public void notifyMusicDeletion(Music music) {
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
@@ -74,8 +74,8 @@ public class IhmForData implements Ihm {
    * @param user User to update
    */
   @Override
-  public void updateUser(User user) throws Exception {
-    throw new Exception("La fonction n'est pas encore implémentée");
+  public void updateUser(User user) {
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 
   /**
@@ -83,7 +83,7 @@ public class IhmForData implements Ihm {
    * @param user Deleted user.
    */
   @Override
-  public void notifyUserDeletion(User user) throws Exception {
-    throw new Exception("La fonction n'est pas encore implémentée");
+  public void notifyUserDeletion(User user) {
+    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
   }
 }
