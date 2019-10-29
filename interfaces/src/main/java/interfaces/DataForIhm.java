@@ -25,7 +25,7 @@ public interface DataForIhm {
    *
    * @param  user LocalUser given by IHM
    */
-  void createUser(LocalUser user) throws IOException;
+  void createUser(LocalUser user) throws IOException, LoginException;
 
   void deleteAccount();
 

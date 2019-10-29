@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Datacore {
+  public static final String LOCAL_USERS_FILENAME  = "lo23-users.ser";
   public Net net;
   public Ihm ihm;
   private volatile HashMap<UUID, User> users;

@@ -7,21 +7,16 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import features.CreateUser;
 import features.Login;
 import features.ShareMusicsPayload;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
+
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -39,28 +34,10 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void createUser(LocalUser user) throws IOException {
-    //Create file config.properties
-    Properties defaultProp = new Properties();
-    Path defaultPropFilePath = Paths.get("resources/default-config.properties");
-    Path userPropFilePath = user.getSavePath().resolve("config.properties");
-    File userConfigFile = new File(userPropFilePath.toString());
-
-    //If there is no config file for our user in the his path
-    if (!userConfigFile.exists()) {
-      InputStream defaultPropInputStream = new FileInputStream(defaultPropFilePath.toFile());
-
-      if (defaultPropInputStream != null) {
-        defaultProp.load(defaultPropInputStream);
-      } else {
-        throw new FileNotFoundException(
-                "Warning: default property file not found in the resources path");
-      }
-      defaultProp.store(new FileOutputStream(userPropFilePath.toString()), null);
-    }
-
-    //Log user immediately after creation
-    Login.run(this.dc, user);
+  public void createUser(LocalUser user) throws IOException, LoginException {
+    InputStream defaultPropInputStream = getClass().getClassLoader()
+        .getResourceAsStream("default-config.properties");
+    CreateUser.run(user, this.dc, defaultPropInputStream);
   }
 
   @Override
