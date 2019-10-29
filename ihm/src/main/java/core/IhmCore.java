@@ -16,7 +16,7 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
- *  the IhmCore will start the HCI of the Application, manages controllers and stage changes
+ *  the IhmCore will start the HCI of the Application, manages controllers and stage changes.
  */
 public class IhmCore extends Application {
 
@@ -66,10 +66,10 @@ public class IhmCore extends Application {
 
   /**
    * Setter of @see ForgottenPasswordController.
-   * @param forgottenPasswordController the forgotten password Controller
+   * @param forgottenPwdController the forgotten password Controller
    */
-  public void setForgottenPasswordController(ForgottenPasswordController forgottenPasswordController) {
-    this.forgottenPasswordController = forgottenPasswordController;
+  public void setForgottenPasswordController(ForgottenPasswordController forgottenPwdController) {
+    this.forgottenPasswordController = forgottenPwdController;
   }
 
   /**
@@ -106,7 +106,7 @@ public class IhmCore extends Application {
 
 
   /**
-   * change the mainScene into LoginScene
+   * change the mainScene into LoginScene.
    */
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
@@ -119,7 +119,7 @@ public class IhmCore extends Application {
   }
 
   /**
-   * change the mainScene into SignupScene
+   * change the mainScene into SignupScene.
    */
   public void showSignupScene() {
     primaryStage.setScene(signupScene);
@@ -132,7 +132,7 @@ public class IhmCore extends Application {
   }
 
   /**
-   * change the mainScene into ForgottenPasswordScene
+   * change the mainScene into ForgottenPasswordScene.
    */
   public void showForgottenPasswordScene() {
     primaryStage.setScene(forgottenPasswordScene);
