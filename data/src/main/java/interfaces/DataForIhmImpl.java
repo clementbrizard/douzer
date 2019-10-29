@@ -103,13 +103,17 @@ public class DataForIhmImpl implements DataForIhm {
       metadata.setTitle(id3v1Tag.getTitle());
       metadata.setArtist(id3v1Tag.getArtist());
       metadata.setAlbum(id3v1Tag.getAlbum());
-      metadata.setReleaseDate(new GregorianCalendar(Integer.parseInt(id3v1Tag.getYear()), Calendar.JANUARY, 1).getTime());
+      metadata.setReleaseDate(new GregorianCalendar(
+              Integer.parseInt(id3v1Tag.getYear()), Calendar.JANUARY, 1)
+              .getTime());
     } else if(mp3File.hasId3v2Tag()){
       ID3v2 id3v2Tag = mp3File.getId3v2Tag();
       metadata.setTitle(id3v2Tag.getTitle());
       metadata.setArtist(id3v2Tag.getArtist());
       metadata.setArtist(id3v2Tag.getAlbum());
-      metadata.setReleaseDate(new GregorianCalendar(Integer.parseInt(id3v2Tag.getYear()), Calendar.JANUARY, 1).getTime());
+      metadata.setReleaseDate(new GregorianCalendar(
+              Integer.parseInt(id3v2Tag.getYear()), Calendar.JANUARY, 1)
+              .getTime());
     }
 
     return metadata;

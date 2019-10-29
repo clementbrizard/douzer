@@ -45,7 +45,7 @@ public interface DataForIhm {
   void modifyUser(LocalUser user);
 
   /**
-   * Extract metadata from mp3 file
+   * Extract metadata from mp3 file.
    * @param path : path of the mp3 file
    * @return MusicMetaData object containing metadata
    */
