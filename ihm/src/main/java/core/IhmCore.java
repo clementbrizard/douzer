@@ -108,7 +108,7 @@ public class IhmCore extends Application {
     //primaryStage.setTitle("login");
     
     //add the root scene (login)
-    primaryStage.setScene(new Scene(root,witdh,height));
+    primaryStage.setScene(new Scene(root,width,height));
     primaryStage.setMaximized(true);
     
     primaryStage.show();
