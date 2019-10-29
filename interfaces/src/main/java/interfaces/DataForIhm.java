@@ -17,6 +17,14 @@ public interface DataForIhm {
 
   void addComment(Music music, String comment);
 
+  /**
+   * Check if there is a config.properties file in the user's save path. If there is no config file
+   * yet, create a config.properties file by copy of default-config.properties
+   * default-config.properties is located in resources/
+   * Then the function is calling Login.run function by giving the Datacore object and the LocalUser
+   *
+   * @param  user LocalUser given by IHM
+   */
   void createUser(LocalUser user) throws IOException;
 
   void deleteAccount();
