@@ -38,6 +38,14 @@ public class DataForIhmImpl implements DataForIhm {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
+  /**
+   * Check if there is a config.properties file in the user's save path. If there is no config file
+   * yet, create a config.properties file by copy of default-config.properties
+   * default-config.properties is located in resources/
+   * Then the function is calling Login.run function by giving the Datacore object and the LocalUser
+   *
+   * @param  user LocalUser given by IHM
+   */
   @Override
   public void createUser(LocalUser user) throws IOException {
     //Create file config.properties
