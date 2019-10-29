@@ -1,11 +1,12 @@
 package message;
 
+import java.io.Serializable;
 import java.net.Socket;
 
 public class SendFile extends Message {
   private String hashMusic;
 
-  public SendFile(String p) {
+  public SendFile(Serializable p) {
     super(p);
     // To be define
   }

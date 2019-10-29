@@ -2,6 +2,7 @@ package provider;
 
 import implementation.NetworkImpl;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -101,7 +102,7 @@ public class NetworkProvider {
    * @param ip ip address of the receiver
    * @return instance of the newly created thread
    */
-  public SendToUserThread createSendToUserThread(String p, InetAddress ip) {
+  public SendToUserThread createSendToUserThread(Serializable p, InetAddress ip) {
     SendToUserThread newThread = new SendToUserThread(p, ip);
     threads.add(newThread);
     newThread.start();
@@ -116,7 +117,7 @@ public class NetworkProvider {
    * @param userIps ips addresses of the receivers
    * @return instance of the newly created thread
    */
-  public SendToUsersThread createSendToUsersThread(String p, Stream<InetAddress> userIps) {
+  public SendToUsersThread createSendToUsersThread(Serializable p, Stream<InetAddress> userIps) {
     SendToUsersThread newThread = new SendToUsersThread(p, userIps);
     threads.add(newThread);
     newThread.start();

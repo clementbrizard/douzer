@@ -1,5 +1,6 @@
 package implementation;
 
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.stream.Stream;
 
@@ -33,7 +34,7 @@ public class NetworkImpl implements Net {
    * @param payload content of the message
    * @param ipDest ip address of the receiver
    */
-  public void sendToUser(String payload, InetAddress ipDest) {
+  public void sendToUser(Serializable payload, InetAddress ipDest) {
     this.netProvider.createSendToUserThread(payload, ipDest);
   }
   
@@ -43,7 +44,7 @@ public class NetworkImpl implements Net {
    * @param payload content of the message
    * @param ipsDest ip addresses of the receivers
    */
-  public void sendToUsers(String payload, Stream<InetAddress> ipsDest) {
+  public void sendToUsers(Serializable payload, Stream<InetAddress> ipsDest) {
     this.netProvider.createSendToUsersThread(payload, ipsDest);
   }
   
@@ -64,7 +65,7 @@ public class NetworkImpl implements Net {
    * @param payload data to transmit to the network
    * @param knownIPs known nodes of the network
    */
-  public void connect(String payload, Stream<InetAddress> knownIPs) {
+  public void connect(Serializable payload, Stream<InetAddress> knownIPs) {
     this.netProvider.createServer();
     sendToUsers(payload, knownIPs);
   }
@@ -76,7 +77,7 @@ public class NetworkImpl implements Net {
    * @param payload data to inform the network we are disconnected
    * @param knownIPs known ips in the network
    */
-  public void disconnect(String payload, Stream<InetAddress> knownIPs) {
+  public void disconnect(Serializable payload, Stream<InetAddress> knownIPs) {
     //Kill server thread (we don't want to receive any messages)
     this.netProvider.createServer().kill();
     
