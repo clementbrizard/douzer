@@ -1,6 +1,7 @@
 package provider;
 
 import implementation.NetworkImpl;
+import interfaces.DataForNet;
 
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -10,10 +11,10 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 import message.Message;
+
 import threads.MessageProcess;
 import threads.RequestDownloadThread;
 import threads.SendToUserThread;
-import threads.SendToUsersThread;
 import threads.Server;
 import threads.ThreadExtend;
 
@@ -27,7 +28,7 @@ import threads.ThreadExtend;
 public class NetworkProvider {
 
   public static final int N_PORT = 1026;
-  private DataInterface dataInterface;
+  private DataForNet dataInterface;
   private Server server;
   private NetworkImpl netImpl;
   private Collection<ThreadExtend> threads;
@@ -66,7 +67,7 @@ public class NetworkProvider {
    * 
    * @return current instance of the implemetation of data interface
    */
-  public DataInterface getDataImpl() {
+  public DataForNet getDataImpl() {
     return this.dataInterface;
   }
 
@@ -75,7 +76,7 @@ public class NetworkProvider {
    * 
    * @param dataInterface implementation of DataInterface
    */
-  public void setDataImpl(DataInterface dataInterface) {
+  public void setDataImpl(DataForNet dataInterface) {
     this.dataInterface = dataInterface;
   }
 

@@ -1,7 +1,10 @@
 package implementation;
 
+import interfaces.Net;
+
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.stream.Stream;
 
 import provider.NetworkProvider;
@@ -34,6 +37,7 @@ public class NetworkImpl implements Net {
    * @param payload content of the message
    * @param ipDest ip address of the receiver
    */
+  @Override
   public void sendToUser(Serializable payload, InetAddress ipDest) {
     this.netProvider.createSendToUserThread(payload, ipDest);
   }
@@ -44,6 +48,7 @@ public class NetworkImpl implements Net {
    * @param payload content of the message
    * @param ipsDest ip addresses of the receivers
    */
+  @Override
   public void sendToUsers(Serializable payload, Stream<InetAddress> ipsDest) {
     ipsDest.forEach((ip) -> netProvider.createSendToUserThread(payload, ip));
   }
@@ -54,6 +59,7 @@ public class NetworkImpl implements Net {
    * @param sourcesIPs ips where the music can be downloaded
    * @param musicHash hash of the music to download
    */
+  @Override
   public void requestDownload(Stream<InetAddress> sourcesIPs, String musicHash) {
     return;
   }
@@ -65,9 +71,10 @@ public class NetworkImpl implements Net {
    * @param payload data to transmit to the network
    * @param knownIPs known nodes of the network
    */
-  public void connect(Serializable payload, Stream<InetAddress> knownIPs) {
+  @Override
+  public void connect(Serializable payload, Collection<InetAddress> knownIPs) {
     this.netProvider.createServer();
-    sendToUsers(payload, knownIPs);
+    sendToUsers(payload, knownIPs.stream());
   }
   
   /**
@@ -77,12 +84,13 @@ public class NetworkImpl implements Net {
    * @param payload data to inform the network we are disconnected
    * @param knownIPs known ips in the network
    */
-  public void disconnect(Serializable payload, Stream<InetAddress> knownIPs) {
+  @Override
+  public void disconnect(Serializable payload, Collection<InetAddress> knownIPs) {
     //Kill server thread (we don't want to receive any messages)
     this.netProvider.createServer().kill();
     
     //Wait for the network to be fully notified
-    this.netProvider.createSendToUsersThread(payload, knownIPs).join();
+    this.netProvider.getNetwork().sendToUsers(payload, knownIPs.stream());
     
     //Then kill every running threads
     for (ThreadExtend thread : this.netProvider.getThreads()) {

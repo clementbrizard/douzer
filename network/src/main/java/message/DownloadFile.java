@@ -1,5 +1,7 @@
 package message;
 
+import interfaces.DataForNet;
+
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -15,7 +17,7 @@ public class DownloadFile extends Message {
   }
 
   @Override
-  public void process(DataInterface data, Socket socket) {
+  public void process(DataForNet data, Socket socket) {
     //To be define
   }
 
