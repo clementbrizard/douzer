@@ -1,5 +1,9 @@
 package core;
 
+import datamodel.Music;
+import datamodel.User;
+import interfaces.Ihm;
+
 /**
  * integration for Ihm interface.
  *
@@ -20,9 +24,10 @@ public class IhmForData implements Ihm {
    * Notify IHM that a new User is connected. This is just a change update, there is no user list
    * exchange.
    * @param user User recently connected.
+   * @throws Exception 
    */
   @Override
-  void notifyUserConnection(User user) {
+  public void notifyUserConnection(User user) throws Exception {
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 
@@ -32,7 +37,7 @@ public class IhmForData implements Ihm {
    * @param user User recently disconnected.
    */
   @Override
-   void notifyUserDisconnection(User user) {
+   public void notifyUserDisconnection(User user) throws Exception {
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 
@@ -42,7 +47,7 @@ public class IhmForData implements Ihm {
    * @param integer Percentage progression, between 0 and 100.
    */
   @Override
-  void notifyDownloadProgress(Music music, int integer) {
+  public void notifyDownloadProgress(Music music, int integer) throws Exception {
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 
@@ -51,7 +56,7 @@ public class IhmForData implements Ihm {
    * @param music Music to update.
    */
   @Override
-  void updateMusic(Music music) {
+  public void updateMusic(Music music) throws Exception{
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 
@@ -60,7 +65,7 @@ public class IhmForData implements Ihm {
    * @param music Deleted music.
    */
   @Override
-  void notifyMusicDeletion(Music music) {
+  public void notifyMusicDeletion(Music music) throws Exception {
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 
@@ -69,7 +74,7 @@ public class IhmForData implements Ihm {
    * @param user User to update
    */
   @Override
-  void updateUser(User user) {
+  public void updateUser(User user) throws Exception {
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 
@@ -78,7 +83,7 @@ public class IhmForData implements Ihm {
    * @param user Deleted user.
    */
   @Override
-  void notifyUserDeletion(User user) {
+  public void notifyUserDeletion(User user) throws Exception {
     throw new Exception("La fonction n'est pas encore implémentée");
   }
 }

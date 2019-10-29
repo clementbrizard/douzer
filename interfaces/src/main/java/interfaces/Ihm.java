@@ -14,7 +14,7 @@ public interface Ihm {
    *
    * @param user User recently connected.
    */
-  void notifyUserConnection(User user);
+  public void notifyUserConnection(User user) throws Exception;
 
   /**
    * Notify IHM that a User disconnected. This is just a change update, there is no user list
@@ -22,7 +22,7 @@ public interface Ihm {
    *
    * @param user User recently disconnected.
    */
-  void notifyUserDisconnection(User user);
+  public void notifyUserDisconnection(User user) throws Exception;
 
   /**
    * Update the IHM progress bar by giving the percentage of the download progression.
@@ -30,34 +30,34 @@ public interface Ihm {
    * @param music   Music considered.
    * @param integer Percentage progression, between 0 and 100.
    */
-  void notifyDownloadProgress(Music music, int integer);
+  public void notifyDownloadProgress(Music music, int integer) throws Exception;
 
   /**
    * Trigger the update of all the occurrences of the modified music.
    *
    * @param music Music to update.
    */
-  void updateMusic(Music music);
+  public void updateMusic(Music music) throws Exception;
 
   /**
    * Notify that a music has been deleted.
    *
    * @param music Deleted music.
    */
-  void notifyMusicDeletion(Music music);
+  public void notifyMusicDeletion(Music music) throws Exception;
 
   /**
    * Trigger the update of all the occurrences of the modified user.
    *
    * @param user User to update
    */
-  void updateUser(User user);
+  public void updateUser(User user) throws Exception;
 
   /**
    * Notify that a User has been deleted.
    *
    * @param user Deleted user.
    */
-  void notifyUserDeletion(User user);
+  public void notifyUserDeletion(User user) throws Exception;
 
 }
