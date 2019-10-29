@@ -62,16 +62,15 @@ public class IhmCore extends Application {
 
   @Override
   public void start(Stage primaryStage) throws Exception {
-    //FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TestView.fxml"));
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NewMusicView.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TestView.fxml"));
     Parent root = (Parent) loader.load();
     primaryStage.setTitle("first test");
     primaryStage.setScene(new Scene(root,witdh,height));
     primaryStage.setMaximized(true);
     primaryStage.show();
-    //TestController ctrl = loader.getController();
-    //setTestController(ctrl);
-    //System.out.println(testController.getLabel().getText());
+    TestController ctrl = loader.getController();
+    setTestController(ctrl);
+    System.out.println(testController.getLabel().getText());
   }
 
   public void run(String[] args) {
