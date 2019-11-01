@@ -265,7 +265,6 @@ public class IhmCore extends Application {
     setSignUpController(signUpController);
     setForgottenPasswordController(forgottenPasswordController);
 
-    System.out.println("dans le start dataforihm : " + this.getDataForIhm());
     
     //set the IgmCore link into Controllers
     loginController.setIhmCore(this);

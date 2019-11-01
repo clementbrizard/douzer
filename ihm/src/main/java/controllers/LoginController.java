@@ -43,7 +43,6 @@ public class LoginController implements Controller {
 
     
     try {
-      System.out.println("ihmcore : " + this.ihmcore.getDataForIhm());
       ihmcore.getDataForIhm().login(userName, password);
       //Go to Main view
 
@@ -60,6 +59,8 @@ public class LoginController implements Controller {
               .showWarning();
       
     } catch (IOException ioe) {
+      
+      login = false;
       ioe.printStackTrace();
     }
     
