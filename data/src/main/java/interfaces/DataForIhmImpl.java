@@ -7,14 +7,17 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import features.CreateUser;
 import features.Login;
 import features.ShareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -45,8 +48,10 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void createUser(LocalUser user) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void createUser(LocalUser user) throws IOException, LoginException {
+    InputStream defaultPropInputStream = getClass().getClassLoader()
+        .getResourceAsStream("default-config.properties");
+    CreateUser.run(user, this.dc, defaultPropInputStream);
   }
 
   @Override
@@ -89,6 +94,12 @@ public class DataForIhmImpl implements DataForIhm {
   public void modifyUser(LocalUser user) {
     throw new UnsupportedOperationException("Not implemented yet");
   }
+
+  @Override
+  public MusicMetadata parseMusicMetadata(String path) {
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
 
   @Override
   public void rateMusic(Music music, int rating) {
