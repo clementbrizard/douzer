@@ -1,9 +1,16 @@
 package controllers;
 
 import core.IhmCore;
+
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+
+import javax.security.auth.login.LoginException;
+
+import org.controlsfx.control.Notifications;
 
 
 /**
@@ -32,26 +39,39 @@ public class LoginController implements Controller {
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
     System.out.println("Pseudo:" + userName + ", pass: " + password);
-    /*
+    boolean login = true;
+
+    
     try {
+      System.out.println("ihmcore : " + this.ihmcore.getDataForIhm());
       ihmcore.getDataForIhm().login(userName, password);
       //Go to Main view
 
     } catch (LoginException le) {
 
+      le.printStackTrace();
+      
+      login = false;
+      
       Notifications.create()
               .title("Connection failed")
               .text("It seems you entered a wrong username/password. Try again.")
               .darkStyle()
               .showWarning();
+      
+    } catch (IOException ioe) {
+      ioe.printStackTrace();
     }
-   */
+    
+    if (login) {
+      //change for the main view
+      System.out.println("passage du login passé");
+    }
   }
 
   @FXML
   private void actionSignup() {
     ihmcore.showSignupScene();
-
   }
 
   @FXML
@@ -61,6 +81,7 @@ public class LoginController implements Controller {
   }
 
   public void setIhmCore(IhmCore ihmcore) {
+    System.out.println("dans le controller dataForIhm : " + ihmcore.getDataForIhm());
     this.ihmcore = ihmcore;
   }
 
