@@ -16,6 +16,16 @@ test:
     - mvn checkstyle:check
   tags:
     - docker
+  
+  stage: test
+  script:
+   - mvn verify
+  artifacts:
+    reports:
+      junit:
+        - data/target/surefire-reports/TEST-*.xml
+        - data/target/failsafe-reports/TEST-*.xml
+
     
 
 
