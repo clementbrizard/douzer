@@ -81,7 +81,6 @@ public class LoginController implements Controller {
   }
 
   public void setIhmCore(IhmCore ihmcore) {
-    System.out.println("dans le controller dataForIhm : " + ihmcore.getDataForIhm());
     this.ihmcore = ihmcore;
   }
 
