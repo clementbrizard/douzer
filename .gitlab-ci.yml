@@ -23,8 +23,8 @@ test:
   artifacts:
     reports:
       junit:
-        - data/target/surefire-reports/TEST-*.xml
-        - data/target/failsafe-reports/TEST-*.xml
+        - data/src/test/java/surefire-reports/TEST-*.xml
+        - data/src/test/java/failsafe-reports/TEST-*.xml
 
     
 
