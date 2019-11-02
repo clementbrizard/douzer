@@ -8,7 +8,9 @@ public class MyMusicsController implements Controller {
   private SearchMusicController searchMusicController;
 
   private CentralFrameController centralFrameController;
-
+  private DetailsMusicController detailsMusicController;
+  
+  
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
@@ -36,5 +38,14 @@ public class MyMusicsController implements Controller {
 
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+  
+
+  public DetailsMusicController getDetailMusicController() {
+    return detailsMusicController;
+  }
+  
+  public void setDetailMusicController(DetailsMusicController detailsMusicController) {
+    this.detailsMusicController = detailsMusicController;
   }
 }

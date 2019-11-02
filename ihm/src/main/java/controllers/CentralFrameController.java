@@ -8,13 +8,12 @@ public class CentralFrameController implements Controller {
   private MyMusicsController myMusicsController;
   private DistantUserController distantUserController;
   private ProfileEditController profilEditcontroller;
-  private DetailsMusicController detailMusicController;
   
   private MainController mainController;
   
   @Override
   public void initialize() {
-    // TODO Auto-generated method stub
+    
   }
   
   public AllMusicsController getAllMusicsController() {
@@ -47,14 +46,6 @@ public class CentralFrameController implements Controller {
 
   public void setProfilEditcontroller(ProfileEditController profilEditcontroller) {
     this.profilEditcontroller = profilEditcontroller;
-  }
-  
-  public DetailsMusicController getDetailMusicController() {
-    return detailMusicController;
-  }
-  
-  public void setDetailMusicController(DetailsMusicController detailMusicController) {
-    this.detailMusicController = detailMusicController;
   }
   
   public MainController getMainController() {
