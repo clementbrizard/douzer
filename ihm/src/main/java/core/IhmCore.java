@@ -238,9 +238,6 @@ public class IhmCore extends Application {
    * @param args the arguments of the Application from Main method
    */
   public void run(String[] args) {
-    /**
-     * launch function will call the function {@link #start(Stage) void}.
-     */
     launch(args);
   }
 

@@ -143,8 +143,8 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public LocalUser getLocalUser() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public LocalUser getCurrentUser() {
+    return this.dc.getCurrentUser();
   }
 
   @Override
