@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="687.0" style="-fx-background-color: #9FC5F8;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Détails de la musique" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="56.0" layoutY="96.0" text="Titre" />
+      <Label layoutX="49.0" layoutY="160.0" text="Artiste" />
+      <Label layoutX="49.0" layoutY="222.0" text="Album" />
+      <Label layoutX="49.0" layoutY="286.0" text="Année" />
+      <Label layoutX="54.0" layoutY="359.0" text="Note" />
+      <TextField layoutX="133.0" layoutY="91.0" prefHeight="31.0" prefWidth="161.0" />
+      <TextField layoutX="133.0" layoutY="155.0" prefHeight="31.0" prefWidth="161.0" />
+      <TextField layoutX="133.0" layoutY="217.0" prefHeight="31.0" prefWidth="161.0" />
+      <TextField layoutX="133.0" layoutY="281.0" prefHeight="31.0" prefWidth="161.0" />
+      <ListView layoutX="428.0" layoutY="115.0" prefHeight="146.0" prefWidth="161.0" />
+      <Label layoutX="428.0" layoutY="96.0" prefHeight="21.0" prefWidth="161.0" style="-fx-background-color: #a9a9a9;" text="Tags" />
+      <Label layoutX="379.0" layoutY="349.0" text="Uploader" />
+      <TextField layoutX="463.0" layoutY="344.0" prefHeight="31.0" prefWidth="161.0" />
+      <RadioButton layoutX="418.0" layoutY="286.0" mnemonicParsing="false" text="Publique" />
+      <RadioButton layoutX="532.0" layoutY="286.0" mnemonicParsing="false" text="Privée" />
+      <Button layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider" />
+      <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="106.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="173.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="139.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="205.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="21.0" fitWidth="21.0" layoutX="237.0" layoutY="360.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>
