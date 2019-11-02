@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="687.0" style="-fx-background-color: #9FC5F8;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DetailsMusicController">
    <children>
       <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Détails de la musique" textFill="WHITE">
@@ -25,13 +24,13 @@
       <TextField fx:id="textFieldArtiste" layoutX="133.0" layoutY="155.0" prefHeight="31.0" prefWidth="161.0" />
       <TextField fx:id="textFieldAlbum" layoutX="133.0" layoutY="217.0" prefHeight="31.0" prefWidth="161.0" />
       <TextField fx:id="textFieldAnnee" layoutX="133.0" layoutY="281.0" prefHeight="31.0" prefWidth="161.0" />
-      <ListView fx:id="listViewTagList" layoutX="428.0" layoutY="115.0" prefHeight="146.0" prefWidth="161.0" />
+      <ListView fx:id="listViewTagsList" layoutX="428.0" layoutY="115.0" prefHeight="146.0" prefWidth="161.0" />
       <Label layoutX="428.0" layoutY="96.0" prefHeight="21.0" prefWidth="161.0" style="-fx-background-color: #a9a9a9;" text="Tags" />
-      <Label layoutX="379.0" layoutY="349.0" text="Uploader" />
-      <TextField fx:id="textFieldLastUploader" layoutX="463.0" layoutY="344.0" prefHeight="31.0" prefWidth="161.0" />
-      <RadioButton fx:id="radioButtonPublique" layoutX="418.0" layoutY="286.0" mnemonicParsing="false" text="Publique" />
-      <RadioButton fx:id="radioButtonPrivee" layoutX="532.0" layoutY="286.0" mnemonicParsing="false" text="Privée" />
-      <Button layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider" />
+      <Label layoutX="386.0" layoutY="400.0" text="Uploader" />
+      <TextField fx:id="textFieldLastUploader" layoutX="470.0" layoutY="395.0" prefHeight="31.0" prefWidth="161.0" />
+      <RadioButton fx:id="radioButtonPublique" layoutX="425.0" layoutY="337.0" mnemonicParsing="false" text="Publique" />
+      <RadioButton fx:id="radioButtonPrivee" layoutX="539.0" layoutY="337.0" mnemonicParsing="false" text="Privée" />
+      <Button fx:id="buttonAddTag" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider" />
       <ImageView fx:id="imageEtoile1" fitHeight="21.0" fitWidth="21.0" layoutX="106.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/EmptyStarSymbol.png" />
@@ -57,5 +56,7 @@
             <Image url="@../images/EmptyStarSymbol.png" />
          </image>
       </ImageView>
+      <TextField fx:id="textFieldAddTag" layoutX="428.0" layoutY="271.0" prefHeight="31.0" prefWidth="129.0" />
+      <Button layoutX="557.0" layoutY="271.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="33.0" text="+" />
    </children>
 </Pane>
