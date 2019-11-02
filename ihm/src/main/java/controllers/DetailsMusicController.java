@@ -1,7 +1,10 @@
 package controllers;
 
 import datamodel.LocalMusic;
+import datamodel.User;
+
 import java.util.Iterator;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -33,7 +36,8 @@ public class DetailsMusicController implements Controller {
    * @param localMusic the music clicked
    */
   public void initMusic(LocalMusic localMusic) {
-
+    this.localMusic = localMusic;
+    
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTitle() != null) {
         textFieldTitre.setText(localMusic.getMetadata().getTitle());
@@ -59,8 +63,9 @@ public class DetailsMusicController implements Controller {
     }
 
     if (localMusic.getOwners() != null) {
-      if (localMusic.getOwners().iterator().hasNext()) {
-        textFieldLastUploader.setText(localMusic.getOwners().iterator().next().getUsername());
+      Iterator<User> itOwners = localMusic.getOwners().iterator();
+      if (itOwners.hasNext()) {
+        textFieldLastUploader.setText(itOwners.next().getUsername());
       }
     }
 
@@ -68,16 +73,23 @@ public class DetailsMusicController implements Controller {
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTags() != null) {
-
-        while (localMusic.getMetadata().getTags().iterator().hasNext()) {
-          tags.add(localMusic.getMetadata().getTags().iterator().next());
+        Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
+        while (itMusicTag.hasNext()) {
+          tags.add(itMusicTag.next());
         }
 
         listViewTagsList.setItems(tags);
       }
     }
-
-
+    
+    if (localMusic.getMetadata() != null) {
+      if (localMusic.getMetadata().getRatings() != null) {
+        if (localMusic.getMetadata().getRatings().get(new User()) != null) { 
+          System.out.println("recherche de la note de l'utilisateur courrant");
+          //rating = localMusic.getMetadata().getRatings().get(new User());
+        }
+      }
+    }
   }
 
   @FXML
@@ -128,18 +140,67 @@ public class DetailsMusicController implements Controller {
 
   @Override
   public void initialize() {
+    
     imageEtoile1.setOnMousePressed((new EventHandler<MouseEvent>() {
-
       @Override
       public void handle(MouseEvent event) {
-        System.out.println("clique sur l'étoile 1");
-        imageEtoile1.setImage(new Image("my/resources/images/FullStarSymbol.png"));
-      }
-
-
-
+        System.out.println("clique sur l'ï¿½toile 1");
+        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile2.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      } 
     }));
-
+    
+    imageEtoile2.setOnMousePressed((new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur l'ï¿½toile 2");
+        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      } 
+    }));
+    
+    imageEtoile3.setOnMousePressed((new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur l'ï¿½toile 3");
+        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      } 
+    }));
+    
+    imageEtoile4.setOnMousePressed((new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur l'ï¿½toile 4");
+        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      } 
+    }));
+    
+    imageEtoile5.setOnMousePressed((new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur l'ï¿½toile 5");
+        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        imageEtoile5.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      } 
+    }));
+    
     buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
 
         @Override
@@ -148,6 +209,7 @@ public class DetailsMusicController implements Controller {
           boolean tagexist = false;
           if (localMusic.getMetadata() != null) {
             if (localMusic.getMetadata().getTags() != null) {
+              
               Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
               while (itMusicTag.hasNext()) {
                 if (itMusicTag.next().equals(textFieldAddTag.getText())) {
