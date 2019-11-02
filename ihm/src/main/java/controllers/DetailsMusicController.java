@@ -1,7 +1,10 @@
 package controllers;
 
 import datamodel.LocalMusic;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
 //replace by javadocs
@@ -19,7 +22,7 @@ public class DetailsMusicController implements Controller {
   }
   
   /**
-   * After the initialisation of the controller execute this function with
+   * After the initialisation with initialize() of the controller execute this function with
    * the localMusic where the user has click
    * @param localMusic
    */
@@ -44,6 +47,20 @@ public class DetailsMusicController implements Controller {
     if(localMusic.getOwners() != null)
       if(localMusic.getOwners().iterator().hasNext())
         textFieldLastUploader.setText(localMusic.getOwners().iterator().next().getUsername());
+    
+    tags = FXCollections.observableArrayList();
+    
+    if(localMusic.getMetadata() != null)
+      if(localMusic.getMetadata().getTags() != null) {
+        
+        while(localMusic.getMetadata().getTags().iterator().hasNext()) {
+          tags.add(localMusic.getMetadata().getTags().iterator().next());
+        }
+        
+        listViewTagsList.setItems(tags);
+      }
+    
+    
   }
 
   @FXML
@@ -61,6 +78,10 @@ public class DetailsMusicController implements Controller {
   @FXML
   private TextField textFieldLastUploader;
   
+  @FXML
+  private ListView<String> listViewTagsList;
+  
+  private ObservableList<String> tags;
   
   @Override
   public void initialize() {
