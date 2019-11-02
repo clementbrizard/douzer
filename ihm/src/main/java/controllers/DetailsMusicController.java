@@ -3,9 +3,13 @@ package controllers;
 import datamodel.LocalMusic;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 //replace by javadocs
 //central view to show all information about on music
@@ -94,8 +98,33 @@ public class DetailsMusicController implements Controller {
   
   private ObservableList<String> tags;
   
+  @FXML
+  private ImageView imageEtoile1;
+  
+  @FXML
+  private ImageView imageEtoile2;
+  
+  @FXML
+  private ImageView imageEtoile3;
+  
+  @FXML
+  private ImageView imageEtoile4;
+  
+  @FXML
+  private ImageView imageEtoile5;
+  
   @Override
   public void initialize() {
+    imageEtoile1.setOnMousePressed((new EventHandler<MouseEvent>() {
+
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur l'étoile 1");
+        imageEtoile1.setImage(new Image("my/resources/images/FullStarSymbol.png") );
+      } 
+      
+    }));
+    
     
   }
 
