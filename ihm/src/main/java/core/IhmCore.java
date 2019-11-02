@@ -36,10 +36,15 @@ public class IhmCore extends Application {
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
 
-  //private DataInterface dataInterface
 
   private IhmForData ihmForData;
-  private DataForIhm dataForIhm;
+  
+  //TODO
+  //just in order to avoid the null value error
+  //the start function create a new instance of IhmCore
+  //then we need to get the DataForIhm in start function
+  //for that I think it's better to create an instance of DataForIhm in ihmProvider
+  private static DataForIhm dataForIhm;
 
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
@@ -75,6 +80,54 @@ public class IhmCore extends Application {
   public void setLoginController(LoginController loginController) {
     this.loginController = loginController;
   }
+
+  public Scene getLoginScene() {
+    return loginScene;
+  }
+
+
+  public void setLoginScene(Scene loginScene) {
+    this.loginScene = loginScene;
+  }
+
+
+  public Scene getSignupScene() {
+    return signupScene;
+  }
+
+
+  public void setSignupScene(Scene signupScene) {
+    this.signupScene = signupScene;
+  }
+
+
+  public Scene getForgottenPasswordScene() {
+    return forgottenPasswordScene;
+  }
+
+
+  public void setForgottenPasswordScene(Scene forgottenPasswordScene) {
+    this.forgottenPasswordScene = forgottenPasswordScene;
+  }
+
+
+  public Stage getPrimaryStage() {
+    return primaryStage;
+  }
+
+
+  public void setPrimaryStage(Stage primaryStage) {
+    this.primaryStage = primaryStage;
+  }
+  
+  public void setDataForIhm(DataForIhm dataForIhm) {
+    this.dataForIhm = dataForIhm;
+  }
+  
+  public DataForIhm getDataForIhm() {
+    return this.dataForIhm;
+  }
+
 
   /**
    * Setter of @see SignUpController.
@@ -212,6 +265,7 @@ public class IhmCore extends Application {
     setSignUpController(signUpController);
     setForgottenPasswordController(forgottenPasswordController);
 
+    
     //set the IgmCore link into Controllers
     loginController.setIhmCore(this);
     signUpController.setIhmCore(this);
@@ -242,10 +296,5 @@ public class IhmCore extends Application {
      * launch function will call the function {@link #start(Stage) void}.
      */
     launch(args);
-  }
-
-
-  public void setDataForIhm(DataForIhm dataForIhm) {
-    this.dataForIhm = dataForIhm;
-  }
+  }  
 }

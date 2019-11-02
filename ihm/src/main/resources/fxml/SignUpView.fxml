@@ -4,6 +4,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -46,7 +47,7 @@
                <Font size="18.0" />
             </font>
          </Label>
-         <TextField fx:id="textFieldPassword" layoutX="364.0" layoutY="314.0" prefHeight="31.0" prefWidth="188.0" />
+         <PasswordField fx:id="textFieldPassword" layoutX="364.0" layoutY="314.0" prefHeight="31.0" prefWidth="188.0" />
          <Label layoutX="235.0" layoutY="76.0" text="Nom">
             <font>
                <Font size="18.0" />
