@@ -30,7 +30,7 @@
       <TextField fx:id="textFieldLastUploader" layoutX="470.0" layoutY="395.0" prefHeight="31.0" prefWidth="161.0" />
       <RadioButton fx:id="radioButtonPublique" layoutX="425.0" layoutY="337.0" mnemonicParsing="false" text="Publique" />
       <RadioButton fx:id="radioButtonPrivee" layoutX="539.0" layoutY="337.0" mnemonicParsing="false" text="Privée" />
-      <Button fx:id="buttonAddTag" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider" />
+      <Button fx:id="buttonValider" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider" />
       <ImageView fx:id="imageEtoile1" fitHeight="21.0" fitWidth="21.0" layoutX="106.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/EmptyStarSymbol.png" />
@@ -57,7 +57,7 @@
          </image>
       </ImageView>
       <TextField fx:id="textFieldAddTag" layoutX="428.0" layoutY="271.0" prefHeight="31.0" prefWidth="129.0" />
-      <Button layoutX="557.0" layoutY="271.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="33.0" text="+" />
+      <Button fx:id="buttonAddTag" layoutX="557.0" layoutY="271.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="33.0" text="+" />
    </children>
 </Pane>
 s
