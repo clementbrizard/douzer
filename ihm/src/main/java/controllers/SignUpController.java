@@ -1,7 +1,9 @@
 package controllers;
 
 import core.IhmCore;
+import datamodel.LocalUser;
 import java.io.File;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -10,6 +12,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.security.auth.login.LoginException;
+import org.controlsfx.control.Notifications;
 
 /**
  * Controller used for the sign up form.
@@ -69,13 +73,15 @@ public class SignUpController implements Controller {
 
     System.out.println("Signing up as user " + userName);
 
-    //LocalUser user = new LocalUser(...);
-    /*
+    LocalUser user = new LocalUser();
+    user.setPassword(password);
+
     try {
-      ihmcore.getDataForIhm().createUser(user);
+      System.out.println(ihmCore.getDataForIhm());
+      ihmCore.getDataForIhm().createUser(user);
       //Go to main view
 
-    } catch (SignupException se) {
+    } catch (IOException | LoginException se) {
 
       Notifications.create()
               .title("Signup failed")
@@ -83,8 +89,6 @@ public class SignUpController implements Controller {
               .darkStyle()
               .showWarning();
     }
-
-   */
 
   }
 
