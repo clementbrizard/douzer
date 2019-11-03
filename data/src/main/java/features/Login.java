@@ -39,7 +39,10 @@ public abstract class Login {
   }
 
   private static InetAddress getIpFromString(String ip) {
-    if (ip.isEmpty()) return null;
+    if (ip.isEmpty()) {
+      return null;
+    }
+
     try {
       return InetAddress.getByName(ip);
     } catch (UnknownHostException e) {

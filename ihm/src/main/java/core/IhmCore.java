@@ -266,23 +266,23 @@ public class IhmCore extends Application {
     forgottenPasswordScene = new Scene(forgottenPasswordParent);
 
     // get the loader for AllMusicsCenterView
-    FXMLLoader allMusicsCenterLoader = new FXMLLoader(getClass().getResource("/fxml/AllMusicsCenterView.fxml"));
+    FXMLLoader allMusicsCenterLoader = new FXMLLoader(getClass()
+        .getResource("/fxml/AllMusicsCenterView.fxml"));
     Parent allMusicsCenterParent = allMusicsCenterLoader.load();
     allMusicsCenterScene = new Scene(allMusicsCenterParent);
 
-    //get Controllers from loader
+    //get the Controllers from loader
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
     AllMusicsController allMusicsController = allMusicsCenterLoader.getController();
 
-
     //set the Controllers link to acces from the controllers
-    setLoginController(loginController);
-    setSignUpController(signUpController);
-    setForgottenPasswordController(forgottenPasswordController);
-    setAllMusicsController(allMusicsController);
+    this.setLoginController(loginController);
+    this.setSignUpController(signUpController);
+    this.setForgottenPasswordController(forgottenPasswordController);
+    this.setAllMusicsController(allMusicsController);
 
     
     //set the IgmCore link into Controllers
