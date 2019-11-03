@@ -95,6 +95,8 @@ public class SignUpController implements Controller {
 
     } catch (IOException | LoginException se) {
 
+      se.printStackTrace();
+
       Notifications.create()
           .title("Signup failed")
           .text("It seems you entered something wrong. Try again.")
