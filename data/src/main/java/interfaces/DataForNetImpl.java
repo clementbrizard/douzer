@@ -9,6 +9,10 @@ import java.net.InetAddress;
 public class DataForNetImpl implements DataForNet {
   private Datacore dc;
 
+  public DataForNetImpl(Datacore dc) {
+    this.dc = dc;
+  }
+
   @Override
   public void process(Serializable payload, InetAddress sourceIp) {
     throw new UnsupportedOperationException("Not implemented yet");

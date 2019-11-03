@@ -24,6 +24,10 @@ import javax.security.auth.login.LoginException;
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
 
+  public DataForIhmImpl(Datacore dc) {
+    this.dc = dc;
+  }
+
   @Override
   public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
     File f = new File(path);

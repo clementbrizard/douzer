@@ -20,10 +20,10 @@ public class DataProvider {
   }
 
   public DataForNet getDataForNet() {
-    return new DataForNetImpl();
+    return new DataForNetImpl(dc);
   }
 
   public DataForIhm getDataForIhm() {
-    return new DataForIhmImpl();
+    return new DataForIhmImpl(dc);
   }
 }
