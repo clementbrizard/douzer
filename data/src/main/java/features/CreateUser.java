@@ -30,6 +30,7 @@ public abstract class CreateUser {
       throws IOException, LoginException {
     //Create file config.properties
     Properties defaultProp = new Properties();
+    // TODO: template for filename
     Path userPropFilePath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     File userConfigFile = new File(userPropFilePath.toString());
 
