@@ -2,10 +2,8 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
-
 import java.io.EOFException;
 import java.io.File;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,7 +24,7 @@ public abstract class CreateUser {
    * Then the function is calling Login.run function by giving
    * the Datacore object and the LocalUser
    *
-   * @param  user LocalUser given by IHM
+   * @param user LocalUser given by IHM
    */
   public static void run(LocalUser user, Datacore dc, InputStream defaultPropInputStream)
       throws IOException, LoginException {
@@ -46,21 +44,27 @@ public abstract class CreateUser {
       defaultProp.store(new FileOutputStream(userPropFilePath.toString()), null);
     }
 
-    FileInputStream file = new FileInputStream(Paths.get(Datacore.LOCAL_USERS_FILENAME).toFile());
-    ObjectInputStream reader = new ObjectInputStream(file);
-    LocalUser otherUser;
-    try {
-      do {
-        otherUser = (LocalUser) reader.readObject();
-      } while (!(user.getUsername().equals(otherUser.getUsername())));
-    } catch (EOFException e) {
-      //Log user immediately after creation
+    File localUsersFile = Paths.get(Datacore.LOCAL_USERS_FILENAME).toFile();
+    if (!localUsersFile.exists()) {
+      // not yet created, so we assume it is the first user
       Login.run(dc, user);
-      return;
-    } catch (ClassNotFoundException e) {
-      throw new LoginException("Local save may be corrupted or outdated");
+    } else {
+      FileInputStream file = new FileInputStream(localUsersFile);
+      ObjectInputStream reader = new ObjectInputStream(file);
+      LocalUser otherUser;
+      try {
+        do {
+          otherUser = (LocalUser) reader.readObject();
+        } while (!(user.getUsername().equals(otherUser.getUsername())));
+      } catch (EOFException e) {
+        //Log user immediately after creation
+        Login.run(dc, user);
+        return;
+      } catch (ClassNotFoundException e) {
+        throw new LoginException("Local save may be corrupted or outdated");
+      }
+      throw new LoginException(("Username already exists"));
     }
-    throw new LoginException(("Username already exists"));
   }
 }
 
