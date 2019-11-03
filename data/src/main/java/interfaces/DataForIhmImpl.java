@@ -112,7 +112,7 @@ public class DataForIhmImpl implements DataForIhm {
       metadata.setTitle(id3v1Tag.getTitle());
       metadata.setArtist(id3v1Tag.getArtist());
       metadata.setAlbum(id3v1Tag.getAlbum());
-      if(id3v1Tag.getYear() != null) {
+      if (id3v1Tag.getYear() != null) {
         metadata.setReleaseDate(new GregorianCalendar(
             Integer.parseInt(id3v1Tag.getYear()), Calendar.JANUARY, 1)
             .getTime());
@@ -123,7 +123,7 @@ public class DataForIhmImpl implements DataForIhm {
       metadata.setTitle(id3v2Tag.getTitle());
       metadata.setArtist(id3v2Tag.getArtist());
       metadata.setAlbum(id3v2Tag.getAlbum());
-      if(id3v2Tag.getYear() != null) {
+      if (id3v2Tag.getYear() != null) {
         metadata.setReleaseDate(new GregorianCalendar(
             Integer.parseInt(id3v2Tag.getYear()), Calendar.JANUARY, 1)
             .getTime());
