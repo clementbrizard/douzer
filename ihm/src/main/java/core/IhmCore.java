@@ -1,5 +1,6 @@
 package core;
 
+import controllers.AllMusicsController;
 import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
@@ -24,18 +25,18 @@ public class IhmCore extends Application {
   private Scene loginScene;
   private Scene signupScene;
   private Scene forgottenPasswordScene;
+  private Scene allMusicsCenterScene;
 
   /**
    * the general scene.
    */
   private Stage primaryStage;
 
-
   private MainController mainController;
   private LoginController loginController;
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
-
+  private AllMusicsController allMusicsController;
 
   private IhmForData ihmForData;
   
@@ -77,6 +78,13 @@ public class IhmCore extends Application {
     this.forgottenPasswordScene = forgottenPasswordScene;
   }
 
+  public Scene getAllMusicsCenterScene() {
+    return allMusicsCenterScene;
+  }
+
+  public void setAllMusicsCenterScene(Scene allMusicsCenterScene) {
+    this.allMusicsCenterScene = allMusicsCenterScene;
+  }
 
   public Stage getPrimaryStage() {
     return primaryStage;
@@ -166,6 +174,14 @@ public class IhmCore extends Application {
     this.forgottenPasswordController = forgottenPwdController;
   }
 
+  public AllMusicsController getAllMusicsController() {
+    return this.allMusicsController;
+  }
+
+  public void setAllMusicsController(AllMusicsController allMusicsController) {
+    this.allMusicsController = allMusicsController;
+  }
+
   /**
    * Getter of @see IhmForData.
    *
@@ -223,6 +239,11 @@ public class IhmCore extends Application {
     primaryStage.setTitle("Mot de passe oubli�");
   }
 
+  public void showAllMusicsCenterScene() {
+    primaryStage.setScene(allMusicsCenterScene);
+    primaryStage.setTitle("Toutes les musiques");
+  }
+
   /**
    * start method who initialize and load the first views and manage theirs controllers.
    */
@@ -244,23 +265,31 @@ public class IhmCore extends Application {
     Parent forgottenPasswordParent = forgottenPasswordLoader.load();
     forgottenPasswordScene = new Scene(forgottenPasswordParent);
 
+    // get the loader for AllMusicsCenterView
+    FXMLLoader allMusicsCenterLoader = new FXMLLoader(getClass().getResource("/fxml/AllMusicsCenterView.fxml"));
+    Parent allMusicsCenterParent = allMusicsCenterLoader.load();
+    allMusicsCenterScene = new Scene(allMusicsCenterParent);
+
     //get Controllers from loader
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
+    AllMusicsController allMusicsController = allMusicsCenterLoader.getController();
 
 
     //set the Controllers link to acces from the controllers
     setLoginController(loginController);
     setSignUpController(signUpController);
     setForgottenPasswordController(forgottenPasswordController);
+    setAllMusicsController(allMusicsController);
 
     
     //set the IgmCore link into Controllers
     loginController.setIhmCore(this);
     signUpController.setIhmCore(this);
     forgottenPasswordController.setIhmCore(this);
+    allMusicsController.setIhmCore(this);
 
     //initialize the first View
     this.primaryStage = primaryStage;

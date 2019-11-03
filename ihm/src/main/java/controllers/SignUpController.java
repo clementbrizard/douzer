@@ -89,9 +89,8 @@ public class SignUpController implements Controller {
     user.setSavePath(Paths.get(currentDir));
 
     try {
-      System.out.println(ihmCore.getDataForIhm());
       ihmCore.getDataForIhm().createUser(user);
-      //Go to main view
+      ihmCore.showAllMusicsCenterScene();
 
     } catch (IOException | LoginException se) {
 
