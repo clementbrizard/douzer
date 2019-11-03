@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -30,7 +31,7 @@ public class SignUpController implements Controller {
   private TextField textFieldSecretAnswer;
 
   @FXML
-  private TextField textFieldPassword;
+  private PasswordField textFieldPassword;
 
   @FXML
   private TextField textFieldSecretQuestion;
