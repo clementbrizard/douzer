@@ -53,58 +53,25 @@ public class IhmCore extends Application {
     this.ihmForData = new IhmForData(this);
   }
 
-
-  /**
-   * Setter for @see IhmForData.
-   *
-   * @param ihmForData the integration of ihm interface
-   */
-  public void setIhmForData(IhmForData ihmForData) {
-    this.ihmForData = ihmForData;
-  }
-
-  /**
-   * Setter of @see MainController.
-   *
-   * @param mainController the main Controller
-   */
-  public void setMainController(MainController mainController) {
-    this.mainController = mainController;
-  }
-
-  /**
-   * Setter of @see LoginController.
-   *
-   * @param loginController the login Controller
-   */
-  public void setLoginController(LoginController loginController) {
-    this.loginController = loginController;
-  }
-
   public Scene getLoginScene() {
     return loginScene;
   }
-
 
   public void setLoginScene(Scene loginScene) {
     this.loginScene = loginScene;
   }
 
-
   public Scene getSignupScene() {
     return signupScene;
   }
-
 
   public void setSignupScene(Scene signupScene) {
     this.signupScene = signupScene;
   }
 
-
   public Scene getForgottenPasswordScene() {
     return forgottenPasswordScene;
   }
-
 
   public void setForgottenPasswordScene(Scene forgottenPasswordScene) {
     this.forgottenPasswordScene = forgottenPasswordScene;
@@ -114,7 +81,6 @@ public class IhmCore extends Application {
   public Stage getPrimaryStage() {
     return primaryStage;
   }
-
 
   public void setPrimaryStage(Stage primaryStage) {
     this.primaryStage = primaryStage;
@@ -128,6 +94,50 @@ public class IhmCore extends Application {
     return this.dataForIhm;
   }
 
+  /**
+   * Getter of @see MainController.
+   *
+   * @return @see MainController
+   */
+  public MainController getMainController() {
+    return this.mainController;
+  }
+
+  /**
+   * Setter of @see MainController.
+   *
+   * @param mainController the main Controller
+   */
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
+  }
+
+  /**
+   * Getter of @see LoginController.
+   *
+   * @return @see LoginController
+   */
+  public LoginController getLoginController() {
+    return this.loginController;
+  }
+
+  /**
+   * Setter of @see LoginController.
+   *
+   * @param loginController the login Controller
+   */
+  public void setLoginController(LoginController loginController) {
+    this.loginController = loginController;
+  }
+
+  /**
+   * Getter of @see SignUpController.
+   *
+   * @return @see SignUpController
+   */
+  public SignUpController getSignUpController() {
+    return this.signUpController;
+  }
 
   /**
    * Setter of @see SignUpController.
@@ -136,6 +146,15 @@ public class IhmCore extends Application {
    */
   public void setSignUpController(SignUpController signUpController) {
     this.signUpController = signUpController;
+  }
+
+  /**
+   * Getter of @see ForgottenPasswordController.
+   *
+   * @return @see ForgottenPasswordController
+   */
+  public ForgottenPasswordController getForgottenPasswordController() {
+    return this.forgottenPasswordController;
   }
 
   /**
@@ -157,41 +176,13 @@ public class IhmCore extends Application {
   }
 
   /**
-   * Getter of @see MainController.
+   * Setter for @see IhmForData.
    *
-   * @return @see MainController
+   * @param ihmForData the integration of ihm interface
    */
-  public MainController getMainController() {
-    return this.mainController;
+  public void setIhmForData(IhmForData ihmForData) {
+    this.ihmForData = ihmForData;
   }
-
-  /**
-   * Getter of @see LoginController.
-   *
-   * @return @see LoginController
-   */
-  public LoginController getLoginController() {
-    return this.loginController;
-  }
-
-  /**
-   * Getter of @see SignUpController.
-   *
-   * @return @see SignUpController
-   */
-  public SignUpController getSignUpController() {
-    return this.signUpController;
-  }
-
-  /**
-   * Getter of @see ForgottenPasswordController.
-   *
-   * @return @see ForgottenPasswordController
-   */
-  public ForgottenPasswordController getForgottenPasswordController() {
-    return this.forgottenPasswordController;
-  }
-
 
   /**
    * change the mainScene into LoginScene.
