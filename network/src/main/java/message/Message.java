@@ -5,8 +5,10 @@ import interfaces.DataForNet;
 import java.io.Serializable;
 import java.net.Socket;
 
-public class Message {
+public class Message implements Serializable {
 
+  private static final long serialVersionUID = -6557831202306199363L;
+  
   private Serializable payload;
 
   public Message(Serializable p) {
