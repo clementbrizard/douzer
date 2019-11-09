@@ -11,7 +11,8 @@ public class LogoutPayload extends Payload {
   @Override
   public void run(Datacore dc) {
     LocalUser currentUser = dc.getCurrentUser();
-    dc.removeOwner(currentUser);
     dc.ihm.notifyUserDisconnection(currentUser);
+    dc.removeOwner(currentUser);
+    dc.wipe();
   }
 }
