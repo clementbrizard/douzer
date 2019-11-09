@@ -141,6 +141,15 @@ public class Datacore {
     throw new UnsupportedOperationException("Merge with between users is not implemented yet");
   }
 
+  /**
+   * Clear all volatiles variables.
+   */
+  public void wipe() {
+    this.users.clear();
+    this.musics.clear();
+    this.currentUser = null;
+  }
+
   public Stream<InetAddress> getIps() {
     return this.users.values().stream()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
