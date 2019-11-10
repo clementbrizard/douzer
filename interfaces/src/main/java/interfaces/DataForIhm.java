@@ -36,7 +36,7 @@ public interface DataForIhm {
 
   void deleteAccount();
 
-  void deleteMusic(Music music, boolean deleteLocal);
+  void deleteMusic(LocalMusic music, boolean deleteLocal);
 
   void logout();
 

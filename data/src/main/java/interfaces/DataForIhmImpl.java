@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -60,8 +61,24 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void deleteMusic(Music music, boolean deleteLocal) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void deleteMusic(LocalMusic music, boolean deleteLocal) {
+    // throw new UnsupportedOperationException("Not implemented yet");
+    Set musics = this.dc.getCurrentUser().getMusics();
+    musics.remove(music);
+    if (musics.contains(music)) {
+      if (deleteLocal) {
+        try {
+          File file = new File(music.getMp3Path());
+          if (file.delete()) {
+            System.out.println( music.getMetadata().getTitle() + "is deleted locally!");
+          } else {
+            System.out.println("Delete operation is failed.");
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 
   @Override
