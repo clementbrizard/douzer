@@ -8,6 +8,7 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
 import features.CreateUser;
+import features.DeleteUser;
 import features.Login;
 import features.ShareMusicsPayload;
 import java.io.File;
@@ -56,7 +57,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void deleteAccount() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    DeleteUser.run(this.dc);
   }
 
   @Override
