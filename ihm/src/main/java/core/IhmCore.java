@@ -16,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * the IhmCore will start the HCI of the Application, manages controllers and stage changes.
@@ -50,7 +52,11 @@ public class IhmCore extends Application {
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
 
+
+  private static final Logger ihmLogger = LogManager.getLogger();
+
   public IhmCore() {
+    ihmLogger.info("IhmCore start");
     this.ihmForData = new IhmForData(this);
   }
 
