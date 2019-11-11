@@ -3,6 +3,7 @@ package features;
 import core.Datacore;
 import core.Payload;
 import datamodel.LocalUser;
+import exceptions.LocalUsersFileException;
 
 public class LogoutPayload extends Payload {
   /**
@@ -11,6 +12,13 @@ public class LogoutPayload extends Payload {
   @Override
   public void run(Datacore dc) {
     LocalUser currentUser = dc.getCurrentUser();
+
+    try {
+      dc.getLocalUsersFileHandler().add(currentUser);
+    } catch (LocalUsersFileException e) {
+      e.printStackTrace();
+    }
+
     dc.ihm.notifyUserDisconnection(currentUser);
     dc.removeOwner(currentUser);
     dc.wipe();

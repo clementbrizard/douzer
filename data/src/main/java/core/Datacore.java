@@ -12,9 +12,15 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Datacore {
-  public static final String LOCAL_USERS_FILENAME  = "lo23-users.ser";
   public Net net;
   public Ihm ihm;
+  /**
+   * LocalUsers filename.
+   * @deprecated use {@link #getLocalUsersFileHandler()} instead. This will be private soon.
+   */
+  @Deprecated
+  public static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
+  private final LocalUsersFileHandler localUsersFileHandler;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
@@ -24,6 +30,7 @@ public class Datacore {
     this.ihm = ihm;
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
+    this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
   }
 
   /**
@@ -83,6 +90,10 @@ public class Datacore {
 
   public void setCurrentUser(LocalUser user) {
     this.currentUser = user;
+  }
+
+  public LocalUsersFileHandler getLocalUsersFileHandler() {
+    return localUsersFileHandler;
   }
 
   public LocalMusic getLocalMusic(String hash) {
@@ -154,5 +165,4 @@ public class Datacore {
     return this.users.values().stream()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
   }
-
 }
