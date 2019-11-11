@@ -70,7 +70,7 @@ public class DataForIhmImpl implements DataForIhm {
         try {
           File file = new File(music.getMp3Path());
           if (file.delete()) {
-            System.out.println( music.getMetadata().getTitle() + "is deleted locally!");
+            System.out.println(music.getMetadata().getTitle() + "is deleted locally!");
           } else {
             System.out.println("Delete operation is failed.");
           }
