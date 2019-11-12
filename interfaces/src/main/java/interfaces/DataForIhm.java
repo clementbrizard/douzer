@@ -47,7 +47,7 @@ public interface DataForIhm {
   /**
    * Extract metadata from mp3 file.
    * @param path : path of the mp3 file
-   * @return MusicMetaData object containing metadata
+   * @return MusicMetaData object containing the extracted metadata
    */
   MusicMetadata parseMusicMetadata(String path)
           throws IOException, UnsupportedTagException, InvalidDataException;
