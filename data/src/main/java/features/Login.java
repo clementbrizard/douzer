@@ -39,6 +39,10 @@ public abstract class Login {
   }
 
   private static InetAddress getIpFromString(String ip) {
+    if (ip.isEmpty()) {
+      return null;
+    }
+
     try {
       return InetAddress.getByName(ip);
     } catch (UnknownHostException e) {
@@ -73,7 +77,8 @@ public abstract class Login {
   public static void run(Datacore dc, String username, String password)
       throws IOException, LoginException {
     Path savePath = Paths.get("").toAbsolutePath();
-    LocalUser user = loadUserFromDisk(savePath.resolve("lo23-users.ser"), username, password);
+    LocalUser user = loadUserFromDisk(savePath.resolve(dc.LOCAL_USERS_FILENAME),
+        username, password);
     run(dc, user);
   }
 
@@ -91,7 +96,8 @@ public abstract class Login {
     user.getMusics().forEach(dc::addMusic);
 
     LoginPayload payload = new LoginPayload(user);
-    Path configPath = user.getSavePath().resolve("config.properties");
+    // TODO: template for filename
+    Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     dc.net.connect(payload, getInitialIpsFromConfig(configPath));
   }
 }

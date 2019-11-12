@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorPaneNewMusic" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewMusicController">
+   <children>
+      <GridPane fx:id="gridPanNewMusic" alignment="CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="56.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" prefWidth="98.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="265.0" minWidth="10.0" prefWidth="264.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="199.0" minWidth="10.0" prefWidth="172.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label fx:id="labelTitle" alignment="CENTER" contentDisplay="CENTER" text="Titre" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Label fx:id="labelArtist" text="Artiste" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <Label fx:id="labelAlbum" text="Album" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <TextField fx:id="textTitle" onKeyPressed="#titleEdited" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="textArtist" onKeyPressed="#artistEdited" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="textAlbum" onKeyPressed="#albumEdited" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="textUploader" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Spinner fx:id="dateYear" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label fx:id="labelYear" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Année" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label fx:id="labelUploader" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Uploader" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <HBox fx:id="hboxRadioButton" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <children>
+                  <RadioButton fx:id="radioPublic" mnemonicParsing="false" text="Public" />
+                  <RadioButton fx:id="radioPrivate" mnemonicParsing="false" text="Private" />
+               </children>
+            </HBox>
+            <HBox fx:id="hboxFileChoice" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+               <children>
+                  <Label fx:id="labelFileChoice" text="Choisir le fichier" />
+                   <TextField fx:id="textFile" prefHeight="25.0" prefWidth="99.0" />
+                  <Button fx:id="buttonFileChoice" mnemonicParsing="false" onAction="#chooseFile">
+                     <graphic>
+                        <ImageView fx:id="imageFileChoice" fitHeight="217.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/music.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+            <Button fx:id="buttonAdd" alignment="CENTER" mnemonicParsing="false" onAction="#add" text="Ajouter le nouveau morceau" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+            <VBox fx:id="vboxTags" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
+               <children>
+                  <Label fx:id="labelTags" text="Tags" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="listViewTags" onKeyPressed="#tagListKeyPressed" prefHeight="200.0" prefWidth="200.0" />
+                         <TextField fx:id="textNewTag" onAction="#addTag" prefHeight="200.0" prefWidth="200.0" />
+                        <Button fx:id="buttonAddTags" mnemonicParsing="false" onAction="#addTag">
+                           <graphic>
+                              <ImageView fx:id="imageAddTags" fitHeight="204.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/plus.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

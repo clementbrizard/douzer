@@ -12,21 +12,28 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import features.CreateUser;
 import features.Login;
 import features.ShareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
+
+  public DataForIhmImpl(Datacore dc) {
+    this.dc = dc;
+  }
 
   @Override
   public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
@@ -52,8 +59,10 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void createUser(LocalUser user) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void createUser(LocalUser user) throws IOException, LoginException {
+    InputStream defaultPropInputStream = getClass().getClassLoader()
+        .getResourceAsStream("default-config.properties");
+    CreateUser.run(user, this.dc, defaultPropInputStream);
   }
 
   @Override
@@ -98,6 +107,7 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
+<<<<<<< data/src/main/java/interfaces/DataForIhmImpl.java
   public MusicMetadata parseMusicMetadata(String path)
       throws IOException, UnsupportedTagException, InvalidDataException {
     MusicMetadata metadata = new MusicMetadata();
@@ -128,6 +138,13 @@ public class DataForIhmImpl implements DataForIhm {
     return metadata;
   }
 
+=======
+  public MusicMetadata parseMusicMetadata(String path) {
+    throw new UnsupportedOperationException("Not implemented yet");
+  }
+
+
+>>>>>>> data/src/main/java/interfaces/DataForIhmImpl.java
   @Override
   public void rateMusic(Music music, int rating) {
     throw new UnsupportedOperationException("Not implemented yet");
@@ -170,8 +187,8 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public LocalUser getLocalUser() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public LocalUser getCurrentUser() {
+    return this.dc.getCurrentUser();
   }
 
   @Override
