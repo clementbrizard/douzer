@@ -6,6 +6,9 @@ import java.io.Serializable;
 import java.net.Socket;
 
 public class SendFile extends Message {
+
+  private static final long serialVersionUID = -6590037734212272745L;
+  
   private String hashMusic;
 
   public SendFile(Serializable p) {

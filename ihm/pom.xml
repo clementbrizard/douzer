@@ -13,15 +13,26 @@
     <dependencies>
         <dependency>
             <groupId>lo23</groupId>
+            <artifactId>data-model</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>lo23</groupId>
             <artifactId>interfaces</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>lo23</groupId>
-            <artifactId>data-model</artifactId>
+            <artifactId>resources</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.40.15</version>
         </dependency>
     </dependencies>
 </project>
