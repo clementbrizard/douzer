@@ -112,7 +112,7 @@ public class DataForIhmImpl implements DataForIhm {
       metadata.setTitle(id3v1Tag.getTitle());
       metadata.setArtist(id3v1Tag.getArtist());
       metadata.setAlbum(id3v1Tag.getAlbum());
-      if (id3v1Tag.getYear() != null) {
+      if (id3v1Tag.getYear().length() > 0) {
         metadata.setReleaseDate(new GregorianCalendar(
             Integer.parseInt(id3v1Tag.getYear()), Calendar.JANUARY, 1)
             .getTime());
