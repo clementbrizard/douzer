@@ -27,7 +27,7 @@ public class UserInfoController implements Controller {
 
   public void init(){
 
-    lblUsername.setText(mainController.getIhmCore().getDataForIhm().getLocalUser().getUsername());
+    lblUsername.setText(mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername());
 
   }
 
