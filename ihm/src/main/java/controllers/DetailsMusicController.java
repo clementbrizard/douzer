@@ -114,7 +114,7 @@ public class DetailsMusicController implements Controller {
       imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
       imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
       imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"))
+      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
       imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
     }
     if (rating == 3) {
