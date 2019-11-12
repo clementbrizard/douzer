@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,12 +34,10 @@ public class OnlineUsersListController implements Controller {
    **/
 
   public void displayOnlineUsers(Stream<User> users) {
-    ObservableList<String> items = FXCollections.observableArrayList();
+    ObservableList<String> items =
+        users.map(user -> user.getIp().toString())
+             .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-    User[] usersList = users.toArray(User[]::new);
-    for (User u : usersList) {
-      items.add(u.getIp().toString());
-    }
     lvwOnlineUsers.setItems(items);
   }
 
