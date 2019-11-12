@@ -10,6 +10,7 @@ import datamodel.User;
 import features.CreateUser;
 import features.Login;
 import features.ShareMusicsPayload;
+import features.UnshareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -68,21 +70,19 @@ public class DataForIhmImpl implements DataForIhm {
   public void deleteMusic(LocalMusic music, boolean deleteLocal) {
     Set musics = this.dc.getCurrentUser().getMusics();
     if (musics.contains(music)) {
+      unshareMusic(music);
       musics.remove(music);
       if (deleteLocal) {
-        try {
-          File file = new File(music.getMp3Path());
-          if (file.delete()) {
-            System.out.println(music.getMetadata().getTitle() + "is deleted locally");
-          } else {
-            System.out.println("Delete operation is failed.");
-          }
-        } catch (Exception e) {
-          e.printStackTrace();
+        File file = new File(music.getMp3Path());
+        if (file.delete()) {
+          System.out.println(music.getMetadata().getTitle() + "is deleted locally");
+        } else {
+          System.out.println("Delete operation is failed.");
         }
       }
     }
   }
+
 
   @Override
   public void logout() {
@@ -139,7 +139,14 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void unshareMusic(LocalMusic music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    this.unshareMusics(Collections.singleton(music));
+  }
+
+  @Override
+  public void unshareMusics(Collection<LocalMusic> musics) {
+    Collection<String> hashMusics = musics.stream().map(x -> x.getMetadata().getHash()).collect(Collectors.toList());
+    UnshareMusicsPayload payload = new UnshareMusicsPayload(hashMusics);
+    this.dc.net.sendToUsers(payload, this.dc.getIps());
   }
 
   @Override

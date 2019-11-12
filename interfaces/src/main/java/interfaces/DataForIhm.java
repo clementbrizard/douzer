@@ -50,7 +50,7 @@ public interface DataForIhm {
 
   void modifyUser(LocalUser user);
 
-  // MusicMetadata parseMusicMetadata(String path);
+  MusicMetadata parseMusicMetadata(String path);
 
   void rateMusic(Music music, int rating);
 
@@ -59,6 +59,8 @@ public interface DataForIhm {
   void shareMusics(Collection<LocalMusic> musics);
 
   void unshareMusic(LocalMusic music);
+
+  void unshareMusics(Collection<LocalMusic> musics);
 
   Stream<User> getOnlineUsers();
 
