@@ -85,14 +85,58 @@ public class DetailsMusicController implements Controller {
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getRatings() != null) {
-        //la ici il faut se récupuré.
-        LocalUser userlocal;
+        LocalUser userlocal = new LocalUser();
 
-        if (localMusic.getMetadata().getRatings().get(new User()) != null) {
+
+        if (localMusic.getMetadata().getRatings().get(userlocal) != null) {
           System.out.println("recherche de la note de l'utilisateur courrant");
-          //rating = localMusic.getMetadata().getRatings().get(new User());
+          Integer rating = localMusic.getMetadata().getRatings().get(new User());
+          setStars(rating.intValue());
         }
       }
+    }
+  }
+
+  /**
+   * Sets the stars to the value set by user.
+   * @param rating the rating of the current user
+   */
+
+  public void setStars(int rating) {
+    if (rating == 1) {
+      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile2.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+    }
+    if (rating == 2) {
+      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"))
+      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+    }
+    if (rating == 3) {
+      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+    }
+    if (rating == 4) {
+      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+    }
+    if (rating == 5) {
+      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile5.setImage(new Image("main/resources/images/FullStarSymbol.png"));
     }
   }
 
