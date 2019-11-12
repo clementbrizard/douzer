@@ -353,7 +353,12 @@ public class IhmCore extends Application {
     primaryStage.setOnCloseRequest(event -> {
       System.out.println("Stage is closing");
       if(dataForIhm != null) {
-      dataForIhm.logout();
+        try {
+          dataForIhm.logout();
+        }
+        catch(UnsupportedOperationException ex) {
+          ex.printStackTrace();
+        }
       }
     });
   }
