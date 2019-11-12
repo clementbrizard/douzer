@@ -1,23 +1,19 @@
 package controllers;
 
-import java.io.File;
-import java.time.LocalDate;
-
+import datamodel.MusicMetadata;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.time.LocalDate;
+import java.util.Date;
 
 /**
  * Pop-up a view when the user want to add a music from a local file.
@@ -296,10 +292,22 @@ public class NewMusicController implements Controller {
     if (valid) {
       System.out.println("Entry valid");
 
-      /**
-       TODO : Fill the MusicMetadata and send it to data
-       TODO : Exit the window
-       */
+      MusicMetadata meta = new MusicMetadata();
+      meta.setTitle(textTitle.getText());
+      meta.setArtist(textArtist.getText());
+      meta.setAlbum(textAlbum.getText());
+      meta.setReleaseDate(new Date(dateYear.getValue()));
+
+      try {
+        myMusicsController.getCentralFrameController().getMainController().getIhmCore().getDataForIhm().addMusic(meta, file.getAbsolutePath());
+
+        /*
+         TODO : Exit the window
+         */
+
+      } catch (java.io.FileNotFoundException e) {
+        System.out.println("File not found : " + file.getAbsolutePath());
+      }
 
     } else {
       System.out.println("Entry not valid");
