@@ -1,5 +1,9 @@
 package controllers;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+
 //replace by javadoc
 //right panel with light info and comment about the music
 public class CurrentMusicInfoController implements Controller {
@@ -7,6 +11,18 @@ public class CurrentMusicInfoController implements Controller {
   private ShareController shareController;
   private NewCommentController newCommentController;
   private MainController mainController;
+
+  @FXML
+  private Button btnPartager;
+
+  /**
+   * Share the current music.
+   * @param event
+   */
+  @FXML
+  private void share(ActionEvent event) {
+
+  }
 
   @Override
   public void initialize() {
@@ -37,3 +53,5 @@ public class CurrentMusicInfoController implements Controller {
     this.mainController = mainController;
   }
 }
+
+
