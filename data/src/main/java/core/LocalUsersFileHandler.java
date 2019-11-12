@@ -24,12 +24,13 @@ public class LocalUsersFileHandler {
 
   /**
    * Returns if the LocalUsersFile contains the specified LocalUser.
-   * @param username LocalUser's username
+   *
+   * @param localUser Checked LocalUser.
    * @return True if the related LocalUsers exists in the LocalUsersFile.
    */
-  public boolean contains(String username) {
+  public boolean contains(LocalUser localUser) {
     try {
-      return getUser(username) != null;
+      return getUser(localUser) != null;
     } catch (LocalUsersFileException e) {
       return false;
     }
@@ -38,11 +39,12 @@ public class LocalUsersFileHandler {
   /**
    * Add a LocalUser to the LocalUsersFile.
    * If it already exist, this is ignored.
+   *
    * @param localUser Added LocalUser.
    * @throws LocalUsersFileException if the file is not accessible.
    */
   public void add(LocalUser localUser) throws LocalUsersFileException {
-    if (contains(localUser.getUsername())) {
+    if (contains(localUser)) {
       return;
     }
 
@@ -55,16 +57,34 @@ public class LocalUsersFileHandler {
     }
   }
 
-  public void remove(String username) {
+  /**
+   * Update a LocalUser on the LocalUsersFile.
+   *
+   * @param localUser Updated LocalUser.
+   * @throws LocalUsersFileException if the file is not accessible.
+   */
+  public void update(LocalUser localUser) throws LocalUsersFileException {
+    remove(localUser);
+    add(localUser);
+  }
+
+  /**
+   * Remove a LocalUser on the LocalUsersFile.
+   *
+   * @param localUser Removed LocalUser.
+   * @throws LocalUsersFileException if the file is not accessible.
+   */
+  public void remove(LocalUser localUser) throws LocalUsersFileException {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
-  public void removeAll() {
+  public void removeAll() throws LocalUsersFileException {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
   /**
    * Returns a LocalUser if it is in the LocalUsersFile.
+   *
    * @param username Wanted LocalUser's username.
    * @return the LocalUser or null if it does not exist.
    * @throws LocalUsersFileException if the file is not accessible.
@@ -85,5 +105,16 @@ public class LocalUsersFileHandler {
     }
 
     return user;
+  }
+
+  /**
+   * Returns a LocalUser if it is in the LocalUsersFile.
+   *
+   * @param localUser Updated LocalUser.
+   * @return the LocalUser or null if it does not exist.
+   * @throws LocalUsersFileException if the file is not accessible.
+   */
+  public LocalUser getUser(LocalUser localUser) throws LocalUsersFileException {
+    return getUser(localUser.getUsername());
   }
 }

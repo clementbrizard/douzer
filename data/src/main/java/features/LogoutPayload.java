@@ -14,7 +14,7 @@ public class LogoutPayload extends Payload {
     LocalUser currentUser = dc.getCurrentUser();
 
     try {
-      dc.getLocalUsersFileHandler().add(currentUser);
+      dc.getLocalUsersFileHandler().update(currentUser);
     } catch (LocalUsersFileException e) {
       e.printStackTrace();
     }

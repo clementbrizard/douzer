@@ -14,12 +14,7 @@ import java.util.stream.Stream;
 public class Datacore {
   public Net net;
   public Ihm ihm;
-  /**
-   * LocalUsers filename.
-   * @deprecated use {@link #getLocalUsersFileHandler()} instead. This will be private soon.
-   */
-  @Deprecated
-  public static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
+  private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
   private final LocalUsersFileHandler localUsersFileHandler;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
