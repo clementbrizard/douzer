@@ -8,6 +8,8 @@ import java.net.Socket;
 
 public class DownloadFile extends Message {
 
+  private static final long serialVersionUID = 7477300323985036967L;
+  
   private String hashMusic;
   private InetAddress ip;
 

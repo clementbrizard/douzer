@@ -35,6 +35,7 @@ public class MessageProcess extends ThreadExtend {
   
   @Override
   public void run() {
+    System.out.println("Message received");
     // TODO Auto-generated method stub
   }
 

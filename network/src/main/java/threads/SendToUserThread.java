@@ -3,6 +3,7 @@ package threads;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 import message.Message;
@@ -31,6 +32,8 @@ public class SendToUserThread extends ThreadExtend {
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       objectOutputStream.writeObject(new Message(this.payload));
       socket.close();
+    } catch (ConnectException e) {
+      System.out.println("Unable to send message. Is receiver listening ?");
     } catch (Exception e) {
       e.printStackTrace();
     }

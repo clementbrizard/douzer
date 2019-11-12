@@ -1,7 +1,11 @@
 package controllers;
 
 import core.IhmCore;
+import datamodel.LocalUser;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -10,12 +14,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.security.auth.login.LoginException;
+import org.controlsfx.control.Notifications;
 
 /**
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
-  
+
   private IhmCore ihmCore;
 
   @FXML
@@ -42,9 +48,9 @@ public class SignUpController implements Controller {
   @FXML
   private FileChooser avatarFileChooser = new FileChooser();
   private File avatarFile = null;
-  
+
   @Override
-  public void initialize()  {
+  public void initialize() {
 
   }
 
@@ -56,35 +62,46 @@ public class SignUpController implements Controller {
   @FXML
   public void actionSignup() {
 
-    //TODO: connect to data + sanity checks
-    String userName = textFieldUsername.getText();
-    String password = textFieldPassword.getText();
-    String name = textFieldFirstName.getText();
-    String surname = textFieldLastName.getText();
+    //TODO: sanity checks
+    final String userName = textFieldUsername.getText();
+    final String password = textFieldPassword.getText();
+    final String firstName = textFieldFirstName.getText();
+    final String lastName = textFieldLastName.getText();
 
-    java.sql.Date birthdateAsJavaSqlDate = java.sql.Date.valueOf(datePickerBirth.getValue());
+    final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
     //Avatar ???
-    String secretQuestion = textFieldSecretQuestion.getText();
-    String secretAnswer = textFieldSecretAnswer.getText();
+    final String secretQuestion = textFieldSecretQuestion.getText();
+    final String secretAnswer = textFieldSecretAnswer.getText();
 
     System.out.println("Signing up as user " + userName);
 
-    //LocalUser user = new LocalUser(...);
-    /*
-    try {
-      ihmcore.getDataForIhm().createUser(user);
-      //Go to main view
+    //TODO: actual savepath
+    final String currentDir = System.getProperty("user.dir");
 
-    } catch (SignupException se) {
+    LocalUser user = new LocalUser();
+
+    user.setPassword(password);
+
+    user.setUsername(userName);
+    user.setFirstName(firstName);
+    user.setLastName(lastName);
+    user.setDateOfBirth(dateOfBirth);
+    user.setSavePath(Paths.get(currentDir));
+
+    try {
+      ihmCore.getDataForIhm().createUser(user);
+      ihmCore.showAllMusicsCenterScene();
+
+    } catch (IOException | LoginException se) {
+
+      se.printStackTrace();
 
       Notifications.create()
-              .title("Signup failed")
-              .text("It seems you entered something wrong. Try again.")
-              .darkStyle()
-              .showWarning();
+          .title("Signup failed")
+          .text("It seems you entered something wrong. Try again.")
+          .darkStyle()
+          .showWarning();
     }
-
-   */
 
   }
 
@@ -99,6 +116,7 @@ public class SignUpController implements Controller {
   /**
    * Called upon clicking the button to choose user's avatar.
    * Opens a file dialog to choose avatar file locally.
+   *
    * @param event The event inducing the button click
    */
   public void actionAvatarChoice(ActionEvent event) {
@@ -106,7 +124,7 @@ public class SignUpController implements Controller {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
   }
-  
+
   public void setIhmCore(IhmCore ihmCore) {
     this.ihmCore = ihmCore;
   }
