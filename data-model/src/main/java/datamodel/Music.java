@@ -1,5 +1,6 @@
 package datamodel;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Music implements java.io.Serializable {
@@ -8,6 +9,7 @@ public class Music implements java.io.Serializable {
 
   public Music(MusicMetadata metadata) {
     this.metadata = metadata;
+    this.owners = new HashSet<>();
   }
 
   public Music(MusicMetadata metadata, Set<User> owners) {
