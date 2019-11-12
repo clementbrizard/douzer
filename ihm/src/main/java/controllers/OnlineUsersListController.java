@@ -35,8 +35,8 @@ public class OnlineUsersListController implements Controller {
   public void displayOnlineUsers(Stream<User> users) {
     ObservableList<String> items = FXCollections.observableArrayList();
 
-    User[] users_list = users.toArray(User[]::new);
-    for(User u : users_list){
+    User[] usersList = users.toArray(User[]::new);
+    for (User u : usersList) {
       items.add(u.getIp().toString());
     }
     lvwOnlineUsers.setItems(items);
@@ -50,7 +50,7 @@ public class OnlineUsersListController implements Controller {
     this.onlineUsersListController = onlineUsersListController;
   }
 
-  public void init(){
+  public void init() {
     displayOnlineUsers(mainController.getIhmCore().getDataForIhm().getOnlineUsers());
   }
 }
