@@ -3,8 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -12,70 +12,67 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="controllers.SignUpController">
+<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SignUpController">
     <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
         <children>
-            <TextField fx:id="textFieldFirstName" layoutX="364.0" layoutY="122.0" prefHeight="31.0" prefWidth="188.0" />
-            <Button fx:id="buttonAvatar" layoutX="388.0" layoutY="268.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un avatar" onAction="#actionAvatarChoice"/>
+            <TextField fx:id="textFieldFirstName" layoutX="364.0" layoutY="109.0" prefHeight="31.0" prefWidth="188.0" />
+            <Button fx:id="buttonAvatar" layoutX="139.0" layoutY="355.0" mnemonicParsing="false" onAction="#actionAvatarChoice" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un avatar" />
             <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Inscription" textFill="WHITE">
                 <font>
                     <Font size="24.0" />
                 </font>
             </Label>
-         <TextField fx:id="textFieldUsername" layoutX="364.0" layoutY="165.0" prefHeight="31.0" prefWidth="188.0"/>
-         <Button fx:id="buttonSignUp" layoutX="476.0" layoutY="535.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Inscription" onAction="#actionSignup"/>
-         <Button fx:id="buttonCancel" layoutX="224.0" layoutY="535.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Annuler" onAction="#actionCancel"/>
-         <Label layoutX="240.0" layoutY="124.0" text="Prénom">
+         <TextField fx:id="textFieldUsername" layoutX="364.0" layoutY="166.0" prefHeight="31.0" prefWidth="188.0" />
+         <Button fx:id="buttonSignUp" layoutX="476.0" layoutY="535.0" mnemonicParsing="false" onAction="#actionSignup" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Inscription" />
+         <Button fx:id="buttonCancel" layoutX="224.0" layoutY="535.0" mnemonicParsing="false" onAction="#actionCancel" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Annuler" />
+         <Label layoutX="194.0" layoutY="115.0" text="Prénom">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <Label layoutX="196.0" layoutY="447.0" text="Réponse à la question secrète">
+         <Label layoutX="196.0" layoutY="402.0" text="Réponse à la question secrète" visible="false">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <TextField fx:id="textFieldLastName" layoutX="364.0" layoutY="74.0" prefHeight="31.0" prefWidth="188.0" />
-         <Label layoutX="225.0" layoutY="170.0" text="Pseudo">
+         <TextField fx:id="textFieldLastName" layoutX="364.0" layoutY="51.0" prefHeight="31.0" prefWidth="188.0" />
+         <Label layoutX="195.0" layoutY="172.0" text="Pseudo">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <TextField fx:id="textFieldSecretAnswer" layoutX="194.0" layoutY="484.0" prefHeight="31.0" prefWidth="352.0" />
-         <Label layoutX="201.0" layoutY="317.0" text="Mot de passe">
+         <TextField fx:id="textFieldSecretAnswer" layoutX="196.0" layoutY="429.0" prefHeight="31.0" prefWidth="352.0" visible="false" />
+         <Label layoutX="171.0" layoutY="300.0" text="Mot de passe">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <PasswordField fx:id="textFieldPassword" layoutX="364.0" layoutY="314.0" prefHeight="31.0" prefWidth="188.0" />
-         <Label layoutX="235.0" layoutY="76.0" text="Nom">
+         <PasswordField fx:id="textFieldPassword" layoutX="364.0" layoutY="294.0" prefHeight="31.0" prefWidth="188.0" />
+         <Label layoutX="204.0" layoutY="57.0" text="Nom">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <TextField fx:id="textFieldSecretQuestion" layoutX="194.0" layoutY="405.0" prefHeight="31.0" prefWidth="352.0" />
-         <Label layoutX="172.0" layoutY="371.0" text="Question secrète en cas d'oubli de mot de passe">
+         <TextField fx:id="textFieldSecretQuestion" layoutX="199.0" layoutY="363.0" prefHeight="31.0" prefWidth="352.0" visible="false" />
+         <Label layoutX="172.0" layoutY="335.0" text="Question secrète en cas d'oubli de mot de passe" visible="false">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <Label layoutX="215.0" layoutY="268.0" text="Avatar">
+         <DatePicker fx:id="datePickerBirth" layoutX="364.0" layoutY="228.0" prefHeight="25.0" prefWidth="188.0" />
+         <Label layoutX="153.0" layoutY="234.0" text="Date de naissance">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-         <DatePicker fx:id="datePickerBirth" layoutX="364.0" layoutY="227.0" prefHeight="25.0" prefWidth="188.0" />
-         <Label layoutX="183.0" layoutY="226.0" text="Date de naissance">
+         <TextField fx:id="avatarFilePath" editable="false" layoutX="361.0" layoutY="356.0" prefHeight="25.0" prefWidth="188.0" />
+         <TextField fx:id="profileFilePath" editable="false" layoutX="294.0" layoutY="454.0" prefHeight="27.0" prefWidth="378.0" />
+         <Button fx:id="buttonAvatar1" layoutX="42.0" layoutY="457.0" mnemonicParsing="false" onAction="#actionAvatarChoice" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un emplacement" />
+         <Label layoutX="186.0" layoutY="416.0" text="Emplacement de sauvegarde du profil">
             <font>
                <Font size="18.0" />
             </font>
          </Label>
-        <Label layoutX="50.0" layoutY="350.0" text="Répertoire de sauvegarde profil">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Label>
-        <Button fx:id="buttonSaveProfile" layoutX="400.0" layoutY="350.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un dossier" onAction="#actionSaveProfileDirChoose"/>
         </children>
     </Pane>
     <columnConstraints>
