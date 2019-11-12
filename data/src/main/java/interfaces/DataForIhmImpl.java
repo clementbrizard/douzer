@@ -17,14 +17,13 @@ import features.Login;
 import features.ShareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
