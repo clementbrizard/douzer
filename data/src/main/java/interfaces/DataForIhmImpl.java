@@ -107,7 +107,6 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-<<<<<<< data/src/main/java/interfaces/DataForIhmImpl.java
   public MusicMetadata parseMusicMetadata(String path)
       throws IOException, UnsupportedTagException, InvalidDataException {
     MusicMetadata metadata = new MusicMetadata();
@@ -138,13 +137,6 @@ public class DataForIhmImpl implements DataForIhm {
     return metadata;
   }
 
-=======
-  public MusicMetadata parseMusicMetadata(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
-  }
-
-
->>>>>>> data/src/main/java/interfaces/DataForIhmImpl.java
   @Override
   public void rateMusic(Music music, int rating) {
     throw new UnsupportedOperationException("Not implemented yet");
