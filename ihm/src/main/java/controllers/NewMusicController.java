@@ -5,6 +5,7 @@ import datamodel.MusicMetadata;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Date;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,7 +20,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 
 /**
  * Pop-up a view when the user want to add a music from a local file.
@@ -305,8 +305,11 @@ public class NewMusicController implements Controller {
       meta.setReleaseDate(new Date(dateYear.getValue()));
 
       try {
-        myMusicsController.getCentralFrameController().getMainController().getIhmCore()
-            .getDataForIhm().addMusic(meta, file.getAbsolutePath());
+        myMusicsController.getCentralFrameController()
+          .getMainController()
+          .getIhmCore()
+          .getDataForIhm()
+          .addMusic(meta, file.getAbsolutePath());
 
         /*
          TODO : Exit the window

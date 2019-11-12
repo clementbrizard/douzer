@@ -4,6 +4,7 @@ import core.IhmCore;
 
 import java.io.IOException;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -32,8 +33,6 @@ public class LoginController implements Controller {
 
   @FXML
   private void actionLogin() {
-
-
 
     // TODO try with the real view, connect to data
     String userName = textFieldPseudo.getText();
