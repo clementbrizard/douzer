@@ -34,7 +34,7 @@ public class OnlineUsersListController implements Controller {
    * Fills the view with the given list of users.
    * @param users list of connected users to display (pseudos)
    */
-  public void updateOnlineUsers(List<String> users) {
+  public void displayOnlineUsers(List<String> users) {
     ObservableList<String> items = FXCollections.observableArrayList(users);
     lvwOnlineUsers.setItems(items);
   }
