@@ -1,6 +1,7 @@
 package controllers;
 
 import datamodel.LocalMusic;
+import datamodel.LocalUser;
 import datamodel.User;
 
 import java.util.Iterator;
@@ -37,7 +38,7 @@ public class DetailsMusicController implements Controller {
    */
   public void initMusic(LocalMusic localMusic) {
     this.localMusic = localMusic;
-    
+
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTitle() != null) {
         textFieldTitre.setText(localMusic.getMetadata().getTitle());
@@ -81,10 +82,13 @@ public class DetailsMusicController implements Controller {
         listViewTagsList.setItems(tags);
       }
     }
-    
+
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getRatings() != null) {
-        if (localMusic.getMetadata().getRatings().get(new User()) != null) { 
+        //la ici il faut se récupuré.
+        LocalUser userlocal;
+
+        if (localMusic.getMetadata().getRatings().get(new User()) != null) {
           System.out.println("recherche de la note de l'utilisateur courrant");
           //rating = localMusic.getMetadata().getRatings().get(new User());
         }
@@ -140,7 +144,7 @@ public class DetailsMusicController implements Controller {
 
   @Override
   public void initialize() {
-    
+
     imageEtoile1.setOnMousePressed((new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -150,9 +154,10 @@ public class DetailsMusicController implements Controller {
         imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
         imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
         imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      } 
+        sendNoteToData(1);
+      }
     }));
-    
+
     imageEtoile2.setOnMousePressed((new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -162,9 +167,10 @@ public class DetailsMusicController implements Controller {
         imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
         imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
         imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      } 
+        sendNoteToData(2);
+      }
     }));
-    
+
     imageEtoile3.setOnMousePressed((new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -174,9 +180,10 @@ public class DetailsMusicController implements Controller {
         imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
         imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
         imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      } 
+        sendNoteToData(3);
+      }
     }));
-    
+
     imageEtoile4.setOnMousePressed((new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -186,9 +193,10 @@ public class DetailsMusicController implements Controller {
         imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
         imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
         imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      } 
+        sendNoteToData(4);
+      }
     }));
-    
+
     imageEtoile5.setOnMousePressed((new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent event) {
@@ -198,9 +206,10 @@ public class DetailsMusicController implements Controller {
         imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
         imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
         imageEtoile5.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      } 
+        sendNoteToData(5);
+      }
     }));
-    
+
     buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
 
         @Override
@@ -209,7 +218,7 @@ public class DetailsMusicController implements Controller {
           boolean tagexist = false;
           if (localMusic.getMetadata() != null) {
             if (localMusic.getMetadata().getTags() != null) {
-              
+
               Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
               while (itMusicTag.hasNext()) {
                 if (itMusicTag.next().equals(textFieldAddTag.getText())) {
@@ -225,6 +234,10 @@ public class DetailsMusicController implements Controller {
         }
     }));
 
+  }
+
+  public void sendNoteToData(int note) {
+    System.out.println("note is : " + note);
   }
 
 

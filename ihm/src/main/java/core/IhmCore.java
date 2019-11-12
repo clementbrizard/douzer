@@ -41,7 +41,7 @@ public class IhmCore extends Application {
   private AllMusicsController allMusicsController;
 
   private IhmForData ihmForData;
-  
+
   //TODO
   //just in order to avoid the null value error
   //the start function create a new instance of IhmCore
@@ -99,11 +99,11 @@ public class IhmCore extends Application {
   public void setPrimaryStage(Stage primaryStage) {
     this.primaryStage = primaryStage;
   }
-  
+
   public void setDataForIhm(DataForIhm dataForIhm) {
     this.dataForIhm = dataForIhm;
   }
-  
+
   public DataForIhm getDataForIhm() {
     return this.dataForIhm;
   }
@@ -290,7 +290,7 @@ public class IhmCore extends Application {
     this.setForgottenPasswordController(forgottenPasswordController);
     this.setAllMusicsController(allMusicsController);
 
-    
+
     //set the IgmCore link into Controllers
     loginController.setIhmCore(this);
     signUpController.setIhmCore(this);
@@ -302,7 +302,7 @@ public class IhmCore extends Application {
 
     //primaryStage.initStyle(StageStyle.UNDECORATED);
 
-    //add the root scene (login)    
+    //add the root scene (login)
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
     primaryStage.show();
@@ -310,6 +310,9 @@ public class IhmCore extends Application {
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    primaryStage.setOnCloseRequest(event -> {
+      System.out.println("close");
+    });
   }
 
   /**
@@ -319,5 +322,5 @@ public class IhmCore extends Application {
    */
   public void run(String[] args) {
     launch(args);
-  }  
+  }
 }
