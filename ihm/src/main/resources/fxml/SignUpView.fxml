@@ -67,7 +67,7 @@
          </Label>
          <TextField fx:id="avatarFilePath" editable="false" layoutX="361.0" layoutY="356.0" prefHeight="25.0" prefWidth="188.0" />
          <TextField fx:id="profileFilePath" editable="false" layoutX="294.0" layoutY="454.0" prefHeight="27.0" prefWidth="378.0" />
-         <Button fx:id="buttonAvatar1" layoutX="42.0" layoutY="457.0" mnemonicParsing="false" onAction="#actionAvatarChoice" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un emplacement" />
+         <Button fx:id="buttonAvatar1" layoutX="42.0" layoutY="457.0" mnemonicParsing="false" onAction="#actionSaveProfileDirChoose" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un emplacement" />
          <Label layoutX="186.0" layoutY="416.0" text="Emplacement de sauvegarde du profil">
             <font>
                <Font size="18.0" />
