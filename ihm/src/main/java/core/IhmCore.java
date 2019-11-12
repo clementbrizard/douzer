@@ -73,9 +73,12 @@ public class IhmCore extends Application {
     return ihmCore;
   }
   
+  /**
+   * show the application.
+   */
   public void showApplication() {
-    if(primaryStage != null) {
-      Platform.runLater(new Runnable(){
+    if (primaryStage != null) {
+      Platform.runLater(new Runnable() {
 
         @Override
         public void run() {
@@ -89,9 +92,12 @@ public class IhmCore extends Application {
     }
   }
   
+  /**
+   * hide the application.
+   */
   public void hideApplication() {
-    if(primaryStage != null) {
-      Platform.runLater(new Runnable(){
+    if (primaryStage != null) {
+      Platform.runLater(new Runnable() {
 
         @Override
         public void run() {
@@ -352,11 +358,10 @@ public class IhmCore extends Application {
     // handler close window
     primaryStage.setOnCloseRequest(event -> {
       System.out.println("Stage is closing");
-      if(dataForIhm != null) {
+      if (dataForIhm != null) {
         try {
           dataForIhm.logout();
-        }
-        catch(UnsupportedOperationException ex) {
+        } catch (UnsupportedOperationException ex) {
           ex.printStackTrace();
         }
       }
