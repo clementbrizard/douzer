@@ -10,12 +10,18 @@ import interfaces.DataForIhm;
 import java.awt.Toolkit;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -255,6 +261,7 @@ public class IhmCore extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
+        
     //get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
@@ -310,8 +317,15 @@ public class IhmCore extends Application {
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    
+    // handler close window
+    primaryStage.setOnCloseRequest(event -> {
+      System.out.println("Stage is closing");
+      dataForIhm.logout();
+    });
+    
   }
-
+  
   /**
    * function who is called from Main to start the HCI.
    *
