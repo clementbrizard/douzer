@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.security.auth.login.LoginException;
@@ -48,6 +49,10 @@ public class SignUpController implements Controller {
   @FXML
   private FileChooser avatarFileChooser = new FileChooser();
   private File avatarFile = null;
+
+  @FXML
+  private DirectoryChooser saveProfileDirectoryChooser = new DirectoryChooser();
+  private File directoryChosenForSavingProfile = null;
 
   @Override
   public void initialize() {
@@ -123,6 +128,11 @@ public class SignUpController implements Controller {
     //TODO: add extension filter
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
+  }
+
+  public void actionSaveProfileDirChoose(ActionEvent event) {
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    directoryChosenForSavingProfile = saveProfileDirectoryChooser.showDialog(primaryStage);
   }
 
   public void setIhmCore(IhmCore ihmCore) {

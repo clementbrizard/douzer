@@ -70,6 +70,12 @@
                <Font size="18.0" />
             </font>
          </Label>
+        <Label layoutX="50.0" layoutY="350.0" text="Répertoire de sauvegarde profil">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Label>
+        <Button fx:id="buttonSaveProfile" layoutX="400.0" layoutY="350.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Choisissez un dossier" onAction="#actionSaveProfileDirChoose"/>
         </children>
     </Pane>
     <columnConstraints>

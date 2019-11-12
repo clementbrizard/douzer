@@ -313,6 +313,15 @@ public class IhmCore extends Application {
   }
 
   /**
+   * Override function called when the user exits the application.
+   */
+  @Override
+  public void stop() {
+    // Tell data to exit
+    //getDataForIhm().logout();
+  }
+
+  /**
    * function who is called from Main to start the HCI.
    *
    * @param args the arguments of the Application from Main method
