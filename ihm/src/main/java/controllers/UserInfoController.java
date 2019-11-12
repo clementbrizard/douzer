@@ -2,7 +2,6 @@ package controllers;
 
 import javafx.fxml.FXML;
 
-import java.awt.*;
 
 //replace by javadocs
 //view in the top left of mainView
@@ -25,7 +24,7 @@ public class UserInfoController implements Controller {
     this.mainController = mainController;
   }
 
-  public void init(){
+  public void init() {
 
     lblUsername.setText(mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername());
 
