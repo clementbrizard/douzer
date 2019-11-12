@@ -2,7 +2,6 @@ package controllers;
 
 import datamodel.User;
 import java.lang.reflect.Array;
-import datamodel.User;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,13 +25,6 @@ public class OnlineUsersListController implements Controller {
 
   @Override
   public void initialize() {
-    /* //Uncomment for test
-    List<String> dummyUsers = new ArrayList<String>();
-    for(int i = 1; i < 21; i++){
-      dummyUsers.add("Test" + i);
-    }
-    updateOnlineUsers(dummyUsers);
-     */
   }
 
   /**
