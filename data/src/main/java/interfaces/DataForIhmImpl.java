@@ -62,15 +62,14 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void deleteMusic(LocalMusic music, boolean deleteLocal) {
-    // throw new UnsupportedOperationException("Not implemented yet");
     Set musics = this.dc.getCurrentUser().getMusics();
-    musics.remove(music);
     if (musics.contains(music)) {
+      musics.remove(music);
       if (deleteLocal) {
         try {
           File file = new File(music.getMp3Path());
           if (file.delete()) {
-            System.out.println(music.getMetadata().getTitle() + "is deleted locally!");
+            System.out.println(music.getMetadata().getTitle() + "is deleted locally");
           } else {
             System.out.println("Delete operation is failed.");
           }
