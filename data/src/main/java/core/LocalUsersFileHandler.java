@@ -2,7 +2,9 @@ package core;
 
 import datamodel.LocalUser;
 import exceptions.LocalUsersFileException;
+
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -70,12 +72,38 @@ public class LocalUsersFileHandler {
 
   /**
    * Remove a LocalUser on the LocalUsersFile.
-   *
+   * Use a temp file, copy all user but skip user to remove
+   * Rename temp file as original one
    * @param localUser Removed LocalUser.
    * @throws LocalUsersFileException if the file is not accessible.
    */
   public void remove(LocalUser localUser) throws LocalUsersFileException {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Path filePath = localUser.getSavePath();
+    String username = localUser.getUsername();
+    File temp = new File("_temp_");
+
+    try {
+      FileInputStream file = new FileInputStream(filePath.toFile());
+      ObjectInputStream reader = new ObjectInputStream(file);
+      FileOutputStream tempFile = new FileOutputStream(temp);
+      ObjectOutputStream writer = new ObjectOutputStream(tempFile);
+      LocalUser user;
+
+      while (true) {
+        user = (LocalUser) reader.readObject();
+        if (!(user.getUsername().equals(username))) {
+          writer.writeObject(user);
+        }
+      }
+    } catch (EOFException e) {
+      //Replace old file with the new one
+      boolean renameSucess = temp.renameTo(filePath.toFile());
+      if (!renameSucess) {
+        throw new LocalUsersFileException("File was not successfully renamed");
+      }
+    } catch (ClassNotFoundException | IOException e) {
+      throw new LocalUsersFileException("Local save may be corrupted or outdated");
+    }
   }
 
   public void removeAll() throws LocalUsersFileException {

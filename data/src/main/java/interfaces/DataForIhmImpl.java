@@ -57,7 +57,7 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void deleteAccount() {
+  public void deleteAccount() throws IOException {
     DeleteUser.run(this.dc);
   }
 
