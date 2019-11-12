@@ -10,6 +10,7 @@ import datamodel.User;
 import features.CreateUser;
 import features.DeleteUser;
 import features.Login;
+import features.LogoutPayload;
 import features.ShareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +19,7 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -67,7 +68,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void logout() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    LogoutPayload payload = new LogoutPayload();
+    this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
   }
 
   @Override
