@@ -1,5 +1,7 @@
 package interfaces;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
@@ -50,7 +52,13 @@ public interface DataForIhm {
 
   void modifyUser(LocalUser user);
 
-  MusicMetadata parseMusicMetadata(String path);
+  /**
+   * Extract metadata from mp3 file.
+   * @param path : path of the mp3 file
+   * @return MusicMetaData object containing the extracted metadata
+   */
+  MusicMetadata parseMusicMetadata(String path)
+          throws IOException, UnsupportedTagException, InvalidDataException;
 
   void rateMusic(Music music, int rating);
 

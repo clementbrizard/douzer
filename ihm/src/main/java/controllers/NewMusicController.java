@@ -1,10 +1,9 @@
 package controllers;
 
 import datamodel.MusicMetadata;
-
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -302,7 +301,7 @@ public class NewMusicController implements Controller {
       meta.setTitle(textTitle.getText());
       meta.setArtist(textArtist.getText());
       meta.setAlbum(textAlbum.getText());
-      meta.setReleaseDate(new Date(dateYear.getValue()));
+      meta.setReleaseYear(Year.of(dateYear.getValue()));
 
       try {
         myMusicsController.getCentralFrameController().getMainController().getIhmCore()
