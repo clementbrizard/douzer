@@ -1,5 +1,6 @@
 package core;
 
+import controllers.AllMusicsController;
 import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
@@ -15,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * the IhmCore will start the HCI of the Application, manages controllers and stage changes.
@@ -24,18 +27,18 @@ public class IhmCore extends Application {
   private Scene loginScene;
   private Scene signupScene;
   private Scene forgottenPasswordScene;
+  private Scene allMusicsCenterScene;
 
   /**
    * the general scene.
    */
   private Stage primaryStage;
 
-
   private MainController mainController;
   private LoginController loginController;
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
-
+  private AllMusicsController allMusicsController;
 
   private IhmForData ihmForData;
   
@@ -49,72 +52,49 @@ public class IhmCore extends Application {
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
 
+
+  private static final Logger ihmLogger = LogManager.getLogger();
+
   public IhmCore() {
+    ihmLogger.info("IhmCore start");
     this.ihmForData = new IhmForData(this);
-  }
-
-
-  /**
-   * Setter for @see IhmForData.
-   *
-   * @param ihmForData the integration of ihm interface
-   */
-  public void setIhmForData(IhmForData ihmForData) {
-    this.ihmForData = ihmForData;
-  }
-
-  /**
-   * Setter of @see MainController.
-   *
-   * @param mainController the main Controller
-   */
-  public void setMainController(MainController mainController) {
-    this.mainController = mainController;
-  }
-
-  /**
-   * Setter of @see LoginController.
-   *
-   * @param loginController the login Controller
-   */
-  public void setLoginController(LoginController loginController) {
-    this.loginController = loginController;
   }
 
   public Scene getLoginScene() {
     return loginScene;
   }
 
-
   public void setLoginScene(Scene loginScene) {
     this.loginScene = loginScene;
   }
-
 
   public Scene getSignupScene() {
     return signupScene;
   }
 
-
   public void setSignupScene(Scene signupScene) {
     this.signupScene = signupScene;
   }
-
 
   public Scene getForgottenPasswordScene() {
     return forgottenPasswordScene;
   }
 
-
   public void setForgottenPasswordScene(Scene forgottenPasswordScene) {
     this.forgottenPasswordScene = forgottenPasswordScene;
   }
 
+  public Scene getAllMusicsCenterScene() {
+    return allMusicsCenterScene;
+  }
+
+  public void setAllMusicsCenterScene(Scene allMusicsCenterScene) {
+    this.allMusicsCenterScene = allMusicsCenterScene;
+  }
 
   public Stage getPrimaryStage() {
     return primaryStage;
   }
-
 
   public void setPrimaryStage(Stage primaryStage) {
     this.primaryStage = primaryStage;
@@ -128,34 +108,6 @@ public class IhmCore extends Application {
     return this.dataForIhm;
   }
 
-
-  /**
-   * Setter of @see SignUpController.
-   *
-   * @param signUpController the signup Controller
-   */
-  public void setSignUpController(SignUpController signUpController) {
-    this.signUpController = signUpController;
-  }
-
-  /**
-   * Setter of @see ForgottenPasswordController.
-   *
-   * @param forgottenPwdController the forgotten password Controller
-   */
-  public void setForgottenPasswordController(ForgottenPasswordController forgottenPwdController) {
-    this.forgottenPasswordController = forgottenPwdController;
-  }
-
-  /**
-   * Getter of @see IhmForData.
-   *
-   * @return @see IhmForData
-   */
-  public IhmForData getIhmForData() {
-    return ihmForData;
-  }
-
   /**
    * Getter of @see MainController.
    *
@@ -163,6 +115,15 @@ public class IhmCore extends Application {
    */
   public MainController getMainController() {
     return this.mainController;
+  }
+
+  /**
+   * Setter of @see MainController.
+   *
+   * @param mainController the main Controller
+   */
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
   /**
@@ -175,12 +136,30 @@ public class IhmCore extends Application {
   }
 
   /**
+   * Setter of @see LoginController.
+   *
+   * @param loginController the login Controller
+   */
+  public void setLoginController(LoginController loginController) {
+    this.loginController = loginController;
+  }
+
+  /**
    * Getter of @see SignUpController.
    *
    * @return @see SignUpController
    */
   public SignUpController getSignUpController() {
     return this.signUpController;
+  }
+
+  /**
+   * Setter of @see SignUpController.
+   *
+   * @param signUpController the signup Controller
+   */
+  public void setSignUpController(SignUpController signUpController) {
+    this.signUpController = signUpController;
   }
 
   /**
@@ -192,6 +171,40 @@ public class IhmCore extends Application {
     return this.forgottenPasswordController;
   }
 
+  /**
+   * Setter of @see ForgottenPasswordController.
+   *
+   * @param forgottenPwdController the forgotten password Controller
+   */
+  public void setForgottenPasswordController(ForgottenPasswordController forgottenPwdController) {
+    this.forgottenPasswordController = forgottenPwdController;
+  }
+
+  public AllMusicsController getAllMusicsController() {
+    return this.allMusicsController;
+  }
+
+  public void setAllMusicsController(AllMusicsController allMusicsController) {
+    this.allMusicsController = allMusicsController;
+  }
+
+  /**
+   * Getter of @see IhmForData.
+   *
+   * @return @see IhmForData
+   */
+  public IhmForData getIhmForData() {
+    return ihmForData;
+  }
+
+  /**
+   * Setter for @see IhmForData.
+   *
+   * @param ihmForData the integration of ihm interface
+   */
+  public void setIhmForData(IhmForData ihmForData) {
+    this.ihmForData = ihmForData;
+  }
 
   /**
    * change the mainScene into LoginScene.
@@ -232,6 +245,11 @@ public class IhmCore extends Application {
     primaryStage.setTitle("Mot de passe oubli�");
   }
 
+  public void showAllMusicsCenterScene() {
+    primaryStage.setScene(allMusicsCenterScene);
+    primaryStage.setTitle("Toutes les musiques");
+  }
+
   /**
    * start method who initialize and load the first views and manage theirs controllers.
    */
@@ -253,23 +271,31 @@ public class IhmCore extends Application {
     Parent forgottenPasswordParent = forgottenPasswordLoader.load();
     forgottenPasswordScene = new Scene(forgottenPasswordParent);
 
-    //get Controllers from loader
+    // get the loader for AllMusicsCenterView
+    FXMLLoader allMusicsCenterLoader = new FXMLLoader(getClass()
+        .getResource("/fxml/AllMusicsCenterView.fxml"));
+    Parent allMusicsCenterParent = allMusicsCenterLoader.load();
+    allMusicsCenterScene = new Scene(allMusicsCenterParent);
+
+    //get the Controllers from loader
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
-
+    AllMusicsController allMusicsController = allMusicsCenterLoader.getController();
 
     //set the Controllers link to acces from the controllers
-    setLoginController(loginController);
-    setSignUpController(signUpController);
-    setForgottenPasswordController(forgottenPasswordController);
+    this.setLoginController(loginController);
+    this.setSignUpController(signUpController);
+    this.setForgottenPasswordController(forgottenPasswordController);
+    this.setAllMusicsController(allMusicsController);
 
     
     //set the IgmCore link into Controllers
     loginController.setIhmCore(this);
     signUpController.setIhmCore(this);
     forgottenPasswordController.setIhmCore(this);
+    allMusicsController.setIhmCore(this);
 
     //initialize the first View
     this.primaryStage = primaryStage;
@@ -292,9 +318,6 @@ public class IhmCore extends Application {
    * @param args the arguments of the Application from Main method
    */
   public void run(String[] args) {
-    /**
-     * launch function will call the function {@link #start(Stage) void}.
-     */
     launch(args);
   }  
 }

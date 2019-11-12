@@ -3,12 +3,21 @@ package threads;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+
 import message.Message;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import provider.NetworkProvider;
 
 public class SendToUserThread extends ThreadExtend {
+  
+  private static final Logger logger = LogManager.getLogger();
+  
   private Serializable payload;
   private InetAddress ipDest;
 
@@ -24,13 +33,15 @@ public class SendToUserThread extends ThreadExtend {
 
   @Override
   public void run() {
-    System.out.println("Send message to a user");
+    logger.info("Send message to a user");
     try {
       Socket socket = new Socket(this.ipDest, NetworkProvider.N_PORT);
       OutputStream outputStream = socket.getOutputStream();
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
       objectOutputStream.writeObject(new Message(this.payload));
       socket.close();
+    } catch (ConnectException e) {
+      logger.error("Unable to send message. Is receiver listening ?");
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -38,6 +49,6 @@ public class SendToUserThread extends ThreadExtend {
 
   @Override
   public void kill() {
-    System.out.println("Stop Sending payload to a user");
+    logger.info("Stop Sending payload to a user");
   }
 }

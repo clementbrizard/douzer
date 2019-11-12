@@ -4,16 +4,32 @@ variables:
   # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
   MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2 -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
 
 cache:
   paths:
     - .m2/repository
-  key: "$CI_JOB_NAME"
+    - jdk1.8.0_212
 
-test:
-  stage: test
+before_script:
+  - if [ ! -d "jdk1.8.0_212" ]; then
+  - wget https://github.com/frekele/oracle-java/releases/download/8u212-b10/jdk-8u212-linux-x64.tar.gz
+  - tar zxvf jdk-8u212-linux-x64.tar.gz
+  - rm jdk-8u212-linux-x64.tar.gz
+  - fi
+  - export JAVA_HOME="$(pwd)/jdk1.8.0_212"
+
+build:
+  stage: build
   script:
-    - mvn checkstyle:check
+    - mvn compile $MAVEN_CLI_OPTS
   tags:
     - docker
 
+style:
+  stage: test
+  script: 
+    - mvn checkstyle:check $MAVEN_CLI_OPTS
+    - mvn test $MAVEN_CLI_OPTS
+  tags:
+    - docker

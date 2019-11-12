@@ -3,6 +3,10 @@ package threads;
 import java.net.Socket;
 
 import message.Message;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import provider.NetworkProvider;
 
 /**
@@ -14,6 +18,8 @@ import provider.NetworkProvider;
  *
  */
 public class MessageProcess extends ThreadExtend {
+  
+  private static final Logger logger = LogManager.getLogger();
 
   private Message message;
   private Socket socket;
@@ -35,12 +41,13 @@ public class MessageProcess extends ThreadExtend {
   
   @Override
   public void run() {
-    // TODO Auto-generated method stub
+    logger.info("Message received");
+    this.message.process(this.netProvider.getDataImpl(), socket);
   }
 
   @Override
   public void kill() {
-    // TODO Auto-generated method stub
+    logger.info("Killing MessageProcess thread");
   }
 
 }

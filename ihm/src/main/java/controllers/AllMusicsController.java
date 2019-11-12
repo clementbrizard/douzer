@@ -1,8 +1,12 @@
 package controllers;
 
+import core.IhmCore;
+
 //replace by javadocs
 //central view show up all music in the network
 public class AllMusicsController implements Controller {
+
+  private IhmCore ihmCore;
   
   private SearchMusicController searchMusicController;
   
@@ -27,5 +31,9 @@ public class AllMusicsController implements Controller {
   
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  public void setIhmCore(IhmCore ihmCore) {
+    this.ihmCore = ihmCore;
   }
 }

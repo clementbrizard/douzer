@@ -6,6 +6,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import message.Message;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import provider.NetworkProvider;
 
 /**
@@ -17,6 +21,8 @@ import provider.NetworkProvider;
  */
 public class Server extends Thread {
 
+  private static final Logger logger = LogManager.getLogger();
+  
   private ServerSocket listeningSocket;
   private NetworkProvider netProvider;
   private boolean serverRunning = true;
@@ -51,7 +57,7 @@ public class Server extends Thread {
     try {
       this.listeningSocket = new ServerSocket(NetworkProvider.N_PORT);
       while (this.serverRunning) {
-        System.out.println("Waiting for connection...");
+        logger.info("Waiting for connection...");
         
         Socket socket = this.listeningSocket.accept();
         

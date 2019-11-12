@@ -3,6 +3,8 @@ package datamodel;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +20,10 @@ public class LocalUser extends User {
    * Default constructor.
    */
   public LocalUser() {
+    this.contacts = new HashSet<>();
+    this.musics = new HashSet<>();
+    this.playlist = new ArrayList<>();
+
     try {
       messageDigest = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
