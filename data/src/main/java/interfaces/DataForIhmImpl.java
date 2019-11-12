@@ -18,10 +18,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Calendar;
+import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -100,7 +99,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public MusicMetadata parseMusicMetadata(String path)
-          throws IOException, UnsupportedTagException, InvalidDataException {
+      throws IOException, UnsupportedTagException, InvalidDataException {
     MusicMetadata metadata = new MusicMetadata();
     Mp3File mp3File = new Mp3File(path);
 
@@ -113,9 +112,7 @@ public class DataForIhmImpl implements DataForIhm {
       metadata.setArtist(id3v1Tag.getArtist());
       metadata.setAlbum(id3v1Tag.getAlbum());
       if (id3v1Tag.getYear().length() > 0) {
-        metadata.setReleaseDate(new GregorianCalendar(
-            Integer.parseInt(id3v1Tag.getYear()), Calendar.JANUARY, 1)
-            .getTime());
+        metadata.setReleaseYear(Year.parse(id3v1Tag.getYear()));
       }
     } else if (mp3File.hasId3v2Tag()) {
       ID3v2 id3v2Tag = mp3File.getId3v2Tag();
@@ -124,9 +121,7 @@ public class DataForIhmImpl implements DataForIhm {
       metadata.setArtist(id3v2Tag.getArtist());
       metadata.setAlbum(id3v2Tag.getAlbum());
       if (id3v2Tag.getYear() != null) {
-        metadata.setReleaseDate(new GregorianCalendar(
-            Integer.parseInt(id3v2Tag.getYear()), Calendar.JANUARY, 1)
-            .getTime());
+        metadata.setReleaseYear(Year.parse(id3v2Tag.getYear()));
       }
     }
 
