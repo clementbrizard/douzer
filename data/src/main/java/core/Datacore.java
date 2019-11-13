@@ -126,8 +126,22 @@ public class Datacore {
    * @param music2 the reference that will not be updated.
    */
   private void mergeMusics(Music music1, Music music2) {
-    // TODO: do a proper merge
-    throw new UnsupportedOperationException("Merge with between musics is not implemented yet");
+    music2.getMetadata().getTags()
+            .forEach(t -> music1.getMetadata().getTags().add(t)
+    );
+
+    music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
+    music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
+
+    if(music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {//music2's metadata is after music1's metadata
+      music1.getMetadata().setTitle(music2.getMetadata().getTitle());
+      music1.getMetadata().setAlbum(music2.getMetadata().getAlbum());
+      music1.getMetadata().setArtist(music2.getMetadata().getArtist());
+      music1.getMetadata().setDuration(music2.getMetadata().getDuration());
+      music1.getMetadata().setHash(music2.getMetadata().getHash());
+      music1.getMetadata().setReleaseDate(music2.getMetadata().getReleaseDate());
+      music1.getMetadata().setTimeStamp(music2.getMetadata().getTimeStamp());
+    }
   }
 
   /**
@@ -137,8 +151,16 @@ public class Datacore {
    * @param user2 the reference that will not be updated.
    */
   private void mergeUsers(User user1, User user2) {
-    // TODO: do a proper merge
-    throw new UnsupportedOperationException("Merge with between users is not implemented yet");
+    if(user1.getTimeStamp().compareTo(user2.getTimeStamp()) < 0){
+      user1.setUsername(user1.getUsername());
+      user1.setFirstName(user2.getFirstName());
+      user1.setLastName(user2.getLastName());
+      user1.setAvatar(user2.getAvatar());
+      user1.setConnected(user2.isConnected());
+      user1.setDateOfBirth(user2.getDateOfBirth());
+      user1.setIp(user2.getIp());
+      user1.setTimeStamp(user2.getTimeStamp());
+    }
   }
 
   public Stream<InetAddress> getIps() {

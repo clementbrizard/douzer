@@ -1,5 +1,7 @@
 package datamodel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,11 +21,16 @@ public class MusicMetadata implements java.io.Serializable {
   private Set<String> tags;
   private transient Map<User, Integer> ratings;
   private transient List<Comment> comments;
+  private Date timeStamp;
 
   public MusicMetadata() {
     this.tags = new HashSet<>();
     this.ratings = new HashMap<>();
     this.comments = new ArrayList<>();
+
+    this.timeStamp = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    dateFormat.format(this.timeStamp);
   }
 
   public String getHash() {
@@ -97,4 +104,8 @@ public class MusicMetadata implements java.io.Serializable {
   public void setDuration(Duration duration) {
     this.duration = duration;
   }
+
+  public Date getTimeStamp(){ return timeStamp; }
+
+  public void setTimeStamp(Date date){ this.timeStamp = date; }
 }

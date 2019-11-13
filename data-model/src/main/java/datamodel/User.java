@@ -2,8 +2,11 @@ package datamodel;
 
 import java.awt.Image;
 import java.net.InetAddress;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
 
 public class User implements java.io.Serializable {
   private UUID uuid;
@@ -14,6 +17,7 @@ public class User implements java.io.Serializable {
   private Date dateOfBirth;
   private boolean connected;
   private InetAddress ip;
+  private Date timeStamp;
 
   public User() {
     this.uuid = UUID.randomUUID();
@@ -28,6 +32,10 @@ public class User implements java.io.Serializable {
     this.dateOfBirth = user.dateOfBirth;
     this.connected = user.connected;
     this.ip = user.ip;
+    this.timeStamp = new Date();
+
+    DateFormat dateFormat = new SimpleDateFormat("\"yyyy/MM/dd HH:mm:ss\"");
+    dateFormat.format(this.timeStamp);
   }
 
   public UUID getUuid() {
@@ -89,4 +97,8 @@ public class User implements java.io.Serializable {
   public void setIp(InetAddress ip) {
     this.ip = ip;
   }
+
+  public Date getTimeStamp(){ return this.timeStamp; }
+
+  public void setTimeStamp(Date timeStamp){ this.timeStamp = timeStamp; }
 }
