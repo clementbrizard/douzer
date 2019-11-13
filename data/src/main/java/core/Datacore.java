@@ -133,7 +133,8 @@ public class Datacore {
     music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
     music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
 
-    if(music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {//music2's metadata is after music1's metadata
+    //music2's metadata is after music1's metadata
+    if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
       music1.getMetadata().setTitle(music2.getMetadata().getTitle());
       music1.getMetadata().setAlbum(music2.getMetadata().getAlbum());
       music1.getMetadata().setArtist(music2.getMetadata().getArtist());
@@ -151,7 +152,7 @@ public class Datacore {
    * @param user2 the reference that will not be updated.
    */
   private void mergeUsers(User user1, User user2) {
-    if(user1.getTimeStamp().compareTo(user2.getTimeStamp()) < 0){
+    if (user1.getTimeStamp().compareTo(user2.getTimeStamp()) < 0) {
       user1.setUsername(user1.getUsername());
       user1.setFirstName(user2.getFirstName());
       user1.setLastName(user2.getLastName());
