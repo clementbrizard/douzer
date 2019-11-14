@@ -7,6 +7,7 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import exceptions.LocalUsersFileException;
 import features.CreateUser;
 import features.Login;
 import features.LogoutPayload;
@@ -67,8 +68,19 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void logout() {
-    LogoutPayload payload = new LogoutPayload();
+    LocalUser currentUser = this.dc.getCurrentUser();
+
+    try {
+      // Updates the written currentUser in case it has been modified
+      this.dc.getLocalUsersFileHandler().update(currentUser);
+    } catch (LocalUsersFileException e) {
+      e.printStackTrace();
+    }
+
+    LogoutPayload payload = new LogoutPayload(currentUser);
     this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
+
+    this.dc.wipe();
   }
 
   @Override

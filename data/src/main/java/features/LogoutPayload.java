@@ -2,25 +2,21 @@ package features;
 
 import core.Datacore;
 import core.Payload;
-import datamodel.LocalUser;
-import exceptions.LocalUsersFileException;
+import datamodel.User;
 
 public class LogoutPayload extends Payload {
+  private User disconnectedUser;
+
+  public LogoutPayload(User disconnectedUser) {
+    this.disconnectedUser = disconnectedUser;
+  }
+
   /**
-   * Remove the current user from all its owned musics and notify IHM.
+   * Notify IHM that a certain User is disconnected. Also remove its musics ownerships.
    */
   @Override
   public void run(Datacore dc) {
-    LocalUser currentUser = dc.getCurrentUser();
-
-    try {
-      dc.getLocalUsersFileHandler().update(currentUser);
-    } catch (LocalUsersFileException e) {
-      e.printStackTrace();
-    }
-
-    dc.ihm.notifyUserDisconnection(currentUser);
-    dc.removeOwner(currentUser);
-    dc.wipe();
+    dc.ihm.notifyUserDisconnection(this.disconnectedUser);
+    dc.removeOwner(this.disconnectedUser);
   }
 }
