@@ -8,7 +8,12 @@
     <children>
         <BorderPane>
             <center>
-                <fx:include fx:id="CentralFrame" source="AllMusicsCenterView.fxml" />
+                <VBox BorderPane.alignment="TOP_RIGHT">
+                    <children>
+                        <fx:include fx:id="CentralFrame" source="AllMusicsCenterView.fxml" />
+                        <fx:include fx:id="MusicPlaying" source="MusicPlayingView.fxml" />
+                    </children>
+                </VBox>
             </center>
              <left>
                 <VBox BorderPane.alignment="TOP_RIGHT">
@@ -16,11 +21,16 @@
                         <fx:include fx:id="Profile" source="ProfileSideView.fxml" />
                         <fx:include fx:id="MyMusicsSide" source="MyMusicsSideView.fxml" />
                         <fx:include fx:id="OnlineUsersList" source="OnlineUsersListView.fxml" />
+                        <fx:include fx:id="Contacts" source="ContactsView.fxml" />
                     </children>
                 </VBox>
              </left>
              <right>
-                <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" />
+                 <!-- <VBox BorderPane.alignment="TOP_LEFT">
+                    <children>
+                        Right side view yet to come
+                    </children>
+                 </VBox> -->
              </right>
         </BorderPane>
     </children>
