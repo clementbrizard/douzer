@@ -14,6 +14,7 @@ public class MainController implements Controller {
   private ContactListController contactListcontroller;
   private OnlineUsersListController onlineUsersListController;
   private CentralFrameController centralFrameController;
+  private MyMusicsController myMusicsController;
 
   @Override
   public void initialize() {
@@ -82,5 +83,13 @@ public class MainController implements Controller {
   
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  public MyMusicsController getMyMusicsController() {
+    return myMusicsController;
+  }
+
+  public void setMyMusicsController(MyMusicsController myMusicsController) {
+    this.myMusicsController = myMusicsController;
   }
 }

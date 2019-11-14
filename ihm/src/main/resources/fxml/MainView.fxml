@@ -13,7 +13,8 @@
              <left>
                 <VBox BorderPane.alignment="TOP_RIGHT">
                     <children>
-                        <fx:include fx:id="Proile" source="ProfileSideView.fxml" />
+                        <fx:include fx:id="Profile" source="ProfileSideView.fxml" />
+                        <fx:include fx:id="MyMusicsSide" source="MyMusicsSideView.fxml" />
                     </children>
                 </VBox>
              </left>
