@@ -15,6 +15,7 @@
                     <children>
                         <fx:include fx:id="Profile" source="ProfileSideView.fxml" />
                         <fx:include fx:id="MyMusicsSide" source="MyMusicsSideView.fxml" />
+                        <fx:include fx:id="OnlineUsersList" source="OnlineUsersListView.fxml" />
                     </children>
                 </VBox>
              </left>
