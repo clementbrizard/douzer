@@ -295,7 +295,7 @@ public class IhmCore extends Application {
 
     // get the loader for mainView
     FXMLLoader mainLoader = new FXMLLoader(getClass()
-            .getResource("/fxml/mainView.fxml"));
+            .getResource("/fxml/MainView.fxml"));
     Parent mainParent = mainLoader.load();
     mainScene = new Scene(mainParent);
 
