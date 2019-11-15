@@ -15,6 +15,8 @@ import datamodel.User;
 import features.CreateUser;
 import features.Login;
 import features.ShareMusicsPayload;
+import features.UnshareMusicsPayload;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -154,7 +156,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void unshareMusic(LocalMusic music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    UnshareMusicsPayload payload = new UnshareMusicsPayload(Collections.singleton(music));
+    this.dc.net.sendToUsers(payload, this.dc.getIps());
   }
 
   @Override
