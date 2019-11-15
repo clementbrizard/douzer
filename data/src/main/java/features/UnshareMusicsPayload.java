@@ -8,7 +8,7 @@ import drydatamodel.DryMusic;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-public class UnshareMusicsPayload {
+public class UnshareMusicsPayload extends Payload {
     private Collection<DryMusic> musics;
 
     public UnshareMusicsPayload(Collection<LocalMusic> musics) {
