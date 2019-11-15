@@ -7,6 +7,11 @@ public class Contact implements java.io.Serializable {
   private String group;
   private transient HashSet<LocalMusic> sharedMusics;
 
+  public Contact(User user) {
+    this.user = user;
+    this.sharedMusics = new HashSet<>();
+  }
+
   public User getUser() {
     return user;
   }

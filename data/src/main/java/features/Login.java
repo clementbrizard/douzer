@@ -18,6 +18,10 @@ import javax.security.auth.login.LoginException;
 
 public abstract class Login {
   private static InetAddress getIpFromString(String ip) {
+    if (ip.isEmpty()) {
+      return null;
+    }
+
     try {
       return InetAddress.getByName(ip);
     } catch (UnknownHostException e) {
@@ -78,7 +82,8 @@ public abstract class Login {
     user.getMusics().forEach(dc::addMusic);
 
     LoginPayload payload = new LoginPayload(user);
-    Path configPath = user.getSavePath().resolve("config.properties");
+    // TODO: template for filename
+    Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     dc.net.connect(payload, getInitialIpsFromConfig(configPath));
   }
 }
