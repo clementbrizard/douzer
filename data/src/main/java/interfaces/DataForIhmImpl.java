@@ -77,7 +77,7 @@ public class DataForIhmImpl implements DataForIhm {
       e.printStackTrace();
     }
 
-    LogoutPayload payload = new LogoutPayload(currentUser);
+    LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
     this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
 
     this.dc.wipe();

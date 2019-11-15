@@ -3,12 +3,13 @@ package features;
 import core.Datacore;
 import core.Payload;
 import datamodel.User;
+import java.util.UUID;
 
 public class LogoutPayload extends Payload {
-  private User disconnectedUser;
+  private UUID uuid;
 
-  public LogoutPayload(User disconnectedUser) {
-    this.disconnectedUser = disconnectedUser;
+  public LogoutPayload(UUID uuid) {
+    this.uuid = uuid;
   }
 
   /**
@@ -16,7 +17,8 @@ public class LogoutPayload extends Payload {
    */
   @Override
   public void run(Datacore dc) {
-    dc.ihm.notifyUserDisconnection(this.disconnectedUser);
-    dc.removeOwner(this.disconnectedUser);
+    User disconnectedUser = dc.getUser(uuid);
+    dc.ihm.notifyUserDisconnection(disconnectedUser);
+    dc.removeOwner(disconnectedUser);
   }
 }
