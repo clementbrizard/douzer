@@ -105,7 +105,11 @@ public class MusicMetadata implements java.io.Serializable {
     this.duration = duration;
   }
 
-  public Date getTimeStamp(){ return timeStamp; }
+  public Date getTimeStamp() {
+    return this.timeStamp;
+  }
 
-  public void setTimeStamp(Date date){ this.timeStamp = date; }
+  public void setTimeStamp(Date date) {
+    this.timeStamp = date;
+  }
 }

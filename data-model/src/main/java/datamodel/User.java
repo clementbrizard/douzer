@@ -98,7 +98,11 @@ public class User implements java.io.Serializable {
     this.ip = ip;
   }
 
-  public Date getTimeStamp(){ return this.timeStamp; }
+  public Date getTimeStamp() {
+    return this.timeStamp;
+  }
 
-  public void setTimeStamp(Date timeStamp){ this.timeStamp = timeStamp; }
+  public void setTimeStamp(Date timeStamp) {
+    this.timeStamp = timeStamp;
+  }
 }
