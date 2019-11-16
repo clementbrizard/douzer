@@ -26,10 +26,16 @@ build:
   tags:
     - docker
 
+test:
+  stage: test
+  script:
+    - mvn test $MAVEN_CLI_OPTS
+  tags:
+    - docker
+
 style:
   stage: test
   script: 
     - mvn checkstyle:check $MAVEN_CLI_OPTS
-    - mvn test $MAVEN_CLI_OPTS
   tags:
     - docker
