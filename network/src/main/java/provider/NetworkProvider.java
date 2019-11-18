@@ -1,6 +1,7 @@
 package provider;
 
 import implementation.NetworkImpl;
+
 import interfaces.DataForNet;
 
 import java.io.Serializable;

@@ -1,13 +1,13 @@
 package message;
 
+import interfaces.DataForNet;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import interfaces.DataForNet;
 
 public class SendFile extends Message {
 

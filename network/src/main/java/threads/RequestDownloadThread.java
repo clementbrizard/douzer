@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import message.DownloadFile;
+import message.SendFile;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import message.DownloadFile;
-import message.Message;
-import message.SendFile;
 import provider.NetworkProvider;
 
 public class RequestDownloadThread extends ThreadExtend {
@@ -27,7 +27,8 @@ public class RequestDownloadThread extends ThreadExtend {
   private NetworkProvider netProvider;
   private boolean threadRunning;
 
-  public RequestDownloadThread(NetworkProvider np, Stream<InetAddress> ownersIps, String musicHash) {
+  public RequestDownloadThread(NetworkProvider np, Stream<InetAddress> ownersIps,
+      String musicHash) {
     this.ownersIps = ownersIps.collect(Collectors.toList());
     this.musicHash = musicHash;
     this.netProvider = np;
@@ -43,7 +44,9 @@ public class RequestDownloadThread extends ThreadExtend {
     
     for (InetAddress ipDest : ownersIps) {
       try {
-        if (!this.threadRunning) return;
+        if (!this.threadRunning) {
+          return;
+        }
         
         Socket socket = new Socket(ipDest, NetworkProvider.N_PORT);
         

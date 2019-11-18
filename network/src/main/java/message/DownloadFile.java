@@ -1,20 +1,26 @@
 package message;
 
+import interfaces.DataForNet;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.Socket;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import interfaces.DataForNet;
-import provider.NetworkProvider;
-
+/**
+ * Message sent to owners of a music one want to download. This message contains
+ * informations about the music (hash) and sends the file to the sender of the
+ * message in the same socket.
+ * 
+ * @author Antoine
+ *
+ */
 public class DownloadFile extends Message {
 
   private static final long serialVersionUID = 7477300323985036967L;
@@ -52,18 +58,18 @@ public class DownloadFile extends Message {
       long fileLength = file.length(); 
       long current = 0;
           
-      while(current!=fileLength){ 
-          int size = 10000;
-          if(fileLength - current >= size)
-              current += size;    
-          else{ 
-              size = (int)(fileLength - current); 
-              current = fileLength;
-          } 
-          contents = new byte[size]; 
-          bis.read(contents, 0, size); 
-          os.write(contents);
-          logger.info("Sending file ... "+(current*100)/fileLength+"% complete!\n");
+      while (current != fileLength) { 
+        int size = 10000;
+        if (fileLength - current >= size) {
+          current += size;    
+        } else { 
+          size = (int)(fileLength - current); 
+          current = fileLength;
+        } 
+        contents = new byte[size]; 
+        bis.read(contents, 0, size); 
+        os.write(contents);
+        logger.info("Sending file ... " + (current * 100) / fileLength + "% complete!\n");
       }   
           
       os.flush(); 
