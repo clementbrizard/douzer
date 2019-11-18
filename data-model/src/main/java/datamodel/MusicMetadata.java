@@ -23,6 +23,9 @@ public class MusicMetadata implements java.io.Serializable {
   private transient List<Comment> comments;
   private Date timeStamp;
 
+  /**
+   * MusicMetadata constructor.
+   */
   public MusicMetadata() {
     this.tags = new HashSet<>();
     this.ratings = new HashMap<>();

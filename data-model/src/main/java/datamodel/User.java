@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-
 public class User implements java.io.Serializable {
   private UUID uuid;
   private String username;
@@ -23,6 +22,10 @@ public class User implements java.io.Serializable {
     this.uuid = UUID.randomUUID();
   }
 
+  /**
+   * User constructor.
+   * @param user model
+   */
   public User(User user) {
     this.uuid = user.uuid;
     this.username = user.username;
