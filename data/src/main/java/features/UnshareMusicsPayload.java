@@ -10,21 +10,23 @@ import java.util.Collection;
  * Example feature.
  */
 public class UnshareMusicsPayload extends Payload {
-  private Collection<String> hashMusics;
+  private Collection<String> musicHashs;
+  private User owner;
 
-  public UnshareMusicsPayload(Collection<String> hashMusics) {
-    this.hashMusics = hashMusics;
+  public UnshareMusicsPayload(Collection<String> musicHashs, User owner) {
+    this.musicHashs = musicHashs;
+    this.owner = owner;
   }
 
-  /**
-   * Add the carried musics to the available musics.
+  /**.
+   * To stop sharing a music by deleting the user from the owner list
    */
   @Override
   public void run(Datacore dc) {
-    this.hashMusics.forEach(hash -> {
+    this.musicHashs.forEach(hash -> {
       Music music = dc.getMusic(hash);
-      User user = dc.getCurrentUser();
-      dc.removeOwner(music, user);
+      dc.removeOwner(music, this.owner);
+      dc.ihm.updateMusic(music);
     });
   }
 }

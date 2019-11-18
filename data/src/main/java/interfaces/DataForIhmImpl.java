@@ -66,6 +66,11 @@ public class DataForIhmImpl implements DataForIhm {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
+  /**
+   * .to delete a music in the library, eventually delete locally, and unshare the music
+   * @param music the music
+   * @param deleteLocal whether or not to delete locally
+   */
   @Override
   public void deleteMusic(LocalMusic music, boolean deleteLocal) {
     Set musics = this.dc.getCurrentUser().getMusics();
@@ -144,8 +149,9 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void unshareMusics(Collection<LocalMusic> musics) {
-    Collection<String> hashMusics = musics.stream().map(x -> x.getMetadata().getHash()).collect(Collectors.toList());
-    UnshareMusicsPayload payload = new UnshareMusicsPayload(hashMusics);
+    Collection<String> musicHashs = musics.stream()
+        .map(x -> x.getMetadata().getHash()).collect(Collectors.toList());
+    UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, dc.getCurrentUser());
     this.dc.net.sendToUsers(payload, this.dc.getIps());
   }
 
