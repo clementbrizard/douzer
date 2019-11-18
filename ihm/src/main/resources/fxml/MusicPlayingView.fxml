@@ -4,34 +4,28 @@
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 
-<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IHM.Controller">
-    <Pane prefHeight="94.0" prefWidth="493.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
-        <children>
-            <ProgressBar fx:id="pgMusicProgress" layoutX="100.0" layoutY="47.0" prefHeight="23.0" prefWidth="315.0" progress="0.27" />
-            <Label layoutX="100.0" layoutY="14.0" text="Artist Name - Music Name" />
-            <ImageView fx:id="ivPlayPause" fitHeight="32.0" fitWidth="37.0" layoutX="14.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/playSymbol.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivNext" fitHeight="35.0" fitWidth="27.0" layoutX="51.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/nextSymbol.png" />
-                </image>
-            </ImageView>
-            <Label fx:id="lblTime" layoutX="418.0" layoutY="48.0" text="0:30/3:30" />
-        </children>
-    </Pane>
-    <columnConstraints>
-        <ColumnConstraints />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-    </rowConstraints>
-</GridPane>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
+   <children>
+       <Pane prefHeight="100" prefWidth="720.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
+           <children>
+               <ProgressBar fx:id="pgMusicProgress" layoutX="99.0" layoutY="50.0" prefHeight="23.0" prefWidth="520.0" progress="0.27" />
+               <Label layoutX="99.0" layoutY="26.0" text="Artist Name - Music Name" />
+               <ImageView fx:id="ivPlayPause" fitHeight="32.0" fitWidth="37.0" layoutX="14.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../images/playSymbol.png" />
+                   </image>
+               </ImageView>
+               <ImageView fx:id="ivNext" fitHeight="35.0" fitWidth="27.0" layoutX="51.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+                   <image>
+                       <Image url="@../images/nextSymbol.png" />
+                   </image>
+               </ImageView>
+               <Label fx:id="lblTime" layoutX="626.0" layoutY="53.0" text="0:30/3:30" />
+           </children>
+       </Pane>
+   </children>
+</AnchorPane>
