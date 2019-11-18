@@ -1,6 +1,10 @@
 package datamodel;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -9,10 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 public class LocalUser extends User {
-  private MessageDigest messageDigest;
+  private transient MessageDigest messageDigest;
   private String pwdHash;
   private Set<Contact> contacts;
-  private Path savePath;
+  private transient Path savePath;
   private Set<LocalMusic> musics;
   private List<LocalMusic> playlist;
 
@@ -82,5 +86,23 @@ public class LocalUser extends User {
 
   public void setSavePath(Path savePath) {
     this.savePath = savePath;
+  }
+
+  private void writeObject(ObjectOutputStream stream) throws IOException {
+    stream.defaultWriteObject();
+    stream.writeUTF(this.savePath.toString());
+  }
+
+  private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+    stream.defaultReadObject();
+
+    try {
+      messageDigest = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
+
+    String savePathString = stream.readUTF();
+    setSavePath(Paths.get(savePathString).toAbsolutePath());
   }
 }
