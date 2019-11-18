@@ -90,7 +90,7 @@ public class SignUpController implements Controller {
 
     try {
       ihmCore.getDataForIhm().createUser(user);
-      ihmCore.showAllMusicsCenterScene();
+      ihmCore.showMainScene();
 
     } catch (IOException | LoginException se) {
 

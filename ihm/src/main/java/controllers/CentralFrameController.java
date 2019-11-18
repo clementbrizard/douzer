@@ -1,9 +1,9 @@
 package controllers;
 
-//replace by javadocs 
+//replace by javadocs
 //the central view who will change often between centralview
 public class CentralFrameController implements Controller {
-  
+
   private AllMusicsController allMusicsController;
   private MyMusicsController myMusicsController;
   private DistantUserController distantUserController;
