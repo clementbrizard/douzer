@@ -18,6 +18,15 @@ import org.apache.logging.log4j.Logger;
 
 import provider.NetworkProvider;
 
+/**
+ * Thread within which the whole process of downloading a file will be handled.
+ * It uses a list (stream) os users IP, the list is supposed to be the list of
+ * IPs where the wanted file can be downloaded. It loops over all the IPs while
+ * there are errors.
+ * 
+ * @author Antoine
+ *
+ */
 public class RequestDownloadThread extends ThreadExtend {
 
   private static final Logger logger = LogManager.getLogger();

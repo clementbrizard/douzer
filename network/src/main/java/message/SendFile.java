@@ -9,6 +9,13 @@ import java.net.Socket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Message sent to a user who has previously asked to download a file. This
+ * message warn the user that it'll receive a file in the socket.
+ * 
+ * @author Antoine
+ *
+ */
 public class SendFile extends Message {
 
   private static final long serialVersionUID = -6590037734212272745L;
