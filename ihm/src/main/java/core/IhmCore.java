@@ -60,12 +60,53 @@ public class IhmCore extends Application {
 
 
   private static final Logger ihmLogger = LogManager.getLogger();
+  
+  private static IhmCore ihmCore;
 
   public IhmCore() {
     ihmLogger.info("IhmCore start");
+    ihmCore = this;
     this.ihmForData = new IhmForData(this);
   }
 
+  public static IhmCore getIhmCore() {
+    return ihmCore;
+  }
+  
+  /**
+   * show the application.
+   */
+  public void showApplication() {
+    if (primaryStage != null) {
+      Platform.runLater(new Runnable() {
+
+        @Override
+        public void run() {
+
+          primaryStage.show();
+          Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+          primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+          primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+        }
+      });
+    }
+  }
+  
+  /**
+   * hide the application.
+   */
+  public void hideApplication() {
+    if (primaryStage != null) {
+      Platform.runLater(new Runnable() {
+
+        @Override
+        public void run() {
+          primaryStage.hide();
+        }
+      });
+    }
+  }
+  
   public Scene getLoginScene() {
     return loginScene;
   }
@@ -312,18 +353,19 @@ public class IhmCore extends Application {
     //add the root scene (login)    
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
-    primaryStage.show();
-
-    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    //primaryStage.show();
     
     // handler close window
     primaryStage.setOnCloseRequest(event -> {
       System.out.println("Stage is closing");
-      dataForIhm.logout();
+      if (dataForIhm != null) {
+        try {
+          dataForIhm.logout();
+        } catch (UnsupportedOperationException ex) {
+          ex.printStackTrace();
+        }
+      }
     });
-    
   }
   
   /**
@@ -331,7 +373,13 @@ public class IhmCore extends Application {
    *
    * @param args the arguments of the Application from Main method
    */
-  public void run(String[] args) {
-    launch(args);
+  public static void run(String[] args) {
+    (new Thread() { 
+      
+      @Override
+      public void run() {
+        launch(IhmCore.class,args);
+      }
+    }).start();
   }  
 }
