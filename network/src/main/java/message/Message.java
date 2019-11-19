@@ -7,6 +7,14 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+/**
+ * Represents the objects that cross the network. It contains payload
+ * due to Data. Default beahaviour is : transmit payload to Data. Can
+ * be subclassed to overload default behaviour.
+ * 
+ * @author Antoine
+ *
+ */
 public class Message implements Serializable {
 
   private static final long serialVersionUID = -6557831202306199363L;
