@@ -14,8 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-//replace by javadocs
-//the view of the music player down in the middle
+/**
+ * PlayerMusic Controller.
+ */
 public class PlayerController implements Controller {
 
   @FXML
@@ -60,8 +61,8 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function creating PlayerList using musicPath
-   * @param url :
+   * Function creating PlayerList using musicPath.
+   * @param url : MusicPath
    * @return
    */
   private MediaPlayer createPlayer(String url) {
@@ -72,7 +73,7 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function to interact with musicPlayer : Play, Pause, Next, Previous
+   * Function to interact with musicPlayer : Play, Pause, Next, Previous.
    */
   private void playPauseSong() {
 
@@ -118,7 +119,7 @@ public class PlayerController implements Controller {
         playPauseSong();
 
       });
-    }else{
+    } else {
       Stream<LocalMusic> streamMusic = mainController.getIhmCore().getDataForIhm().getLocalMusics();
       arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
       arrayMusic.forEach(musicPath -> players.add(createPlayer(musicPath.getMp3Path())));
@@ -126,7 +127,7 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Update GUI values
+   * Update GUI values.
    */
   private void updateValues() {
     Thread thread = new Thread(() -> {
@@ -153,7 +154,7 @@ public class PlayerController implements Controller {
   }
 
   /**
-   *  Function to show musicInfo
+   *  Function to show musicInfo.
    * @param song : LocalMusic object
    */
   private void showSongInfo(LocalMusic song) {
@@ -169,7 +170,7 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Update playButton apperance
+   * Update playButton apperance.
    */
   private void playIcon() {
     ivPlay.setVisible(false);
@@ -179,7 +180,7 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Update pauseButton apperance
+   * Update pauseButton apperance.
    */
   private void pauseIcon() {
     ivPause.setVisible(false);
@@ -189,8 +190,8 @@ public class PlayerController implements Controller {
   }
 
   /**
-   *
-   * @param sec : converting time
+   * Converting time.
+   * @param sec : time
    * @return string format
    */
   private String secToMin(long sec) {
