@@ -45,6 +45,10 @@ public class OnlineUsersListController implements Controller {
 
   public void init() {
     // TODO uncomment to get IPs when Data method is implemented
-    displayOnlineUsers(mainController.getApplication().getIhmCore().getDataForIhm().getOnlineUsers());
+    displayOnlineUsers(mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getOnlineUsers());
   }
 }

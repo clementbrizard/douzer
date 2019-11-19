@@ -25,12 +25,24 @@ public class UserInfoController implements Controller {
     this.mainController = mainController;
   }
 
+  /**
+   * the init function who initialize the field with default data.
+   */
   public void init() {
     String name = "";
-    if (this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser() == null) {
+    if (this.mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser() == null) {
       name = "Booba";
     } else {
-      name = this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser().getUsername();
+      name = this.mainController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser()
+          .getUsername();
     }
     lblUserPseudo.setText(
         name

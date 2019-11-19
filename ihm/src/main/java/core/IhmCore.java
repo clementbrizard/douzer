@@ -16,7 +16,7 @@ public class IhmCore {
   private static IhmCore ihmCore;
   
   public static IhmCore init() {
-    if(ihmCore == null) {
+    if (ihmCore == null) {
       ihmCore = new IhmCore();
       
       ihmCore.ihmForData = new IhmForData(ihmCore);
@@ -28,19 +28,19 @@ public class IhmCore {
     
   }
   
-  public IhmForData getIhmForData () {
+  public IhmForData getIhmForData() {
     return ihmForData;
   }
   
-  public void setIhmForData (IhmForData ihmForData) {
+  public void setIhmForData(IhmForData ihmForData) {
     this.ihmForData = ihmForData;
   }
   
-  public DataForIhm getDataForIhm () {
+  public DataForIhm getDataForIhm() {
     return dataForIhm;
   }
   
-  public void setDataForIhm (DataForIhm dataForIhm) {
+  public void setDataForIhm(DataForIhm dataForIhm) {
     this.dataForIhm = dataForIhm;
   }
   

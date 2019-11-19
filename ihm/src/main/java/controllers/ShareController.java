@@ -69,9 +69,17 @@ public class ShareController implements Controller {
     // if radiobutton Public is selected, the music if shared
     try {
       if ((Boolean) shareStatusGroup.getSelectedToggle().getUserData()) {
-        currentMusicInfoController.getApplication().getIhmCore().getDataForIhm().shareMusic(currentMusic);
+        currentMusicInfoController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .shareMusic(currentMusic);
       } else {
-        currentMusicInfoController.getApplication().getIhmCore().getDataForIhm().unshareMusic(currentMusic);
+        currentMusicInfoController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .unshareMusic(currentMusic);
       }
     } catch (Exception e) {
       shareLogger.error(e);

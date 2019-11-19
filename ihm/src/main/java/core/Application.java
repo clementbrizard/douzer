@@ -1,23 +1,24 @@
 package core;
 
-import java.awt.Toolkit;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import controllers.AllMusicsController;
 import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
 import controllers.SignUpController;
-import interfaces.DataForIhm;
+
+import java.awt.Toolkit;
+
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
+
 import javafx.stage.Stage;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Application extends javafx.application.Application {
   
