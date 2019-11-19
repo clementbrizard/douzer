@@ -3,6 +3,7 @@ package core;
 import datamodel.LocalUser;
 import exceptions.LocalUsersFileException;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -75,7 +76,31 @@ public class LocalUsersFileHandler {
    * @throws LocalUsersFileException if the file is not accessible.
    */
   public void remove(LocalUser localUser) throws LocalUsersFileException {
-    throw new UnsupportedOperationException("Not implemented yet");
+    File temp = new File("_temp_" + localUser.getUuid());
+
+    try {
+      FileInputStream file = new FileInputStream(this.filePath.toFile());
+      ObjectInputStream reader = new ObjectInputStream(file);
+      FileOutputStream tempFile = new FileOutputStream(temp);
+      ObjectOutputStream writer = new ObjectOutputStream(tempFile);
+      LocalUser user;
+
+      while (true) {
+        user = (LocalUser) reader.readObject();
+        if (!(user.getUuid().equals(localUser.getUuid()))) {
+          writer.writeObject(user);
+        }
+      }
+    } catch (EOFException e) {
+      //Replace old file with the new one
+      boolean renameSucess = temp.renameTo(this.filePath.toFile());
+      if (!renameSucess) {
+        throw new LocalUsersFileException("File was not successfully renamed");
+      }
+    } catch (ClassNotFoundException | IOException e) {
+      e.printStackTrace();
+      throw new LocalUsersFileException("Local save may be corrupted or outdated");
+    }
   }
 
   public void removeAll() throws LocalUsersFileException {
@@ -93,7 +118,7 @@ public class LocalUsersFileHandler {
     LocalUser user;
 
     try {
-      FileInputStream file = new FileInputStream(filePath.toFile());
+      FileInputStream file = new FileInputStream(this.filePath.toFile());
       ObjectInputStream reader = new ObjectInputStream(file);
       do {
         user = (LocalUser) reader.readObject();
