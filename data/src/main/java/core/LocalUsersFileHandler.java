@@ -79,8 +79,7 @@ public class LocalUsersFileHandler {
    */
   public void remove(LocalUser localUser) throws LocalUsersFileException {
     Path filePath = localUser.getSavePath();
-    String username = localUser.getUsername();
-    File temp = new File("_temp_");
+    File temp = new File("_temp_" + localUser.getUuid());
 
     try {
       FileInputStream file = new FileInputStream(filePath.toFile());
@@ -91,7 +90,7 @@ public class LocalUsersFileHandler {
 
       while (true) {
         user = (LocalUser) reader.readObject();
-        if (!(user.getUsername().equals(username))) {
+        if (!(user.getUuid().equals(localUser.getUuid()))) {
           writer.writeObject(user);
         }
       }
