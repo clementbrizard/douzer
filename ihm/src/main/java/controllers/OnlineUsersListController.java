@@ -1,7 +1,6 @@
 package controllers;
 
 import datamodel.User;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ import javafx.scene.control.ListView;
 public class OnlineUsersListController implements Controller {
 
   private MainController mainController;
-  private OnlineUsersListController onlineUsersListController;
 
   @FXML
   private ListView<String> lvwOnlineUsers;
@@ -41,12 +39,9 @@ public class OnlineUsersListController implements Controller {
     lvwOnlineUsers.setItems(items);
   }
 
-  public OnlineUsersListController getOnlineUsersListController() {
-    return onlineUsersListController;
-  }
 
-  public void setOnlineUsersListController(OnlineUsersListController onlineUsersListController) {
-    this.onlineUsersListController = onlineUsersListController;
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
   public void init() {

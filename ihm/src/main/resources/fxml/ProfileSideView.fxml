@@ -10,7 +10,7 @@
    <children>
        <Pane fx:id="pnProfile" prefHeight="155.0" prefWidth="200" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
            <children>
-               <Label alignment="TOP_CENTER" layoutX="71.0" layoutY="14.0" text="Pseudo" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
+               <Label fx:id="lblUserPseudo" alignment="TOP_CENTER" layoutX="71.0" layoutY="14.0" text="Pseudo" textAlignment="CENTER" textOverrun="CENTER_WORD_ELLIPSIS">
                    <font>
                        <Font size="18.0" />
                    </font>

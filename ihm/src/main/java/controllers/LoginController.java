@@ -40,6 +40,8 @@ public class LoginController implements Controller {
     String password = textFieldPassword.getText();
     boolean login = true;
     ihmcore.showMainScene();
+    ihmcore.getMainController().init();
+
     logger.info("User {} logged in", userName);
 
     //TODO uncomment when Data team fix login method
