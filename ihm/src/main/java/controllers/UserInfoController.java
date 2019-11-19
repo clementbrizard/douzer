@@ -26,9 +26,14 @@ public class UserInfoController implements Controller {
   }
 
   public void init() {
+    String name = "";
+    if (this.mainController.getIhmCore().getDataForIhm().getCurrentUser() == null) {
+      name = "Booba";
+    } else {
+      name = this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername();
+    }
     lblUserPseudo.setText(
-        //this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername()
-        "Kaaris"
+        name
     );
   }
 
