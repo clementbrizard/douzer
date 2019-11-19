@@ -83,8 +83,7 @@ public class SignUpController implements Controller {
     final Path avatarPath;
     // Get the image from the avatar path
     Image avatarImg = null;
-    if (avatarFile != null)
-    {
+    if (avatarFile != null) {
       avatarPath = avatarFile.toPath();
       try {
         avatarImg = ImageIO.read(avatarFile);
