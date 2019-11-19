@@ -1,12 +1,13 @@
 package controllers;
 
+import javafx.fxml.FXML;
 import javax.xml.soap.Detail;
 
 //replace by javadocs
 //the central view who will change often between centralview
 public class CentralFrameController implements Controller {
 
-  private AllMusicsController allMusicsController;
+  @FXML private AllMusicsController allMusicsController;
   private MyMusicsController myMusicsController;
   private DistantUserController distantUserController;
   private ProfileEditController profileEditController;
@@ -71,19 +72,9 @@ public class CentralFrameController implements Controller {
    * Initializes the controllers inside of the central frame.
    */
   public void init() {
-    this.allMusicsController = new AllMusicsController();
+    //TODO add controllers when they are linked to XML
     this.allMusicsController.setCentralFrameController(this);
-
-    this.detailsMusicController = new DetailsMusicController();
-    this.detailsMusicController.setCentralFrameController(this);
-
-    this.distantUserController = new DistantUserController();
-    this.distantUserController.setCentralFrameController(this);
-
-    this.myMusicsController = new MyMusicsController();
-    this.myMusicsController.setCentralFrameController(this);
-
-    this.profileEditController = new ProfileEditController();
-    this.profileEditController.setCentralFrameController(this);
+    this.allMusicsController.setIhmCore(this.mainController.getIhmCore());
+    this.allMusicsController.init();
   }
 }

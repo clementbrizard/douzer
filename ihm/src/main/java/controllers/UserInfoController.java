@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
 
@@ -14,11 +15,8 @@ public class UserInfoController implements Controller {
   private Label lblUserPseudo;
 
   @Override
-  public void initialize() {
-    // TODO Auto-generated method stub
-    System.out.println("Initialize");
-  }
-  
+  public void initialize() { }
+
   public MainController getMainController() {
     return mainController;
   }
@@ -28,7 +26,6 @@ public class UserInfoController implements Controller {
   }
 
   public void init() {
-    System.out.println("Init");
     lblUserPseudo.setText(
         this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername());
   }

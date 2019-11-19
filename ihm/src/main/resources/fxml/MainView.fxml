@@ -10,18 +10,18 @@
             <center>
                 <VBox BorderPane.alignment="TOP_RIGHT">
                     <children>
-                        <fx:include fx:id="CentralFrame" source="AllMusicsCenterView.fxml" />
-                        <fx:include fx:id="MusicPlaying" source="MusicPlayingView.fxml" />
+                        <fx:include fx:id="centralFrame" source="CentralView.fxml" />
+                        <fx:include fx:id="player" source="MusicPlayingView.fxml" />
                     </children>
                 </VBox>
             </center>
              <left>
                 <VBox BorderPane.alignment="TOP_RIGHT">
                     <children>
-                        <fx:include fx:id="Profile" source="ProfileSideView.fxml" />
-                        <fx:include fx:id="MyMusicsSide" source="MyMusicsSideView.fxml" />
-                        <fx:include fx:id="OnlineUsersList" source="OnlineUsersListView.fxml" />
-                        <fx:include fx:id="Contacts" source="ContactsView.fxml" />
+                        <fx:include fx:id="userInfo" source="ProfileSideView.fxml" />
+                        <fx:include fx:id="myMusics" source="MyMusicsSideView.fxml" />
+                        <fx:include fx:id="onlineUsersList" source="OnlineUsersListView.fxml" />
+                        <fx:include fx:id="contactList" source="ContactsView.fxml" />
                     </children>
                 </VBox>
              </left>

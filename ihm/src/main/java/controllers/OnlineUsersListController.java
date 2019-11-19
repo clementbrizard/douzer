@@ -23,8 +23,7 @@ public class OnlineUsersListController implements Controller {
   private ListView<String> lvwOnlineUsers;
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() { }
 
   /**
    * Fills the view with the ips of users.
@@ -45,6 +44,7 @@ public class OnlineUsersListController implements Controller {
   }
 
   public void init() {
+    // TODO uncomment to get IPs when Data method is implemented
     displayOnlineUsers(mainController.getIhmCore().getDataForIhm().getOnlineUsers());
   }
 }
