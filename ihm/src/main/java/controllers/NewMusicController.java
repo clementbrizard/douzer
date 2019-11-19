@@ -1,8 +1,9 @@
 package controllers;
 
+import datamodel.MusicMetadata;
 import java.io.File;
 import java.time.LocalDate;
-
+import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -296,10 +297,23 @@ public class NewMusicController implements Controller {
     if (valid) {
       System.out.println("Entry valid");
 
-      /**
-       TODO : Fill the MusicMetadata and send it to data
-       TODO : Exit the window
-       */
+      MusicMetadata meta = new MusicMetadata();
+      meta.setTitle(textTitle.getText());
+      meta.setArtist(textArtist.getText());
+      meta.setAlbum(textAlbum.getText());
+      meta.setReleaseYear(Year.of(dateYear.getValue()));
+
+      try {
+        myMusicsController.getCentralFrameController().getMainController().getIhmCore()
+            .getDataForIhm().addMusic(meta, file.getAbsolutePath());
+
+        /*
+         TODO : Exit the window
+         */
+
+      } catch (java.io.FileNotFoundException e) {
+        System.out.println("File not found : " + file.getAbsolutePath());
+      }
 
     } else {
       System.out.println("Entry not valid");

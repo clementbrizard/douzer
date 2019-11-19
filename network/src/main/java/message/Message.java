@@ -3,7 +3,9 @@ package message;
 import interfaces.DataForNet;
 
 import java.io.Serializable;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Message implements Serializable {
 
@@ -15,8 +17,14 @@ public class Message implements Serializable {
     this.payload = p;
   }
 
-  public void process(DataForNet data, Socket socket){
-    //To be define
+  public void process(DataForNet data, Socket socket) {
+    try {
+      data.process(payload, 
+          InetAddress.getByName(socket.getRemoteSocketAddress()
+          .toString().split(":")[0].split("/")[1]));
+    } catch (UnknownHostException e) {
+      e.printStackTrace();
+    }
   }
 
   public Serializable getPayload() {
