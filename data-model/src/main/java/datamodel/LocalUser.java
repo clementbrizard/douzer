@@ -91,7 +91,7 @@ public class LocalUser extends User {
 
   private void writeObject(ObjectOutputStream stream) throws IOException {
     stream.defaultWriteObject();
-    stream.writeUTF(this.savePath.toString());
+    stream.writeUTF(this.savePath.toAbsolutePath().toString());
   }
 
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
