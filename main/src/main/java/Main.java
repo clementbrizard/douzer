@@ -21,7 +21,7 @@ public class Main {
     
     //we have to wait the end of IhmCore initialisation
     try {
-      Thread.sleep(1000);
+      Thread.sleep(3000);
     } catch (InterruptedException e1) {
       // TODO Auto-generated catch block
       e1.printStackTrace();
