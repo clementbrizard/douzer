@@ -1,17 +1,20 @@
 package controllers;
 
+import javafx.fxml.FXML;
+import javax.xml.soap.Detail;
+
 //replace by javadocs
 //the central view who will change often between centralview
 public class CentralFrameController implements Controller {
 
-  private AllMusicsController allMusicsController;
+  @FXML private AllMusicsController allMusicsController;
   private MyMusicsController myMusicsController;
   private DistantUserController distantUserController;
-  private ProfileEditController profilEditcontroller;
-  private DetailsMusicController detailMusicController;
+  private ProfileEditController profileEditController;
+  private DetailsMusicController detailsMusicController;
   
   private MainController mainController;
-  
+
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
@@ -41,27 +44,37 @@ public class CentralFrameController implements Controller {
     this.distantUserController = distantUserController;
   }
   
-  public ProfileEditController getProfilEditcontroller() {
-    return profilEditcontroller;
+  public ProfileEditController getprofileEditController() {
+    return profileEditController;
   }
 
-  public void setProfilEditcontroller(ProfileEditController profilEditcontroller) {
-    this.profilEditcontroller = profilEditcontroller;
+  public void setprofileEditController(ProfileEditController profileEditController) {
+    this.profileEditController = profileEditController;
   }
   
-  public DetailsMusicController getDetailMusicController() {
-    return detailMusicController;
+  public DetailsMusicController getDetailsMusicController() {
+    return this.detailsMusicController;
   }
   
-  public void setDetailMusicController(DetailsMusicController detailMusicController) {
-    this.detailMusicController = detailMusicController;
+  public void setdetailsMusicController(DetailsMusicController detailsMusicController) {
+    this.detailsMusicController = detailsMusicController;
   }
   
   public MainController getMainController() {
-    return mainController;
+    return this.mainController;
   }
   
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+  }
+
+  /**
+   * Initializes the controllers inside of the central frame.
+   */
+  public void init() {
+    //TODO add controllers when they are linked to XML
+    this.allMusicsController.setCentralFrameController(this);
+    this.allMusicsController.setIhmCore(this.mainController.getIhmCore());
+    this.allMusicsController.init();
   }
 }

@@ -19,10 +19,10 @@
                  <children>
                      <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" prefHeight="384.0" prefWidth="505.0">
                          <columns>
-                             <TableColumn prefWidth="129.0" text="Artiste" />
-                             <TableColumn prefWidth="152.0" text="Titre" />
-                             <TableColumn prefWidth="131.0" text="Album" />
-                             <TableColumn minWidth="4.0" prefWidth="92.0" text="Durée" />
+                             <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
+                             <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />
+                             <TableColumn fx:id="albumCol" prefWidth="131.0" text="Album" />
+                             <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="92.0" text="Durée" />
                          </columns>
                      </TableView>
                      <TextField fx:id="tfSearch" layoutX="110.0" layoutY="24.0" prefHeight="31.0" prefWidth="473.0" promptText="Rechercher" />

@@ -1,8 +1,11 @@
 package controllers;
 
+import datamodel.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -14,36 +17,34 @@ import javafx.scene.control.ListView;
  */
 public class OnlineUsersListController implements Controller {
 
-  private OnlineUsersListController onlineUsersListController;
+  private MainController mainController;
 
   @FXML
   private ListView<String> lvwOnlineUsers;
 
   @Override
-  public void initialize() {
-    /* //Uncomment for test
-    List<String> dummyUsers = new ArrayList<String>();
-    for(int i = 1; i < 21; i++){
-      dummyUsers.add("Test" + i);
-    }
-    updateOnlineUsers(dummyUsers);
-     */
-  }
+  public void initialize() { }
 
   /**
-   * Fills the view with the given list of users.
-   * @param users list of connected users to display (pseudos)
-   */
-  public void updateOnlineUsers(List<String> users) {
-    ObservableList<String> items = FXCollections.observableArrayList(users);
+   * Fills the view with the ips of users.
+   * @param users Stream of connected users
+   **/
+
+  public void displayOnlineUsers(Stream<User> users) {
+    ObservableList<String> items =
+        users.map(user -> user.getIp().toString())
+             .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
     lvwOnlineUsers.setItems(items);
   }
 
-  public OnlineUsersListController getOnlineUsersListController() {
-    return onlineUsersListController;
+
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 
-  public void setOnlineUsersListController(OnlineUsersListController onlineUsersListController) {
-    this.onlineUsersListController = onlineUsersListController;
+  public void init() {
+    // TODO uncomment to get IPs when Data method is implemented
+    displayOnlineUsers(mainController.getIhmCore().getDataForIhm().getOnlineUsers());
   }
 }
