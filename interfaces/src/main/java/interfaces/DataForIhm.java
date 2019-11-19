@@ -36,7 +36,7 @@ public interface DataForIhm {
    */
   void createUser(LocalUser user) throws IOException, LoginException;
 
-  void deleteAccount();
+  void deleteAccount() throws IOException;
 
   void deleteMusic(Music music, boolean deleteLocal);
 

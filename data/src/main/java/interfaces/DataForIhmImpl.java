@@ -14,6 +14,7 @@ import datamodel.SearchQuery;
 import datamodel.User;
 import exceptions.LocalUsersFileException;
 import features.CreateUser;
+import features.DeleteUser;
 import features.Login;
 import features.LogoutPayload;
 import features.ShareMusicsPayload;
@@ -68,8 +69,8 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void deleteAccount() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void deleteAccount() throws IOException {
+    DeleteUser.run(this.dc);
   }
 
   @Override
