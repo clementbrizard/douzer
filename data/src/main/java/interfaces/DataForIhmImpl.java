@@ -31,8 +31,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
+  private static final Logger startLogger = LogManager.getLogger();
 
   public DataForIhmImpl(Datacore dc) {
     this.dc = dc;
@@ -87,9 +92,9 @@ public class DataForIhmImpl implements DataForIhm {
       if (deleteLocal) {
         File file = new File(music.getMp3Path());
         if (file.delete()) {
-          System.out.println(music.getMetadata().getTitle() + "is deleted locally");
+          startLogger.info(music.getMetadata().getTitle() + "is deleted locally");
         } else {
-          System.out.println("Delete operation is failed.");
+          startLogger.error("Delete operation is failed.");
         }
       }
     }
