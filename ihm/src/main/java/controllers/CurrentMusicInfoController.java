@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import core.IhmCore;
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
@@ -28,7 +29,7 @@ public class CurrentMusicInfoController implements Controller {
 
   private Scene shareScene;
 
-  private IhmCore ihmCore;
+  private Application application;
 
   @FXML
   private Button btnPartager;
@@ -63,8 +64,8 @@ public class CurrentMusicInfoController implements Controller {
     musicSharingPopup.setTitle("Partage");
     musicSharingPopup.setScene(this.shareScene);
     // Set position of second window, related to primary window.
-    musicSharingPopup.setX(ihmCore.getPrimaryStage().getX() + 200);
-    musicSharingPopup.setY(ihmCore.getPrimaryStage().getY() + 100);
+    musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
+    musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
 
     musicSharingPopup.show();
   }
@@ -106,12 +107,12 @@ public class CurrentMusicInfoController implements Controller {
     this.mainController = mainController;
   }
 
-  public IhmCore getIhmCore() {
-    return ihmCore;
+  public Application getApplication() {
+    return application;
   }
 
-  public void setIhmCore(IhmCore ihmCore) {
-    this.ihmCore = ihmCore;
+  public void setApplication(Application application) {
+    this.application = application;
   }
 
   public Scene getShareScene() {

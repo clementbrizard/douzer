@@ -27,10 +27,10 @@ public class UserInfoController implements Controller {
 
   public void init() {
     String name = "";
-    if (this.mainController.getIhmCore().getDataForIhm().getCurrentUser() == null) {
+    if (this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser() == null) {
       name = "Booba";
     } else {
-      name = this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername();
+      name = this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser().getUsername();
     }
     lblUserPseudo.setText(
         name

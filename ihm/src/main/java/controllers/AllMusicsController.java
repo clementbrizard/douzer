@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import core.IhmCore;
 import datamodel.Music;
 import datamodel.MusicMetadata;
@@ -26,9 +27,10 @@ public class AllMusicsController implements Controller {
   @FXML private TableColumn<MusicMetadata, String> albumCol;
   @FXML private TableColumn<MusicMetadata, Duration> durationCol;
 
-  private IhmCore ihmCore;
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
+  
+  private Application application;
 
   @Override
   public void initialize() {
@@ -51,10 +53,9 @@ public class AllMusicsController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
-  public void setIhmCore(IhmCore ihmCore) {
-    this.ihmCore = ihmCore;
+  public void setApplication(Application application) {
+    this.application = application;
   }
-
 
   /**
    * Setup the table columns to receive data.
@@ -76,8 +77,9 @@ public class AllMusicsController implements Controller {
   }
 
   private List<MusicMetadata> parseMusic() {
-    return this.ihmCore.getDataForIhm().getAvailableMusics()
+    return this.application.getIhmCore().getDataForIhm().getAvailableMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
   }
+
 }

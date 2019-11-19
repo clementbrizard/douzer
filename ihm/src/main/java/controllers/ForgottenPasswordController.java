@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import core.IhmCore;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -9,8 +10,6 @@ import javafx.scene.control.TextField;
  * Controller used for the forgotten password form.
  */
 public class ForgottenPasswordController implements Controller {
-
-  private IhmCore ihmCore;
 
   @FXML
   private TextField textFieldUsername;
@@ -26,6 +25,8 @@ public class ForgottenPasswordController implements Controller {
 
   @FXML
   private Label labelSecretQuestion;
+
+  private Application application;
 
   @Override
   public void initialize()  {
@@ -67,11 +68,11 @@ public class ForgottenPasswordController implements Controller {
    * Switches back to the login window.
    */
   public void actionCancel() {
-    ihmCore.showLoginScene();
+    application.showLoginScene();
   }
-
-
-  public void setIhmCore(IhmCore ihmCore) {
-    this.ihmCore = ihmCore;
+  
+  public void setApplication(Application application) {
+    // TODO Auto-generated method stub
+    this.application = application;
   }
 }

@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import core.IhmCore;
 import datamodel.LocalUser;
 import java.awt.Image;
@@ -27,8 +28,6 @@ import org.controlsfx.control.Notifications;
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
-
-  private IhmCore ihmCore;
 
   @FXML
   private TextField textFieldFirstName;
@@ -62,6 +61,8 @@ public class SignUpController implements Controller {
   @FXML
   private TextField profileFilePath;
   private File directoryChosenForSavingProfile = null;
+
+  private Application application;
 
   @Override
   public void initialize() {
@@ -112,9 +113,9 @@ public class SignUpController implements Controller {
     user.setAvatar(avatarImg);
 
     try {
-      ihmCore.getDataForIhm().createUser(user);
-      ihmCore.showMainScene();
-      ihmCore.getMainController().init();
+      application.getIhmCore().getDataForIhm().createUser(user);
+      application.showMainScene();
+      application.getMainController().init();
 
 
     } catch (IOException | LoginException se) {
@@ -135,7 +136,7 @@ public class SignUpController implements Controller {
    * Switches back to the login window.
    */
   public void actionCancel() {
-    ihmCore.showLoginScene();
+    application.showLoginScene();
   }
 
   /**
@@ -158,7 +159,7 @@ public class SignUpController implements Controller {
     profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
   }
 
-  public void setIhmCore(IhmCore ihmCore) {
-    this.ihmCore = ihmCore;
+  public void setApplication(Application application) {
+    this.application = application; 
   }
 }

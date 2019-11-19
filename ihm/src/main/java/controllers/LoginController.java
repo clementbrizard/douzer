@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import core.IhmCore;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class LoginController implements Controller {
   private TextField textFieldPseudo;
   @FXML
   private PasswordField textFieldPassword;
+  private Application application;
 
   @Override
   public void initialize() {
@@ -39,8 +41,8 @@ public class LoginController implements Controller {
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
     boolean login = true;
-    ihmcore.showMainScene();
-    ihmcore.getMainController().init();
+    application.showMainScene();
+    application.getMainController().init();
 
     logger.info("User {} logged in", userName);
 
@@ -67,17 +69,17 @@ public class LoginController implements Controller {
 
   @FXML
   private void actionSignup() {
-    ihmcore.showSignupScene();
+    application.showSignupScene();
   }
 
   @FXML
   private void actionForgottenPassword() {
-    ihmcore.showForgottenPasswordScene();
+    application.showForgottenPasswordScene();
 
   }
 
-  public void setIhmCore(IhmCore ihmcore) {
-    this.ihmcore = ihmcore;
+  public void setApplication(Application application) {
+    this.application = application;
   }
 
 }

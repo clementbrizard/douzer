@@ -307,6 +307,7 @@ public class NewMusicController implements Controller {
       try {
         myMusicsController.getCentralFrameController()
           .getMainController()
+          .getApplication()
           .getIhmCore()
           .getDataForIhm()
           .addMusic(meta, file.getAbsolutePath());

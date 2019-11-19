@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import core.IhmCore;
 import javafx.fxml.FXML;
 import org.omg.CORBA.Current;
@@ -9,7 +10,8 @@ import org.omg.CORBA.Current;
 //the view who will own each sub-views
 public class MainController implements Controller {
   
-  private IhmCore ihmCore;
+  
+  
   // 1. Left controllers
   @FXML private UserInfoController userInfoController;
   @FXML private ContactListController contactListController;
@@ -22,18 +24,16 @@ public class MainController implements Controller {
   // 3. Controllers not linked to FXML yet
   private DownloadController downloadController;
   private CurrentMusicInfoController currentMusicInfoController;
+  private Application application;
 
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
   }
   
-  public IhmCore getIhmCore() {
-    return ihmCore;
-  }
-
-  public void setIhmCore(IhmCore ihmCore) {
-    this.ihmCore = ihmCore;
+  
+  public void setApplication(Application application) {
+    this.application = application;
   }
 
   public UserInfoController getUserInfoController() {
@@ -90,6 +90,10 @@ public class MainController implements Controller {
   
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+  
+  public Application getApplication() {
+    return application;
   }
 
 

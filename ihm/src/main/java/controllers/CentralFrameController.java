@@ -74,7 +74,7 @@ public class CentralFrameController implements Controller {
   public void init() {
     //TODO add controllers when they are linked to XML
     this.allMusicsController.setCentralFrameController(this);
-    this.allMusicsController.setIhmCore(this.mainController.getIhmCore());
+    this.allMusicsController.setApplication(this.mainController.getApplication());
     this.allMusicsController.init();
   }
 }
