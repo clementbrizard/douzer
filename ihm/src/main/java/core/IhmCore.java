@@ -10,12 +10,18 @@ import interfaces.DataForIhm;
 import java.awt.Toolkit;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,6 +34,7 @@ public class IhmCore extends Application {
   private Scene signupScene;
   private Scene forgottenPasswordScene;
   private Scene allMusicsCenterScene;
+  private Scene mainScene;
 
   /**
    * the general scene.
@@ -54,12 +61,53 @@ public class IhmCore extends Application {
 
 
   private static final Logger ihmLogger = LogManager.getLogger();
+  
+  private static IhmCore ihmCore;
 
   public IhmCore() {
     ihmLogger.info("IhmCore start");
+    ihmCore = this;
     this.ihmForData = new IhmForData(this);
   }
 
+  public static IhmCore getIhmCore() {
+    return ihmCore;
+  }
+  
+  /**
+   * show the application.
+   */
+  public void showApplication() {
+    if (primaryStage != null) {
+      Platform.runLater(new Runnable() {
+
+        @Override
+        public void run() {
+
+          primaryStage.show();
+          Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+          primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+          primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+        }
+      });
+    }
+  }
+  
+  /**
+   * hide the application.
+   */
+  public void hideApplication() {
+    if (primaryStage != null) {
+      Platform.runLater(new Runnable() {
+
+        @Override
+        public void run() {
+          primaryStage.hide();
+        }
+      });
+    }
+  }
+  
   public Scene getLoginScene() {
     return loginScene;
   }
@@ -90,6 +138,14 @@ public class IhmCore extends Application {
 
   public void setAllMusicsCenterScene(Scene allMusicsCenterScene) {
     this.allMusicsCenterScene = allMusicsCenterScene;
+  }
+
+  public Scene getMainScene() {
+    return mainScene;
+  }
+
+  public void setMainScene(Scene mainScene) {
+    this.mainScene = mainScene;
   }
 
   public Stage getPrimaryStage() {
@@ -245,9 +301,9 @@ public class IhmCore extends Application {
     primaryStage.setTitle("Mot de passe oubli�");
   }
 
-  public void showAllMusicsCenterScene() {
-    primaryStage.setScene(allMusicsCenterScene);
-    primaryStage.setTitle("Toutes les musiques");
+  public void showMainScene() {
+    primaryStage.setScene(mainScene);
+    primaryStage.setTitle("Vue principale");
   }
 
   /**
@@ -255,6 +311,7 @@ public class IhmCore extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
+        
     //get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
@@ -277,25 +334,33 @@ public class IhmCore extends Application {
     Parent allMusicsCenterParent = allMusicsCenterLoader.load();
     allMusicsCenterScene = new Scene(allMusicsCenterParent);
 
+    // get the loader for mainView
+    FXMLLoader mainLoader = new FXMLLoader(getClass()
+            .getResource("/fxml/MainView.fxml"));
+    Parent mainParent = mainLoader.load();
+    mainScene = new Scene(mainParent);
+
     //get the Controllers from loader
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
     AllMusicsController allMusicsController = allMusicsCenterLoader.getController();
+    MainController mainController = mainLoader.getController();
 
     //set the Controllers link to acces from the controllers
     this.setLoginController(loginController);
     this.setSignUpController(signUpController);
     this.setForgottenPasswordController(forgottenPasswordController);
     this.setAllMusicsController(allMusicsController);
-
+    this.setMainController(mainController);
     
     //set the IgmCore link into Controllers
     loginController.setIhmCore(this);
     signUpController.setIhmCore(this);
     forgottenPasswordController.setIhmCore(this);
     allMusicsController.setIhmCore(this);
+    mainController.setIhmCore(this);
 
     //initialize the first View
     this.primaryStage = primaryStage;
@@ -305,13 +370,21 @@ public class IhmCore extends Application {
     //add the root scene (login)    
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
-    primaryStage.show();
-
-    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    //primaryStage.show();
+    
+    // handler close window
+    primaryStage.setOnCloseRequest(event -> {
+      System.out.println("Stage is closing");
+      if (dataForIhm != null) {
+        try {
+          dataForIhm.logout();
+        } catch (UnsupportedOperationException ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
   }
-
+  
   /**
    * Override function called when the user exits the application.
    */
@@ -326,7 +399,13 @@ public class IhmCore extends Application {
    *
    * @param args the arguments of the Application from Main method
    */
-  public void run(String[] args) {
-    launch(args);
+  public static void run(String[] args) {
+    (new Thread() { 
+      
+      @Override
+      public void run() {
+        launch(IhmCore.class,args);
+      }
+    }).start();
   }  
 }

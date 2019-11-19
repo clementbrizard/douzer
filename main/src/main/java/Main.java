@@ -16,7 +16,20 @@ public class Main {
 
     startLogger.info("Application start");
 
-    IhmCore ihmCore = new IhmCore();
+    
+    IhmCore.run(args);
+    
+    //we have to wait the end of IhmCore initialisation
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e1) {
+      // TODO Auto-generated catch block
+      e1.printStackTrace();
+    }
+    IhmCore ihmCore = IhmCore.getIhmCore();
+    ihmCore.hideApplication();
+
+    
     NetworkProvider networkProvider = new NetworkProvider();
     DataProvider dataProvider = new DataProvider();
 
@@ -25,9 +38,10 @@ public class Main {
     } catch (DataException e) {
       e.printStackTrace();
     }
+    
     ihmCore.setDataForIhm(dataProvider.getDataForIhm());
     networkProvider.setDataImpl(dataProvider.getDataForNet());
 
-    ihmCore.run(args);
+    ihmCore.showApplication();
   }
 }
