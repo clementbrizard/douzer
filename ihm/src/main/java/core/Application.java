@@ -21,37 +21,138 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Application extends javafx.application.Application {
-  
+  private static final Logger applicationLogger = LogManager.getLogger();
+
+  // Scenes
   private Scene loginScene;
-  private Scene signupScene;
+  private Scene signUpScene;
   private Scene forgottenPasswordScene;
   private Scene allMusicsCenterScene;
   private Scene mainScene;
 
-  /**
-   * the general scene.
-   */
+  // The general stage
   private Stage primaryStage;
 
+  // Controllers
   private MainController mainController;
   private LoginController loginController;
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
   private AllMusicsController allMusicsController;
 
+  // Window size properties
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
 
-
-  private static final Logger ihmLogger = LogManager.getLogger();
-  
-  
+  // Reference to ihmCore
   private IhmCore ihmCore;
 
+  // Constructor
   public Application() {
-    ihmLogger.info("IhmCore start");
+    applicationLogger.info("IhmCore start");
   }
-  
+
+  // Getters for scenes
+  public Scene getLoginScene() {
+    return loginScene;
+  }
+
+  public Scene getSignUpScene() {
+    return signUpScene;
+  }
+
+  public Scene getForgottenPasswordScene() {
+    return forgottenPasswordScene;
+  }
+
+  public Scene getAllMusicsCenterScene() {
+    return allMusicsCenterScene;
+  }
+
+  public Scene getMainScene() {
+    return mainScene;
+  }
+
+  // Getter for general stage
+  public Stage getPrimaryStage() {
+    return primaryStage;
+  }
+
+  // Getters for controllers
+  public MainController getMainController() {
+    return this.mainController;
+  }
+
+  public LoginController getLoginController() {
+    return this.loginController;
+  }
+
+  public SignUpController getSignUpController() {
+    return this.signUpController;
+  }
+
+  public ForgottenPasswordController getForgottenPasswordController() {
+    return this.forgottenPasswordController;
+  }
+
+  public AllMusicsController getAllMusicsController() {
+    return this.allMusicsController;
+  }
+
+  // Getter for reference to ihmCore
+  public IhmCore getIhmCore() {
+    return this.ihmCore;
+  }
+
+  // Setters for scenes
+  public void setLoginScene(Scene loginScene) {
+    this.loginScene = loginScene;
+  }
+
+  public void setSignUpScene(Scene signUpScene) {
+    this.signUpScene = signUpScene;
+  }
+
+  public void setForgottenPasswordScene(Scene forgottenPasswordScene) {
+    this.forgottenPasswordScene = forgottenPasswordScene;
+  }
+
+  public void setAllMusicsCenterScene(Scene allMusicsCenterScene) {
+    this.allMusicsCenterScene = allMusicsCenterScene;
+  }
+
+  public void setMainScene(Scene mainScene) {
+    this.mainScene = mainScene;
+  }
+
+  // Setter for general stage
+  public void setPrimaryStage(Stage primaryStage) {
+    this.primaryStage = primaryStage;
+  }
+
+  // Setters for controllers
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
+  }
+
+  public void setLoginController(LoginController loginController) {
+    this.loginController = loginController;
+  }
+
+  public void setSignUpController(SignUpController signUpController) {
+    this.signUpController = signUpController;
+  }
+
+  public void setForgottenPasswordController(ForgottenPasswordController forgottenPwdController) {
+    this.forgottenPasswordController = forgottenPwdController;
+  }
+
+  public void setAllMusicsController(AllMusicsController allMusicsController) {
+    this.allMusicsController = allMusicsController;
+  }
+
+  // Other methods
+
   /**
    * Show the application and init the controllers.
    */
@@ -61,7 +162,6 @@ public class Application extends javafx.application.Application {
 
         @Override
         public void run() {
-
           primaryStage.show();
           Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
           primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
@@ -70,9 +170,9 @@ public class Application extends javafx.application.Application {
       });
     }
   }
-  
+
   /**
-   * hide the application.
+   * Hide the application.
    */
   public void hideApplication() {
     if (primaryStage != null) {
@@ -85,142 +185,9 @@ public class Application extends javafx.application.Application {
       });
     }
   }
-  
-  public Scene getLoginScene() {
-    return loginScene;
-  }
-
-  public void setLoginScene(Scene loginScene) {
-    this.loginScene = loginScene;
-  }
-
-  public Scene getSignupScene() {
-    return signupScene;
-  }
-
-  public void setSignupScene(Scene signupScene) {
-    this.signupScene = signupScene;
-  }
-
-  public Scene getForgottenPasswordScene() {
-    return forgottenPasswordScene;
-  }
-
-  public void setForgottenPasswordScene(Scene forgottenPasswordScene) {
-    this.forgottenPasswordScene = forgottenPasswordScene;
-  }
-
-  public Scene getAllMusicsCenterScene() {
-    return allMusicsCenterScene;
-  }
-
-  public void setAllMusicsCenterScene(Scene allMusicsCenterScene) {
-    this.allMusicsCenterScene = allMusicsCenterScene;
-  }
-
-  public Scene getMainScene() {
-    return mainScene;
-  }
-
-  public void setMainScene(Scene mainScene) {
-    this.mainScene = mainScene;
-  }
-
-  public Stage getPrimaryStage() {
-    return primaryStage;
-  }
-
-  public void setPrimaryStage(Stage primaryStage) {
-    this.primaryStage = primaryStage;
-  }
-  
 
   /**
-   * Getter of @see MainController.
-   *
-   * @return @see MainController
-   */
-  public MainController getMainController() {
-    return this.mainController;
-  }
-
-  /**
-   * Setter of @see MainController.
-   *
-   * @param mainController the main Controller
-   */
-  public void setMainController(MainController mainController) {
-    this.mainController = mainController;
-  }
-
-  /**
-   * Getter of @see LoginController.
-   *
-   * @return @see LoginController
-   */
-  public LoginController getLoginController() {
-    return this.loginController;
-  }
-
-  /**
-   * Setter of @see LoginController.
-   *
-   * @param loginController the login Controller
-   */
-  public void setLoginController(LoginController loginController) {
-    this.loginController = loginController;
-  }
-
-  /**
-   * Getter of @see SignUpController.
-   *
-   * @return @see SignUpController
-   */
-  public SignUpController getSignUpController() {
-    return this.signUpController;
-  }
-
-  /**
-   * Setter of @see SignUpController.
-   *
-   * @param signUpController the signup Controller
-   */
-  public void setSignUpController(SignUpController signUpController) {
-    this.signUpController = signUpController;
-  }
-
-  /**
-   * Getter of @see ForgottenPasswordController.
-   *
-   * @return @see ForgottenPasswordController
-   */
-  public ForgottenPasswordController getForgottenPasswordController() {
-    return this.forgottenPasswordController;
-  }
-
-  /**
-   * Setter of @see ForgottenPasswordController.
-   *
-   * @param forgottenPwdController the forgotten password Controller
-   */
-  public void setForgottenPasswordController(ForgottenPasswordController forgottenPwdController) {
-    this.forgottenPasswordController = forgottenPwdController;
-  }
-
-  public AllMusicsController getAllMusicsController() {
-    return this.allMusicsController;
-  }
-
-  public void setAllMusicsController(AllMusicsController allMusicsController) {
-    this.allMusicsController = allMusicsController;
-  }
-  
-  public IhmCore getIhmCore() {
-    return this.ihmCore;
-  }
-
-  /**
-   * change the mainScene into LoginScene.
+   * Change the mainScene into loginScene.
    */
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
@@ -233,10 +200,10 @@ public class Application extends javafx.application.Application {
   }
 
   /**
-   * change the mainScene into SignupScene.
+   * Change the mainScene into signUpScene.
    */
-  public void showSignupScene() {
-    primaryStage.setScene(signupScene);
+  public void showSignUpScene() {
+    primaryStage.setScene(signUpScene);
 
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
@@ -246,7 +213,7 @@ public class Application extends javafx.application.Application {
   }
 
   /**
-   * change the mainScene into ForgottenPasswordScene.
+   * Change the mainScene into forgottenPasswordScene.
    */
   public void showForgottenPasswordScene() {
     primaryStage.setScene(forgottenPasswordScene);
@@ -258,47 +225,50 @@ public class Application extends javafx.application.Application {
     primaryStage.setTitle("Mot de passe oublié");
   }
 
+  /**
+   * Show main scene.
+   */
   public void showMainScene() {
     primaryStage.setScene(mainScene);
     primaryStage.setTitle("Vue principale");
   }
 
   /**
-   * start method who initialize and load the first views and manage theirs controllers.
+   * Start method which initialize and load the first views and manage theirs controllers.
    */
   @Override
-  public void start(Stage primaryStage) throws Exception {    
+  public void start(Stage primaryStage) throws Exception {
     this.ihmCore = IhmCore.init();
-    
-    //get the loader for LoginView
+
+    //  Get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
     loginScene = new Scene(loginParent);
 
-    //get the loader for SignUpView
+    //  Get the loader for SignUpView
     FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
     Parent signupParent = signupLoader.load();
-    signupScene = new Scene(signupParent);
+    signUpScene = new Scene(signupParent);
 
-    //get the loader for ForgottenPasswordView
+    // Get the loader for ForgottenPasswordView
     FXMLLoader forgottenPasswordLoader =
         new FXMLLoader(getClass().getResource("/fxml/ForgottenPasswordView.fxml"));
     Parent forgottenPasswordParent = forgottenPasswordLoader.load();
     forgottenPasswordScene = new Scene(forgottenPasswordParent);
 
-    // get the loader for AllMusicsCenterView
+    // Get the loader for AllMusicsCenterView
     FXMLLoader allMusicsCenterLoader = new FXMLLoader(getClass()
         .getResource("/fxml/AllMusicsCenterView.fxml"));
     Parent allMusicsCenterParent = allMusicsCenterLoader.load();
     allMusicsCenterScene = new Scene(allMusicsCenterParent);
 
-    // get the loader for mainView
+    // Get the loader for MainView
     FXMLLoader mainLoader = new FXMLLoader(getClass()
-            .getResource("/fxml/MainView.fxml"));
+        .getResource("/fxml/MainView.fxml"));
     Parent mainParent = mainLoader.load();
     mainScene = new Scene(mainParent);
 
-    //get the Controllers from loader
+    // Get the Controllers from loader
     LoginController loginController = loginLoader.getController();
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
@@ -306,33 +276,33 @@ public class Application extends javafx.application.Application {
     AllMusicsController allMusicsController = allMusicsCenterLoader.getController();
     MainController mainController = mainLoader.getController();
 
-    //set the Controllers link to acces from the controllers
+    // Set the Controllers link to access from the controllers
     this.setLoginController(loginController);
     this.setSignUpController(signUpController);
     this.setForgottenPasswordController(forgottenPasswordController);
     this.setAllMusicsController(allMusicsController);
     this.setMainController(mainController);
-    
-    //set the IgmCore link into Controllers
+
+    // Set the link to ihmCore for controllers
     loginController.setApplication(this);
     signUpController.setApplication(this);
     forgottenPasswordController.setApplication(this);
     allMusicsController.setApplication(this);
     mainController.setApplication(this);
 
-    //initialize the first View
+    // Initialize the first view
     this.primaryStage = primaryStage;
 
     //primaryStage.initStyle(StageStyle.UNDECORATED);
 
-    //add the root scene (login)    
+    // Add the root scene (login)
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
     //primaryStage.show();
-    
-    // handler close window
+
+    // Handle window closing
     primaryStage.setOnCloseRequest(event -> {
-      System.out.println("Stage is closing");
+      applicationLogger.info("Stage is closing");
       if (this.ihmCore.getDataForIhm() != null) {
         try {
           this.ihmCore.getDataForIhm().logout();
@@ -341,10 +311,10 @@ public class Application extends javafx.application.Application {
         }
       }
     });
-    
+
     primaryStage.show();
   }
-  
+
   /**
    * Override function called when the user exits the application.
    */
@@ -355,12 +325,12 @@ public class Application extends javafx.application.Application {
   }
 
   /**
-   * function who is called from Main to start the HCI.
+   * Method which is called from Main to start the HCI.
    *
    * @param args the arguments of the Application from Main method
    */
   public static void run(String[] args) {
     launch(Application.class);
-  }  
-  
+  }
+
 }

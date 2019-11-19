@@ -7,19 +7,14 @@ import org.apache.logging.log4j.Logger;
 import provider.NetworkProvider;
 
 public class Main {
-
   private static final Logger startLogger = LogManager.getLogger();
 
   /**
-   * Initialize all the modules and starts the application.
+   * Initialize all the modules and start the application.
    */
   public static void main(String[] args) {
 
     startLogger.info("Application start");
-    
-    
-    
-    
     
     NetworkProvider networkProvider = new NetworkProvider();
     DataProvider dataProvider = new DataProvider();

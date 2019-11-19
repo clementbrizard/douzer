@@ -3,38 +3,33 @@ package controllers;
 import core.Application;
 import core.IhmCore;
 
-import java.io.IOException;
-
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-import javax.security.auth.login.LoginException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.controlsfx.control.Notifications;
-
 
 /**
  * Controller used for the login view.
  */
 public class LoginController implements Controller {
 
-  private static final Logger logger = LogManager.getLogger();
-  private IhmCore ihmcore;
+  private static final Logger loginLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldPseudo;
+
   @FXML
   private PasswordField textFieldPassword;
+
   private Application application;
+  private IhmCore ihmcore;
+
+  // Other methods
 
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   @FXML
   private void actionLogin() {
@@ -44,7 +39,7 @@ public class LoginController implements Controller {
     application.showMainScene();
     application.getMainController().init();
 
-    logger.info("User {} logged in", userName);
+    loginLogger.info("User {} logged in", userName);
 
     //TODO uncomment when Data team fix login method
     /*
@@ -68,14 +63,13 @@ public class LoginController implements Controller {
   }
 
   @FXML
-  private void actionSignup() {
-    application.showSignupScene();
+  private void actionSignUp() {
+    application.showSignUpScene();
   }
 
   @FXML
   private void actionForgottenPassword() {
     application.showForgottenPasswordScene();
-
   }
 
   public void setApplication(Application application) {

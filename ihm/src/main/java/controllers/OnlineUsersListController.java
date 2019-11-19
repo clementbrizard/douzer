@@ -1,8 +1,6 @@
 package controllers;
 
 import datamodel.User;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -11,22 +9,37 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 
-
 /**
  * The left middle view containing all connected users.
  */
 public class OnlineUsersListController implements Controller {
-
-  private MainController mainController;
-
   @FXML
   private ListView<String> lvwOnlineUsers;
 
+  private MainController mainController;
+
+  // Setters
+
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
+  }
+
+  // Other methods
+
   @Override
-  public void initialize() { }
+  public void initialize() {}
+
+  public void init() {
+    // TODO uncomment to get IPs when Data method is implemented
+    displayOnlineUsers(mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getOnlineUsers());
+  }
 
   /**
-   * Fills the view with the ips of users.
+   * Fill the view with the ips of users.
    * @param users Stream of connected users
    **/
 
@@ -38,17 +51,4 @@ public class OnlineUsersListController implements Controller {
     lvwOnlineUsers.setItems(items);
   }
 
-
-  public void setMainController(MainController mainController) {
-    this.mainController = mainController;
-  }
-
-  public void init() {
-    // TODO uncomment to get IPs when Data method is implemented
-    displayOnlineUsers(mainController
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .getOnlineUsers());
-  }
 }

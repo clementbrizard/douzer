@@ -1,7 +1,6 @@
 package controllers;
 
 import core.Application;
-import core.IhmCore;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -28,8 +27,16 @@ public class ForgottenPasswordController implements Controller {
 
   private Application application;
 
+  // Setters
+
+  public void setApplication(Application application) {
+    this.application = application;
+  }
+
+  // Other methods
+
   @Override
-  public void initialize()  {
+  public void initialize() {
     textFieldUsername.textProperty().addListener((observable, oldValue, newValue) -> {
       //Check if username exists, if yes show the secret question
       //if(newValue in localUsersList....)
@@ -70,9 +77,5 @@ public class ForgottenPasswordController implements Controller {
   public void actionCancel() {
     application.showLoginScene();
   }
-  
-  public void setApplication(Application application) {
-    // TODO Auto-generated method stub
-    this.application = application;
-  }
+
 }

@@ -1,15 +1,11 @@
 package controllers;
 
 import core.Application;
-import core.IhmCore;
 import datamodel.LocalUser;
 import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,12 +18,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 
 /**
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
+  private static final Logger signUpLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldFirstName;
@@ -52,22 +51,30 @@ public class SignUpController implements Controller {
 
   @FXML
   private FileChooser avatarFileChooser = new FileChooser();
+
   @FXML
   private TextField avatarFilePath;
-  private File avatarFile = null;
 
   @FXML
   private DirectoryChooser saveProfileDirectoryChooser = new DirectoryChooser();
+
   @FXML
   private TextField profileFilePath;
-  private File directoryChosenForSavingProfile = null;
 
+  private File avatarFile = null;
+  private File directoryChosenForSavingProfile = null;
   private Application application;
 
-  @Override
-  public void initialize() {
+  // Setters
 
+  public void setApplication(Application application) {
+    this.application = application;
   }
+
+  @Override
+  public void initialize() {}
+
+  // Other methods
 
   /**
    * Called upon clicking the button to confirm sign up.
@@ -75,7 +82,7 @@ public class SignUpController implements Controller {
    * them and forwards it to data for further process
    */
   @FXML
-  public void actionSignup() {
+  public void actionSignUp() {
 
     //TODO: sanity checks
     final String userName = textFieldUsername.getText();
@@ -97,7 +104,7 @@ public class SignUpController implements Controller {
     final String secretQuestion = textFieldSecretQuestion.getText();
     final String secretAnswer = textFieldSecretAnswer.getText();
 
-    System.out.println("Signing up as user " + userName);
+    signUpLogger.info("Signing up as user {}.", userName);
 
     final Path profileSavePath = directoryChosenForSavingProfile.toPath();
 
@@ -159,7 +166,4 @@ public class SignUpController implements Controller {
     profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
   }
 
-  public void setApplication(Application application) {
-    this.application = application; 
-  }
 }
