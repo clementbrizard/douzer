@@ -13,7 +13,7 @@
        <Pane prefHeight="100" prefWidth="720.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
            <children>
                <ProgressBar fx:id="pgMusicProgress" layoutX="99.0" layoutY="50.0" prefHeight="23.0" prefWidth="520.0" progress="0.27" />
-               <Label layoutX="99.0" layoutY="26.0" text="Artist Name - Music Name" />
+               <Label fx:id="lblArtistMusicName" layoutX="99.0" layoutY="26.0" text="Artist Name - Music Name" />
                <ImageView fx:id="ivPlayPause" fitHeight="32.0" fitWidth="37.0" layoutX="14.0" layoutY="33.0" pickOnBounds="true" preserveRatio="true">
                    <image>
                        <Image url="@../images/playSymbol.png" />

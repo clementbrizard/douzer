@@ -9,7 +9,7 @@ public class PlayerController implements Controller {
   
   private MainController mainController;
   @FXML
-  Label lblArtisMusicName;
+  Label lblArtistMusicName;
 
   @Override
   public void initialize() {
@@ -25,6 +25,6 @@ public class PlayerController implements Controller {
   }
 
   public void setPlayerText(String artistName, String musicName) {
-    this.lblArtisMusicName.setText(artistName + " - " + musicName);
+    this.lblArtistMusicName.setText(artistName + " - " + musicName);
   }
 }
