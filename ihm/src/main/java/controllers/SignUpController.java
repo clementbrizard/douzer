@@ -3,12 +3,9 @@ package controllers;
 import core.IhmCore;
 import datamodel.LocalUser;
 import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -83,16 +80,21 @@ public class SignUpController implements Controller {
     final String lastName = textFieldLastName.getText();
 
     final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
-    final Path avatarPath = avatarFile.toPath();
-
+    final Path avatarPath;
     // Get the image from the avatar path
     Image avatarImg = null;
-    try {
-      avatarImg = ImageIO.read(avatarFile);
-    } catch (java.io.IOException ex) {
-      // Image could not be loaded
-      // log it ?
+    if (avatarFile != null)
+    {
+      avatarPath = avatarFile.toPath();
+      try {
+        avatarImg = ImageIO.read(avatarFile);
+      } catch (java.io.IOException ex) {
+        // Image could not be loaded
+        // log it ?
+      }
     }
+
+
     final String secretQuestion = textFieldSecretQuestion.getText();
     final String secretAnswer = textFieldSecretAnswer.getText();
 

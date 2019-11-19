@@ -2,7 +2,6 @@ package controllers;
 
 import core.IhmCore;
 import javafx.fxml.FXML;
-import org.omg.CORBA.Current;
 
 
 //replace by javadocs
@@ -20,8 +19,8 @@ public class MainController implements Controller {
   @FXML private PlayerController playerController;
 
   // 3. Controllers not linked to FXML yet
-  private DownloadController downloadController;
-  private CurrentMusicInfoController currentMusicInfoController;
+  @FXML private DownloadController downloadController;
+  @FXML private CurrentMusicInfoController currentMusicInfoController;
 
   @Override
   public void initialize() {
@@ -99,8 +98,8 @@ public class MainController implements Controller {
   public void init() {
     //TODO add controllers when we link them to the FXML
     userInfoController.setMainController(this);
-    userInfoController.init()
-    ;
+    userInfoController.init();
+
     this.playerController.setMainController(this);
     this.playerController.setPlayerText("Test artist", "Test music");
 
@@ -111,6 +110,9 @@ public class MainController implements Controller {
 
     this.onlineUsersListController.setMainController(this);
     this.onlineUsersListController.init();
+
+    this.currentMusicInfoController.setMainController(this);
+    this.currentMusicInfoController.init();
 
 
   }
