@@ -18,6 +18,10 @@ import javax.security.auth.login.LoginException;
 
 public abstract class Login {
   private static InetAddress getIpFromString(String ip) {
+    if (ip.isEmpty()) {
+      return null;
+    }
+
     try {
       return InetAddress.getByName(ip);
     } catch (UnknownHostException e) {
@@ -55,7 +59,7 @@ public abstract class Login {
       LocalUser user = dc.getLocalUsersFileHandler().getUser(username);
 
       if (!user.verifyPassword(password)) {
-        throw new LocalUsersFileException("Wrong user password");
+        throw new LoginException("Wrong user password");
       }
 
       run(dc, user);
@@ -78,7 +82,8 @@ public abstract class Login {
     user.getMusics().forEach(dc::addMusic);
 
     LoginPayload payload = new LoginPayload(user);
-    Path configPath = user.getSavePath().resolve("config.properties");
+    // TODO: template for filename
+    Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     dc.net.connect(payload, getInitialIpsFromConfig(configPath));
   }
 }

@@ -20,12 +20,13 @@ public abstract class CreateUser {
    * Then the function is calling Login.run function by giving
    * the Datacore object and the LocalUser
    *
-   * @param  user LocalUser given by IHM
+   * @param user LocalUser given by IHM
    */
   public static void run(LocalUser user, Datacore dc, InputStream defaultPropInputStream)
       throws IOException {
     //Create file config.properties
     Properties defaultProp = new Properties();
+    // TODO: template for filename
     Path userPropFilePath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     File userConfigFile = new File(userPropFilePath.toString());
 

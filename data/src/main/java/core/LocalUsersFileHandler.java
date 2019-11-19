@@ -78,11 +78,10 @@ public class LocalUsersFileHandler {
    * @throws LocalUsersFileException if the file is not accessible.
    */
   public void remove(LocalUser localUser) throws LocalUsersFileException {
-    Path filePath = localUser.getSavePath();
     File temp = new File("_temp_" + localUser.getUuid());
 
     try {
-      FileInputStream file = new FileInputStream(filePath.toFile());
+      FileInputStream file = new FileInputStream(this.filePath.toFile());
       ObjectInputStream reader = new ObjectInputStream(file);
       FileOutputStream tempFile = new FileOutputStream(temp);
       ObjectOutputStream writer = new ObjectOutputStream(tempFile);
@@ -96,7 +95,7 @@ public class LocalUsersFileHandler {
       }
     } catch (EOFException e) {
       //Replace old file with the new one
-      boolean renameSucess = temp.renameTo(filePath.toFile());
+      boolean renameSucess = temp.renameTo(this.filePath.toFile());
       if (!renameSucess) {
         throw new LocalUsersFileException("File was not successfully renamed");
       }
@@ -120,7 +119,7 @@ public class LocalUsersFileHandler {
     LocalUser user;
 
     try {
-      FileInputStream file = new FileInputStream(filePath.toFile());
+      FileInputStream file = new FileInputStream(this.filePath.toFile());
       ObjectInputStream reader = new ObjectInputStream(file);
       do {
         user = (LocalUser) reader.readObject();

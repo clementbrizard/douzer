@@ -1,16 +1,23 @@
 package datamodel;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 public class LocalUser extends User {
-  private MessageDigest messageDigest;
+  private static MessageDigest messageDigest;
   private String pwdHash;
   private Set<Contact> contacts;
-  private Path savePath;
+  // Path is not serializable, handle serialization with readObject writeObject below.
+  private transient Path savePath;
   private Set<LocalMusic> musics;
   private List<LocalMusic> playlist;
 
@@ -18,6 +25,10 @@ public class LocalUser extends User {
    * Default constructor.
    */
   public LocalUser() {
+    this.contacts = new HashSet<>();
+    this.musics = new HashSet<>();
+    this.playlist = new ArrayList<>();
+
     try {
       messageDigest = MessageDigest.getInstance("SHA-256");
     } catch (NoSuchAlgorithmException e) {
@@ -76,5 +87,16 @@ public class LocalUser extends User {
 
   public void setSavePath(Path savePath) {
     this.savePath = savePath;
+  }
+
+  private void writeObject(ObjectOutputStream stream) throws IOException {
+    stream.defaultWriteObject();
+    stream.writeUTF(this.savePath.toAbsolutePath().toString());
+  }
+
+  private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+    stream.defaultReadObject();
+    String savePathString = stream.readUTF();
+    setSavePath(Paths.get(savePathString).toAbsolutePath());
   }
 }
