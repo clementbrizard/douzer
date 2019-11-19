@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 public class LocalUser extends User {
-  private transient MessageDigest messageDigest;
+  private static MessageDigest messageDigest;
   private String pwdHash;
   private Set<Contact> contacts;
   private transient Path savePath;
@@ -95,13 +95,6 @@ public class LocalUser extends User {
 
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
     stream.defaultReadObject();
-
-    try {
-      messageDigest = MessageDigest.getInstance("SHA-256");
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
-
     String savePathString = stream.readUTF();
     setSavePath(Paths.get(savePathString).toAbsolutePath());
   }
