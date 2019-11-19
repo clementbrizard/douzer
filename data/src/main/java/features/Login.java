@@ -59,7 +59,7 @@ public abstract class Login {
       LocalUser user = dc.getLocalUsersFileHandler().getUser(username);
 
       if (!user.verifyPassword(password)) {
-        throw new LocalUsersFileException("Wrong user password");
+        throw new LoginException("Wrong user password");
       }
 
       run(dc, user);
