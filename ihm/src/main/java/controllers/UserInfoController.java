@@ -27,7 +27,8 @@ public class UserInfoController implements Controller {
 
   public void init() {
     lblUserPseudo.setText(
-        this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername()
+        //this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername()
+        "Kaaris"
     );
   }
 
