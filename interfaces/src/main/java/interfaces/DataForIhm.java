@@ -36,11 +36,11 @@ public interface DataForIhm {
    */
   void createUser(LocalUser user) throws IOException, LoginException;
 
-  void deleteAccount();
+  void deleteAccount() throws IOException;
 
   void deleteMusic(LocalMusic music, boolean deleteLocal);
 
-  void logout();
+  void logout() throws IOException;
 
   void download(Music music);
 
