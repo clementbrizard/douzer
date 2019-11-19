@@ -91,6 +91,8 @@ public class SignUpController implements Controller {
     try {
       ihmCore.getDataForIhm().createUser(user);
       ihmCore.showMainScene();
+      ihmCore.getMainController().init();
+
 
     } catch (IOException | LoginException se) {
 

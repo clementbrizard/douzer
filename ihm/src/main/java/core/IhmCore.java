@@ -75,7 +75,7 @@ public class IhmCore extends Application {
   }
   
   /**
-   * show the application.
+   * Show the application and init the controllers.
    */
   public void showApplication() {
     if (primaryStage != null) {
@@ -298,7 +298,7 @@ public class IhmCore extends Application {
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
 
-    primaryStage.setTitle("Mot de passe oubli�");
+    primaryStage.setTitle("Mot de passe oublié");
   }
 
   public void showMainScene() {

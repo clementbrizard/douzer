@@ -1,6 +1,7 @@
 package controllers;
 
 import core.IhmCore;
+import org.omg.CORBA.Current;
 
 //replace by javadocs
 //the view who will own each sub-views
@@ -14,7 +15,6 @@ public class MainController implements Controller {
   private ContactListController contactListcontroller;
   private OnlineUsersListController onlineUsersListController;
   private CentralFrameController centralFrameController;
-  private MyMusicsController myMusicsController;
 
   @Override
   public void initialize() {
@@ -28,7 +28,7 @@ public class MainController implements Controller {
   public void setIhmCore(IhmCore ihmCore) {
     this.ihmCore = ihmCore;
   }
-  
+
   public UserInfoController getUserInfoController() {
     return userInfoController;
   }
@@ -85,11 +85,34 @@ public class MainController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
-  public MyMusicsController getMyMusicsController() {
-    return myMusicsController;
-  }
 
-  public void setMyMusicsController(MyMusicsController myMusicsController) {
-    this.myMusicsController = myMusicsController;
+  /**
+   * Initializes all controllers inside of the main controller.
+   */
+  public void init() {
+    this.centralFrameController = new CentralFrameController();
+    this.centralFrameController.setMainController(this);
+    this.centralFrameController.init();
+
+    this.contactListcontroller = new ContactListController();
+    this.contactListcontroller.setMainController(this);
+
+    this.onlineUsersListController = new OnlineUsersListController();
+    this.onlineUsersListController.setMainController(this);
+    //this.onlineUsersListController.init(); // Pas implémenté côté Data
+
+    this.userInfoController = new UserInfoController();
+    this.userInfoController.setMainController(this);
+    this.userInfoController.init(); // Crash ICI : impossible d'accéder aux champs FXML
+
+    this.currentMusicInfoController = new CurrentMusicInfoController();
+    this.currentMusicInfoController.setMainController(this);
+
+    this.downloadController = new DownloadController();
+    this.downloadController.setMainController(this);
+
+    this.playerController = new PlayerController();
+    this.playerController.setMainController(this);
+
   }
 }

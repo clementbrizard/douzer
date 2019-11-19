@@ -19,7 +19,6 @@ import javafx.scene.control.ListView;
 public class OnlineUsersListController implements Controller {
 
   private MainController mainController;
-  private OnlineUsersListController onlineUsersListController;
 
   @FXML
   private ListView<String> lvwOnlineUsers;
@@ -40,16 +39,12 @@ public class OnlineUsersListController implements Controller {
 
     lvwOnlineUsers.setItems(items);
   }
-
-  public OnlineUsersListController getOnlineUsersListController() {
-    return onlineUsersListController;
-  }
-
-  public void setOnlineUsersListController(OnlineUsersListController onlineUsersListController) {
-    this.onlineUsersListController = onlineUsersListController;
-  }
-
+  
   public void init() {
     displayOnlineUsers(mainController.getIhmCore().getDataForIhm().getOnlineUsers());
+  }
+
+  public void setMainController(MainController mainController) {
+    this.mainController = mainController;
   }
 }

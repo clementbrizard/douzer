@@ -9,12 +9,14 @@ import javafx.scene.control.Label;
 public class UserInfoController implements Controller {
 
   private MainController mainController;
+
   @FXML
-  private Label lblUsername;
+  private Label lblUserPseudo;
 
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
+    System.out.println("Initialize");
   }
   
   public MainController getMainController() {
@@ -26,9 +28,9 @@ public class UserInfoController implements Controller {
   }
 
   public void init() {
-
-    lblUsername.setText(mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername());
-
+    System.out.println("Init");
+    lblUserPseudo.setText(
+        this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername());
   }
 
 }
