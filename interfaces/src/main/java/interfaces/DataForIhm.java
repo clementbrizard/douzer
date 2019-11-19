@@ -40,7 +40,7 @@ public interface DataForIhm {
 
   void deleteMusic(Music music, boolean deleteLocal);
 
-  void logout();
+  void logout() throws IOException;
 
   void download(Music music);
 
