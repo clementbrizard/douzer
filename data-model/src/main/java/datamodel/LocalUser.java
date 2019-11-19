@@ -16,7 +16,7 @@ public class LocalUser extends User {
   private static MessageDigest messageDigest;
   private String pwdHash;
   private Set<Contact> contacts;
-  //Path not serializable, handle serialization with readObject writeObject bellow
+  // Path is not serializable, handle serialization with readObject writeObject below.
   private transient Path savePath;
   private Set<LocalMusic> musics;
   private List<LocalMusic> playlist;
