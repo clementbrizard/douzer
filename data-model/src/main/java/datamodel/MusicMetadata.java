@@ -1,5 +1,7 @@
 package datamodel;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Year;
 import java.util.ArrayList;
@@ -20,11 +22,19 @@ public class MusicMetadata implements java.io.Serializable {
   private Set<String> tags;
   private transient Map<User, Integer> ratings;
   private transient List<Comment> comments;
+  private Date timeStamp;
 
+  /**
+   * MusicMetadata constructor.
+   */
   public MusicMetadata() {
     this.tags = new HashSet<>();
     this.ratings = new HashMap<>();
     this.comments = new ArrayList<>();
+
+    this.timeStamp = new Date();
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    dateFormat.format(this.timeStamp);
   }
 
   public String getHash() {
@@ -97,5 +107,27 @@ public class MusicMetadata implements java.io.Serializable {
 
   public void setDuration(Duration duration) {
     this.duration = duration;
+  }
+
+  public Date getTimeStamp() {
+    return this.timeStamp;
+  }
+
+  private void setTimeStamp(Date date) {
+    this.timeStamp = date;
+  }
+
+  /**
+   * Update this MusicMetadata with metaData of another music
+   *
+   * @param newMusicMetadata the reference that will be updated.
+   */
+  public void updateMusicMetadata(MusicMetadata newMusicMetadata) {
+    // Modify unique values
+    this.setTitle(newMusicMetadata.getTitle());
+    this.setAlbum(newMusicMetadata.getAlbum());
+    this.setArtist(newMusicMetadata.getArtist());
+    this.setReleaseYear(newMusicMetadata.getReleaseYear());
+    this.setTimeStamp(newMusicMetadata.getTimeStamp());
   }
 }
