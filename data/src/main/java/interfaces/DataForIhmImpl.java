@@ -208,7 +208,7 @@ public class DataForIhmImpl implements DataForIhm {
     User u = dc.getCurrentUser();
     musics.forEach(m -> dc.removeOwner(m, u));
     Collection<String> musicHashs = musics.stream()
-        .map(x -> x.getMetadata().getHash()).collect(Collectors.toList());
+        .map(m -> m.getMetadata().getHash()).collect(Collectors.toList());
     UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, u.getUuid());
     this.dc.net.sendToUsers(payload, this.dc.getIps());
   }
