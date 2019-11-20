@@ -4,8 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Music implements java.io.Serializable {
-  private transient MusicMetadata metadata;
-  private transient Set<User> owners;
+  private MusicMetadata metadata;
+  private Set<User> owners;
 
   public Music(MusicMetadata metadata) {
     this.metadata = metadata;

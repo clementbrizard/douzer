@@ -3,7 +3,6 @@ package datamodel;
 import java.time.Duration;
 import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,8 +17,8 @@ public class MusicMetadata implements java.io.Serializable {
   private Duration duration;
   private Year releaseYear;
   private Set<String> tags;
-  private transient Map<User, Integer> ratings;
-  private transient List<Comment> comments;
+  private Map<User, Integer> ratings;
+  private List<Comment> comments;
 
   public MusicMetadata() {
     this.tags = new HashSet<>();
