@@ -3,9 +3,9 @@ package datamodel;
 import java.util.HashSet;
 
 public class Contact implements java.io.Serializable {
-  private transient User user;
+  private User user;
   private String group;
-  private transient HashSet<LocalMusic> sharedMusics;
+  private HashSet<LocalMusic> sharedMusics;
 
   public Contact(User user) {
     this.user = user;

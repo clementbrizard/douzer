@@ -12,9 +12,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Datacore {
-  public static final String LOCAL_USERS_FILENAME  = "lo23-users.ser";
   public Net net;
   public Ihm ihm;
+  private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
+  private final LocalUsersFileHandler localUsersFileHandler;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
@@ -24,6 +25,7 @@ public class Datacore {
     this.ihm = ihm;
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
+    this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
   }
 
   /**
@@ -85,6 +87,10 @@ public class Datacore {
     this.currentUser = user;
   }
 
+  public LocalUsersFileHandler getLocalUsersFileHandler() {
+    return localUsersFileHandler;
+  }
+
   public LocalMusic getLocalMusic(String hash) {
     Music m = this.musics.get(hash);
     return m instanceof LocalMusic ? (LocalMusic) m : null;
@@ -126,23 +132,18 @@ public class Datacore {
    * @param music2 the reference that will not be updated.
    */
   private void mergeMusics(Music music1, Music music2) {
-    music2.getMetadata().getTags()
-            .forEach(t -> music1.getMetadata().getTags().add(t)
-    );
+    //Local User must be owner of the music
+    music1.getOwners().add(this.currentUser);
 
+    // extends the lists of Tags, comments and ratings
+    music1.getMetadata().getTags().addAll(music2.getMetadata().getTags());
     music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
     music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
-
-    //music2's metadata is after music1's metadata
+    //music2's was created first
     if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
-      music1.getMetadata().setTitle(music2.getMetadata().getTitle());
-      music1.getMetadata().setAlbum(music2.getMetadata().getAlbum());
-      music1.getMetadata().setArtist(music2.getMetadata().getArtist());
-      music1.getMetadata().setDuration(music2.getMetadata().getDuration());
-      music1.getMetadata().setHash(music2.getMetadata().getHash());
-      music1.getMetadata().setReleaseDate(music2.getMetadata().getReleaseDate());
-      music1.getMetadata().setTimeStamp(music2.getMetadata().getTimeStamp());
+      music1.getMetadata().updateMusicMetadata(music2.getMetadata());
     }
+    // else, music1 is already the template
   }
 
   /**
@@ -152,21 +153,24 @@ public class Datacore {
    * @param user2 the reference that will not be updated.
    */
   private void mergeUsers(User user1, User user2) {
+    // user2 was created first
     if (user1.getTimeStamp().compareTo(user2.getTimeStamp()) < 0) {
-      user1.setUsername(user1.getUsername());
-      user1.setFirstName(user2.getFirstName());
-      user1.setLastName(user2.getLastName());
-      user1.setAvatar(user2.getAvatar());
-      user1.setConnected(user2.isConnected());
-      user1.setDateOfBirth(user2.getDateOfBirth());
-      user1.setIp(user2.getIp());
-      user1.setTimeStamp(user2.getTimeStamp());
+      user1.updateUser(user2);
     }
+    // No else, the user1 is the template
+  }
+
+  /**
+   * Clear all volatiles variables.
+   */
+  public void wipe() {
+    this.users.clear();
+    this.musics.clear();
+    this.currentUser = null;
   }
 
   public Stream<InetAddress> getIps() {
     return this.users.values().stream()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
   }
-
 }
