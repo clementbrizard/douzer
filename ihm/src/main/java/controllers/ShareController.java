@@ -12,8 +12,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-//replace by javadocs
-//popup view when click on share Button on shareController
+/**
+ * Controller of the sharing/unsharing popup window.
+ */
 public class ShareController implements Controller {
   private static final Logger shareLogger = LogManager.getLogger();
 
@@ -68,6 +69,9 @@ public class ShareController implements Controller {
 
   // Other methods
 
+  /**
+   * Initialize the Controller.
+   */
   @Override
   public void initialize() {
     this.shareStatusGroup = new ToggleGroup();

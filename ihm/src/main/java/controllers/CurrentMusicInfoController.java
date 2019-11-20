@@ -17,7 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 
 /*
- * right panel with light info and comment about the music
+ * Right panel controller. Contains informations about the current music, sharing button,
+ * download progress bar
  */
 public class CurrentMusicInfoController implements Controller {
 
@@ -104,6 +105,9 @@ public class CurrentMusicInfoController implements Controller {
     this.currentMusic.getMetadata().setTitle("Ceci est un test");
   }
 
+  /**
+   * Open a popup window to share or unshare the current music.
+   */
   @FXML
   private void share(ActionEvent event) {
     try {
