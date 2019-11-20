@@ -24,7 +24,6 @@ public class LoginController implements Controller {
   private PasswordField textFieldPassword;
 
   private Application application;
-  private IhmCore ihmcore;
 
   // Other methods
 
