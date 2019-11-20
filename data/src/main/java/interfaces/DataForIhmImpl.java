@@ -97,7 +97,7 @@ public class DataForIhmImpl implements DataForIhm {
         if (file.delete()) {
           startLogger.info(music.getMetadata().getTitle() + "is deleted locally");
         } else {
-          startLogger.error("Delete operation is failed.");
+          startLogger.error("Delete operation for the local music has failed.");
         }
       }
     }
