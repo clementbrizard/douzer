@@ -12,9 +12,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Datacore {
-  public static final String LOCAL_USERS_FILENAME  = "lo23-users.ser";
   public Net net;
   public Ihm ihm;
+  private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
+  private final LocalUsersFileHandler localUsersFileHandler;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
@@ -24,6 +25,7 @@ public class Datacore {
     this.ihm = ihm;
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
+    this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
   }
 
   /**
@@ -85,6 +87,10 @@ public class Datacore {
     this.currentUser = user;
   }
 
+  public LocalUsersFileHandler getLocalUsersFileHandler() {
+    return localUsersFileHandler;
+  }
+
   public LocalMusic getLocalMusic(String hash) {
     Music m = this.musics.get(hash);
     return m instanceof LocalMusic ? (LocalMusic) m : null;
@@ -141,9 +147,17 @@ public class Datacore {
     throw new UnsupportedOperationException("Merge with between users is not implemented yet");
   }
 
+  /**
+   * Clear all volatiles variables.
+   */
+  public void wipe() {
+    this.users.clear();
+    this.musics.clear();
+    this.currentUser = null;
+  }
+
   public Stream<InetAddress> getIps() {
     return this.users.values().stream()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
   }
-
 }

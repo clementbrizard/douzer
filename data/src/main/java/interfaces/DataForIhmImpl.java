@@ -12,8 +12,11 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import exceptions.LocalUsersFileException;
 import features.CreateUser;
+import features.DeleteUser;
 import features.Login;
+import features.LogoutPayload;
 import features.ShareMusicsPayload;
 import features.UnshareMusicsPayload;
 import java.io.File;
@@ -74,8 +77,8 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void deleteAccount() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void deleteAccount() throws IOException {
+    DeleteUser.run(this.dc);
   }
 
   /**
@@ -101,8 +104,20 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void logout() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void logout() throws IOException {
+    LocalUser currentUser = this.dc.getCurrentUser();
+
+    try {
+      // Updates the written currentUser in case it has been modified
+      this.dc.getLocalUsersFileHandler().update(currentUser);
+    } catch (LocalUsersFileException e) {
+      throw new IOException(e);
+    }
+
+    LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
+    this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
+
+    this.dc.wipe();
   }
 
   @Override
