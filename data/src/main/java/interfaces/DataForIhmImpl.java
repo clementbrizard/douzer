@@ -14,6 +14,7 @@ import datamodel.SearchQuery;
 import datamodel.User;
 import exceptions.LocalUsersFileException;
 import features.CreateUser;
+import features.DeleteMusic;
 import features.DeleteUser;
 import features.Login;
 import features.LogoutPayload;
@@ -81,26 +82,9 @@ public class DataForIhmImpl implements DataForIhm {
     DeleteUser.run(this.dc);
   }
 
-  /**
-   * .to delete a music in the library, eventually delete locally, and unshare the music
-   * @param music the music
-   * @param deleteLocal whether or not to delete locally
-   */
   @Override
   public void deleteMusic(LocalMusic music, boolean deleteLocal) {
-    Set musics = this.dc.getCurrentUser().getMusics();
-    if (musics.contains(music)) {
-      unshareMusic(music);
-      musics.remove(music);
-      if (deleteLocal) {
-        File file = new File(music.getMp3Path());
-        if (file.delete()) {
-          startLogger.info(music.getMetadata().getTitle() + "is deleted locally");
-        } else {
-          startLogger.error("Delete operation for the local music has failed.");
-        }
-      }
-    }
+    DeleteMusic.deleteMusic(music, deleteLocal, dc, startLogger);
   }
 
   @Override
@@ -195,22 +179,13 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void unshareMusic(LocalMusic music) {
-    this.unshareMusics(Collections.singleton(music));
+    DeleteMusic.unshareMusic(music, dc);
   }
 
-  /**
-   * Unshare a collection of music, first remove the user as owner.
-   * Then send the payload to all users
-   * @param musics the music to unshare
-   */
+
   @Override
   public void unshareMusics(Collection<LocalMusic> musics) {
-    User u = dc.getCurrentUser();
-    musics.forEach(m -> dc.removeOwner(m, u));
-    Collection<String> musicHashs = musics.stream()
-        .map(m -> m.getMetadata().getHash()).collect(Collectors.toList());
-    UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, u.getUuid());
-    this.dc.net.sendToUsers(payload, this.dc.getIps());
+    DeleteMusic.unshareMusics(musics, dc);
   }
 
   @Override

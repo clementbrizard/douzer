@@ -11,11 +11,11 @@ import java.util.UUID;
  */
 public class UnshareMusicsPayload extends Payload {
   private Collection<String> musicHashs;
-  private UUID uuid;
+  private UUID ownerToRemove;
 
-  public UnshareMusicsPayload(Collection<String> musicHashs, UUID uuid) {
+  public UnshareMusicsPayload(Collection<String> musicHashs, UUID ownerToRemove) {
     this.musicHashs = musicHashs;
-    this.uuid = uuid;
+    this.ownerToRemove = ownerToRemove;
   }
 
   /**.
@@ -24,9 +24,9 @@ public class UnshareMusicsPayload extends Payload {
   @Override
   public void run(Datacore dc) {
     this.musicHashs.forEach(hash -> {
-      Music music = dc.getMusic(hash);
-      dc.removeOwner(music, dc.getUser(this.uuid));
-      dc.ihm.updateMusic(music);
+      Music musicToUnshare = dc.getMusic(hash);
+      dc.removeOwner(musicToUnshare, dc.getUser(this.ownerToRemove));
+      dc.ihm.updateMusic(musicToUnshare);
     });
   }
 }
