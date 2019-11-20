@@ -16,14 +16,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-//replace by javadoc
-//right panel with light info and comment about the music
+/*
+ * right panel with light info and comment about the music
+ */
 public class CurrentMusicInfoController implements Controller {
 
   private static final Logger currentMusicInfoLogger = LogManager.getLogger();
 
   @FXML
-  private Button btnPartager;
+  private Button buttonShare;
 
   @FXML
   private ProgressBar downloadProgress;
