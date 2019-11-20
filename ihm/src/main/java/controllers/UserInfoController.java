@@ -5,7 +5,8 @@ import javafx.scene.control.Label;
 
 
 /**
- * Controller used for managing the top left view with the nickname and the buttons to modify profile and disconnect.
+ * Controller used for managing the top left view 
+ * with the nickname and the buttons to modify profile and disconnect.
  */
 public class UserInfoController implements Controller {
   @FXML
