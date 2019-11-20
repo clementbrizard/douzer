@@ -12,8 +12,10 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
+import features.CommentMusicPayload;
 import features.CreateUser;
 import features.Login;
+import features.RateMusicPayload;
 import features.ShareMusicsPayload;
 import features.UnshareMusicsPayload;
 import java.io.File;
@@ -63,7 +65,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addComment(Music music, String comment) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    CommentMusicPayload commentMusicPayload = new CommentMusicPayload(music, comment, this.dc);
+    this.dc.net.sendToUsers(commentMusicPayload, this.dc.getIps());
   }
 
   @Override
@@ -164,7 +167,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void rateMusic(Music music, int rating) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    RateMusicPayload rateMusicPayload = new RateMusicPayload(music, rating, this.dc);
+    this.dc.net.sendToUsers(rateMusicPayload, this.dc.getIps());
   }
 
   @Override
