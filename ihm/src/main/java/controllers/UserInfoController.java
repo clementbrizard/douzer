@@ -4,8 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
 
-//replace by javadocs
-//view in the top left of mainView
+/**
+ * Controller used for managing the top left view with the nickname and the buttons to modify profile and disconnect.
+ */
 public class UserInfoController implements Controller {
   @FXML
   private Label lblUserPseudo;
