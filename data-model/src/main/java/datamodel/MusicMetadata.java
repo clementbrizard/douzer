@@ -41,10 +41,6 @@ public class MusicMetadata implements java.io.Serializable {
     return hash;
   }
 
-  public void setHash(String hash) {
-    this.hash = hash;
-  }
-
   public String getTitle() {
     return title;
   }
@@ -118,7 +114,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   /**
-   * Update this MusicMetadata with metaData of another music
+   * Update this MusicMetadata with metaData of another music.
    *
    * @param newMusicMetadata the reference that will be updated.
    */

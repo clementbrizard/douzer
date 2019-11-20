@@ -100,8 +100,14 @@ public class User implements java.io.Serializable {
     return this.timeStamp;
   }
 
-  private void setTimeStamp(Date newTimeStamp){ this.timeStamp = newTimeStamp; }
+  private void setTimeStamp(Date newTimeStamp) {
+    this.timeStamp = newTimeStamp;
+  }
 
+  /**
+   * Update of a user attributes based on an other user.
+   * @param newUser other user
+   */
   public void updateUser(User newUser) {
     this.setUsername(newUser.getUsername());
     this.setFirstName(newUser.getFirstName());
