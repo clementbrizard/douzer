@@ -14,14 +14,13 @@ import javafx.scene.control.Label;
 import org.controlsfx.control.Notifications;
 
 public class TestController implements Controller {
+  static int count = 0;
   
   @FXML
   private Label label;
   
   @FXML
   private Button buttonClick;
-  
-  static int count = 0;
   
   @Override
   public void initialize() {

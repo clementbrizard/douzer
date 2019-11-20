@@ -23,6 +23,8 @@ import org.apache.logging.log4j.Logger;
  * the IhmCore will start the HCI of the Application, manages controllers and stage changes.
  */
 public class IhmCore extends Application {
+  private static final Logger ihmLogger = LogManager.getLogger();
+  private static DataForIhm dataForIhm;
 
   private Scene loginScene;
   private Scene signupScene;
@@ -41,19 +43,10 @@ public class IhmCore extends Application {
   private AllMusicsController allMusicsController;
 
   private IhmForData ihmForData;
-  
-  //TODO
-  //just in order to avoid the null value error
-  //the start function create a new instance of IhmCore
-  //then we need to get the DataForIhm in start function
-  //for that I think it's better to create an instance of DataForIhm in ihmProvider
-  private static DataForIhm dataForIhm;
 
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
   private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
 
-
-  private static final Logger ihmLogger = LogManager.getLogger();
 
   public IhmCore() {
     ihmLogger.info("IhmCore start");
