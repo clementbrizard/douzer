@@ -1,7 +1,5 @@
 package datamodel;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Year;
 import java.util.ArrayList;
@@ -33,8 +31,6 @@ public class MusicMetadata implements java.io.Serializable {
     this.comments = new ArrayList<>();
 
     this.timeStamp = new Date();
-    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-    dateFormat.format(this.timeStamp);
   }
 
   public String getHash() {
@@ -46,6 +42,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setTitle(String title) {
+    this.timeStamp = new Date();
     this.title = title;
   }
 
@@ -54,6 +51,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setArtist(String artist) {
+    this.timeStamp = new Date();
     this.artist = artist;
   }
 
@@ -62,6 +60,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setAlbum(String album) {
+    this.timeStamp = new Date();
     this.album = album;
   }
 
@@ -70,6 +69,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setReleaseYear(Year releaseYear) {
+    this.timeStamp = new Date();
     this.releaseYear = releaseYear;
   }
 
@@ -78,6 +78,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setTags(Set<String> tags) {
+    this.timeStamp = new Date();
     this.tags = tags;
   }
 
@@ -86,6 +87,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setRatings(Map<User, Integer> ratings) {
+    this.timeStamp = new Date();
     this.ratings = ratings;
   }
 
@@ -94,6 +96,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setComments(List<Comment> comments) {
+    this.timeStamp = new Date();
     this.comments = comments;
   }
 
@@ -102,6 +105,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setDuration(Duration duration) {
+    this.timeStamp = new Date();
     this.duration = duration;
   }
 
@@ -125,5 +129,9 @@ public class MusicMetadata implements java.io.Serializable {
     this.setArtist(newMusicMetadata.getArtist());
     this.setReleaseYear(newMusicMetadata.getReleaseYear());
     this.setTimeStamp(newMusicMetadata.getTimeStamp());
+    //Add set values
+    this.tags.addAll(newMusicMetadata.tags);
+    this.comments.addAll(newMusicMetadata.comments);
+    this.ratings.putAll(newMusicMetadata.ratings);
   }
 }

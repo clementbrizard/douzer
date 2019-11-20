@@ -135,15 +135,19 @@ public class Datacore {
     //Local User must be owner of the music
     music1.getOwners().add(this.currentUser);
 
-    // extends the lists of Tags, comments and ratings
-    music1.getMetadata().getTags().addAll(music2.getMetadata().getTags());
-    music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
-    music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
     //music2's was created first
     if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
+      music2.getMetadata().getTags().addAll(music1.getMetadata().getTags());
+      music2.getMetadata().getComments().addAll(music1.getMetadata().getComments());
+      music2.getMetadata().getRatings().putAll(music1.getMetadata().getRatings());
+
       music1.getMetadata().updateMusicMetadata(music2.getMetadata());
+    } else {
+      // else, music1 is the most recent, so we just merge set attributes
+      music1.getMetadata().getTags().addAll(music2.getMetadata().getTags());
+      music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
+      music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
     }
-    // else, music1 is already the template
   }
 
   /**
