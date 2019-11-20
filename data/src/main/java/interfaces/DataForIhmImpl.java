@@ -94,7 +94,7 @@ public class DataForIhmImpl implements DataForIhm {
         if (file.delete()) {
           startLogger.info(music.getMetadata().getTitle() + "is deleted locally");
         } else {
-          startLogger.error("Delete operation is failed.");
+          startLogger.error("Delete operation for the local music has failed.");
         }
       }
     }
@@ -183,11 +183,18 @@ public class DataForIhmImpl implements DataForIhm {
     this.unshareMusics(Collections.singleton(music));
   }
 
+  /**
+   * Unshare a collection of music, first remove the user as owner.
+   * Then send the payload to all users
+   * @param musics the music to unshare
+   */
   @Override
   public void unshareMusics(Collection<LocalMusic> musics) {
+    User u = dc.getCurrentUser();
+    musics.forEach(m -> dc.removeOwner(m, u));
     Collection<String> musicHashs = musics.stream()
         .map(x -> x.getMetadata().getHash()).collect(Collectors.toList());
-    UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, dc.getCurrentUser());
+    UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, u.getUuid());
     this.dc.net.sendToUsers(payload, this.dc.getIps());
   }
 

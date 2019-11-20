@@ -5,17 +5,18 @@ import core.Payload;
 import datamodel.Music;
 import datamodel.User;
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * Example feature.
  */
 public class UnshareMusicsPayload extends Payload {
   private Collection<String> musicHashs;
-  private User owner;
+  private UUID uuid;
 
-  public UnshareMusicsPayload(Collection<String> musicHashs, User owner) {
+  public UnshareMusicsPayload(Collection<String> musicHashs, UUID uuid) {
     this.musicHashs = musicHashs;
-    this.owner = owner;
+    this.uuid = uuid;
   }
 
   /**.
@@ -25,7 +26,7 @@ public class UnshareMusicsPayload extends Payload {
   public void run(Datacore dc) {
     this.musicHashs.forEach(hash -> {
       Music music = dc.getMusic(hash);
-      dc.removeOwner(music, this.owner);
+      dc.removeOwner(music, dc.getUser(this.uuid));
       dc.ihm.updateMusic(music);
     });
   }
