@@ -96,7 +96,13 @@ public class LocalUser extends User {
 
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
     stream.defaultReadObject();
+
     String savePathString = stream.readUTF();
     setSavePath(Paths.get(savePathString).toAbsolutePath());
+
+    // Add himself as owner of its musics
+    Set<User> owners = new HashSet<>();
+    owners.add(this);
+    musics.forEach(localMusic -> localMusic.setOwners(owners));
   }
 }
