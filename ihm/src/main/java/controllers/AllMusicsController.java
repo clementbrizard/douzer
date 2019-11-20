@@ -10,8 +10,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-//replace by javadocs
-//central view show up all music in the network
+
+/**
+ * central view show up all music in the network.
+ */
 public class AllMusicsController implements Controller {
 
   @FXML
@@ -32,36 +34,75 @@ public class AllMusicsController implements Controller {
 
   // Getters
 
+  /**
+   * getter of searchMusicController.
+   * @return a SearchMusicController
+   * @see SearchMusicController
+   */
   public SearchMusicController getSearchMusicController() {
     return searchMusicController;
   }
 
+  /**
+   * getter of centralFrameController.
+   * @return a CentralFrameController
+   * @see CentralFrameController
+   */
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
+  }
+  
+  /**
+   * getter of application.
+   * @return a Application
+   * @see Application
+   */
+  public Application getApplication() {
+    return application;
   }
 
   // Setters
 
+  /**
+   * setter of searchMusicController.
+   * @param searchMusicController the new SearchMusicController
+   * @see SearchMusicController
+   */
   public void setSearchMusicController(SearchMusicController searchMusicController) {
     this.searchMusicController = searchMusicController;
   }
 
+  /**
+   * setter of centralFrameController.
+   * @param centralFrameController the new CentralFrameController
+   * @see CentralFrameController
+   */
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
   }
 
+  
+  /**
+   * setter of application.
+   * @param application the new Application
+   * @see Application
+   */
   public void setApplication(Application application) {
     this.application = application;
   }
 
   // Other methods
 
+  /**
+   * the initialize method of the Controller call by Javafx when we create the view of AllMusics.
+   */
   @Override
   public void initialize() {
   }
 
   /**
-   * Setup the table columns to receive data.
+   * Setup the table columns to receive data, 
+   * this method has to be called right after the creation of the view.
    */
   public void init() {
 
@@ -76,6 +117,7 @@ public class AllMusicsController implements Controller {
     this.displayAvailableMusics();
   }
 
+  
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.parseMusic());
   }
