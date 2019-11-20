@@ -62,7 +62,7 @@ public class LoginController implements Controller {
   }
 
   @FXML
-  private void actionSignUp() {
+  private void actionSignup() {
     application.showSignUpScene();
   }
 

@@ -82,7 +82,7 @@ public class SignUpController implements Controller {
    * them and forwards it to data for further process
    */
   @FXML
-  public void actionSignUp() {
+  public void actionSignup() {
 
     //TODO: sanity checks
     final String userName = textFieldUsername.getText();
