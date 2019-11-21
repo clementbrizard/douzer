@@ -130,8 +130,8 @@ public class MusicMetadata implements java.io.Serializable {
     this.setReleaseYear(newMusicMetadata.getReleaseYear());
     this.setTimeStamp(newMusicMetadata.getTimeStamp());
     //Add set values
-    this.tags.addAll(newMusicMetadata.tags);
-    this.comments.addAll(newMusicMetadata.comments);
-    this.ratings.putAll(newMusicMetadata.ratings);
+    this.tags = newMusicMetadata.tags;
+    this.comments = newMusicMetadata.comments;
+    this.ratings = newMusicMetadata.ratings;
   }
 }
