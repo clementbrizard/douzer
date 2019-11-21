@@ -3,8 +3,9 @@ package controllers;
 import core.Application;
 import javafx.fxml.FXML;
 
-//replace by javadocs
-//the view who will own each sub-views
+/**
+ * Controller in charge of managing the other (central, left and right).
+ */
 public class MainController implements Controller {
 
   // Left controllers
