@@ -1,36 +1,54 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 
 
-//replace by javadocs
-//view in the top left of mainView
+/**
+ * Controller used for managing the top left view 
+ * with the nickname and the buttons to modify profile and disconnect.
+ */
 public class UserInfoController implements Controller {
-
-  private MainController mainController;
-
   @FXML
   private Label lblUserPseudo;
 
-  @Override
-  public void initialize() { }
+  private MainController mainController;
+
+  // Getters
 
   public MainController getMainController() {
     return mainController;
   }
-  
+
+  // Setters
+
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
 
+  // Other methods
+
+  @Override
+  public void initialize() { }
+
+  /**
+   * Initialize the field with default data.
+   */
   public void init() {
     String name = "";
-    if (this.mainController.getIhmCore().getDataForIhm().getCurrentUser() == null) {
+    if (this.mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser() == null) {
       name = "Booba";
     } else {
-      name = this.mainController.getIhmCore().getDataForIhm().getCurrentUser().getUsername();
+      name = this.mainController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser()
+          .getUsername();
     }
     lblUserPseudo.setText(
         name
