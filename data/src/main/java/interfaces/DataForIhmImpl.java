@@ -34,13 +34,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
-  private static final Logger startLogger = LogManager.getLogger();
 
   public DataForIhmImpl(Datacore dc) {
     this.dc = dc;
