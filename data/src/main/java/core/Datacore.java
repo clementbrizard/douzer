@@ -3,6 +3,7 @@ package core;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
+import datamodel.SearchQuery;
 import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
@@ -67,8 +68,8 @@ public class Datacore {
         .filter(u -> !(u instanceof LocalUser));
   }
 
-  public HashMap<String, Music> getMusics() {
-    return musics;
+  public Stream<Music> getMusics() {
+    return musics.values().stream();
   }
 
   public User getUser(UUID uuid) {

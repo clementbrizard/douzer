@@ -17,6 +17,7 @@ import features.CreateUser;
 import features.DeleteUser;
 import features.Login;
 import features.LogoutPayload;
+import features.Search;
 import features.ShareMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -199,7 +200,12 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public Stream<Music> getMusics(SearchQuery query) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public Stream<Music> getMusics() {
+    return this.dc.getMusics();
+  }
+
+  @Override
+  public Stream<Music> searchMusics(SearchQuery searchQuery) {
+    return Search.run(this.dc, searchQuery);
   }
 }
