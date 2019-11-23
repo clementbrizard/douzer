@@ -78,5 +78,7 @@ public interface DataForIhm {
 
   LocalUser getCurrentUser();
 
-  Stream<Music> getMusics(SearchQuery query);
+  Stream<Music> getMusics();
+
+  Stream<Music> searchMusics(SearchQuery searchQuery);
 }
