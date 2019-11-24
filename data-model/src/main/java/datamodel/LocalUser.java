@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class LocalUser extends User {
@@ -86,17 +87,47 @@ public class LocalUser extends User {
   }
 
   public void setSavePath(Path savePath) {
-    this.savePath = savePath;
+    this.savePath = savePath.toAbsolutePath();
   }
 
   private void writeObject(ObjectOutputStream stream) throws IOException {
     stream.defaultWriteObject();
-    stream.writeUTF(this.savePath.toAbsolutePath().toString());
+    stream.writeUTF(this.savePath.toString());
   }
 
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
     stream.defaultReadObject();
+
     String savePathString = stream.readUTF();
     setSavePath(Paths.get(savePathString).toAbsolutePath());
+
+    // Add himself as owner of its musics
+    Set<User> owners = new HashSet<>();
+    owners.add(this);
+    musics.forEach(localMusic -> localMusic.setOwners(owners));
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    if (!super.equals(o)) {
+      return false;
+    }
+    LocalUser localUser = (LocalUser) o;
+    return Objects.equals(pwdHash, localUser.pwdHash)
+        && Objects.equals(contacts, localUser.contacts)
+        && Objects.equals(savePath, localUser.savePath)
+        && Objects.equals(musics, localUser.musics)
+        && Objects.equals(playlist, localUser.playlist);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), pwdHash, contacts, savePath, musics, playlist);
   }
 }
