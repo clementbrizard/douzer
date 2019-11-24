@@ -30,7 +30,7 @@ public class MusicMetadata implements java.io.Serializable {
     this.ratings = new HashMap<>();
     this.comments = new ArrayList<>();
 
-    this.timeStamp = new Date();
+    updateTimeStamp();
   }
 
   public String getHash() {
@@ -42,7 +42,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setTitle(String title) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.title = title;
   }
 
@@ -51,7 +51,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setArtist(String artist) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.artist = artist;
   }
 
@@ -60,7 +60,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setAlbum(String album) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.album = album;
   }
 
@@ -69,7 +69,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setReleaseYear(Year releaseYear) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.releaseYear = releaseYear;
   }
 
@@ -78,7 +78,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setTags(Set<String> tags) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.tags = tags;
   }
 
@@ -87,7 +87,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setRatings(Map<User, Integer> ratings) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.ratings = ratings;
   }
 
@@ -96,7 +96,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setComments(List<Comment> comments) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.comments = comments;
   }
 
@@ -105,7 +105,7 @@ public class MusicMetadata implements java.io.Serializable {
   }
 
   public void setDuration(Duration duration) {
-    this.timeStamp = new Date();
+    updateTimeStamp();
     this.duration = duration;
   }
 
@@ -113,8 +113,8 @@ public class MusicMetadata implements java.io.Serializable {
     return this.timeStamp;
   }
 
-  private void setTimeStamp(Date date) {
-    this.timeStamp = date;
+  private void updateTimeStamp() {
+    this.timeStamp = new Date();
   }
 
   /**
@@ -124,14 +124,15 @@ public class MusicMetadata implements java.io.Serializable {
    */
   public void updateMusicMetadata(MusicMetadata newMusicMetadata) {
     // Modify unique values
-    this.setTitle(newMusicMetadata.getTitle());
-    this.setAlbum(newMusicMetadata.getAlbum());
-    this.setArtist(newMusicMetadata.getArtist());
-    this.setReleaseYear(newMusicMetadata.getReleaseYear());
-    this.setTimeStamp(newMusicMetadata.getTimeStamp());
+    this.title = newMusicMetadata.title;
+    this.album = newMusicMetadata.album;
+    this.artist = newMusicMetadata.artist;
+    this.releaseYear = newMusicMetadata.releaseYear;
     //Add set values
     this.tags = newMusicMetadata.tags;
     this.comments = newMusicMetadata.comments;
     this.ratings = newMusicMetadata.ratings;
+
+    updateTimeStamp();
   }
 }

@@ -33,7 +33,7 @@ public class User implements java.io.Serializable {
     this.dateOfBirth = user.dateOfBirth;
     this.connected = user.connected;
     this.ip = user.ip;
-    this.timeStamp = new Date();
+    updateTimeStamp();
   }
 
   public UUID getUuid() {
@@ -45,6 +45,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setUsername(String username) {
+    updateTimeStamp();
     this.username = username;
   }
 
@@ -53,6 +54,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setAvatar(Image avatar) {
+    updateTimeStamp();
     this.avatar = avatar;
   }
 
@@ -61,6 +63,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setFirstName(String firstName) {
+    updateTimeStamp();
     this.firstName = firstName;
   }
 
@@ -69,6 +72,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setLastName(String lastName) {
+    updateTimeStamp();
     this.lastName = lastName;
   }
 
@@ -77,6 +81,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setDateOfBirth(Date dateOfBirth) {
+    updateTimeStamp();
     this.dateOfBirth = dateOfBirth;
   }
 
@@ -93,6 +98,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setIp(InetAddress ip) {
+    updateTimeStamp();
     this.ip = ip;
   }
 
@@ -100,8 +106,8 @@ public class User implements java.io.Serializable {
     return this.timeStamp;
   }
 
-  private void setTimeStamp(Date newTimeStamp) {
-    this.timeStamp = newTimeStamp;
+  private void updateTimeStamp() {
+    this.timeStamp = new Date();
   }
 
   /**
@@ -109,13 +115,14 @@ public class User implements java.io.Serializable {
    * @param newUser other user
    */
   public void updateUser(User newUser) {
-    this.setUsername(newUser.getUsername());
-    this.setFirstName(newUser.getFirstName());
-    this.setLastName(newUser.getLastName());
-    this.setAvatar(newUser.getAvatar());
-    this.setConnected(newUser.isConnected());
-    this.setDateOfBirth(newUser.getDateOfBirth());
-    this.setIp(newUser.getIp());
-    this.setTimeStamp(newUser.getTimeStamp());
+    this.username = newUser.username;
+    this.firstName = newUser.firstName;
+    this.lastName = newUser.lastName;
+    this.avatar = newUser.avatar;
+    this.connected = newUser.connected;
+    this.dateOfBirth = newUser.dateOfBirth;
+    this.ip = newUser.ip;
+
+    updateTimeStamp();
   }
 }
