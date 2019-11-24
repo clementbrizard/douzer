@@ -3,6 +3,7 @@ package datamodel;
 import java.awt.Image;
 import java.net.InetAddress;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class User implements java.io.Serializable {
@@ -88,5 +89,29 @@ public class User implements java.io.Serializable {
 
   public void setIp(InetAddress ip) {
     this.ip = ip;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User) o;
+    return connected == user.connected &&
+        Objects.equals(uuid, user.uuid) &&
+        Objects.equals(username, user.username) &&
+        Objects.equals(avatar, user.avatar) &&
+        Objects.equals(firstName, user.firstName) &&
+        Objects.equals(lastName, user.lastName) &&
+        Objects.equals(dateOfBirth, user.dateOfBirth) &&
+        Objects.equals(ip, user.ip);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(uuid, username, avatar, firstName, lastName, dateOfBirth, connected, ip);
   }
 }
