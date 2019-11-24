@@ -119,11 +119,11 @@ public class LocalUser extends User {
       return false;
     }
     LocalUser localUser = (LocalUser) o;
-    return Objects.equals(pwdHash, localUser.pwdHash) &&
-        Objects.equals(contacts, localUser.contacts) &&
-        Objects.equals(savePath, localUser.savePath) &&
-        Objects.equals(musics, localUser.musics) &&
-        Objects.equals(playlist, localUser.playlist);
+    return Objects.equals(pwdHash, localUser.pwdHash)
+        && Objects.equals(contacts, localUser.contacts)
+        && Objects.equals(savePath, localUser.savePath)
+        && Objects.equals(musics, localUser.musics)
+        && Objects.equals(playlist, localUser.playlist);
   }
 
   @Override

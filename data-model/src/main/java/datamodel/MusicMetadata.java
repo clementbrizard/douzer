@@ -116,15 +116,15 @@ public class MusicMetadata implements java.io.Serializable {
       return false;
     }
     MusicMetadata that = (MusicMetadata) o;
-    return Objects.equals(hash, that.hash) &&
-        Objects.equals(title, that.title) &&
-        Objects.equals(artist, that.artist) &&
-        Objects.equals(album, that.album) &&
-        Objects.equals(duration, that.duration) &&
-        Objects.equals(releaseYear, that.releaseYear) &&
-        Objects.equals(tags, that.tags) &&
-        Objects.equals(ratings, that.ratings) &&
-        Objects.equals(comments, that.comments);
+    return Objects.equals(hash, that.hash)
+        && Objects.equals(title, that.title)
+        && Objects.equals(artist, that.artist)
+        && Objects.equals(album, that.album)
+        && Objects.equals(duration, that.duration)
+        && Objects.equals(releaseYear, that.releaseYear)
+        && Objects.equals(tags, that.tags)
+        && Objects.equals(ratings, that.ratings)
+        && Objects.equals(comments, that.comments);
   }
 
   @Override

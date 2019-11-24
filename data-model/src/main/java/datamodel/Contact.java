@@ -46,9 +46,9 @@ public class Contact implements java.io.Serializable {
       return false;
     }
     Contact contact = (Contact) o;
-    return Objects.equals(user, contact.user) &&
-        Objects.equals(group, contact.group) &&
-        Objects.equals(sharedMusics, contact.sharedMusics);
+    return Objects.equals(user, contact.user)
+        && Objects.equals(group, contact.group)
+        && Objects.equals(sharedMusics, contact.sharedMusics);
   }
 
   @Override

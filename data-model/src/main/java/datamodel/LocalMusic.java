@@ -60,8 +60,8 @@ public class LocalMusic extends Music {
       return false;
     }
     LocalMusic that = (LocalMusic) o;
-    return shared == that.shared &&
-        Objects.equals(mp3Path, that.mp3Path);
+    return shared == that.shared
+        && Objects.equals(mp3Path, that.mp3Path);
   }
 
   @Override

@@ -100,14 +100,14 @@ public class User implements java.io.Serializable {
       return false;
     }
     User user = (User) o;
-    return connected == user.connected &&
-        Objects.equals(uuid, user.uuid) &&
-        Objects.equals(username, user.username) &&
-        Objects.equals(avatar, user.avatar) &&
-        Objects.equals(firstName, user.firstName) &&
-        Objects.equals(lastName, user.lastName) &&
-        Objects.equals(dateOfBirth, user.dateOfBirth) &&
-        Objects.equals(ip, user.ip);
+    return connected == user.connected
+        && Objects.equals(uuid, user.uuid)
+        && Objects.equals(username, user.username)
+        && Objects.equals(avatar, user.avatar)
+        && Objects.equals(firstName, user.firstName)
+        && Objects.equals(lastName, user.lastName)
+        && Objects.equals(dateOfBirth, user.dateOfBirth)
+        && Objects.equals(ip, user.ip);
   }
 
   @Override
