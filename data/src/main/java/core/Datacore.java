@@ -3,7 +3,6 @@ package core;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
-import datamodel.SearchQuery;
 import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
@@ -13,10 +12,10 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 public class Datacore {
-  public Net net;
-  public Ihm ihm;
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
   private final LocalUsersFileHandler localUsersFileHandler;
+  public Net net;
+  public Ihm ihm;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
@@ -53,6 +52,13 @@ public class Datacore {
     } else {
       this.users.put(user.getUuid(), user);
     }
+  }
+
+  /**
+   * Remove a user from the map.
+   */
+  public void removeUser(User user) {
+    this.users.remove(user.getUuid());
   }
 
   public HashMap<UUID, User> getUsers() {
@@ -158,7 +164,7 @@ public class Datacore {
   }
 
   public Stream<InetAddress> getIps() {
-    return this.users.values().stream()
+    return this.getOnlineUsers()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
   }
 }
