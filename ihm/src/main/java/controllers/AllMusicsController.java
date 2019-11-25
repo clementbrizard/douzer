@@ -81,7 +81,6 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
-
   }
 
   /**
@@ -105,7 +104,7 @@ public class AllMusicsController implements Controller {
         AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
       }
     });
-    
+
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
