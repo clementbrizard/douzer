@@ -8,11 +8,11 @@
     <children>
         <BorderPane>
             <center>
-                <VBox BorderPane.alignment="CENTER">
-                    <children>
-                        <fx:include fx:id="allMusics" source="AllMusicsCenterView.fxml" />
-                    </children>
-                </VBox>
+                <AnchorPane fx:id="content">
+                    <!--
+                          Put views here from the code. See @CentralFrameController
+                          -->
+                </AnchorPane>
             </center>
 
         </BorderPane>
