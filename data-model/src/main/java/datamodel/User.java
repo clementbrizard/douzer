@@ -90,6 +90,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setConnected(boolean connected) {
+    updateTimeStamp();
     this.connected = connected;
   }
 
