@@ -15,9 +15,8 @@ public class CentralFrameController implements Controller {
 
   @FXML
   private AllMusicsController allMusicsController;
-  @FXML
-  private MyMusicsController myMusicsController;
 
+  private MyMusicsController myMusicsController;
   private DistantUserController distantUserController;
   private ProfileEditController profileEditController;
   private DetailsMusicController detailsMusicController;
@@ -150,8 +149,6 @@ public class CentralFrameController implements Controller {
     this.allMusicsController.setCentralFrameController(this);
     this.allMusicsController.init();
 
-    this.myMusicsController.setCentralFrameController(this);
-    this.myMusicsController.init();
   }
 
 }
