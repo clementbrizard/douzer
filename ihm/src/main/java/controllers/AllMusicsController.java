@@ -114,10 +114,13 @@ public class AllMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
-    this.displayAvailableMusics();
+    try {
+      this.displayAvailableMusics();
+    } catch (UnsupportedOperationException e) {
+      e.printStackTrace();
+    }
   }
 
-  
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.parseMusic());
   }
