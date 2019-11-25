@@ -1,17 +1,12 @@
 package controllers;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Collection;
-import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import sun.java2d.cmm.Profile;
 
 
 /**
