@@ -15,8 +15,9 @@ public class CentralFrameController implements Controller {
 
   @FXML
   private AllMusicsController allMusicsController;
-
+  @FXML
   private MyMusicsController myMusicsController;
+
   private DistantUserController distantUserController;
   private ProfileEditController profileEditController;
   private DetailsMusicController detailsMusicController;
@@ -147,8 +148,10 @@ public class CentralFrameController implements Controller {
   public void init() {
     //TODO add controllers when they are linked to XML
     this.allMusicsController.setCentralFrameController(this);
-    this.allMusicsController.setApplication(this.mainController.getApplication());
     this.allMusicsController.init();
+
+    this.myMusicsController.setCentralFrameController(this);
+    this.myMusicsController.init();
   }
 
 }
