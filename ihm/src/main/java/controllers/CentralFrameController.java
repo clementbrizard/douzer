@@ -1,6 +1,17 @@
 package controllers;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.Collection;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import sun.java2d.cmm.Profile;
 
 
 /**
@@ -14,11 +25,13 @@ import javafx.fxml.FXML;
 public class CentralFrameController implements Controller {
 
   @FXML
-  private AllMusicsController allMusicsController;
+  private AnchorPane content;
 
+  private AllMusicsController allMusicsController;
   private MyMusicsController myMusicsController;
   private DistantUserController distantUserController;
   private ProfileEditController profileEditController;
+  //TODO : is detailsMusicController useless ??
   private DetailsMusicController detailsMusicController;
   private MainController mainController;
 
@@ -145,10 +158,55 @@ public class CentralFrameController implements Controller {
    * Initialize the controllers inside the central frame.
    */
   public void init() {
-    //TODO add controllers when they are linked to XML
+    this.allMusicsController = (AllMusicsController)
+        this.getControllerFromResource("/fxml/AllMusicsCenterView.fxml");
     this.allMusicsController.setCentralFrameController(this);
     this.allMusicsController.init();
 
+    this.profileEditController = (ProfileEditController)
+        this.getControllerFromResource("/fxml/MyAccountView.fxml");
+    this.profileEditController.setCentralFrameController(this);
+
+    this.myMusicsController = (MyMusicsController)
+        this.getControllerFromResource("/fxml/MyMusicsCenterView.fxml");
+    this.myMusicsController.setCentralFrameController(this);
+    this.myMusicsController.init();
+
+    this.distantUserController = (DistantUserController)
+        this.getControllerFromResource("/fxml/UserProfileView.fxml");
+    this.distantUserController.setCentralFrameController(this);
+
+    this.setCentralContent("/fxml/AllMusicsCenterView.fxml");
   }
 
+  /**
+   * Initializes a controller with the given fxml path.
+
+   * @param resource Path to the view linked to the controller
+   */
+  private Controller getControllerFromResource(String resource) {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
+
+    try {
+      loader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+    return loader.getController();
+  }
+
+  /**
+   * Sets the content of the central AnchorPane to the given fxml resource path.
+   * @param fxmlResource path to the fxml
+   */
+  public void setCentralContent(String fxmlResource) {
+    try {
+      FXMLLoader loader = new FXMLLoader((getClass().getResource(fxmlResource)));
+      this.content.getChildren().setAll((Node) loader.load());
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }
