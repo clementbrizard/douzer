@@ -31,8 +31,8 @@ public class CentralFrameController implements Controller {
 
   private Parent allMusicsParent;
   private AllMusicsController allMusicsController;
-  @FXML
 
+  @FXML
   private Parent myMusicsParent;
   private MyMusicsController myMusicsController;
 
