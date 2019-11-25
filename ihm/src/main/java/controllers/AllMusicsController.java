@@ -74,6 +74,8 @@ public class AllMusicsController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
+
+
   // Other methods
 
   /**
