@@ -82,7 +82,7 @@ public class MyMusicsController implements Controller {
 
 
   /**
-   * Refreshes the table with getLocalMusics() from DataForIhm
+   * Refreshes the table with getLocalMusics() from DataForIhm.
    */
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.parseMusic());
