@@ -201,6 +201,7 @@ public class CentralFrameController implements Controller {
    * @param fxmlResource path to the fxml
    */
   public void setCentralContent(String fxmlResource) {
+    // https://stackoverflow.com/questions/18619394/loading-new-fxml-in-the-same-scene
     try {
       FXMLLoader loader = new FXMLLoader((getClass().getResource(fxmlResource)));
       this.content.getChildren().setAll((Node) loader.load());
