@@ -1,6 +1,5 @@
 package controllers;
 
-import core.Application;
 import datamodel.MusicMetadata;
 import java.time.Duration;
 import java.util.List;
@@ -30,8 +29,6 @@ public class AllMusicsController implements Controller {
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
 
-  private Application application;
-
   // Getters
 
   /**
@@ -50,15 +47,6 @@ public class AllMusicsController implements Controller {
    */
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
-  }
-  
-  /**
-   * getter of application.
-   * @return a Application
-   * @see Application
-   */
-  public Application getApplication() {
-    return application;
   }
 
   // Setters
@@ -81,15 +69,7 @@ public class AllMusicsController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
-  
-  /**
-   * setter of application.
-   * @param application the new Application
-   * @see Application
-   */
-  public void setApplication(Application application) {
-    this.application = application;
-  }
+
 
   // Other methods
 
@@ -126,7 +106,8 @@ public class AllMusicsController implements Controller {
   }
 
   private List<MusicMetadata> parseMusic() {
-    return this.application.getIhmCore().getDataForIhm().getAvailableMusics()
+    return this.getCentralFrameController().getMainController().getApplication()
+        .getIhmCore().getDataForIhm().getAvailableMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
   }
