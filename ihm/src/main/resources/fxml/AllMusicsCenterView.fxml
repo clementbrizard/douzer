@@ -60,9 +60,6 @@
                          <padding>
                              <Insets bottom="5" left="8" right="8" top="5" />
                          </padding>
-                         <HBox.margin>
-                             <Insets top="0" />
-                         </HBox.margin>
                      </Button>
                      <Label fx:id="lblTitle" alignment="CENTER" blendMode="ADD" contentDisplay="CENTER" text="Tous les morceaux" textAlignment="CENTER" textFill="WHITE" translateX="-70">
                          <font>
