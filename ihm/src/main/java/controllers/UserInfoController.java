@@ -1,5 +1,6 @@
 package controllers;
 
+import datamodel.LocalUser;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -47,24 +48,14 @@ public class UserInfoController implements Controller {
    * Initialize the field with default data.
    */
   public void init() {
-    String name = "";
-    if (this.mainController
+    String name = this.mainController
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getCurrentUser() == null) {
-      name = "Booba";
-    } else {
-      name = this.mainController
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .getCurrentUser()
-          .getUsername();
-    }
-    lblUserPseudo.setText(
-        name
-    );
+        .getCurrentUser()
+        .getUsername();
+
+    lblUserPseudo.setText(name);
   }
 
   @FXML

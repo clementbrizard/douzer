@@ -3,12 +3,15 @@ package controllers;
 import core.Application;
 import core.IhmCore;
 
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import javax.security.auth.login.LoginException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 /**
  * Controller used for the login view.
@@ -34,17 +37,12 @@ public class LoginController implements Controller {
   private void actionLogin() {
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
-    boolean login = true;
-    application.showMainScene();
-    application.getMainController().init();
 
     loginLogger.info("User {} logged in", userName);
-
-    //TODO uncomment when Data team fix login method
-    /*
     try {
-      ihmcore.getDataForIhm().login(userName, password);
-      ihmcore.showMainScene();
+      this.application.getIhmCore().getDataForIhm().login(userName, password);
+      application.getMainController().init();
+      this.application.showMainScene();
 
     } catch (LoginException le) {
 
@@ -58,7 +56,7 @@ public class LoginController implements Controller {
       
     } catch (IOException ioe) {
       ioe.printStackTrace();
-    }*/
+    }
   }
 
   @FXML
