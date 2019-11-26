@@ -22,9 +22,13 @@ import features.Search;
 import features.ShareMusicsPayload;
 import features.UnshareMusics;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
@@ -106,13 +110,42 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void exportProfile(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void exportProfile(String path) throws IOException {
+    LocalUser localUser = dc.getCurrentUser();
+
+    FileOutputStream fileOutputStream = new FileOutputStream(path);
+    ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+    objectOutputStream.writeObject(localUser);
+
+    objectOutputStream.flush();
+    objectOutputStream.close();
+    fileOutputStream.close();
   }
 
   @Override
-  public void importProfile(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void importProfile(String path) throws IOException, ClassNotFoundException {
+    try {
+      FileInputStream fileInputStream = new FileInputStream(path);
+      ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+      LocalUser localUser = (LocalUser)objectInputStream.readObject();
+      objectInputStream.close();
+      fileInputStream.close();
+
+      //We check if the username already exists on our local computer. If it doesn't we add the LocalUser.
+      boolean userNameAlreadyExists = false;
+      try {
+        dc.getLocalUsersFileHandler().getUser(localUser.getUsername());
+        userNameAlreadyExists = true;
+      } catch (LocalUsersFileException e) {
+        dc.getLocalUsersFileHandler().add(localUser);
+      }
+
+      if(userNameAlreadyExists){
+        //Throw UserNotFoundException
+      }
+    } catch (LocalUsersFileException e){
+      throw new IOException(e);
+    }
   }
 
   @Override
