@@ -20,11 +20,11 @@ import javafx.scene.layout.AnchorPane;
  */
 public class CentralFrameController implements Controller {
 
-  static public final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
-  static public final String allMusicsAdvancedSearchView = "/fxml/AllMusicsAdvancedSearchView.fxml";
-  static public final String profileEditView = "/fxml/MyAccountView.fxml";
-  static public final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
-  static public final String distantUserView = "/fxml/UserProfileView.fxml";
+  public static final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
+  public static final String allMusicsAdvancedSearchView = "/fxml/AllMusicsAdvancedSearchView.fxml";
+  public static final String profileEditView = "/fxml/MyAccountView.fxml";
+  public static final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
+  public static final String distantUserView = "/fxml/UserProfileView.fxml";
 
   @FXML
   private AnchorPane content;
@@ -159,6 +159,7 @@ public class CentralFrameController implements Controller {
    */
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+
   }
 
   // Other methods
@@ -172,23 +173,27 @@ public class CentralFrameController implements Controller {
    */
   public void init() {
     try {
-      FXMLLoader allMusicsLoader = new FXMLLoader(getClass().getResource(CentralFrameController.allMusicsView));
+      FXMLLoader allMusicsLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.allMusicsView));
       this.allMusicsParent = allMusicsLoader.load();
       this.allMusicsController = allMusicsLoader.getController();
       this.allMusicsController.setCentralFrameController(this);
       this.allMusicsController.init();
 
-      FXMLLoader profileEditLoader = new FXMLLoader(getClass().getResource(CentralFrameController.profileEditView));
+      FXMLLoader profileEditLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.profileEditView));
       this.profileEditParent = profileEditLoader.load();
       this.profileEditController = profileEditLoader.getController();
       this.profileEditController.setCentralFrameController(this);
 
-      FXMLLoader myMusicsLoader = new FXMLLoader(getClass().getResource(CentralFrameController.myMusicsView));
+      FXMLLoader myMusicsLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.myMusicsView));
       this.myMusicsParent = myMusicsLoader.load();
       this.myMusicsController = myMusicsLoader.getController();
       this.myMusicsController.setCentralFrameController(this);
 
-      FXMLLoader distantUserLoader = new FXMLLoader(getClass().getResource(CentralFrameController.distantUserView));
+      FXMLLoader distantUserLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.distantUserView));
       this.distantUserParent = distantUserLoader.load();
       this.distantUserController = distantUserLoader.getController();
       this.distantUserController.setCentralFrameController(this);
@@ -209,6 +214,7 @@ public class CentralFrameController implements Controller {
   public void setCentralContentAllMusics() {
     this.content.getChildren().setAll((Node) this.allMusicsParent);
   }
+
   public void setCentralContentMyMusics() {
     this.content.getChildren().setAll(((Node) this.myMusicsParent));
   }
