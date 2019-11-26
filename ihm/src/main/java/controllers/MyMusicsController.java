@@ -141,7 +141,7 @@ public class MyMusicsController implements Controller {
     addMusicPopup.setScene(this.addMusicScene);
 
     if (application == null) {
-      logger.error("Please set the application for MyMusicController : setApplication(app)");
+      logger.error("MyMusicsController application is null, did you call MyMusicsController.setApplication(app) ?");
       return;
     }
     // Set position of second window, relatively to primary window.
