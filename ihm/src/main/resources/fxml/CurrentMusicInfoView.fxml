@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="241.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CurrentMusicInfoController">
+  <children>
+    <VBox alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="400.0" prefWidth="241.0" style="-fx-background-color: #9fc5f8;">
+      <children>
+        <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: #9fc5f8; -fx-border-color: #9fc5f8;" />
+          <Button fx:id="buttonShare" mnemonicParsing="false" onAction="#share" text="Partager" />
+        <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: #9fc5f8; -fx-background-color: #9fc5f8;" />
+        <ProgressBar fx:id="downloadProgress" prefWidth="200.0" progress="0.0" />
+        <Separator orientation="VERTICAL" prefHeight="200.0" style="-fx-background-color: #9fc5f8; -fx-border-color: #9fc5f8;" />
+      </children>
+    </VBox>
+  </children>
+</AnchorPane>
