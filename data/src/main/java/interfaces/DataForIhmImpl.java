@@ -186,7 +186,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public Stream<User> getOnlineUsers() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.dc.getOnlineUsers();
   }
 
   @Override
