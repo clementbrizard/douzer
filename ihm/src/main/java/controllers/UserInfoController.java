@@ -16,6 +16,9 @@ public class UserInfoController implements Controller {
   private Label lblUserPseudo;
   @FXML
   private Button btnModifyProfile;
+  @FXML
+  private Button btnDisconnect;
+
   private MainController mainController;
 
   // Getters
@@ -58,7 +61,13 @@ public class UserInfoController implements Controller {
     lblUserPseudo.setText(
         name
     );
+    this.connectButtons();
+  }
 
+  /**
+   * Connects the buttons to functions.
+   */
+  private void connectButtons() {
     this.btnModifyProfile.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
@@ -66,6 +75,21 @@ public class UserInfoController implements Controller {
             .setCentralContentProfileEdit();
       }
     });
-  }
 
+    this.btnDisconnect.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        try {
+          UserInfoController.this.getMainController().getApplication().getIhmCore().getDataForIhm().logout();
+        } catch (UnsupportedOperationException ex) {
+          ex.printStackTrace();
+        }
+
+        UserInfoController.this.getMainController().getApplication().getPrimaryStage().setScene(
+            UserInfoController.this.getMainController().getApplication().getLoginScene());
+      }
+    });
+  }
 }
+
+
