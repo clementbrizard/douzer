@@ -161,6 +161,7 @@ public class CentralFrameController implements Controller {
    */
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+
   }
 
   // Other methods
