@@ -1,6 +1,5 @@
 package core;
 
-import controllers.AllMusicsController;
 import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
@@ -27,7 +26,7 @@ public class Application extends javafx.application.Application {
   private Scene loginScene;
   private Scene signUpScene;
   private Scene forgottenPasswordScene;
-  private Scene allMusicsCenterScene;
+  private Scene centerScene;
   private Scene mainScene;
 
   // The general stage
@@ -38,7 +37,6 @@ public class Application extends javafx.application.Application {
   private LoginController loginController;
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
-  private AllMusicsController allMusicsController;
 
   // Window size properties
   private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
@@ -65,9 +63,6 @@ public class Application extends javafx.application.Application {
     return forgottenPasswordScene;
   }
 
-  public Scene getAllMusicsCenterScene() {
-    return allMusicsCenterScene;
-  }
 
   public Scene getMainScene() {
     return mainScene;
@@ -95,10 +90,6 @@ public class Application extends javafx.application.Application {
     return this.forgottenPasswordController;
   }
 
-  public AllMusicsController getAllMusicsController() {
-    return this.allMusicsController;
-  }
-
   // Getter for reference to ihmCore
   public IhmCore getIhmCore() {
     return this.ihmCore;
@@ -117,8 +108,8 @@ public class Application extends javafx.application.Application {
     this.forgottenPasswordScene = forgottenPasswordScene;
   }
 
-  public void setAllMusicsCenterScene(Scene allMusicsCenterScene) {
-    this.allMusicsCenterScene = allMusicsCenterScene;
+  public void setCenterScene(Scene centerScene) {
+    this.centerScene = centerScene;
   }
 
   public void setMainScene(Scene mainScene) {
@@ -145,10 +136,6 @@ public class Application extends javafx.application.Application {
 
   public void setForgottenPasswordController(ForgottenPasswordController forgottenPwdController) {
     this.forgottenPasswordController = forgottenPwdController;
-  }
-
-  public void setAllMusicsController(AllMusicsController allMusicsController) {
-    this.allMusicsController = allMusicsController;
   }
 
   // Other methods
@@ -256,11 +243,11 @@ public class Application extends javafx.application.Application {
     Parent forgottenPasswordParent = forgottenPasswordLoader.load();
     forgottenPasswordScene = new Scene(forgottenPasswordParent);
 
-    // Get the loader for AllMusicsCenterView
-    FXMLLoader allMusicsCenterLoader = new FXMLLoader(getClass()
-        .getResource("/fxml/AllMusicsCenterView.fxml"));
-    Parent allMusicsCenterParent = allMusicsCenterLoader.load();
-    allMusicsCenterScene = new Scene(allMusicsCenterParent);
+    // Get the loader for Center view
+    FXMLLoader centerLoader = new FXMLLoader(getClass()
+        .getResource("/fxml/CentralView.fxml"));
+    Parent centerParent = centerLoader.load();
+    centerScene = new Scene(centerParent);
 
     // Get the loader for MainView
     FXMLLoader mainLoader = new FXMLLoader(getClass()
@@ -273,21 +260,18 @@ public class Application extends javafx.application.Application {
     SignUpController signUpController = signupLoader.getController();
     ForgottenPasswordController forgottenPasswordController =
         forgottenPasswordLoader.getController();
-    AllMusicsController allMusicsController = allMusicsCenterLoader.getController();
     MainController mainController = mainLoader.getController();
 
     // Set the Controllers link to access from the controllers
     this.setLoginController(loginController);
     this.setSignUpController(signUpController);
     this.setForgottenPasswordController(forgottenPasswordController);
-    this.setAllMusicsController(allMusicsController);
     this.setMainController(mainController);
 
     // Set the link to ihmCore for controllers
     loginController.setApplication(this);
     signUpController.setApplication(this);
     forgottenPasswordController.setApplication(this);
-    allMusicsController.setApplication(this);
     mainController.setApplication(this);
 
     // Initialize the first view

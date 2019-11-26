@@ -6,17 +6,14 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 //replace by javadocs
 //central view with all user music
@@ -135,25 +132,9 @@ public class MyMusicsController implements Controller {
       this.setNewMusicController(newMusicController);
       newMusicController.setMyMusicsController(this);
 
-    } catch (IOException e) {
-      logger.error(e);
-    }
-
-    Stage addMusicPopup = new Stage();
-    addMusicPopup.setTitle("Ajout de musique");
-    addMusicPopup.setScene(this.addMusicScene);
-
-    if (application == null) {
-      logger.error("MyMusicsController application is null, "
-          + " did you call MyMusicsController.setApplication(app) ?");
-      return;
-    }
-    // Set position of second window, relatively to primary window.
-    addMusicPopup.setX(application.getPrimaryStage().getX() + 200);
-    addMusicPopup.setY(application.getPrimaryStage().getY() + 100);
-
-    // Show sharing popup.
-    addMusicPopup.show();
+  @FXML
+  public void changeFrameToAllMusics(ActionEvent event) {
+    MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
 }
