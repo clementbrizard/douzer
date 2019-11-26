@@ -68,7 +68,7 @@
          <top>
              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;">
                  <children>
-                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrame" text="Toutes les musiques" translateX="-204">
+                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToAllMusics" text="Toutes les musiques" translateX="-204">
                          <padding>
                              <Insets bottom="5" left="8" right="8" top="5" />
                          </padding>

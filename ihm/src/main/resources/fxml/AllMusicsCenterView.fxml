@@ -49,14 +49,14 @@
                              <Image url="@../images/minusSymbol.png" />
                          </image>
                      </ImageView>
-                     <Button fx:id="btnAdvancedSearch" layoutX="111.0" layoutY="59.0" text="Recherche avancée" underline="true" />
+                     <Button fx:id="btnAdvancedSearch" onAction="#changeFrameToAdvancedSearch" layoutX="111.0" layoutY="59.0" text="Recherche avancée" underline="true" />
                  </children>
              </Pane>
          </center>
          <top>
              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;">
                  <children>
-                     <Button fx:id="btnMyMusicsCenter" text="Mes musiques" translateX="-204">
+                     <Button fx:id="btnMyMusicsCenter" onAction="#changeFrameToMyMusics" text="Mes musiques" translateX="-204">
                          <padding>
                              <Insets bottom="5" left="8" right="8" top="5" />
                          </padding>

@@ -19,10 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class AllMusicsController implements Controller {
 
   @FXML
-  private Button btnAdvancedSearch;
-  @FXML
-  private Button btnMyMusicsCenter;
-  @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
   private TableColumn<MusicMetadata, String> artistCol;
@@ -99,20 +95,6 @@ public class AllMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
-    this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
-      }
-    });
-
-    this.btnMyMusicsCenter.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
-      }
-    });
-
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
@@ -129,6 +111,16 @@ public class AllMusicsController implements Controller {
         .getIhmCore().getDataForIhm().getAvailableMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
+  }
+
+  @FXML
+  public void changeFrameToAdvancedSearch(ActionEvent event) {
+    AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+  }
+
+  @FXML
+  public void changeFrameToMyMusics(ActionEvent event) {
+    AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
   }
 
 }

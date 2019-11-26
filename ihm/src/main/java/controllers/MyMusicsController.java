@@ -100,7 +100,7 @@ public class MyMusicsController implements Controller {
   }
 
   @FXML
-  public void changeFrame(ActionEvent event) {
+  public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
