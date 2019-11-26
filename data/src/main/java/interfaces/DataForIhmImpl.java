@@ -65,7 +65,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addComment(Music music, String comment) {
-    CommentMusicPayload commentMusicPayload = new CommentMusicPayload(music, comment, this.dc);
+    CommentMusicPayload commentMusicPayload = new CommentMusicPayload(music,
+        comment, this.dc.getCurrentUser());
     this.dc.net.sendToUsers(commentMusicPayload, this.dc.getIps());
   }
 
@@ -167,7 +168,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void rateMusic(Music music, int rating) {
-    RateMusicPayload rateMusicPayload = new RateMusicPayload(music, rating, this.dc);
+    RateMusicPayload rateMusicPayload = new RateMusicPayload(music,
+        rating, this.dc.getCurrentUser());
     this.dc.net.sendToUsers(rateMusicPayload, this.dc.getIps());
   }
 
