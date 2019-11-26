@@ -1,10 +1,10 @@
 package controllers;
 
 //Replace by javadocs
-//view whith search bar and other search option
+//view with search bar and other search option
 //Let's see if we can create an interface who regroup 
 //  all the view that will be needed to do a research 
-//  (in our case, there are several parents, wich can be weird)
+//  (in our case, there are several parents, which can be weird)
 public class SearchMusicController implements Controller {
   
   private MyMusicsController myMusicsController;

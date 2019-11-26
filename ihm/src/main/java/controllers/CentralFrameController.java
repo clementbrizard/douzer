@@ -1,13 +1,12 @@
 package controllers;
 
-import java.io.IOException;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+
+import java.io.IOException;
 
 
 /**
@@ -198,7 +197,7 @@ public class CentralFrameController implements Controller {
       this.distantUserController = distantUserLoader.getController();
       this.distantUserController.setCentralFrameController(this);
 
-      this.setCentralContentMyMusics();
+      this.setCentralContentAllMusics();
 
     } catch (IOException e) {
       e.printStackTrace();
@@ -217,10 +216,6 @@ public class CentralFrameController implements Controller {
 
   public void setCentralContentMyMusics() {
     this.content.getChildren().setAll(((Node) this.myMusicsParent));
-  }
-
-  public void setCentralContentAllMusicsAdvancedSearch() {
-    // TODO
   }
 
   public void setCentralContentDistantUser() {

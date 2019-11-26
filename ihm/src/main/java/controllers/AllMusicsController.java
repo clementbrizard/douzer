@@ -1,16 +1,23 @@
 package controllers;
 
 import datamodel.MusicMetadata;
-import java.time.Duration;
-import java.util.List;
-import java.util.stream.Collectors;
+import datamodel.SearchQuery;
+import datamodel.Music;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 /**
@@ -30,6 +37,18 @@ public class AllMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
   private TableColumn<MusicMetadata, Duration> durationCol;
+  @FXML
+  private TextField tfSearch;
+  @FXML
+  private TextField tfSearchTitle;
+  @FXML
+  private TextField tfSearchArtist;
+  @FXML
+  private TextField tfSearchAlbum;
+  @FXML
+  private TextField tfSearchDuration;
+  @FXML
+  private ImageView ivSearchAll;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
@@ -85,7 +104,7 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Setup the table columns to receive data, 
+   * Setup the table columns to receive data,
    * this method has to be called right after the creation of the view.
    */
   public void init() {
@@ -98,14 +117,82 @@ public class AllMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
+    this.tfSearchTitle.setVisible(false);
+    this.tfSearchArtist.setVisible(false);
+    this.tfSearchAlbum.setVisible(false);
+    this.tfSearchDuration.setVisible(false);
 
     this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+          if (tfSearchTitle.isVisible()) {
+            tfSearchTitle.setVisible(false);
+          } else {
+            tfSearchTitle.setVisible(true);
+          }
+
+        if (tfSearchArtist.isVisible()) {
+          tfSearchArtist.setVisible(false);
+        } else {
+          tfSearchArtist.setVisible(true);
+        }
+
+        if (tfSearchAlbum.isVisible()) {
+          tfSearchAlbum.setVisible(false);
+        } else {
+          tfSearchAlbum.setVisible(true);
+        }
+
+        if (tfSearchDuration.isVisible()) {
+          tfSearchDuration.setVisible(false);
+        } else {
+          tfSearchDuration.setVisible(true);
+        }
+
+        if (tfSearch.isVisible()) {
+          tfSearch.setVisible(false);
+        } else {
+          tfSearch.setVisible(true);
+        }
       }
     });
-    
+
+    this.ivSearchAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+
+        SearchQuery query = new SearchQuery();
+
+        if (tfSearch.isVisible()) {
+          query.withText(tfSearch.getText());
+        } else {
+          if (tfSearchTitle.getText() != null) {
+            query.withTitle(tfSearchTitle.getText());
+          }
+
+          if (tfSearchArtist != null) {
+            query.withArtist(tfSearchArtist.getText());
+          }
+
+          if (tfSearchAlbum != null) {
+            query.withArtist(tfSearchAlbum.getText());
+          }
+
+          if (tfSearchDuration != null) {
+            query.withArtist(tfSearchDuration.getText());
+          }
+        }
+
+        Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()
+                .getMainController()
+                .getApplication()
+                .getIhmCore()
+                .getDataForIhm().getMusics(query); //TODO rename
+
+        updateMusics(searchResults);
+      }
+    });
+
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
@@ -122,6 +209,10 @@ public class AllMusicsController implements Controller {
         .getIhmCore().getDataForIhm().getAvailableMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
+  }
+
+  private void updateMusics(Stream<Music> newMusics) {
+    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
   }
 
 }
