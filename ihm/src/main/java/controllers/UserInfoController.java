@@ -1,16 +1,26 @@
 package controllers;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
- * Controller used for managing the top left view 
+ * Controller used for managing the top left view
  * with the nickname and the buttons to modify profile and disconnect.
  */
 public class UserInfoController implements Controller {
+  private static final Logger logger = LogManager.getLogger();
+
   @FXML
   private Label lblUserPseudo;
+
+  @FXML
+  private Button btnLogout;
 
   private MainController mainController;
 
@@ -29,7 +39,8 @@ public class UserInfoController implements Controller {
   // Other methods
 
   @Override
-  public void initialize() { }
+  public void initialize() {
+  }
 
   /**
    * Initialize the field with default data.
@@ -53,6 +64,16 @@ public class UserInfoController implements Controller {
     lblUserPseudo.setText(
         name
     );
+  }
+
+  @FXML
+  private void logout(ActionEvent event) {
+    try {
+      this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
+      this.mainController.getApplication().showLoginScene();
+    } catch (Exception e) {
+      logger.error(e);
+    }
   }
 
 }
