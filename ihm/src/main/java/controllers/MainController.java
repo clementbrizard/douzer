@@ -111,7 +111,6 @@ public class MainController implements Controller {
     userInfoController.init();
 
     this.playerController.setMainController(this);
-    this.playerController.setPlayerText("Test artist", "Test music");
 
     this.centralFrameController.setMainController(this);
     this.centralFrameController.init();
@@ -122,4 +121,5 @@ public class MainController implements Controller {
     this.onlineUsersListController.init();
   }
 
+  }
 }
