@@ -6,6 +6,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
+import core.LocalUsersFileHandler;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
@@ -107,12 +108,31 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void exportProfile(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    LocalUser currentUser = this.dc.getCurrentUser();
+    LocalUsersFileHandler newLocalUsersFile = new LocalUsersFileHandler(path);
+    try {
+      newLocalUsersFile.add(currentUser);
+    } catch (LocalUsersFileException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override
-  public void importProfile(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void importProfile(String path, String username) {
+    LocalUser newUser = new LocalUser();
+    LocalUsersFileHandler newLocalUsersFile = new LocalUsersFileHandler(path);
+    try {
+      newUser = newLocalUsersFile.getUser(username);
+    } catch (LocalUsersFileException e) {
+      e.printStackTrace();
+    }
+    try {
+      createUser(newUser);
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (LoginException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override

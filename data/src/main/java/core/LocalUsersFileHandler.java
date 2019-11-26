@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class LocalUsersFileHandler {
   private Path filePath;
 
-  LocalUsersFileHandler(String filePath) {
+  public LocalUsersFileHandler(String filePath) {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
   }

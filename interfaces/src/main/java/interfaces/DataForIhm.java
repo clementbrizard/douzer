@@ -46,7 +46,7 @@ public interface DataForIhm {
 
   void exportProfile(String path);
 
-  void importProfile(String path);
+  void importProfile(String path,String username);
 
   void login(String username, String password) throws IOException, LoginException;
 
