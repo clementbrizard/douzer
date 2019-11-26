@@ -1,6 +1,9 @@
 package controllers;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 
@@ -11,7 +14,8 @@ import javafx.scene.control.Label;
 public class UserInfoController implements Controller {
   @FXML
   private Label lblUserPseudo;
-
+  @FXML
+  private Button btnModifyProfile;
   private MainController mainController;
 
   // Getters
@@ -24,6 +28,7 @@ public class UserInfoController implements Controller {
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+
   }
 
   // Other methods
@@ -53,6 +58,13 @@ public class UserInfoController implements Controller {
     lblUserPseudo.setText(
         name
     );
+
+    this.btnModifyProfile.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        UserInfoController.this.mainController.getCentralFrameController().setCentralContentProfileEdit();
+      }
+    });
   }
 
 }
