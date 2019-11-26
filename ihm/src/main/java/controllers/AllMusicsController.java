@@ -120,6 +120,7 @@ public class AllMusicsController implements Controller {
     );
 
 
+    // Two mock musics for testing purposes
     MusicMetadata mtest = new MusicMetadata();
     mtest.setTitle("aaa");
     mtest.setArtist("bbb");
@@ -149,19 +150,6 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Called when the user clicks on the delete image.
-   * Gets the selected music and deletes it.
-   */
-  public void deleteLocalMusic() {
-    MusicMetadata musicToDelete = getCurrentlySelectedItem();
-    if (musicToDelete != null) {
-      System.out.println("DANNY DELETO: " + musicToDelete.getTitle());
-    } else {
-      System.out.println("NOTHING TO DELETE");
-    }
-  }
-
-  /**
    * Called when the user clicks on the info image.
    * Gets the selected music and shows its information.
    */
@@ -169,6 +157,18 @@ public class AllMusicsController implements Controller {
     MusicMetadata metadataToShow = getCurrentlySelectedItem();
     if (metadataToShow != null) {
       System.out.println("SHOWING -> " + metadataToShow.getArtist());
+    }
+  }
+
+  /**
+   * Called when the user clicks the download image.
+   * Downloads selected music.
+   */
+  public void downloadMusic() {
+    MusicMetadata musicToDownload = getCurrentlySelectedItem();
+    if (musicToDownload != null) {
+      //DL Music..
+      System.out.println("Danny de vito");
     }
   }
 
