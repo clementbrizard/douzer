@@ -1,5 +1,6 @@
 package controllers;
 
+import core.Application;
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
 import java.io.IOException;
@@ -15,11 +16,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
-//replace by javadoc
-//right panel with light info and comment about the music
+/*
+ * Right panel controller. Contains informations about the current music, sharing button,
+ * download progress bar
+ */
 public class CurrentMusicInfoController implements Controller {
 
   private static final Logger currentMusicInfoLogger = LogManager.getLogger();
+
+  @FXML
+  private Button buttonShare;
+
+  @FXML
+  private ProgressBar downloadProgress;
 
   private ShareController shareController;
   private NewCommentController newCommentController;
@@ -27,47 +36,24 @@ public class CurrentMusicInfoController implements Controller {
 
   private Scene shareScene;
 
-  @FXML
-  private Button btnPartager;
-  @FXML
-  private ProgressBar downloadProgress;
-
+  private Application application;
   private LocalMusic currentMusic;
 
+  // Getters
+  public ShareController getShareController() {
+    return shareController;
+  }
 
-  /**
-   * Share the current music. Open the music sharing pop-up.
-   *
-   * @param event nut used
-   */
-  @FXML
-  private void share(ActionEvent event) {
-    if (this.currentMusic == null) {
-      return;
-    }
+  public NewCommentController getNewCommentController() {
+    return newCommentController;
+  }
 
-    try {
-      //get the loader for SignUpView
-      FXMLLoader shareLoader = new FXMLLoader(getClass().getResource("/fxml/ShareView.fxml"));
-      Parent shareParent = shareLoader.load();
-      shareScene = new Scene(shareParent);
-      ShareController shareController = shareLoader.getController();
-      this.setShareController(shareController);
-      shareController.setCurrentMusicInfoController(this);
+  public MainController getMainController() {
+    return mainController;
+  }
 
-      shareController.initializeCurrentMusicInfo(this.currentMusic);
-
-    } catch (IOException e) {
-      currentMusicInfoLogger.error(e);
-    }
-    Stage musicSharingPopup = new Stage();
-    musicSharingPopup.setTitle("Partage");
-    musicSharingPopup.setScene(this.shareScene);
-    // Set position of second window, related to primary window.
-    musicSharingPopup.setX(mainController.getIhmCore().getPrimaryStage().getX() + 200);
-    musicSharingPopup.setY(mainController.getIhmCore().getPrimaryStage().getY() + 100);
-
-    musicSharingPopup.show();
+  public Application getApplication() {
+    return application;
   }
 
   /**
@@ -84,26 +70,20 @@ public class CurrentMusicInfoController implements Controller {
     this.currentMusic = new LocalMusic(new MusicMetadata(), "pathTest.mp3");
     this.currentMusic.setShared(true);
     this.currentMusic.getMetadata().setTitle("Ceci est un test");
+
   }
 
-  public ShareController getShareController() {
-    return shareController;
+  public LocalMusic getCurrentMusic() {
+    return this.currentMusic;
   }
 
-  public void setShareController(ShareController shareController) {
+  // Setters
+  public void setShareController(ShareController shareController){
     this.shareController = shareController;
-  }
-
-  public NewCommentController getNewCommentController() {
-    return newCommentController;
   }
 
   public void setNewCommentController(NewCommentController newCommentController) {
     this.newCommentController = newCommentController;
-  }
-
-  public MainController getMainController() {
-    return mainController;
   }
 
   public void setMainController(MainController mainController) {
@@ -114,16 +94,54 @@ public class CurrentMusicInfoController implements Controller {
     return this.shareScene;
   }
 
+  public void setApplication(Application application) {
+    this.application = application;
+  }
+
   public void setShareScene(Scene shareScene) {
     this.shareScene = shareScene;
   }
 
-  public LocalMusic getCurrentMusic() {
-    return this.currentMusic;
-  }
-
   public void setCurrentMusic(LocalMusic currentMusic) {
     this.currentMusic = currentMusic;
+  }
+
+  // Other methods
+
+  /**
+   * Share the current music. Open the music sharing pop-up.
+   *
+   * @param event nut used
+   */
+  @FXML
+  private void share(ActionEvent event) {
+    if (this.currentMusic == null) {
+      return;
+    }
+    try {
+      // Initialize shareScene and shareController
+      FXMLLoader shareLoader = new FXMLLoader(getClass().getResource("/fxml/ShareView.fxml"));
+      Parent shareParent = shareLoader.load();
+      shareScene = new Scene(shareParent);
+      ShareController shareController = shareLoader.getController();
+      this.setShareController(shareController);
+      shareController.setCurrentMusicInfoController(this);
+      shareController.initializeCurrentMusicInfo(this.currentMusic);
+
+    } catch (IOException e) {
+      currentMusicInfoLogger.error(e);
+    }
+
+    Stage musicSharingPopup = new Stage();
+    musicSharingPopup.setTitle("Partage");
+    musicSharingPopup.setScene(this.shareScene);
+
+    // Set position of second window, relatively to primary window.
+    musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
+    musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
+
+    // Show sharing popup.
+    musicSharingPopup.show();
   }
 
 }
