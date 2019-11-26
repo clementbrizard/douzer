@@ -108,7 +108,7 @@ public class Datacore {
 
   public Stream<LocalMusic> getLocalMusics() {
     return this.musics.values().stream()
-        .filter(m -> !(m instanceof LocalMusic)).map(m -> (LocalMusic) m);
+        .filter(m -> (m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
   /**
