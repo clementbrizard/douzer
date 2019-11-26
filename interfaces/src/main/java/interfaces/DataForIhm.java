@@ -38,7 +38,7 @@ public interface DataForIhm {
 
   void deleteAccount() throws IOException;
 
-  void deleteMusic(Music music, boolean deleteLocal);
+  void deleteMusic(LocalMusic music, boolean deleteLocal);
 
   void logout() throws IOException;
 
@@ -67,6 +67,8 @@ public interface DataForIhm {
   void shareMusics(Collection<LocalMusic> musics);
 
   void unshareMusic(LocalMusic music);
+
+  void unshareMusics(Collection<LocalMusic> musics);
 
   Stream<User> getOnlineUsers();
 

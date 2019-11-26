@@ -14,11 +14,13 @@ import datamodel.SearchQuery;
 import datamodel.User;
 import exceptions.LocalUsersFileException;
 import features.CreateUser;
+import features.DeleteMusic;
 import features.DeleteUser;
 import features.Login;
 import features.LogoutPayload;
 import features.Search;
 import features.ShareMusicsPayload;
+import features.UnshareMusics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,9 +30,11 @@ import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
+
 
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
@@ -75,8 +79,8 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void deleteMusic(Music music, boolean deleteLocal) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void deleteMusic(LocalMusic music, boolean deleteLocal) {
+    DeleteMusic.run(music, deleteLocal, dc);
   }
 
   @Override
@@ -171,7 +175,13 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void unshareMusic(LocalMusic music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    UnshareMusics.unshareMusic(music, dc);
+  }
+
+
+  @Override
+  public void unshareMusics(Collection<LocalMusic> musics) {
+    UnshareMusics.run(musics, dc);
   }
 
   @Override
