@@ -1,6 +1,7 @@
 package features;
 
 import core.Datacore;
+import datamodel.Contact;
 import datamodel.LocalUser;
 import exceptions.LocalUsersFileException;
 import java.io.FileInputStream;
@@ -50,7 +51,7 @@ public abstract class Login {
    *
    * @param username Username of the requested user
    * @param password Password of the requested user
-   * @throws IOException When the users file or config file can't be read
+   * @throws IOException    When the users file or config file can't be read
    * @throws LoginException When the user can't be found
    */
   public static void run(Datacore dc, String username, String password)
@@ -77,9 +78,11 @@ public abstract class Login {
    */
   public static void run(Datacore dc, LocalUser user)
       throws IOException {
+    user.setConnected(true);
     dc.setCurrentUser(user);
     dc.addUser(user);
     user.getMusics().forEach(dc::addMusic);
+    user.getContacts().stream().map(Contact::getUser).forEach(dc::addUser);
 
     LoginPayload payload = new LoginPayload(user);
     // TODO: template for filename

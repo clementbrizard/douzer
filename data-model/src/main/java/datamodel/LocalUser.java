@@ -101,6 +101,8 @@ public class LocalUser extends User {
     String savePathString = stream.readUTF();
     setSavePath(Paths.get(savePathString).toAbsolutePath());
 
+    this.contacts.stream().map(Contact::getUser).forEach(u -> u.setConnected(false));
+
     // Add himself as owner of its musics
     Set<User> owners = new HashSet<>();
     owners.add(this);

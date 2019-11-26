@@ -86,7 +86,7 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void logout() throws IOException {
     LocalUser currentUser = this.dc.getCurrentUser();
-
+    currentUser.setConnected(false);
     try {
       // Updates the written currentUser in case it has been modified
       this.dc.getLocalUsersFileHandler().update(currentUser);
