@@ -98,5 +98,6 @@ public class LocalUser extends User {
     stream.defaultReadObject();
     String savePathString = stream.readUTF();
     setSavePath(Paths.get(savePathString).toAbsolutePath());
+    this.contacts.stream().map(Contact::getUser).forEach(u -> u.setConnected(false));
   }
 }
