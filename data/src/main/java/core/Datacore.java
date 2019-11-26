@@ -136,8 +136,22 @@ public class Datacore {
    * @param music2 the reference that will not be updated.
    */
   private void mergeMusics(Music music1, Music music2) {
-    // TODO: do a proper merge
-    throw new UnsupportedOperationException("Merge with between musics is not implemented yet");
+    //Local User must be owner of the music
+    music1.getOwners().add(this.currentUser);
+
+    //music2's was created first
+    if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
+      music2.getMetadata().getTags().addAll(music1.getMetadata().getTags());
+      music2.getMetadata().getComments().addAll(music1.getMetadata().getComments());
+      music2.getMetadata().getRatings().putAll(music1.getMetadata().getRatings());
+
+      music1.getMetadata().updateMusicMetadata(music2.getMetadata());
+    } else {
+      // else, music1 is the most recent, so we just merge set attributes
+      music1.getMetadata().getTags().addAll(music2.getMetadata().getTags());
+      music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
+      music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
+    }
   }
 
   /**
@@ -147,8 +161,11 @@ public class Datacore {
    * @param user2 the reference that will not be updated.
    */
   private void mergeUsers(User user1, User user2) {
-    // TODO: do a proper merge
-    throw new UnsupportedOperationException("Merge with between users is not implemented yet");
+    // user2 was created first
+    if (user1.getTimeStamp().compareTo(user2.getTimeStamp()) <= 0) {
+      user1.updateUser(user2);
+    }
+    // No else, the user1 is the template
   }
 
   /**
