@@ -58,6 +58,8 @@ public class PlayerController implements Controller {
     ivPlay.setOnMouseClicked(e -> {
       playPauseSong();
     });
+    
+    playerOnMusic("/");
   }
 
   /**
@@ -72,6 +74,12 @@ public class PlayerController implements Controller {
     return player;
   }
 
+  private void playerOnMusic(String url) {
+    players.clear();
+    players.add(createPlayer(url));
+    musicID = 0;
+  }
+  
   /**
    * Function to interact with musicPlayer : Play, Pause, Next, Previous.
    */
@@ -120,7 +128,12 @@ public class PlayerController implements Controller {
 
       });
     } else {
-      Stream<LocalMusic> streamMusic = mainController.getApplication().getIhmCore().getDataForIhm().getLocalMusics();
+      System.out.println("appuie sur start");
+      Stream<LocalMusic> streamMusic = mainController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getLocalMusics();
       arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
       arrayMusic.forEach(musicPath -> players.add(createPlayer(musicPath.getMp3Path())));
     }
