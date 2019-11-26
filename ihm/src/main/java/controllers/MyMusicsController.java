@@ -120,7 +120,10 @@ public class MyMusicsController implements Controller {
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
   }
-
+  
+  /**
+   * the Button who will show the windows to add music.
+   */
   @FXML
   public void addMusic() {
     try {
@@ -141,7 +144,8 @@ public class MyMusicsController implements Controller {
     addMusicPopup.setScene(this.addMusicScene);
 
     if (application == null) {
-      logger.error("MyMusicsController application is null, did you call MyMusicsController.setApplication(app) ?");
+      logger.error("MyMusicsController application is null, "
+          + " did you call MyMusicsController.setApplication(app) ?");
       return;
     }
     // Set position of second window, relatively to primary window.
