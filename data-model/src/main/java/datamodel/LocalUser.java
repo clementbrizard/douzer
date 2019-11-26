@@ -15,6 +15,7 @@ import java.util.Set;
 
 public class LocalUser extends User {
   private static MessageDigest messageDigest;
+
   static {
     try {
       messageDigest = MessageDigest.getInstance("SHA-256");
