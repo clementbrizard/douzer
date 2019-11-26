@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Datacore {
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
@@ -19,6 +21,7 @@ public class Datacore {
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
+  private static final Logger startLogger = LogManager.getLogger();
 
   Datacore(Net net, Ihm ihm) {
     this.net = net;
@@ -139,8 +142,22 @@ public class Datacore {
    * @param music2 the reference that will not be updated.
    */
   private void mergeMusics(Music music1, Music music2) {
-    // TODO: do a proper merge
-    throw new UnsupportedOperationException("Merge with between musics is not implemented yet");
+    //Local User must be owner of the music
+    music1.getOwners().add(this.currentUser);
+
+    //music2's was created first
+    if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
+      music2.getMetadata().getTags().addAll(music1.getMetadata().getTags());
+      music2.getMetadata().getComments().addAll(music1.getMetadata().getComments());
+      music2.getMetadata().getRatings().putAll(music1.getMetadata().getRatings());
+
+      music1.getMetadata().updateMusicMetadata(music2.getMetadata());
+    } else {
+      // else, music1 is the most recent, so we just merge set attributes
+      music1.getMetadata().getTags().addAll(music2.getMetadata().getTags());
+      music1.getMetadata().getComments().addAll(music2.getMetadata().getComments());
+      music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
+    }
   }
 
   /**
@@ -150,8 +167,11 @@ public class Datacore {
    * @param user2 the reference that will not be updated.
    */
   private void mergeUsers(User user1, User user2) {
-    // TODO: do a proper merge
-    throw new UnsupportedOperationException("Merge with between users is not implemented yet");
+    // user2 was created first
+    if (user1.getTimeStamp().compareTo(user2.getTimeStamp()) <= 0) {
+      user1.updateUser(user2);
+    }
+    // No else, the user1 is the template
   }
 
   /**
@@ -166,5 +186,9 @@ public class Datacore {
   public Stream<InetAddress> getIps() {
     return this.getOnlineUsers()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
+  }
+
+  public static Logger getStartLogger() {
+    return startLogger;
   }
 }

@@ -3,6 +3,7 @@ package datamodel;
 import java.awt.Image;
 import java.net.InetAddress;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class User implements java.io.Serializable {
@@ -14,11 +15,16 @@ public class User implements java.io.Serializable {
   private Date dateOfBirth;
   private boolean connected;
   private InetAddress ip;
+  private Date timeStamp;
 
   public User() {
     this.uuid = UUID.randomUUID();
   }
 
+  /**
+   * User constructor.
+   * @param user model
+   */
   public User(User user) {
     this.uuid = user.uuid;
     this.username = user.username;
@@ -28,6 +34,7 @@ public class User implements java.io.Serializable {
     this.dateOfBirth = user.dateOfBirth;
     this.connected = user.connected;
     this.ip = user.ip;
+    updateTimeStamp();
   }
 
   public UUID getUuid() {
@@ -39,6 +46,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setUsername(String username) {
+    updateTimeStamp();
     this.username = username;
   }
 
@@ -47,6 +55,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setAvatar(Image avatar) {
+    updateTimeStamp();
     this.avatar = avatar;
   }
 
@@ -55,6 +64,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setFirstName(String firstName) {
+    updateTimeStamp();
     this.firstName = firstName;
   }
 
@@ -63,6 +73,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setLastName(String lastName) {
+    updateTimeStamp();
     this.lastName = lastName;
   }
 
@@ -71,6 +82,7 @@ public class User implements java.io.Serializable {
   }
 
   public void setDateOfBirth(Date dateOfBirth) {
+    updateTimeStamp();
     this.dateOfBirth = dateOfBirth;
   }
 
@@ -87,6 +99,55 @@ public class User implements java.io.Serializable {
   }
 
   public void setIp(InetAddress ip) {
+    updateTimeStamp();
     this.ip = ip;
+  }
+
+  public Date getTimeStamp() {
+    return this.timeStamp;
+  }
+
+  private void updateTimeStamp() {
+    this.timeStamp = new Date();
+  }
+
+  /**
+   * Update of a user attributes based on an other user.
+   * @param newUser other user
+   */
+  public void updateUser(User newUser) {
+    this.username = newUser.username;
+    this.firstName = newUser.firstName;
+    this.lastName = newUser.lastName;
+    this.avatar = newUser.avatar;
+    this.connected = newUser.connected;
+    this.dateOfBirth = newUser.dateOfBirth;
+    this.ip = newUser.ip;
+
+    updateTimeStamp();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    User user = (User) o;
+    return connected == user.connected
+        && Objects.equals(uuid, user.uuid)
+        && Objects.equals(username, user.username)
+        && Objects.equals(avatar, user.avatar)
+        && Objects.equals(firstName, user.firstName)
+        && Objects.equals(lastName, user.lastName)
+        && Objects.equals(dateOfBirth, user.dateOfBirth)
+        && Objects.equals(ip, user.ip);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(uuid, username, avatar, firstName, lastName, dateOfBirth, connected, ip);
   }
 }
