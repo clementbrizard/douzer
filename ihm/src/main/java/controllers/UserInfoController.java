@@ -80,7 +80,8 @@ public class UserInfoController implements Controller {
       @Override
       public void handle(ActionEvent event) {
         try {
-          UserInfoController.this.getMainController().getApplication().getIhmCore().getDataForIhm().logout();
+          UserInfoController.this.getMainController().getApplication()
+              .getIhmCore().getDataForIhm().logout();
         } catch (UnsupportedOperationException ex) {
           ex.printStackTrace();
         }
