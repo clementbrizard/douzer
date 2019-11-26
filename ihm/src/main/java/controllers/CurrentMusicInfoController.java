@@ -42,6 +42,10 @@ public class CurrentMusicInfoController implements Controller {
    */
   @FXML
   private void share(ActionEvent event) {
+    if (this.currentMusic == null) {
+      return;
+    }
+
     try {
       //get the loader for SignUpView
       FXMLLoader shareLoader = new FXMLLoader(getClass().getResource("/fxml/ShareView.fxml"));
