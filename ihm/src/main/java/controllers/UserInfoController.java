@@ -1,5 +1,6 @@
 package controllers;
 
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -71,7 +72,7 @@ public class UserInfoController implements Controller {
     try {
       this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
       this.mainController.getApplication().showLoginScene();
-    } catch (Exception e) {
+    } catch (IOException e) {
       logger.error(e);
     }
   }
