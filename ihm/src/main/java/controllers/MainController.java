@@ -120,6 +120,5 @@ public class MainController implements Controller {
     this.onlineUsersListController.setMainController(this);
     this.onlineUsersListController.init();
   }
-
-  }
 }
+
