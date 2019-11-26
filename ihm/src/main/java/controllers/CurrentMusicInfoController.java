@@ -78,7 +78,7 @@ public class CurrentMusicInfoController implements Controller {
   }
 
   // Setters
-  public void setShareController(ShareController shareController){
+  public void setShareController(ShareController shareController) {
     this.shareController = shareController;
   }
 
