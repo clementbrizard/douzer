@@ -1,11 +1,13 @@
 package controllers;
 
-import core.Application;
 import datamodel.MusicMetadata;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -16,6 +18,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class AllMusicsController implements Controller {
 
+  @FXML
+  private Button btnAdvancedSearch;
   @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
@@ -29,8 +33,6 @@ public class AllMusicsController implements Controller {
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
-
-  private Application application;
 
   // Getters
 
@@ -50,15 +52,6 @@ public class AllMusicsController implements Controller {
    */
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
-  }
-  
-  /**
-   * getter of application.
-   * @return a Application
-   * @see Application
-   */
-  public Application getApplication() {
-    return application;
   }
 
   // Setters
@@ -81,16 +74,6 @@ public class AllMusicsController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
-  
-  /**
-   * setter of application.
-   * @param application the new Application
-   * @see Application
-   */
-  public void setApplication(Application application) {
-    this.application = application;
-  }
-
   // Other methods
 
   /**
@@ -98,6 +81,7 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
+
   }
 
   /**
@@ -114,6 +98,14 @@ public class AllMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
+
+    this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+      }
+    });
+    
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
@@ -126,7 +118,8 @@ public class AllMusicsController implements Controller {
   }
 
   private List<MusicMetadata> parseMusic() {
-    return this.application.getIhmCore().getDataForIhm().getAvailableMusics()
+    return this.getCentralFrameController().getMainController().getApplication()
+        .getIhmCore().getDataForIhm().getAvailableMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
   }
