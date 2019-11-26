@@ -80,19 +80,15 @@ public class SignUpController implements Controller {
     final String lastName = textFieldLastName.getText();
 
     final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
-    final Path avatarPath;
+    final Path avatarPath = avatarFile.toPath();
     // Get the image from the avatar path
     Image avatarImg = null;
-    if (avatarFile != null) {
-      avatarPath = avatarFile.toPath();
-      try {
-        avatarImg = ImageIO.read(avatarFile);
-      } catch (java.io.IOException ex) {
-        // Image could not be loaded
-        // log it ?
-      }
+    try {
+      avatarImg = ImageIO.read(avatarFile);
+    } catch (java.io.IOException ex) {
+      // Image could not be loaded
+      // log it ?
     }
-
 
     final String secretQuestion = textFieldSecretQuestion.getText();
     final String secretAnswer = textFieldSecretAnswer.getText();
