@@ -72,9 +72,14 @@ public class AllMusicsController implements Controller {
    */
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+
+    this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+      }
+    });
   }
-
-
 
   // Other methods
 
@@ -83,6 +88,7 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
+
   }
 
   /**
