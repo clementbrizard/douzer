@@ -21,6 +21,8 @@ public class AllMusicsController implements Controller {
   @FXML
   private Button btnAdvancedSearch;
   @FXML
+  private Button btnMyMusicsCenter;
+  @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
   private TableColumn<MusicMetadata, String> artistCol;
@@ -102,6 +104,13 @@ public class AllMusicsController implements Controller {
       @Override
       public void handle(ActionEvent event) {
         AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+      }
+    });
+
+    this.btnMyMusicsCenter.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
       }
     });
 

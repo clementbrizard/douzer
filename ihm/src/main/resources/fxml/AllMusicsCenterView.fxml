@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -8,11 +10,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.text.TextFlow?>
-<?import javafx.scene.control.Button?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AllMusicsController">
    <children>
       <BorderPane>
@@ -53,11 +54,23 @@
              </Pane>
          </center>
          <top>
-               <Label fx:id="lblTitle" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Tous les morceaux" textFill="WHITE" BorderPane.alignment="CENTER">
-                   <font>
-                       <Font size="24.0" />
-                   </font>
-               </Label>
+             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;">
+                 <children>
+                     <Button fx:id="btnMyMusicsCenter" text="Mes musiques" translateX="-204">
+                         <padding>
+                             <Insets bottom="5" left="8" right="8" top="5" />
+                         </padding>
+                         <HBox.margin>
+                             <Insets top="0" />
+                         </HBox.margin>
+                     </Button>
+                     <Label fx:id="lblTitle" alignment="CENTER" blendMode="ADD" contentDisplay="CENTER" text="Tous les morceaux" textAlignment="CENTER" textFill="WHITE" translateX="-70">
+                         <font>
+                             <Font size="24.0" />
+                         </font>
+                     </Label>
+                 </children>
+             </HBox>
          </top>
       </BorderPane>
    </children>
