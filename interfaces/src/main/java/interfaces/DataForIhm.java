@@ -58,9 +58,9 @@ public interface DataForIhm {
 
   void download(Music music);
 
-  void exportProfile(String path);
+  void exportProfile(String path) throws IOException;
 
-  void importProfile(String path);
+  void importProfile(String path) throws IOException, ClassNotFoundException;
 
   void login(String username, String password) throws IOException, LoginException;
 
