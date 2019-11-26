@@ -55,6 +55,7 @@ public class LocalUsersFileHandler {
       ObjectOutputStream writer = new ObjectOutputStream(file);
       writer.writeObject(localUser);
     } catch (IOException e) {
+      e.printStackTrace();
       throw new LocalUsersFileException("Local save may be corrupted or outdated");
     }
   }

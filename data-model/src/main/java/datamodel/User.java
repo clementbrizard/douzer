@@ -1,15 +1,21 @@
 package datamodel;
 
 import java.awt.Image;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 
 public class User implements java.io.Serializable {
   private UUID uuid;
   private String username;
-  private Image avatar;
+  private transient RenderedImage avatar;
   private String firstName;
   private String lastName;
   private Date dateOfBirth;
@@ -50,11 +56,11 @@ public class User implements java.io.Serializable {
     this.username = username;
   }
 
-  public Image getAvatar() {
+  public RenderedImage getAvatar() {
     return avatar;
   }
 
-  public void setAvatar(Image avatar) {
+  public void setAvatar(RenderedImage avatar) {
     updateTimeStamp();
     this.avatar = avatar;
   }
@@ -125,6 +131,16 @@ public class User implements java.io.Serializable {
     this.ip = newUser.ip;
 
     updateTimeStamp();
+  }
+
+  private void writeObject(ObjectOutputStream stream) throws IOException {
+    stream.defaultWriteObject();
+    ImageIO.write(this.avatar, "png", stream);
+  }
+
+  private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+    stream.defaultReadObject();
+    this.avatar = ImageIO.read(stream);
   }
 
   @Override
