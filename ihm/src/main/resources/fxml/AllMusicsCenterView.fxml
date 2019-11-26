@@ -11,6 +11,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.text.TextFlow?>
+<?import javafx.scene.control.Button?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AllMusicsController">
    <children>
       <BorderPane>
@@ -46,7 +48,7 @@
                              <Image url="@../images/minusSymbol.png" />
                          </image>
                      </ImageView>
-                     <Label fx:id="lblAdvancedSearch" layoutX="111.0" layoutY="59.0" text="Recherche avancée" underline="true" />
+                     <Button fx:id="btnAdvancedSearch" layoutX="111.0" layoutY="59.0" text="Recherche avancée" underline="true" />
                  </children>
              </Pane>
          </center>
