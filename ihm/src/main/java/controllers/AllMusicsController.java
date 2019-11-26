@@ -126,7 +126,7 @@ public class AllMusicsController implements Controller {
   }
 
   private List<MusicMetadata> parseMusic() {
-    return this.application.getIhmCore().getDataForIhm().getAvailableMusics()
+    return this.application.getIhmCore().getDataForIhm().getLocalMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
   }
