@@ -3,6 +3,7 @@ package core;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
+import datamodel.SearchQuery;
 import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
@@ -10,6 +11,8 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.stream.Stream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Datacore {
   public Net net;
@@ -19,6 +22,7 @@ public class Datacore {
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
+  private static final Logger startLogger = LogManager.getLogger();
 
   Datacore(Net net, Ihm ihm) {
     this.net = net;
@@ -67,8 +71,8 @@ public class Datacore {
         .filter(u -> !(u instanceof LocalUser));
   }
 
-  public HashMap<String, Music> getMusics() {
-    return musics;
+  public Stream<Music> getMusics() {
+    return musics.values().stream();
   }
 
   public User getUser(UUID uuid) {
@@ -176,5 +180,9 @@ public class Datacore {
   public Stream<InetAddress> getIps() {
     return this.users.values().stream()
         .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
+  }
+
+  public static Logger getStartLogger() {
+    return startLogger;
   }
 }
