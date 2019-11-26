@@ -23,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Pop-up a view when the user want to add a music from a local file.
- * TODO : Do a popup
  */
 public class NewMusicController implements Controller {
   private static final Logger newMusicLogger = LogManager.getLogger();
@@ -330,7 +329,8 @@ public class NewMusicController implements Controller {
             .getDataForIhm()
             .addMusic(meta, file.getAbsolutePath());
 
-        //TODO : Exit the window
+        Stage stage = (Stage) this.textFile.getScene().getWindow();
+        stage.close();
 
       } catch (java.io.FileNotFoundException e) {
         newMusicLogger.error("File not found : " + file.getAbsolutePath());

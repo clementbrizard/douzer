@@ -129,7 +129,6 @@ public class MyMusicsController implements Controller {
    */
   @FXML
   public void addMusic() {
-    System.out.println("buton");
     try {
       // Initialize shareScene and shareController
       FXMLLoader addMusicLoader = new FXMLLoader(getClass().getResource("/fxml/NewMusicView.fxml"));

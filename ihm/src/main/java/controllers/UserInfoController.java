@@ -73,6 +73,7 @@ public class UserInfoController implements Controller {
     } catch (IOException e) {
       logger.error(e);
     }
+  }
     
   /**
    * Connects the buttons to functions.
@@ -83,21 +84,6 @@ public class UserInfoController implements Controller {
       public void handle(ActionEvent event) {
         UserInfoController.this.mainController.getCentralFrameController()
             .setCentralContentProfileEdit();
-      }
-    });
-
-    this.btnDisconnect.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        try {
-          UserInfoController.this.getMainController().getApplication()
-              .getIhmCore().getDataForIhm().logout();
-        } catch (UnsupportedOperationException ex) {
-          ex.printStackTrace();
-        }
-
-        UserInfoController.this.getMainController().getApplication().getPrimaryStage().setScene(
-            UserInfoController.this.getMainController().getApplication().getLoginScene());
       }
     });
   }
