@@ -120,7 +120,7 @@ public class PlayerController implements Controller {
 
       });
     } else {
-      Stream<LocalMusic> streamMusic = mainController.getIhmCore().getDataForIhm().getLocalMusics();
+      Stream<LocalMusic> streamMusic = mainController.getApplication().getIhmCore().getDataForIhm().getLocalMusics();
       arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
       arrayMusic.forEach(musicPath -> players.add(createPlayer(musicPath.getMp3Path())));
     }
