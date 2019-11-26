@@ -2,6 +2,8 @@ package controllers;
 
 import datamodel.LocalMusic;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,8 +60,10 @@ public class PlayerController implements Controller {
     ivPlay.setOnMouseClicked(e -> {
       playPauseSong();
     });
-    
-    playerOnMusic("../ihm/src/main/resources/music/Shrek.mp3");
+
+    String test = Paths.get("ihm","src","main","resources", "music").toFile().getAbsolutePath();
+
+    playerOnMusic(test+"/Shrek.mp3");
   }
 
   /**
