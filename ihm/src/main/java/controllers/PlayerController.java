@@ -59,7 +59,7 @@ public class PlayerController implements Controller {
       playPauseSong();
     });
     
-    playerOnMusic("/");
+    playerOnMusic("../ihm/src/main/resources/music/Shrek.mp3");
   }
 
   /**
@@ -76,7 +76,7 @@ public class PlayerController implements Controller {
 
   private void playerOnMusic(String url) {
     players.clear();
-    players.add(createPlayer(url));
+    players.add(createPlayer(url));    
     musicID = 0;
   }
   
@@ -93,7 +93,8 @@ public class PlayerController implements Controller {
       mediaPlayer.setVolume(100);
       mediaPlayer.play();
 
-      showSongInfo(arrayMusic.get(musicID));
+      if(arrayMusic != null && arrayMusic.size() == 0)
+        showSongInfo(arrayMusic.get(musicID));
       playIcon();
 
       ivPause.setOnMouseClicked(e -> {
