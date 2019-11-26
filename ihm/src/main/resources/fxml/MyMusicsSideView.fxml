@@ -9,9 +9,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MyMusicsController">
    <children>
-       <Pane fx:id="pnPlaylists" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
+       <Pane fx:id="pnMusics" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
            <children>
-               <Label layoutX="43.0" layoutY="14.0" text="Mes playlists">
+               <Label layoutX="43.0" layoutY="14.0" text="Mes musiques">
                    <font>
                        <Font size="18.0" />
                    </font>
