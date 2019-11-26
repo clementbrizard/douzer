@@ -1,6 +1,7 @@
 package controllers;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +19,10 @@ public class UserInfoController implements Controller {
 
   @FXML
   private Label lblUserPseudo;
+  @FXML
+  private Button btnModifyProfile;
+  @FXML
+  private Button btnDisconnect;
 
   @FXML
   private Button btnLogout;
@@ -34,6 +39,7 @@ public class UserInfoController implements Controller {
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+
   }
 
   // Other methods
@@ -64,16 +70,36 @@ public class UserInfoController implements Controller {
     lblUserPseudo.setText(
         name
     );
+    this.connectButtons();
   }
 
-  @FXML
-  private void logout(ActionEvent event) {
-    try {
-      this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
-      this.mainController.getApplication().showLoginScene();
-    } catch (Exception e) {
-      logger.error(e);
-    }
-  }
+  /**
+   * Connects the buttons to functions.
+   */
+  private void connectButtons() {
+    this.btnModifyProfile.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        UserInfoController.this.mainController.getCentralFrameController()
+            .setCentralContentProfileEdit();
+      }
+    });
 
+    this.btnDisconnect.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        try {
+          UserInfoController.this.getMainController().getApplication()
+              .getIhmCore().getDataForIhm().logout();
+        } catch (UnsupportedOperationException ex) {
+          ex.printStackTrace();
+        }
+
+        UserInfoController.this.getMainController().getApplication().getPrimaryStage().setScene(
+            UserInfoController.this.getMainController().getApplication().getLoginScene());
+      }
+    });
+  }
 }
+
+
