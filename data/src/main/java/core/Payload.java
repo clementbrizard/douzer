@@ -1,6 +1,6 @@
 package core;
 
-import exceptions.DataException;
+import exceptions.data.DataException;
 import java.net.InetAddress;
 import java.util.UUID;
 

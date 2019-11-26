@@ -2,7 +2,7 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
-import exceptions.LocalUsersFileException;
+import exceptions.data.LocalUsersFileException;
 
 import java.io.File;
 import java.io.IOException;
