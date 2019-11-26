@@ -4,7 +4,11 @@ import datamodel.MusicMetadata;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -93,6 +97,11 @@ public class MyMusicsController implements Controller {
         .getIhmCore().getDataForIhm().getLocalMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
+  }
+
+  @FXML
+  public void changeFrame(ActionEvent event) {
+    MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
 }
