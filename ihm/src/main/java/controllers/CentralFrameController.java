@@ -32,10 +32,8 @@ public class CentralFrameController implements Controller {
   private Parent allMusicsParent;
   private AllMusicsController allMusicsController;
 
-  @FXML
   private Parent myMusicsParent;
   private MyMusicsController myMusicsController;
-
 
   private Parent distantUserParent;
   private DistantUserController distantUserController;
@@ -165,11 +163,11 @@ public class CentralFrameController implements Controller {
   }
 
   // Other methods
-  
+
   @Override
   public void initialize() {
   }
-  
+
   /**
    * Initialize the controllers inside the central frame.
    */
