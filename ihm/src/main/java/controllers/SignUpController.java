@@ -92,7 +92,6 @@ public class SignUpController implements Controller {
 
     final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
     final Path avatarPath = avatarFile.toPath();
-
     // Get the image from the avatar path
     Image avatarImg = null;
     try {
@@ -101,6 +100,7 @@ public class SignUpController implements Controller {
       // Image could not be loaded
       // log it ?
     }
+
     final String secretQuestion = textFieldSecretQuestion.getText();
     final String secretAnswer = textFieldSecretAnswer.getText();
 

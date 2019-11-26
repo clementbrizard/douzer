@@ -35,11 +35,11 @@ public class CurrentMusicInfoController implements Controller {
   private MainController mainController;
 
   private Scene shareScene;
+
   private Application application;
   private LocalMusic currentMusic;
 
   // Getters
-
   public ShareController getShareController() {
     return shareController;
   }
@@ -56,8 +56,21 @@ public class CurrentMusicInfoController implements Controller {
     return application;
   }
 
-  public Scene getShareScene() {
-    return this.shareScene;
+  /**
+   * Initialize the controller.
+   */
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+  }
+
+  public void init() {
+    // TODO Initialize currentMusic with the current music
+    // TODO link currentMusicInfoController with MainController instead of IhmCore
+    this.currentMusic = new LocalMusic(new MusicMetadata(), "pathTest.mp3");
+    this.currentMusic.setShared(true);
+    this.currentMusic.getMetadata().setTitle("Ceci est un test");
+
   }
 
   public LocalMusic getCurrentMusic() {
@@ -65,7 +78,6 @@ public class CurrentMusicInfoController implements Controller {
   }
 
   // Setters
-
   public void setShareController(ShareController shareController) {
     this.shareController = shareController;
   }
@@ -76,6 +88,10 @@ public class CurrentMusicInfoController implements Controller {
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+  }
+
+  public Scene getShareScene() {
+    return this.shareScene;
   }
 
   public void setApplication(Application application) {
@@ -93,23 +109,15 @@ public class CurrentMusicInfoController implements Controller {
   // Other methods
 
   /**
-   * Initialize the controller.
-   */
-  @Override
-  public void initialize() {
-    // TODO Auto-generated method stub
-    // TODO Initialize currentMusic with the current music
-    // TODO link currentMusicInfoController with MainController instead of IhmCore
-    this.currentMusic = new LocalMusic(new MusicMetadata(), "pathTest.mp3");
-    this.currentMusic.setShared(true);
-    this.currentMusic.getMetadata().setTitle("Ceci est un test");
-  }
-
-  /**
-   * Open a popup window to share or unshare the current music.
+   * Share the current music. Open the music sharing pop-up.
+   *
+   * @param event nut used
    */
   @FXML
   private void share(ActionEvent event) {
+    if (this.currentMusic == null) {
+      return;
+    }
     try {
       // Initialize shareScene and shareController
       FXMLLoader shareLoader = new FXMLLoader(getClass().getResource("/fxml/ShareView.fxml"));

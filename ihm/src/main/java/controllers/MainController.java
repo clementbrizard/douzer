@@ -2,6 +2,8 @@ package controllers;
 
 import core.Application;
 import javafx.fxml.FXML;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Controller in charge of managing the other (central, left and right).
@@ -22,8 +24,10 @@ public class MainController implements Controller {
   @FXML
   private PlayerController playerController;
 
-  // Controllers not linked to FXML yet
+  // Left
+  @FXML
   private DownloadController downloadController;
+  @FXML
   private CurrentMusicInfoController currentMusicInfoController;
 
   private Application application;
@@ -107,19 +111,47 @@ public class MainController implements Controller {
    */
   public void init() {
     //TODO add controllers when we link them to the FXML
-    userInfoController.setMainController(this);
-    userInfoController.init();
+    Logger logger = LogManager.getLogger();
+    try {
+      userInfoController.setMainController(this);
+      userInfoController.init();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("User Info Controller calls : %s", e.toString());
+    }
+    try {
+      this.playerController.setMainController(this);
+      this.playerController.setPlayerText("Test artist", "Test music");
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Player Controller calls : " + e.getMessage());
+    }
 
-    this.playerController.setMainController(this);
-    this.playerController.setPlayerText("Test artist", "Test music");
+    try {
+      this.centralFrameController.setMainController(this);
+      this.centralFrameController.init();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Central Frame Controller calls : " + e.getMessage());
+    }
 
-    this.centralFrameController.setMainController(this);
-    this.centralFrameController.init();
+    try {
+      this.contactListController.setMainController(this);
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Contact List Controller calls : " + e.getMessage());
+    }
 
-    this.contactListController.setMainController(this);
+    try {
+      this.onlineUsersListController.setMainController(this);
+      this.onlineUsersListController.init();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Online Users Controller calls : " + e.getMessage());
+    }
 
-    this.onlineUsersListController.setMainController(this);
-    this.onlineUsersListController.init();
+    try {
+      this.currentMusicInfoController.setMainController(this);
+      this.currentMusicInfoController.init();
+      this.currentMusicInfoController.setApplication(this.application);
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Current Music Info Controller calls : " + e.getMessage());
+    }
   }
 
 }
