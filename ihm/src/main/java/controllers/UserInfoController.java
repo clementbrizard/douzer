@@ -62,7 +62,8 @@ public class UserInfoController implements Controller {
     this.btnModifyProfile.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        UserInfoController.this.mainController.getCentralFrameController().setCentralContentProfileEdit();
+        UserInfoController.this.mainController.getCentralFrameController()
+            .setCentralContentProfileEdit();
       }
     });
   }
