@@ -158,7 +158,7 @@ public class Datacore {
    */
   private void mergeUsers(User user1, User user2) {
     // user2 was created first
-    if (user1.getTimeStamp().compareTo(user2.getTimeStamp()) < 0) {
+    if (user1.getTimeStamp().compareTo(user2.getTimeStamp()) <= 0) {
       user1.updateUser(user2);
     }
     // No else, the user1 is the template
