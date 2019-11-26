@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 
+import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -19,15 +20,32 @@ import javafx.scene.layout.AnchorPane;
  */
 public class CentralFrameController implements Controller {
 
+  static public final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
+  static public final String allMusicsAdvancedSearchView = "/fxml/AllMusicsAdvancedSearchView.fxml";
+  static public final String profileEditView = "/fxml/MyAccountView.fxml";
+  static public final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
+  static public final String distantUserView = "/fxml/UserProfileView.fxml";
+
   @FXML
   private AnchorPane content;
 
+  private Parent allMusicsParent;
   private AllMusicsController allMusicsController;
+
+  private Parent myMusicsParent;
   private MyMusicsController myMusicsController;
+
+  private Parent distantUserParent;
   private DistantUserController distantUserController;
+
+  private Parent profileEditParent;
   private ProfileEditController profileEditController;
   //TODO : is detailsMusicController useless ??
   private DetailsMusicController detailsMusicController;
+
+  //TODO new view or make new slots appear for research ?
+  private Parent allMusicsAdvancedSearchParent;
+
   private MainController mainController;
 
 
@@ -144,65 +162,63 @@ public class CentralFrameController implements Controller {
   }
 
   // Other methods
-  
+
   @Override
   public void initialize() {
   }
-  
+
   /**
    * Initialize the controllers inside the central frame.
    */
   public void init() {
-    this.allMusicsController = (AllMusicsController)
-        this.getControllerFromResource("/fxml/AllMusicsCenterView.fxml");
-    this.allMusicsController.setCentralFrameController(this);
-    this.allMusicsController.init();
-
-    this.profileEditController = (ProfileEditController)
-        this.getControllerFromResource("/fxml/MyAccountView.fxml");
-    this.profileEditController.setCentralFrameController(this);
-
-    this.myMusicsController = (MyMusicsController)
-        this.getControllerFromResource("/fxml/MyMusicsCenterView.fxml");
-    this.myMusicsController.setCentralFrameController(this);
-    this.myMusicsController.init();
-
-    this.distantUserController = (DistantUserController)
-        this.getControllerFromResource("/fxml/UserProfileView.fxml");
-    this.distantUserController.setCentralFrameController(this);
-
-    this.setCentralContent("/fxml/AllMusicsCenterView.fxml");
-  }
-
-  /**
-   * Initializes a controller with the given fxml path.
-
-   * @param resource Path to the view linked to the controller
-   */
-  private Controller getControllerFromResource(String resource) {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource(resource));
-
     try {
-      loader.load();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+      FXMLLoader allMusicsLoader = new FXMLLoader(getClass().getResource(CentralFrameController.allMusicsView));
+      this.allMusicsParent = allMusicsLoader.load();
+      this.allMusicsController = allMusicsLoader.getController();
+      this.allMusicsController.setCentralFrameController(this);
+      this.allMusicsController.init();
 
-    return loader.getController();
-  }
+      FXMLLoader profileEditLoader = new FXMLLoader(getClass().getResource(CentralFrameController.profileEditView));
+      this.profileEditParent = profileEditLoader.load();
+      this.profileEditController = profileEditLoader.getController();
+      this.profileEditController.setCentralFrameController(this);
 
-  /**
-   * Sets the content of the central AnchorPane to the given fxml resource path.
-   * @param fxmlResource path to the fxml
-   */
-  public void setCentralContent(String fxmlResource) {
-    // https://stackoverflow.com/questions/18619394/loading-new-fxml-in-the-same-scene
-    try {
-      FXMLLoader loader = new FXMLLoader((getClass().getResource(fxmlResource)));
-      this.content.getChildren().setAll((Node) loader.load());
+      FXMLLoader myMusicsLoader = new FXMLLoader(getClass().getResource(CentralFrameController.myMusicsView));
+      this.myMusicsParent = myMusicsLoader.load();
+      this.myMusicsController = myMusicsLoader.getController();
+      this.myMusicsController.setCentralFrameController(this);
+
+      FXMLLoader distantUserLoader = new FXMLLoader(getClass().getResource(CentralFrameController.distantUserView));
+      this.distantUserParent = distantUserLoader.load();
+      this.distantUserController = distantUserLoader.getController();
+      this.distantUserController.setCentralFrameController(this);
+
+      this.setCentralContentMyMusics();
 
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
+
+  // Methods to change the FXML shown in the central view
+  // https://stackoverflow.com/questions/18619394/loading-new-fxml-in-the-same-scene
+  public void setCentralContentProfileEdit() {
+    this.content.getChildren().setAll((Node) this.profileEditParent);
+  }
+
+  public void setCentralContentAllMusics() {
+    this.content.getChildren().setAll((Node) this.allMusicsParent);
+  }
+  public void setCentralContentMyMusics() {
+    this.content.getChildren().setAll(((Node) this.myMusicsParent));
+  }
+
+  public void setCentralContentAllMusicsAdvancedSearch() {
+    // TODO
+  }
+
+  public void setCentralContentDistantUser() {
+    this.content.getChildren().setAll(((Node) this.distantUserParent));
+  }
+
 }
