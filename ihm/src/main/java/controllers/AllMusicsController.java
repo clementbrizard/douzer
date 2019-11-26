@@ -1,14 +1,19 @@
 package controllers;
 
 import core.Application;
+import datamodel.Music;
 import datamodel.MusicMetadata;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javax.swing.text.html.ImageView;
 
 
 /**
@@ -114,7 +119,57 @@ public class AllMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
-    this.displayAvailableMusics();
+
+    MusicMetadata mtest = new MusicMetadata();
+    mtest.setTitle("aaa");
+    mtest.setArtist("bbb");
+    mtest.setAlbum("ccc");
+
+    MusicMetadata mtest2 = new MusicMetadata();
+    mtest2.setTitle("zzz");
+    mtest2.setArtist("yyy");
+    mtest2.setAlbum("aaa");
+
+    ArrayList<MusicMetadata> l = new ArrayList<MusicMetadata>();
+    l.add(mtest);
+    l.add(mtest2);
+
+    tvMusics.getItems().setAll(l);
+
+    //this.displayAvailableMusics();
+  }
+
+  private MusicMetadata getCurrentlySelectedItem() {
+    return tvMusics.getSelectionModel().getSelectedItem();
+  }
+
+  public void searchClicked() {
+    // Filter music list according to search
+    //tvMusics.getItems().setAll();
+  }
+
+  /**
+   * Called when the user clicks on the delete image.
+   * Gets the selected music and deletes it.
+   */
+  public void deleteLocalMusic() {
+    MusicMetadata musicToDelete = getCurrentlySelectedItem();
+    if (musicToDelete != null) {
+      System.out.println("DANNY DELETO: " + musicToDelete.getTitle());
+    } else {
+      System.out.println("NOTHING TO DELETE");
+    }
+  }
+
+  /**
+   * Called when the user clicks on the info image.
+   * Gets the selected music and shows its information.
+   */
+  public void showMusicInfo() {
+    MusicMetadata metadataToShow = getCurrentlySelectedItem();
+    if (metadataToShow != null) {
+      System.out.println("SHOWING -> " + metadataToShow.getArtist());
+    }
   }
 
   
