@@ -1,8 +1,12 @@
 package controllers;
 
+import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-import datamodel.Music;
+import java.time.Duration;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,11 +17,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-
-import java.time.Duration;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 /**
@@ -57,6 +56,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * getter of searchMusicController.
+   *
    * @return a SearchMusicController
    * @see SearchMusicController
    */
@@ -66,6 +66,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * getter of centralFrameController.
+   *
    * @return a CentralFrameController
    * @see CentralFrameController
    */
@@ -77,6 +78,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * setter of searchMusicController.
+   *
    * @param searchMusicController the new SearchMusicController
    * @see SearchMusicController
    */
@@ -86,6 +88,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * setter of centralFrameController.
+   *
    * @param centralFrameController the new CentralFrameController
    * @see CentralFrameController
    */
@@ -108,7 +111,6 @@ public class AllMusicsController implements Controller {
    * this method has to be called right after the creation of the view.
    */
   public void init() {
-
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
@@ -125,11 +127,11 @@ public class AllMusicsController implements Controller {
     this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-          if (tfSearchTitle.isVisible()) {
-            tfSearchTitle.setVisible(false);
-          } else {
-            tfSearchTitle.setVisible(true);
-          }
+        if (tfSearchTitle.isVisible()) {
+          tfSearchTitle.setVisible(false);
+        } else {
+          tfSearchTitle.setVisible(true);
+        }
 
         if (tfSearchArtist.isVisible()) {
           tfSearchArtist.setVisible(false);
@@ -149,10 +151,10 @@ public class AllMusicsController implements Controller {
           tfSearchDuration.setVisible(true);
         }
 
-        if (tfSearch.isVisible()) {
-          tfSearch.setVisible(false);
+        if (tfSearch.isDisable()) {
+          tfSearch.setDisable(false);
         } else {
-          tfSearch.setVisible(true);
+          tfSearch.setDisable(true);
         }
       }
     });
@@ -184,10 +186,10 @@ public class AllMusicsController implements Controller {
         }
 
         Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()
-                .getMainController()
-                .getApplication()
-                .getIhmCore()
-                .getDataForIhm().getMusics(query); //TODO rename
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm().getMusics(query); //TODO rename
 
         updateMusics(searchResults);
       }
