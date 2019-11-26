@@ -52,7 +52,7 @@ public class DataForIhmImpl implements DataForIhm {
       );
 
       newMusic.getOwners().add(dc.getCurrentUser());
-
+      
       dc.getCurrentUser().getMusics().add(newMusic);
       dc.addMusic(newMusic);
     } else {
