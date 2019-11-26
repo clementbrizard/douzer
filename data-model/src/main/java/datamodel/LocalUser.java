@@ -15,6 +15,15 @@ import java.util.Set;
 
 public class LocalUser extends User {
   private static MessageDigest messageDigest;
+
+  static {
+    try {
+      messageDigest = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
+  }
+
   private String pwdHash;
   private Set<Contact> contacts;
   // Path is not serializable, handle serialization with readObject writeObject below.
@@ -29,12 +38,6 @@ public class LocalUser extends User {
     this.contacts = new HashSet<>();
     this.musics = new HashSet<>();
     this.playlist = new ArrayList<>();
-
-    try {
-      messageDigest = MessageDigest.getInstance("SHA-256");
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
   }
 
   /**
