@@ -55,7 +55,7 @@
                              <Image url="@../images/minusSymbol.png" />
                          </image>
                      </ImageView>
-                     <Button fx:id="btnAddMusic" layoutX="500.0" layoutY="116.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" />
+                     <Button fx:id="btnAddMusic" layoutX="500.0" layoutY="116.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" onAction="#addMusic" />
                      <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="25.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
                          <image>
                              <Image url="@../images/returnArrow.png" />

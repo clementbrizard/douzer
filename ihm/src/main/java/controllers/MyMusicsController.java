@@ -1,5 +1,7 @@
 package controllers;
 
+import com.sun.javafx.logging.Logger;
+
 import core.Application;
 import datamodel.MusicMetadata;
 import java.io.IOException;
@@ -10,10 +12,14 @@ import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
 //replace by javadocs
 //central view with all user music
@@ -45,7 +51,7 @@ public class MyMusicsController implements Controller {
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
-    logger = LogManager.getLogger();
+    //logger = LogManager.getLogger();
   }
 
   public NewMusicController getNewMusicController() {
@@ -123,6 +129,7 @@ public class MyMusicsController implements Controller {
    */
   @FXML
   public void addMusic() {
+    System.out.println("buton");
     try {
       // Initialize shareScene and shareController
       FXMLLoader addMusicLoader = new FXMLLoader(getClass().getResource("/fxml/NewMusicView.fxml"));
@@ -131,6 +138,23 @@ public class MyMusicsController implements Controller {
       NewMusicController newMusicController = addMusicLoader.getController();
       this.setNewMusicController(newMusicController);
       newMusicController.setMyMusicsController(this);
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    Stage musicSharingPopup = new Stage();
+    musicSharingPopup.setTitle("Ajout musique");
+    musicSharingPopup.setScene(this.addMusicScene);
+
+    // Set position of second window, relatively to primary window.
+    //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
+    //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
+
+    // Show sharing popup.
+    musicSharingPopup.show();
+    
+  }
 
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
