@@ -4,7 +4,10 @@ import datamodel.MusicMetadata;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -15,6 +18,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
  */
 public class AllMusicsController implements Controller {
 
+  @FXML
+  private Button btnAdvancedSearch;
   @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
@@ -67,9 +72,14 @@ public class AllMusicsController implements Controller {
    */
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+
+    this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+      }
+    });
   }
-
-
 
   // Other methods
 
@@ -78,6 +88,7 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
+
   }
 
   /**
