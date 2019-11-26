@@ -135,7 +135,9 @@ public class User implements java.io.Serializable {
 
   private void writeObject(ObjectOutputStream stream) throws IOException {
     stream.defaultWriteObject();
-    ImageIO.write(this.avatar, "png", stream);
+    if (this.avatar != null) {
+      ImageIO.write(this.avatar, "png", stream);
+    }
   }
 
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
