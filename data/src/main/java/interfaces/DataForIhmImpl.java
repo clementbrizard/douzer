@@ -95,7 +95,7 @@ public class DataForIhmImpl implements DataForIhm {
     }
 
     LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
-    this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
+    this.dc.net.disconnect(payload, this.dc.getOnlineIps().collect(Collectors.toList()));
 
     this.dc.wipe();
   }
@@ -170,7 +170,7 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void shareMusics(Collection<LocalMusic> musics) {
     ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-    this.dc.net.sendToUsers(payload, this.dc.getIps());
+    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
   @Override public void notifyMusicUpdate(LocalMusic music) {

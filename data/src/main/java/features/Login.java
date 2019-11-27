@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -84,7 +85,8 @@ public abstract class Login {
     user.getMusics().forEach(dc::addMusic);
     user.getContacts().stream().map(Contact::getUser).forEach(dc::addUser);
 
-    LoginPayload payload = new LoginPayload(user);
+    LoginPayload payload = new LoginPayload(user, dc.getOnlineIps()
+        .collect(Collectors.toCollection(HashSet::new)));
     // TODO: template for filename
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     dc.net.connect(payload, getInitialIpsFromConfig(configPath));
