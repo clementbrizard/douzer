@@ -1,7 +1,7 @@
 package core;
 
 import datamodel.LocalUser;
-import exceptions.LocalUsersFileException;
+import exceptions.data.LocalUsersFileException;
 
 import java.io.EOFException;
 import java.io.File;

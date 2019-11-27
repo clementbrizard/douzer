@@ -10,7 +10,7 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.MusicMetadata;
 import datamodel.User;
-import exceptions.LocalUsersFileException;
+import exceptions.data.LocalUsersFileException;
 import java.io.File;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterEach;

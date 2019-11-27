@@ -12,7 +12,7 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
-import exceptions.LocalUsersFileException;
+import exceptions.data.LocalUsersFileException;
 import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
