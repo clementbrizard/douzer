@@ -197,7 +197,7 @@ public class CentralFrameController implements Controller {
       this.distantUserController = distantUserLoader.getController();
       this.distantUserController.setCentralFrameController(this);
 
-      this.setCentralContentAllMusics();
+      this.setCentralContentMyMusics();
 
     } catch (IOException e) {
       e.printStackTrace();

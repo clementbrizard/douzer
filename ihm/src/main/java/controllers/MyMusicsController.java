@@ -1,18 +1,30 @@
 package controllers;
 
+import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
-//replace by javadocs
-//central view with all user music
+/**
+ * central view show up my musics.
+ */
 public class MyMusicsController implements Controller {
 
+  @FXML
+  private Button btnAdvancedSearchMm;
   @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
@@ -23,39 +35,96 @@ public class MyMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
   private TableColumn<MusicMetadata, Duration> durationCol;
+  @FXML
+  private TextField tfSearchMm;
+  @FXML
+  private TextField tfSearchTitleMm;
+  @FXML
+  private TextField tfSearchArtistMm;
+  @FXML
+  private TextField tfSearchAlbumMm;
+  @FXML
+  private TextField tfSearchDurationMm;
+  @FXML
+  private ImageView ivSearchAllMm;
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
 
   private CentralFrameController centralFrameController;
 
-  @Override
-  public void initialize() {
-    // TODO Auto-generated method stub
-  }
+  //Getters
 
+  /**
+   * getter of newMusicController.
+   *
+   * @return a NewMusicController
+   * @see NewMusicController
+   */
   public NewMusicController getNewMusicController() {
     return newMusicController;
   }
 
-  public void setNewMusicController(NewMusicController newMusicController) {
-    this.newMusicController = newMusicController;
-  }
-
+  /**
+   * getter of searchMusicController.
+   *
+   * @return a SearchMusicController
+   * @see SearchMusicController
+   */
   public SearchMusicController getSearchMusicController() {
     return searchMusicController;
   }
 
-  public void setSearchMusicController(SearchMusicController searchMusicController) {
-    this.searchMusicController = searchMusicController;
-  }
-
+  /**
+   * getter of centralFrameController.
+   *
+   * @return a CentralFrameController
+   * @see CentralFrameController
+   */
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
   }
 
+  //Setters
+
+  /**
+   * setter of NewMusicController.
+   *
+   * @param newMusicController the new newMusicController
+   * @see NewMusicController
+   */
+  public void setNewMusicController(NewMusicController newMusicController) {
+    this.newMusicController = newMusicController;
+  }
+
+  /**
+   * setter of searchMusicController.
+   *
+   * @param searchMusicController the new SearchMusicController
+   * @see SearchMusicController
+   */
+  public void setSearchMusicController(SearchMusicController searchMusicController) {
+    this.searchMusicController = searchMusicController;
+  }
+
+  /**
+   * setter of centralFrameController.
+   *
+   * @param centralFrameController the new CentralFrameController
+   * @see CentralFrameController
+   */
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  // Other methods
+
+  /**
+   * the initialize method of the Controller call by Javafx when we create the view of AllMusics.
+   */
+  @Override
+  public void initialize() {
+
   }
 
   /**
@@ -71,6 +140,82 @@ public class MyMusicsController implements Controller {
     this.durationCol.setCellValueFactory(
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
+
+    this.tfSearchTitleMm.setVisible(false);
+    this.tfSearchArtistMm.setVisible(false);
+    this.tfSearchAlbumMm.setVisible(false);
+    this.tfSearchDurationMm.setVisible(false);
+
+    this.btnAdvancedSearchMm.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        if (tfSearchTitleMm.isVisible()) {
+          tfSearchTitleMm.setVisible(false);
+        } else {
+          tfSearchTitleMm.setVisible(true);
+        }
+
+        if (tfSearchArtistMm.isVisible()) {
+          tfSearchArtistMm.setVisible(false);
+        } else {
+          tfSearchArtistMm.setVisible(true);
+        }
+
+        if (tfSearchAlbumMm.isVisible()) {
+          tfSearchAlbumMm.setVisible(false);
+        } else {
+          tfSearchAlbumMm.setVisible(true);
+        }
+
+        if (tfSearchDurationMm.isVisible()) {
+          tfSearchDurationMm.setVisible(false);
+        } else {
+          tfSearchDurationMm.setVisible(true);
+        }
+
+        if (tfSearchMm.isDisable()) {
+          tfSearchMm.setDisable(false);
+        } else {
+          tfSearchMm.setDisable(true);
+        }
+      }
+    });
+
+    this.ivSearchAllMm.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent event) {
+
+        SearchQuery query = new SearchQuery();
+
+        if (tfSearchMm.isVisible()) {
+          query.withText(tfSearchMm.getText());
+        } else {
+          if (tfSearchTitleMm.getText() != null) {
+            query.withTitle(tfSearchTitleMm.getText());
+          }
+
+          if (tfSearchArtistMm != null) {
+            query.withArtist(tfSearchArtistMm.getText());
+          }
+
+          if (tfSearchAlbumMm != null) {
+            query.withArtist(tfSearchAlbumMm.getText());
+          }
+
+          if (tfSearchDurationMm != null) {
+            query.withArtist(tfSearchDurationMm.getText());
+          }
+        }
+
+        Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm().getMusics(query); //TODO rename
+
+        updateMusics(searchResults);
+      }
+    });
 
     try {
       this.displayAvailableMusics();
@@ -93,6 +238,10 @@ public class MyMusicsController implements Controller {
         .getIhmCore().getDataForIhm().getLocalMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
+  }
+
+  private void updateMusics(Stream<Music> newMusics) {
+    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
   }
 
 }
