@@ -1,5 +1,7 @@
 package core;
 
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+
 import datamodel.LocalUser;
 import exceptions.data.LocalUsersFileException;
 import java.io.EOFException;
@@ -9,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -96,10 +99,10 @@ public class LocalUsersFileHandler {
       }
     } catch (EOFException e) {
       //Replace old file with the new one
-      File file = this.filePath.toFile();
-      //For windows we have to delete original file
-      if (!file.delete() || !temp.renameTo(file)) {
-        throw new LocalUsersFileException("File was not successfully deleted or renamed");
+      try {
+        Files.move(temp.toPath(), this.filePath, REPLACE_EXISTING);
+      } catch (IOException ex) {
+        throw new LocalUsersFileException("File was not successfully moved: " + ex.getMessage());
       }
     } catch (ClassNotFoundException | IOException e) {
       throw new LocalUsersFileException("Local save may be corrupted or outdated");
