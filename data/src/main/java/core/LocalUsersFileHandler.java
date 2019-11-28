@@ -2,7 +2,6 @@ package core;
 
 import datamodel.LocalUser;
 import exceptions.data.LocalUsersFileException;
-
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -75,6 +74,7 @@ public class LocalUsersFileHandler {
    * Remove a LocalUser on the LocalUsersFile.
    * Use a temp file, copy all user but skip user to remove
    * Rename temp file as original one
+   *
    * @param localUser Removed LocalUser.
    * @throws LocalUsersFileException if the file is not accessible.
    */
@@ -96,9 +96,10 @@ public class LocalUsersFileHandler {
       }
     } catch (EOFException e) {
       //Replace old file with the new one
-      boolean renameSucess = temp.renameTo(this.filePath.toFile());
-      if (!renameSucess) {
-        throw new LocalUsersFileException("File was not successfully renamed");
+      File file = this.filePath.toFile();
+      //For windows we have to delete original file
+      if (!file.delete() || !temp.renameTo(file)) {
+        throw new LocalUsersFileException("File was not successfully deleted or renamed");
       }
     } catch (ClassNotFoundException | IOException e) {
       throw new LocalUsersFileException("Local save may be corrupted or outdated");
