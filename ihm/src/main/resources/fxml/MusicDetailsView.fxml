@@ -36,12 +36,12 @@
             <Image url="@../images/EmptyStarSymbol.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="imageEtoile2" fitHeight="21.0" fitWidth="21.0" layoutX="173.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imageEtoile2" fitHeight="21.0" fitWidth="21.0" layoutX="139.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/EmptyStarSymbol.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="imageEtoile3" fitHeight="21.0" fitWidth="21.0" layoutX="139.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imageEtoile3" fitHeight="21.0" fitWidth="21.0" layoutX="173.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/EmptyStarSymbol.png" />
          </image>
@@ -60,4 +60,3 @@
       <Button fx:id="buttonAddTag" layoutX="557.0" layoutY="271.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="33.0" text="+" />
    </children>
 </Pane>
-s

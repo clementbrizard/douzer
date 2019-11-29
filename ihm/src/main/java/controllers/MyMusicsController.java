@@ -3,9 +3,11 @@ package controllers;
 import com.sun.javafx.logging.Logger;
 
 import core.Application;
+import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,19 +49,25 @@ public class MyMusicsController implements Controller {
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
+  private DetailsMusicController detailsMusicController;
 
   private CentralFrameController centralFrameController;
   private Scene addMusicScene;
+  private Scene infoMusicScene;
   private Application application;
 
+  private LocalMusic musicInformation;
+  private ArrayList<LocalMusic> listMusics;
+
   private Logger logger;
-  
+
   private  ContextMenu contextMenu;
 
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
     //logger = LogManager.getLogger();
+    listMusics = new ArrayList<LocalMusic>();
 
   }
 
@@ -69,6 +77,11 @@ public class MyMusicsController implements Controller {
 
   public void setNewMusicController(NewMusicController newMusicController) {
     this.newMusicController = newMusicController;
+  }
+
+
+  public void setDetailsMusicController(DetailsMusicController controller) {
+	  this.detailsMusicController = controller;
   }
 
   public SearchMusicController getSearchMusicController() {
@@ -87,6 +100,9 @@ public class MyMusicsController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
+  public DetailsMusicController getDetailsMusicController(DetailsMusicController controller) {
+	  return this.detailsMusicController;
+  }
 
   public Application getApplication() {
     return application;
@@ -114,22 +130,24 @@ public class MyMusicsController implements Controller {
     } catch (UnsupportedOperationException e) {
       e.printStackTrace();
     }
-    
-    
+
+
     // Create ContextMenu
     contextMenu = new ContextMenu();
-    
+
     MenuItem item1 = new MenuItem("Informations");
     item1.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
+
+        showMusicInformation(musicInformation);
         System.out.println("click on first element");
       }
     });
-    
+
     /*MenuItem item2 = new MenuItem("Menu Item 2");
     item2.setOnAction(new EventHandler<ActionEvent>() {
-      
+
       @Override
       public void handle(ActionEvent event) {
         System.out.println("Click On second Item");
@@ -153,12 +171,13 @@ public class MyMusicsController implements Controller {
 
 
   private List<MusicMetadata> parseMusic() {
+    this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
+            .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toList()));
+
     return this.getCentralFrameController().getMainController().getApplication()
-        .getIhmCore().getDataForIhm().getLocalMusics()
-        .map(x -> x.getMetadata())
-        .collect(Collectors.toList());
+            .getIhmCore().getDataForIhm().getLocalMusics().map(x -> x.getMetadata()).collect(Collectors.toList());
   }
-  
+
   /**
    * the Button who will show the windows to add music.
    */
@@ -172,11 +191,11 @@ public class MyMusicsController implements Controller {
       NewMusicController newMusicController = addMusicLoader.getController();
       this.setNewMusicController(newMusicController);
       newMusicController.setMyMusicsController(this);
-      
+
     } catch (Exception e) {
       e.printStackTrace();
     }
-    
+
     Stage musicSharingPopup = new Stage();
     musicSharingPopup.setTitle("Ajout musique");
     musicSharingPopup.setScene(this.addMusicScene);
@@ -187,12 +206,39 @@ public class MyMusicsController implements Controller {
 
     // Show sharing popup.
     musicSharingPopup.show();
-    
+
+  }
+
+  private void showMusicInformation(LocalMusic music) {
+	  try {
+	      // Initialize shareScene and shareController
+	      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass().getResource("/fxml/MusicDetailsView.fxml"));
+	      Parent musicDetailsParent = musicDetailsLoader.load();
+	      infoMusicScene = new Scene(musicDetailsParent);
+	      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
+	      this.setDetailsMusicController(detailsMusicController);
+	      detailsMusicController.setMyMusicsController(this);
+	      detailsMusicController.initMusic(music);
+
+	    } catch (Exception e) {
+	      e.printStackTrace();
+	    }
+
+	    Stage musicDetailsPopup = new Stage();
+	    musicDetailsPopup.setTitle("Info musique");
+	    musicDetailsPopup.setScene(this.infoMusicScene);
+
+	    // Set position of second window, relatively to primary window.
+	    //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
+	    //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
+
+	    // Show sharing popup.
+	    musicDetailsPopup.show();
   }
 
   @FXML
   public void handleClickTableView(MouseEvent click){
-    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem(); 
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
     boolean doubleclicked = false;
     if(click.getButton().equals(MouseButton.PRIMARY)){
         if(click.getClickCount() == 2){
@@ -203,17 +249,22 @@ public class MyMusicsController implements Controller {
         }
         if(music != null && !doubleclicked) {
           System.out.println("musique appuyé : " + music.getTitle());
-        }    
+        }
     }
-    
+
     if(click.getButton().equals(MouseButton.SECONDARY)) {
       if(music != null) {
+        for(int i = 0; i<this.listMusics.size(); i++) {
+        	if (this.listMusics.get(i).getMetadata().equals(music)) {
+        		musicInformation = listMusics.get(i);
+        	}
+        }
         contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
       }
     }
   }
-  
-  
+
+
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();

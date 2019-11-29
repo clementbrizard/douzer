@@ -4,6 +4,7 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
 
+import java.io.File;
 import java.util.Iterator;
 
 import javafx.collections.FXCollections;
@@ -20,6 +21,52 @@ import javafx.scene.input.MouseEvent;
 //replace by javadocs
 //central view to show all information about on music
 public class DetailsMusicController implements Controller {
+
+	  @FXML
+	  private TextField textFieldTitre;
+
+	  @FXML
+	  private TextField textFieldArtiste;
+
+	  @FXML
+	  private TextField textFieldAlbum;
+
+	  @FXML
+	  private TextField textFieldAnnee;
+
+	  @FXML
+	  private TextField textFieldLastUploader;
+
+	  @FXML
+	  private TextField textFieldAddTag;
+
+	  @FXML
+	  private ListView<String> listViewTagsList;
+
+	  private ObservableList<String> tags;
+
+	  private LocalMusic localMusic;
+
+	  @FXML
+	  private Button buttonValider;
+
+	  @FXML
+	  private Button buttonAddTag;
+
+	  @FXML
+	  private ImageView imageEtoile1;
+
+	  @FXML
+	  private ImageView imageEtoile2;
+
+	  @FXML
+	  private ImageView imageEtoile3;
+
+	  @FXML
+	  private ImageView imageEtoile4;
+
+	  @FXML
+  private ImageView imageEtoile5;
 
   private MyMusicsController myMusicsController;
 
@@ -104,87 +151,41 @@ public class DetailsMusicController implements Controller {
 
   public void setStars(int rating) {
     if (rating == 1) {
-      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile2.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 2) {
-      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 3) {
-      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 4) {
-      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 5) {
-      imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-      imageEtoile5.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
     }
   }
-
-  @FXML
-  private TextField textFieldTitre;
-
-  @FXML
-  private TextField textFieldArtiste;
-
-  @FXML
-  private TextField textFieldAlbum;
-
-  @FXML
-  private TextField textFieldAnnee;
-
-  @FXML
-  private TextField textFieldLastUploader;
-
-  @FXML
-  private TextField textFieldAddTag;
-
-  @FXML
-  private ListView<String> listViewTagsList;
-
-  private ObservableList<String> tags;
-
-  private LocalMusic localMusic;
-
-  @FXML
-  private Button buttonValider;
-
-  @FXML
-  private Button buttonAddTag;
-
-  @FXML
-  private ImageView imageEtoile1;
-
-  @FXML
-  private ImageView imageEtoile2;
-
-  @FXML
-  private ImageView imageEtoile3;
-
-  @FXML
-  private ImageView imageEtoile4;
-
-  @FXML
-  private ImageView imageEtoile5;
 
   @Override
   public void initialize() {
@@ -193,11 +194,7 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 1");
-        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile2.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-        imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-        imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        setStars(1);
         sendNoteToData(1);
       }
     }));
@@ -206,11 +203,7 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 2");
-        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile3.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-        imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        setStars(2);
         sendNoteToData(2);
       }
     }));
@@ -219,11 +212,7 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 3");
-        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile4.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
-        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        setStars(3);
         sendNoteToData(3);
       }
     }));
@@ -232,11 +221,7 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 4");
-        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile5.setImage(new Image("main/resources/images/EmptyStarSymbol.png"));
+        setStars(4);
         sendNoteToData(4);
       }
     }));
@@ -245,11 +230,7 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 5");
-        imageEtoile1.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile2.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile3.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile4.setImage(new Image("main/resources/images/FullStarSymbol.png"));
-        imageEtoile5.setImage(new Image("main/resources/images/FullStarSymbol.png"));
+        setStars(5);
         sendNoteToData(5);
       }
     }));
