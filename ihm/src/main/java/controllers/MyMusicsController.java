@@ -53,6 +53,8 @@ public class MyMusicsController implements Controller {
   private Application application;
 
   private Logger logger;
+  
+  private  ContextMenu contextMenu;
 
   @Override
   public void initialize() {
@@ -115,35 +117,30 @@ public class MyMusicsController implements Controller {
     
     
     // Create ContextMenu
-    ContextMenu contextMenu = new ContextMenu();
+    contextMenu = new ContextMenu();
     
-    MenuItem item1 = new MenuItem("Menu Item 1");
+    MenuItem item1 = new MenuItem("Informations");
     item1.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         System.out.println("click on first element");
       }
     });
-    MenuItem item2 = new MenuItem("Menu Item 2");
+    
+    /*MenuItem item2 = new MenuItem("Menu Item 2");
     item2.setOnAction(new EventHandler<ActionEvent>() {
       
       @Override
       public void handle(ActionEvent event) {
         System.out.println("Click On second Item");
       }
-    });
+    });*/
     // Add MenuItem to ContextMenu
-    contextMenu.getItems().addAll(item1, item2);
+    contextMenu.getItems().addAll(item1);//, item2);
 
     // When user right-click on TvMusics
 
-    tvMusics.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
-      
-      @Override
-      public void handle(ContextMenuEvent event) {
-        contextMenu.show(tvMusics, event.getScreenX(), event.getScreenY());
-      }
-    });
+
   }
 
 
@@ -198,18 +195,22 @@ public class MyMusicsController implements Controller {
     MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem(); 
     boolean doubleclicked = false;
     if(click.getButton().equals(MouseButton.PRIMARY)){
-      if(click.getClickCount() == 2){
-          if(music != null) {
-            System.out.println("Double clicked on : " + music.getTitle());
-            doubleclicked = true;
-          }
-      }
-      if(music != null && !doubleclicked) {
-        System.out.println("musique appuyé : " + music.getTitle());
-      }
-  }
+        if(click.getClickCount() == 2){
+            if(music != null) {
+              System.out.println("Double clicked on : " + music.getTitle());
+              doubleclicked = true;
+            }
+        }
+        if(music != null && !doubleclicked) {
+          System.out.println("musique appuyé : " + music.getTitle());
+        }    
+    }
     
-    
+    if(click.getButton().equals(MouseButton.SECONDARY)) {
+      if(music != null) {
+        contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
+      }
+    }
   }
   
   
