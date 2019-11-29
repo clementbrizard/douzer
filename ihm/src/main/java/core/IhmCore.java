@@ -1,5 +1,7 @@
 package core;
 
+import org.apache.logging.log4j.LogManager;
+
 import interfaces.DataForIhm;
 
 /**
@@ -32,6 +34,7 @@ public class IhmCore {
 
   public static IhmCore init() {
     if (ihmCore == null) {
+      LogManager.getLogger().info("IhmCore start");
       ihmCore = new IhmCore();
 
       ihmCore.ihmForData = new IhmForData(ihmCore);
