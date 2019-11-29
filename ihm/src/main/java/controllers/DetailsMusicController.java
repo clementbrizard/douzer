@@ -78,7 +78,7 @@ public class DetailsMusicController implements Controller {
   private MyMusicsController myMusicsController;
 
   private int note = 0;
-  
+
   public MyMusicsController getMyMusicsController() {
     return this.myMusicsController;
   }
@@ -309,22 +309,19 @@ public class DetailsMusicController implements Controller {
     if (textFieldTitre.getText() == null || textFieldTitre.getText().trim().equals("")) {
       bool = false;
       textFieldTitre.setStyle(" -fx-background-color:red;");
-    }
-    else {
+    } else {
       textFieldTitre.setStyle(" -fx-background-color:white;");
     }
     if (textFieldArtiste.getText() == null || textFieldArtiste.getText().trim().equals("")) {
       bool = false;
       textFieldArtiste.setStyle(" -fx-background-color:red;");
-    }
-    else {
+    } else {
       textFieldArtiste.setStyle(" -fx-background-color:white;");
     }
     if (textFieldAlbum.getText() == null || textFieldAlbum.getText().trim().equals("")) {
       bool = false;
       textFieldAlbum.setStyle(" -fx-background-color:red;");
-    }
-    else {
+    } else {
       textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
     //if (textFieldAnnee.getText() == null || textFieldAnnee.getText().trim().equals("")) {
@@ -335,11 +332,10 @@ public class DetailsMusicController implements Controller {
         || textFieldLastUploader.getText().trim().equals("")) {
       bool = false;
       textFieldLastUploader.setStyle(" -fx-background-color:red;");
-    }
-    else {
+    } else {
       textFieldLastUploader.setStyle(" -fx-background-color:white;");
     }
-    
+
 
     return bool;
   }
@@ -356,9 +352,11 @@ public class DetailsMusicController implements Controller {
     localMusic.getMetadata().setTitle(textFieldTitre.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtiste.getText());
-    if(note > 0)
-      this.getMyMusicsController().getApplication().getIhmCore().getDataForIhm().rateMusic(localMusic, note);
-    
+    if (note > 0) {
+      this.getMyMusicsController().getApplication()
+      .getIhmCore().getDataForIhm().rateMusic(localMusic, note);
+    }
+
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();
   }
