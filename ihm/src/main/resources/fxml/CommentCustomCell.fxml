@@ -1,8 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
-</AnchorPane>
 
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
+   <children>
+      <Label layoutX="13.0" layoutY="5.0" prefHeight="18.0" prefWidth="66.0" text="PseudoUtilisateur" />
+      <ImageView fitHeight="25.0" fitWidth="16.0" layoutX="94.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="25.0" fitWidth="16.0" layoutX="110.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="25.0" fitWidth="16.0" layoutX="126.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="25.0" fitWidth="16.0" layoutX="142.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="25.0" fitWidth="16.0" layoutX="158.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <TextArea layoutY="99.0" />
+   </children>
+</AnchorPane>
