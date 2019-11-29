@@ -265,5 +265,31 @@ public class DetailsMusicController implements Controller {
     System.out.println("note is : " + note);
   }
 
+  public Boolean checkFields(TextField textFieldTitre, TextField textFieldArtiste, TextField textFieldAlbum,
+      TextField textFieldAnnee, TextField textFieldLastUploader) {
+    Boolean bool = true;
+    if (textFieldTitre.getText() == null || textFieldTitre.getText().trim().equals("")) {
+      bool = false;
+      textFieldTitre.setStyle(" -fx-background-color:red;");
+    }
+    if (textFieldArtiste.getText() == null || textFieldArtiste.getText().trim().equals("")) {
+      bool = false;
+      textFieldArtiste.setStyle(" -fx-background-color:red;");
+    }
+    if (textFieldAlbum.getText() == null || textFieldAlbum.getText().trim().equals("")) {
+      bool = false;
+      textFieldAlbum.setStyle(" -fx-background-color:red;");
+    }
+    //if (textFieldAnnee.getText() == null || textFieldAnnee.getText().trim().equals("")) {
+    //  bool = false;
+    //  textFieldAnnee.setStyle(" -fx-background-color:red;");
+    //}
+    if (textFieldLastUploader.getText() == null || textFieldLastUploader.getText().trim().equals("")) {
+      bool = false;
+      textFieldLastUploader.setStyle(" -fx-background-color:red;");
+    }
+
+    return bool;
+  }
 
 }
