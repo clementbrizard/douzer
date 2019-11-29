@@ -54,14 +54,16 @@ public class NetworkImpl implements Net {
   }
   
   /**
-   * TODO.
+   * Sends a request to download the distant file identified by the given
+   * hash from differents IPs (list of users who have the mp3). The list is
+   * used to manage errors
    * 
    * @param sourcesIPs ips where the music can be downloaded
    * @param musicHash hash of the music to download
    */
   @Override
   public void requestDownload(Stream<InetAddress> sourcesIPs, String musicHash) {
-    return;
+    this.netProvider.createRequestDownloadThread(sourcesIPs, musicHash);
   }
   
   /**

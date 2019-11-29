@@ -1,6 +1,13 @@
 package controllers;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+
+import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 
 
 /**
@@ -13,13 +20,32 @@ import javafx.fxml.FXML;
  */
 public class CentralFrameController implements Controller {
 
+  public static final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
+  public static final String allMusicsAdvancedSearchView = "/fxml/AllMusicsAdvancedSearchView.fxml";
+  public static final String profileEditView = "/fxml/MyAccountView.fxml";
+  public static final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
+  public static final String distantUserView = "/fxml/UserProfileView.fxml";
+
   @FXML
+  private AnchorPane content;
+
+  private Parent allMusicsParent;
   private AllMusicsController allMusicsController;
 
+  private Parent myMusicsParent;
   private MyMusicsController myMusicsController;
+
+  private Parent distantUserParent;
   private DistantUserController distantUserController;
+
+  private Parent profileEditParent;
   private ProfileEditController profileEditController;
+  //TODO : is detailsMusicController useless ??
   private DetailsMusicController detailsMusicController;
+
+  //TODO new view or make new slots appear for research ?
+  private Parent allMusicsAdvancedSearchParent;
+
   private MainController mainController;
 
 
@@ -133,22 +159,73 @@ public class CentralFrameController implements Controller {
    */
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+
   }
 
   // Other methods
-  
+
   @Override
   public void initialize() {
   }
-  
+
   /**
    * Initialize the controllers inside the central frame.
    */
   public void init() {
-    //TODO add controllers when they are linked to XML
-    this.allMusicsController.setCentralFrameController(this);
-    this.allMusicsController.setApplication(this.mainController.getApplication());
-    this.allMusicsController.init();
+    try {
+      FXMLLoader allMusicsLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.allMusicsView));
+      this.allMusicsParent = allMusicsLoader.load();
+      this.allMusicsController = allMusicsLoader.getController();
+      this.allMusicsController.setCentralFrameController(this);
+      this.allMusicsController.init();
+
+      FXMLLoader profileEditLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.profileEditView));
+      this.profileEditParent = profileEditLoader.load();
+      this.profileEditController = profileEditLoader.getController();
+      this.profileEditController.setCentralFrameController(this);
+
+      FXMLLoader myMusicsLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.myMusicsView));
+      this.myMusicsParent = myMusicsLoader.load();
+      this.myMusicsController = myMusicsLoader.getController();
+      this.myMusicsController.setCentralFrameController(this);
+      this.myMusicsController.init();
+
+      FXMLLoader distantUserLoader = new FXMLLoader(
+          getClass().getResource(CentralFrameController.distantUserView));
+      this.distantUserParent = distantUserLoader.load();
+      this.distantUserController = distantUserLoader.getController();
+      this.distantUserController.setCentralFrameController(this);
+
+      this.setCentralContentMyMusics();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Methods to change the FXML shown in the central view
+  // https://stackoverflow.com/questions/18619394/loading-new-fxml-in-the-same-scene
+  public void setCentralContentProfileEdit() {
+    this.content.getChildren().setAll((Node) this.profileEditParent);
+  }
+
+  public void setCentralContentAllMusics() {
+    this.content.getChildren().setAll((Node) this.allMusicsParent);
+  }
+
+  public void setCentralContentMyMusics() {
+    this.content.getChildren().setAll(((Node) this.myMusicsParent));
+  }
+
+  public void setCentralContentAllMusicsAdvancedSearch() {
+    // TODO
+  }
+
+  public void setCentralContentDistantUser() {
+    this.content.getChildren().setAll(((Node) this.distantUserParent));
   }
 
 }

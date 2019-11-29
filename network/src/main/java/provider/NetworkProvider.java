@@ -1,6 +1,7 @@
 package provider;
 
 import implementation.NetworkImpl;
+
 import interfaces.DataForNet;
 
 import java.io.Serializable;
@@ -121,7 +122,10 @@ public class NetworkProvider {
    */
   public RequestDownloadThread createRequestDownloadThread(Stream<InetAddress> ownersIps,
       String musicHash) {
-    return null;
+    RequestDownloadThread newThread = new RequestDownloadThread(this, ownersIps, musicHash);
+    threads.add(newThread);
+    newThread.start();
+    return newThread;
   }
   
   /**

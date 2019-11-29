@@ -26,11 +26,11 @@
                 </VBox>
              </left>
              <right>
-                 <!-- <VBox BorderPane.alignment="TOP_LEFT">
+                 <VBox BorderPane.alignment="TOP_LEFT">
                     <children>
-                        Right side view yet to come
+                        <fx:include fx:id="currentMusicInfo" source="CurrentMusicInfoView.fxml" />
                     </children>
-                 </VBox> -->
+                 </VBox>
              </right>
         </BorderPane>
     </children>

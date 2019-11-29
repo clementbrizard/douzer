@@ -4,17 +4,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CentralFrameController">
-    <children>
-        <BorderPane>
-            <center>
-                <VBox BorderPane.alignment="CENTER">
-                    <children>
-                        <fx:include fx:id="allMusics" source="AllMusicsCenterView.fxml" />
-                    </children>
-                </VBox>
-            </center>
-
-        </BorderPane>
-    </children>
+<AnchorPane fx:id="content" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CentralFrameController">
+    <!--
+      Put views here from the code. See @CentralFrameController
+  -->
 </AnchorPane>

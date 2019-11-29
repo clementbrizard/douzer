@@ -1,4 +1,4 @@
-package exceptions;
+package exceptions.data;
 
 public class DataException extends Exception {
   public DataException(String s) {

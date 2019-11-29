@@ -30,20 +30,24 @@ public class OnlineUsersListController implements Controller {
   public void initialize() {}
 
   public void init() {
-    // TODO uncomment to get IPs when Data method is implemented
-    displayOnlineUsers(mainController
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .getOnlineUsers());
+    try {
+      displayOnlineUsers();
+    } catch (UnsupportedOperationException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
-   * Fill the view with the ips of users.
-   * @param users Stream of connected users
+   * Fills the view with the ips of users.
    **/
 
-  public void displayOnlineUsers(Stream<User> users) {
+  public void displayOnlineUsers() {
+    Stream<User> users = this.mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getOnlineUsers();
+
     ObservableList<String> items =
         users.map(user -> user.getIp().toString())
              .collect(Collectors.toCollection(FXCollections::observableArrayList));
