@@ -1,21 +1,31 @@
 package controllers;
 
-//replace by javadocs
-//popup view when click on Comment Button on CurrentMusicInfoController
-public class NewCommentController implements Controller {
+import datamodel.LocalMusic;
 
-  private CurrentMusicInfoController currentMusicController;
+public class NewCommentController implements Controller{
+
+  private LocalMusic localMusic;
+  
+  private CommentsController commentsController;
+  
+  
+  public CommentsController getCommentsController() {
+    return commentsController;
+  }
+
+  public void setCommentsController(CommentsController commentsController) {
+    this.commentsController = commentsController;
+  }
+  
+  public void init(LocalMusic localMusic) {
+    this.localMusic = localMusic;
+  }
   
   @Override
   public void initialize() {
-    // TODO Auto-generated method stub
+        
   }
 
-  public CurrentMusicInfoController getCurrentMusicController() {
-    return currentMusicController;
-  }
 
-  public void setCurrentMusicController(CurrentMusicInfoController currentMusicController) {
-    this.currentMusicController = currentMusicController;
-  }
+  
 }

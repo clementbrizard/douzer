@@ -31,7 +31,7 @@ public class CurrentMusicInfoController implements Controller {
   private ProgressBar downloadProgress;
 
   private ShareController shareController;
-  private NewCommentController newCommentController;
+  private CommentsController newCommentController;
   private MainController mainController;
 
   private Scene shareScene;
@@ -44,7 +44,7 @@ public class CurrentMusicInfoController implements Controller {
     return shareController;
   }
 
-  public NewCommentController getNewCommentController() {
+  public CommentsController getNewCommentController() {
     return newCommentController;
   }
 
@@ -81,7 +81,7 @@ public class CurrentMusicInfoController implements Controller {
     this.shareController = shareController;
   }
 
-  public void setNewCommentController(NewCommentController newCommentController) {
+  public void setNewCommentController(CommentsController newCommentController) {
     this.newCommentController = newCommentController;
   }
 
