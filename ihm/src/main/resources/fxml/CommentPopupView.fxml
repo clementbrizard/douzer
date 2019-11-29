@@ -43,6 +43,6 @@
             <Image url="@../images/EmptyStarSymbol.png" />
          </image>
       </ImageView>
-      <Button layoutX="592.0" layoutY="540.0" mnemonicParsing="false" text="Valider" />
+      <Button fx:id="validation" layoutX="592.0" layoutY="540.0" mnemonicParsing="false" text="Valider" onAction="#comment" />
    </children>
 </Pane>

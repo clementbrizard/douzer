@@ -1,12 +1,15 @@
 package controllers;
 
 import datamodel.LocalMusic;
+import datamodel.Music;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -19,10 +22,16 @@ public class CommentsController implements Controller {
   private CurrentMusicInfoController currentMusicInfoController;
   private NewCommentController newCommentController;
   
-  private LocalMusic localMusic;
+  private Music music;
   
   @FXML
   private Button commentButton;
+  
+  @FXML
+  private Label titleMusic;
+  
+  @FXML
+  private ListView listCommentaire;
   
   public CurrentMusicInfoController getCurrentMusicController() {
     return currentMusicInfoController;
@@ -42,12 +51,15 @@ public class CommentsController implements Controller {
   
   
   
-  public void init(LocalMusic localMusic) {
-    this.localMusic = localMusic;
+  public void init(Music music) {
+    this.music = music;
+    titleMusic.setText(music.getMetadata().getTitle());
+    //listCommentaire.setCellFactory(value);
+    
   }
   
   /*
-   * we show the CommentPopupView for the Current LocalMusic
+   * we show the CommentPopupView for the Current LocalMusic.
    */
   @FXML
   public void commentClick(ActionEvent event) {
@@ -60,7 +72,7 @@ public class CommentsController implements Controller {
       NewCommentController newCommentController = newComment.getController();
       this.setNewCommentController(newCommentController);
       newCommentController.setCommentsController(this);
-      newCommentController.init(this.localMusic);
+      newCommentController.init(this.music);
 
     } catch (Exception e) {
       e.printStackTrace();

@@ -1,6 +1,7 @@
 package controllers;
 
 import datamodel.LocalMusic;
+import datamodel.Music;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -34,7 +35,7 @@ public class ShareController implements Controller {
   private Label labelMusic;
 
   private ToggleGroup shareStatusGroup;
-  private LocalMusic currentMusic;
+  private Music currentMusic;
 
   private ShareController shareController;
   private CurrentMusicInfoController currentMusicInfoController;
@@ -90,6 +91,11 @@ public class ShareController implements Controller {
    */
   @FXML
   private void confirm(ActionEvent event) {
+    
+    if( !(currentMusic instanceof LocalMusic)) {
+      //TODO popup the music is not Local impossible to share then
+      return;
+    }
     // if radiobutton Public is selected, the music if shared
     try {
       if ((Boolean) shareStatusGroup.getSelectedToggle().getUserData()) {
@@ -97,13 +103,13 @@ public class ShareController implements Controller {
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
-            .shareMusic(currentMusic);
+            .shareMusic((LocalMusic) currentMusic);
       } else {
         currentMusicInfoController
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
-            .unshareMusic(currentMusic);
+            .unshareMusic((LocalMusic) currentMusic);
       }
     } catch (Exception e) {
       shareLogger.error(e);
@@ -131,10 +137,11 @@ public class ShareController implements Controller {
    *
    * @param currentMusic the current music
    */
-  public void initializeCurrentMusicInfo(LocalMusic currentMusic) {
+  public void initializeCurrentMusicInfo(Music currentMusic) {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
-    this.radioPublic.setSelected(this.currentMusic.isShared());
+    if(currentMusic instanceof LocalMusic)
+      this.radioPublic.setSelected( ((LocalMusic) this.currentMusic).isShared());
   }
 
 }

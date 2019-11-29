@@ -245,19 +245,17 @@ public class MyMusicsController implements Controller {
   @FXML
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
-    boolean doubleclicked = false;
+    
     if (click.getButton().equals(MouseButton.PRIMARY)) {
-      if (click.getClickCount() == 2) {
-        if (music != null) {
-          System.out.println("Double clicked on : " + music.getTitle());
-          doubleclicked = true;
+      if (music != null) {
+        for (int i = 0; i < this.listMusics.size(); i++) {
+          if (this.listMusics.get(i).getMetadata().equals(music)) {
+            musicInformation = listMusics.get(i);
+          }
         }
-      }
-      if (music != null && !doubleclicked) {
-        System.out.println("musique appuyé : " + music.getTitle());
+        this.getCentralFrameController().getMainController().getCurrentMusicInfoController().init(musicInformation);
       }
     }
-
     if (click.getButton().equals(MouseButton.SECONDARY)) {
       if (music != null) {
         for (int i = 0; i < this.listMusics.size(); i++) {
