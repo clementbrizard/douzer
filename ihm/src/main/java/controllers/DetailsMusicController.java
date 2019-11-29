@@ -8,8 +8,11 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.Iterator;
 
+import org.apache.logging.log4j.LogManager;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 //replace by javadocs
 //central view to show all information about on music
@@ -269,8 +273,20 @@ public class DetailsMusicController implements Controller {
     System.out.println("note is : " + note);
   }
 
-  public Boolean checkFields(TextField textFieldTitre, TextField textFieldArtiste, TextField textFieldAlbum,
-      TextField textFieldAnnee, TextField textFieldLastUploader) {
+  public void Validation(ActionEvent action) {
+    //if(checkField())
+
+    localMusic.getMetadata().setTitle(textFieldTitre.getText());
+    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+    localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
+    //localMusic.getMetadata().setReleaseYear(new Year (textFieldAnnee.getText()));
+
+
+    //@FXML
+    //private TextField textFieldLastUploader;
+  }
+
+  public Boolean checkFields() {
     Boolean bool = true;
     if (textFieldTitre.getText() == null || textFieldTitre.getText().trim().equals("")) {
       bool = false;
@@ -294,6 +310,19 @@ public class DetailsMusicController implements Controller {
     }
 
     return bool;
+  }
+
+  public void validation(ActionEvent action) {
+
+    if(!checkFields())
+      return;
+    localMusic.getMetadata().setTitle(textFieldTitre.getText());
+    localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
+    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+    //TODO function from DATA who update the LocalMusic
+    //this.getMyMusicsController().getApplication().getIhmCore().getDataForIhm().
+    LogManager.getLogger().info("Change Field TODO with Data function if exist");
+    ((Stage) this.textFieldTitre.getScene().getWindow()).close();
   }
 
 }

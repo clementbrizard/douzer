@@ -48,7 +48,7 @@ public class Application extends javafx.application.Application {
 
   // Constructor
   public Application() {
-    applicationLogger.info("IhmCore start");
+    applicationLogger.info("Application start");
   }
 
   // Getters for scenes
