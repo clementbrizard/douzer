@@ -77,6 +77,8 @@ public class DetailsMusicController implements Controller {
 
   private MyMusicsController myMusicsController;
 
+  private int note = 0;
+  
   public MyMusicsController getMyMusicsController() {
     return this.myMusicsController;
   }
@@ -232,7 +234,7 @@ public class DetailsMusicController implements Controller {
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 1");
         setStars(1);
-        sendNoteToData(1);
+        note = 1;
       }
     }));
 
@@ -241,7 +243,7 @@ public class DetailsMusicController implements Controller {
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 2");
         setStars(2);
-        sendNoteToData(2);
+        note = 2;
       }
     }));
 
@@ -250,7 +252,7 @@ public class DetailsMusicController implements Controller {
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 3");
         setStars(3);
-        sendNoteToData(3);
+        note = 3;
       }
     }));
 
@@ -259,7 +261,7 @@ public class DetailsMusicController implements Controller {
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 4");
         setStars(4);
-        sendNoteToData(4);
+        note = 4;
       }
     }));
 
@@ -268,7 +270,7 @@ public class DetailsMusicController implements Controller {
       public void handle(MouseEvent event) {
         System.out.println("clique sur l'�toile 5");
         setStars(5);
-        sendNoteToData(5);
+        note = 5;
       }
     }));
 
@@ -298,10 +300,6 @@ public class DetailsMusicController implements Controller {
 
   }
 
-  public void sendNoteToData(int note) {
-    System.out.println("note is : " + note);
-  }
-
   /**
    * Function checks that the fields are not null.
    * @return Boolean, false if there is a nul field.
@@ -312,13 +310,22 @@ public class DetailsMusicController implements Controller {
       bool = false;
       textFieldTitre.setStyle(" -fx-background-color:red;");
     }
+    else {
+      textFieldTitre.setStyle(" -fx-background-color:white;");
+    }
     if (textFieldArtiste.getText() == null || textFieldArtiste.getText().trim().equals("")) {
       bool = false;
       textFieldArtiste.setStyle(" -fx-background-color:red;");
     }
+    else {
+      textFieldArtiste.setStyle(" -fx-background-color:white;");
+    }
     if (textFieldAlbum.getText() == null || textFieldAlbum.getText().trim().equals("")) {
       bool = false;
       textFieldAlbum.setStyle(" -fx-background-color:red;");
+    }
+    else {
+      textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
     //if (textFieldAnnee.getText() == null || textFieldAnnee.getText().trim().equals("")) {
     //  bool = false;
@@ -329,6 +336,10 @@ public class DetailsMusicController implements Controller {
       bool = false;
       textFieldLastUploader.setStyle(" -fx-background-color:red;");
     }
+    else {
+      textFieldLastUploader.setStyle(" -fx-background-color:white;");
+    }
+    
 
     return bool;
   }
@@ -345,8 +356,9 @@ public class DetailsMusicController implements Controller {
     localMusic.getMetadata().setTitle(textFieldTitre.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtiste.getText());
-    //TODO function from DATA who update the LocalMusic
-    //this.getMyMusicsController().getApplication().getIhmCore().getDataForIhm().
+    if(note > 0)
+      this.getMyMusicsController().getApplication().getIhmCore().getDataForIhm().rateMusic(localMusic, note);
+    
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();
   }

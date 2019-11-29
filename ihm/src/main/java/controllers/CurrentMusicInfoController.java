@@ -70,7 +70,6 @@ public class CurrentMusicInfoController implements Controller {
     this.currentMusic = new LocalMusic(new MusicMetadata(), "pathTest.mp3");
     this.currentMusic.setShared(true);
     this.currentMusic.getMetadata().setTitle("Ceci est un test");
-
   }
 
   public LocalMusic getCurrentMusic() {
