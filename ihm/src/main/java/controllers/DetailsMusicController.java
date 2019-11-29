@@ -5,6 +5,7 @@ import datamodel.LocalUser;
 import datamodel.User;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Iterator;
 
 import javafx.collections.FXCollections;
@@ -13,6 +14,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -32,7 +35,7 @@ public class DetailsMusicController implements Controller {
 	  private TextField textFieldAlbum;
 
 	  @FXML
-	  private TextField textFieldAnnee;
+	  private Spinner<Integer> dateYear;
 
 	  @FXML
 	  private TextField textFieldLastUploader;
@@ -106,7 +109,8 @@ public class DetailsMusicController implements Controller {
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getReleaseYear() != null) {
-        textFieldAnnee.setText("" + localMusic.getMetadata().getReleaseYear());
+        dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+        1000, LocalDate.now().getYear(), localMusic.getMetadata().getReleaseYear().getValue(), 1));
       }
     }
 

@@ -23,7 +23,7 @@
       <TextField fx:id="textFieldTitre" layoutX="133.0" layoutY="91.0" prefHeight="31.0" prefWidth="161.0" />
       <TextField fx:id="textFieldArtiste" layoutX="133.0" layoutY="155.0" prefHeight="31.0" prefWidth="161.0" />
       <TextField fx:id="textFieldAlbum" layoutX="133.0" layoutY="217.0" prefHeight="31.0" prefWidth="161.0" />
-      <TextField fx:id="textFieldAnnee" layoutX="133.0" layoutY="281.0" prefHeight="31.0" prefWidth="161.0" />
+      <Spinner fx:id="dateYear" layoutX="133.0" layoutY="281.0" prefHeight="31.0" prefWidth="161.0" />
       <ListView fx:id="listViewTagsList" layoutX="428.0" layoutY="115.0" prefHeight="146.0" prefWidth="161.0" />
       <Label layoutX="428.0" layoutY="96.0" prefHeight="21.0" prefWidth="161.0" style="-fx-background-color: #a9a9a9;" text="Tags" />
       <Label layoutX="386.0" layoutY="400.0" text="Uploader" />
