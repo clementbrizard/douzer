@@ -81,7 +81,7 @@ public class MyMusicsController implements Controller {
 
 
   public void setDetailsMusicController(DetailsMusicController controller) {
-	  this.detailsMusicController = controller;
+    this.detailsMusicController = controller;
   }
 
   public SearchMusicController getSearchMusicController() {
@@ -101,7 +101,7 @@ public class MyMusicsController implements Controller {
   }
 
   public DetailsMusicController getDetailsMusicController(DetailsMusicController controller) {
-	  return this.detailsMusicController;
+    return this.detailsMusicController;
   }
 
   public Application getApplication() {
@@ -175,7 +175,8 @@ public class MyMusicsController implements Controller {
             .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toList()));
 
     return this.getCentralFrameController().getMainController().getApplication()
-            .getIhmCore().getDataForIhm().getLocalMusics().map(x -> x.getMetadata()).collect(Collectors.toList());
+            .getIhmCore().getDataForIhm().getLocalMusics()
+            .map(x -> x.getMetadata()).collect(Collectors.toList());
   }
 
   /**
@@ -210,54 +211,59 @@ public class MyMusicsController implements Controller {
   }
 
   private void showMusicInformation(LocalMusic music) {
-	  try {
-	      // Initialize shareScene and shareController
-	      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass().getResource("/fxml/MusicDetailsView.fxml"));
-	      Parent musicDetailsParent = musicDetailsLoader.load();
-	      infoMusicScene = new Scene(musicDetailsParent);
-	      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
-	      this.setDetailsMusicController(detailsMusicController);
-	      detailsMusicController.setMyMusicsController(this);
-	      detailsMusicController.initMusic(music);
+    try {
+      // Initialize shareScene and shareController
+      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
+          .getResource("/fxml/MusicDetailsView.fxml"));
+      Parent musicDetailsParent = musicDetailsLoader.load();
+      infoMusicScene = new Scene(musicDetailsParent);
+      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
+      this.setDetailsMusicController(detailsMusicController);
+      detailsMusicController.setMyMusicsController(this);
+      detailsMusicController.initMusic(music);
 
-	    } catch (Exception e) {
-	      e.printStackTrace();
-	    }
-
-	    Stage musicDetailsPopup = new Stage();
-	    musicDetailsPopup.setTitle("Info musique");
-	    musicDetailsPopup.setScene(this.infoMusicScene);
-
-	    // Set position of second window, relatively to primary window.
-	    //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
-	    //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
-
-	    // Show sharing popup.
-	    musicDetailsPopup.show();
-  }
-
-  @FXML
-  public void handleClickTableView(MouseEvent click){
-    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
-    boolean doubleclicked = false;
-    if(click.getButton().equals(MouseButton.PRIMARY)){
-        if(click.getClickCount() == 2){
-            if(music != null) {
-              System.out.println("Double clicked on : " + music.getTitle());
-              doubleclicked = true;
-            }
-        }
-        if(music != null && !doubleclicked) {
-          System.out.println("musique appuyé : " + music.getTitle());
-        }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
 
-    if(click.getButton().equals(MouseButton.SECONDARY)) {
-      if(music != null) {
-        for(int i = 0; i<this.listMusics.size(); i++) {
-        	if (this.listMusics.get(i).getMetadata().equals(music)) {
-        		musicInformation = listMusics.get(i);
-        	}
+    Stage musicDetailsPopup = new Stage();
+    musicDetailsPopup.setTitle("Info musique");
+    musicDetailsPopup.setScene(this.infoMusicScene);
+
+    // Set position of second window, relatively to primary window.
+    //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
+    //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
+
+    // Show sharing popup.
+    musicDetailsPopup.show();
+  }
+
+  /**
+   * This function implements right click options.
+   * @param click mouse event right click.
+   */
+  @FXML
+  public void handleClickTableView(MouseEvent click) {
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
+    boolean doubleclicked = false;
+    if (click.getButton().equals(MouseButton.PRIMARY)) {
+      if (click.getClickCount() == 2) {
+        if (music != null) {
+          System.out.println("Double clicked on : " + music.getTitle());
+          doubleclicked = true;
+        }
+      }
+      if (music != null && !doubleclicked) {
+        System.out.println("musique appuyé : " + music.getTitle());
+      }
+    }
+
+    if (click.getButton().equals(MouseButton.SECONDARY)) {
+      if (music != null) {
+        for (int i = 0; i < this.listMusics.size(); i++) {
+          if (this.listMusics.get(i).getMetadata().equals(music)) {
+            musicInformation = listMusics.get(i);
+          }
         }
         contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
       }

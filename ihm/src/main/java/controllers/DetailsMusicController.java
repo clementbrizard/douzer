@@ -8,8 +8,6 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.Iterator;
 
-import org.apache.logging.log4j.LogManager;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,54 +23,56 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import org.apache.logging.log4j.LogManager;
+
 //replace by javadocs
 //central view to show all information about on music
 public class DetailsMusicController implements Controller {
 
-	  @FXML
-	  private TextField textFieldTitre;
+  @FXML
+  private TextField textFieldTitre;
 
-	  @FXML
-	  private TextField textFieldArtiste;
+  @FXML
+  private TextField textFieldArtiste;
 
-	  @FXML
-	  private TextField textFieldAlbum;
+  @FXML
+  private TextField textFieldAlbum;
 
-	  @FXML
-	  private Spinner<Integer> dateYear;
+  @FXML
+  private Spinner<Integer> dateYear;
 
-	  @FXML
-	  private TextField textFieldLastUploader;
+  @FXML
+  private TextField textFieldLastUploader;
 
-	  @FXML
-	  private TextField textFieldAddTag;
+  @FXML
+  private TextField textFieldAddTag;
 
-	  @FXML
-	  private ListView<String> listViewTagsList;
+  @FXML
+  private ListView<String> listViewTagsList;
 
-	  private ObservableList<String> tags;
+  private ObservableList<String> tags;
 
-	  private LocalMusic localMusic;
+  private LocalMusic localMusic;
 
-	  @FXML
-	  private Button buttonValider;
+  @FXML
+  private Button buttonValider;
 
-	  @FXML
-	  private Button buttonAddTag;
+  @FXML
+  private Button buttonAddTag;
 
-	  @FXML
-	  private ImageView imageEtoile1;
+  @FXML
+  private ImageView imageEtoile1;
 
-	  @FXML
-	  private ImageView imageEtoile2;
+  @FXML
+  private ImageView imageEtoile2;
 
-	  @FXML
-	  private ImageView imageEtoile3;
+  @FXML
+  private ImageView imageEtoile3;
 
-	  @FXML
-	  private ImageView imageEtoile4;
+  @FXML
+  private ImageView imageEtoile4;
 
-	  @FXML
+  @FXML
   private ImageView imageEtoile5;
 
   private MyMusicsController myMusicsController;
@@ -114,7 +114,8 @@ public class DetailsMusicController implements Controller {
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getReleaseYear() != null) {
         dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-        1000, LocalDate.now().getYear(), localMusic.getMetadata().getReleaseYear().getValue(), 1));
+            1000, LocalDate.now().getYear(), localMusic.getMetadata()
+            .getReleaseYear().getValue(), 1));
       }
     }
 
@@ -159,42 +160,70 @@ public class DetailsMusicController implements Controller {
 
   public void setStars(int rating) {
     if (rating == 1) {
-      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile1.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 2) {
-      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile1.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 3) {
-      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile1.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 4) {
-      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
+      imageEtoile1.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
     }
     if (rating == 5) {
-      imageEtoile1.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File("../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile1.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile2.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile3.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile4.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+      imageEtoile5.setImage(new Image(new File(
+          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
     }
   }
 
+  /**
+   * Function changes the rating and the stars display when star is clicked.
+   */
   @Override
   public void initialize() {
 
@@ -273,19 +302,10 @@ public class DetailsMusicController implements Controller {
     System.out.println("note is : " + note);
   }
 
-  public void Validation(ActionEvent action) {
-    //if(checkField())
-
-    localMusic.getMetadata().setTitle(textFieldTitre.getText());
-    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
-    localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-    //localMusic.getMetadata().setReleaseYear(new Year (textFieldAnnee.getText()));
-
-
-    //@FXML
-    //private TextField textFieldLastUploader;
-  }
-
+  /**
+   * Function checks that the fields are not null.
+   * @return Boolean, false if there is a nul field.
+   */
   public Boolean checkFields() {
     Boolean bool = true;
     if (textFieldTitre.getText() == null || textFieldTitre.getText().trim().equals("")) {
@@ -304,7 +324,8 @@ public class DetailsMusicController implements Controller {
     //  bool = false;
     //  textFieldAnnee.setStyle(" -fx-background-color:red;");
     //}
-    if (textFieldLastUploader.getText() == null || textFieldLastUploader.getText().trim().equals("")) {
+    if (textFieldLastUploader.getText() == null
+        || textFieldLastUploader.getText().trim().equals("")) {
       bool = false;
       textFieldLastUploader.setStyle(" -fx-background-color:red;");
     }
@@ -312,10 +333,15 @@ public class DetailsMusicController implements Controller {
     return bool;
   }
 
+  /**
+   * Function updates the value of modified fields.
+   * @param action button Validation is clicked.
+   */
   public void validation(ActionEvent action) {
 
-    if(!checkFields())
+    if (!checkFields()) {
       return;
+    }
     localMusic.getMetadata().setTitle(textFieldTitre.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtiste.getText());
