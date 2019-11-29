@@ -58,8 +58,8 @@ public class DetailsMusicController implements Controller {
     }
 
     if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getReleaseDate() != null) {
-        textFieldAnnee.setText("" + localMusic.getMetadata().getReleaseDate().getYear());
+      if (localMusic.getMetadata().getReleaseYear() != null) {
+        textFieldAnnee.setText("" + localMusic.getMetadata().getReleaseYear());
       }
     }
 

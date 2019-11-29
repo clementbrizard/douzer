@@ -16,9 +16,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 //replace by javadocs
@@ -52,6 +58,7 @@ public class MyMusicsController implements Controller {
   public void initialize() {
     // TODO Auto-generated method stub
     //logger = LogManager.getLogger();
+
   }
 
   public NewMusicController getNewMusicController() {
@@ -92,7 +99,6 @@ public class MyMusicsController implements Controller {
    * this method has to be called right after the creation of the view.
    */
   public void init() {
-
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
@@ -106,6 +112,38 @@ public class MyMusicsController implements Controller {
     } catch (UnsupportedOperationException e) {
       e.printStackTrace();
     }
+    
+    
+    // Create ContextMenu
+    ContextMenu contextMenu = new ContextMenu();
+    
+    MenuItem item1 = new MenuItem("Menu Item 1");
+    item1.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        System.out.println("click on first element");
+      }
+    });
+    MenuItem item2 = new MenuItem("Menu Item 2");
+    item2.setOnAction(new EventHandler<ActionEvent>() {
+      
+      @Override
+      public void handle(ActionEvent event) {
+        System.out.println("Click On second Item");
+      }
+    });
+    // Add MenuItem to ContextMenu
+    contextMenu.getItems().addAll(item1, item2);
+
+    // When user right-click on TvMusics
+
+    tvMusics.setOnContextMenuRequested(new EventHandler<ContextMenuEvent>() {
+      
+      @Override
+      public void handle(ContextMenuEvent event) {
+        contextMenu.show(tvMusics, event.getScreenX(), event.getScreenY());
+      }
+    });
   }
 
 
@@ -155,6 +193,26 @@ public class MyMusicsController implements Controller {
     
   }
 
+  @FXML
+  public void handleClickTableView(MouseEvent click){
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem(); 
+    boolean doubleclicked = false;
+    if(click.getButton().equals(MouseButton.PRIMARY)){
+      if(click.getClickCount() == 2){
+          if(music != null) {
+            System.out.println("Double clicked on : " + music.getTitle());
+            doubleclicked = true;
+          }
+      }
+      if(music != null && !doubleclicked) {
+        System.out.println("musique appuyé : " + music.getTitle());
+      }
+  }
+    
+    
+  }
+  
+  
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
