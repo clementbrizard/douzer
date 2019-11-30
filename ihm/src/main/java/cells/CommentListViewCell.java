@@ -31,6 +31,7 @@ public class CommentListViewCell extends ListCell<String> {
     } else {
       if (mLLoader == null) {
           mLLoader = new FXMLLoader(getClass().getResource("/fxml/CommentCustomCell.fxml"));
+          mLLoader.setController(this);
 
           try {
               mLLoader.load();
