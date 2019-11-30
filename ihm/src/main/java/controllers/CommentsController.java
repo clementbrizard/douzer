@@ -18,21 +18,21 @@ import javafx.stage.Stage;
 public class CommentsController implements Controller {
 
   private Scene newCommentLoader;
-  
+
   private CurrentMusicInfoController currentMusicInfoController;
   private NewCommentController newCommentController;
-  
+
   private Music music;
-  
+
   @FXML
   private Button commentButton;
-  
+
   @FXML
   private Label titleMusic;
-  
+
   @FXML
   private ListView listCommentaire;
-  
+
   public CurrentMusicInfoController getCurrentMusicController() {
     return currentMusicInfoController;
   }
@@ -48,17 +48,17 @@ public class CommentsController implements Controller {
   public void setNewCommentController(NewCommentController newCommentController) {
     this.newCommentController = newCommentController;
   }
-  
-  
-  
+
+
+
   public void init(Music music) {
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
     //listCommentaire.setCellFactory(value);
-    
+
   }
-  
-  /*
+
+  /**
    * we show the CommentPopupView for the Current LocalMusic.
    */
   @FXML
@@ -68,7 +68,7 @@ public class CommentsController implements Controller {
       FXMLLoader newComment = new FXMLLoader(getClass().getResource("/fxml/CommentPopupView.fxml"));
       Parent newCommentParent = newComment.load();
       newCommentLoader = new Scene(newCommentParent);
-      
+
       NewCommentController newCommentController = newComment.getController();
       this.setNewCommentController(newCommentController);
       newCommentController.setCommentsController(this);
@@ -86,16 +86,16 @@ public class CommentsController implements Controller {
     //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
     //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
 
-    
+
     // Show sharing popup.
     newCommentPopup.initModality(Modality.APPLICATION_MODAL);
     newCommentPopup.showAndWait();
     //newCommentPopup.show();
   }
-  
+
   @Override
   public void initialize() {
-    
+
   }
 
 

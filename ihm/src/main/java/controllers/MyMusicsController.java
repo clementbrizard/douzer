@@ -245,7 +245,7 @@ public class MyMusicsController implements Controller {
   @FXML
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
-    
+
     if (click.getButton().equals(MouseButton.PRIMARY)) {
       if (music != null) {
         for (int i = 0; i < this.listMusics.size(); i++) {
@@ -253,7 +253,8 @@ public class MyMusicsController implements Controller {
             musicInformation = listMusics.get(i);
           }
         }
-        this.getCentralFrameController().getMainController().getCurrentMusicInfoController().init(musicInformation);
+        this.getCentralFrameController().getMainController()
+        .getCurrentMusicInfoController().init(musicInformation);
       }
     }
     if (click.getButton().equals(MouseButton.SECONDARY)) {

@@ -91,8 +91,8 @@ public class ShareController implements Controller {
    */
   @FXML
   private void confirm(ActionEvent event) {
-    
-    if( !(currentMusic instanceof LocalMusic)) {
+
+    if (!(currentMusic instanceof LocalMusic)) {
       //TODO popup the music is not Local impossible to share then
       return;
     }
@@ -140,8 +140,9 @@ public class ShareController implements Controller {
   public void initializeCurrentMusicInfo(Music currentMusic) {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
-    if(currentMusic instanceof LocalMusic)
-      this.radioPublic.setSelected( ((LocalMusic) this.currentMusic).isShared());
+    if (currentMusic instanceof LocalMusic) {
+      this.radioPublic.setSelected(((LocalMusic) this.currentMusic).isShared());
+    }
   }
 
 }
