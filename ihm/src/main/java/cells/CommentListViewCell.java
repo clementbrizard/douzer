@@ -2,14 +2,15 @@ package cells;
 
 import java.io.IOException;
 
+import datamodel.Comment;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 
-public class CommentListViewCell extends ListCell<String> {
+public class CommentListViewCell extends ListCell<Comment> {
   
   @FXML
   TextArea comment;
@@ -17,13 +18,16 @@ public class CommentListViewCell extends ListCell<String> {
   @FXML
   private AnchorPane anchorPane;
   
+  @FXML
+  private Label labelOwner;
+  
   private FXMLLoader mLLoader;
   
   @Override
-  protected void updateItem(String comment,boolean empty) {
+  protected void updateItem(Comment comment,boolean empty) {
     super.updateItem(comment, empty);
     
-    if(empty || comment == null || comment.trim().equals("")) {
+    if(empty || comment == null || comment.getComment().trim().equals("")) {
 
       setText(null);
       setGraphic(null);
@@ -40,8 +44,8 @@ public class CommentListViewCell extends ListCell<String> {
           }
 
       }
-
-      this.comment.setText(comment);
+      this.labelOwner.setText(comment.getOwner().getUsername());
+      this.comment.setText(comment.getComment());
       this.comment.setEditable(false);
 
       setText(null);

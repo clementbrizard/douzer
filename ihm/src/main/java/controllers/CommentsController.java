@@ -1,6 +1,7 @@
 package controllers;
 
 import cells.CommentListViewCell;
+import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.Music;
 import javafx.collections.FXCollections;
@@ -36,9 +37,9 @@ public class CommentsController implements Controller {
   private Label titleMusic;
 
   @FXML
-  private ListView<String> listCommentaire;
+  private ListView<Comment> listCommentaire;
   
-  private ObservableList<String> commentObservableList;
+  private ObservableList<Comment> commentObservableList;
   
   public CurrentMusicInfoController getCurrentMusicController() {
     return currentMusicInfoController;
@@ -62,13 +63,17 @@ public class CommentsController implements Controller {
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
     commentObservableList = FXCollections.observableArrayList();
-    //TODO get all comment from music 
-    commentObservableList.addAll("test","test");
+    commentObservableList.addAll(music.getMetadata().getComments()); 
+    
+    commentObservableList.addAll(
+        new Comment("test1",this.getCurrentMusicController().getApplication().getIhmCore().getDataForIhm().getCurrentUser())
+        ,new Comment("2",this.getCurrentMusicController().getApplication().getIhmCore().getDataForIhm().getCurrentUser()));
+    
     listCommentaire.setItems(commentObservableList);
-    listCommentaire.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+    listCommentaire.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
       
       @Override
-      public ListCell<String> call(ListView<String> param) {
+      public ListCell<Comment> call(ListView<Comment> param) {
         // TODO Auto-generated method stub
         return new CommentListViewCell();
       } 
