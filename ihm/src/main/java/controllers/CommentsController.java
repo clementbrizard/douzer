@@ -1,7 +1,10 @@
 package controllers;
 
+import cells.CommentListViewCell;
 import datamodel.LocalMusic;
 import datamodel.Music;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +12,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 //replace by javadocs
 //popup view when click on Comment Button on CurrentMusicInfoController
@@ -31,7 +36,9 @@ public class CommentsController implements Controller {
   private Label titleMusic;
   
   @FXML
-  private ListView listCommentaire;
+  private ListView<String> listCommentaire;
+  
+  private ObservableList<String> commentObservableList;
   
   public CurrentMusicInfoController getCurrentMusicController() {
     return currentMusicInfoController;
@@ -54,8 +61,19 @@ public class CommentsController implements Controller {
   public void init(Music music) {
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
-    
-    //listCommentaire.setCellFactory(value);
+    commentObservableList = FXCollections.observableArrayList();
+    //TODO get all comment from music 
+    commentObservableList.addAll("test","test");
+    listCommentaire.setItems(commentObservableList);
+    listCommentaire.setCellFactory(new Callback<ListView<String>, ListCell<String>>() {
+      
+      @Override
+      public ListCell<String> call(ListView<String> param) {
+        // TODO Auto-generated method stub
+        return new CommentListViewCell();
+      } 
+      
+    });
     
   }
   
