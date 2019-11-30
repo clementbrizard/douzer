@@ -38,9 +38,9 @@ public class CommentsController implements Controller {
 
   @FXML
   private ListView<Comment> listCommentaire;
-  
+
   private ObservableList<Comment> commentObservableList;
-  
+
   public CurrentMusicInfoController getCurrentMusicController() {
     return currentMusicInfoController;
   }
@@ -58,28 +58,32 @@ public class CommentsController implements Controller {
   }
 
 
-
+  /**
+   * This function displays the music's comments.
+   * @param music Object Music.
+   */
   public void init(Music music) {
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
     commentObservableList = FXCollections.observableArrayList();
-    commentObservableList.addAll(music.getMetadata().getComments()); 
-    
+    commentObservableList.addAll(music.getMetadata().getComments());
+
     commentObservableList.addAll(
-        new Comment("test1",this.getCurrentMusicController().getApplication().getIhmCore().getDataForIhm().getCurrentUser())
-        ,new Comment("2",this.getCurrentMusicController().getApplication().getIhmCore().getDataForIhm().getCurrentUser()));
-    
+        new Comment("test1",this.getCurrentMusicController().getApplication().getIhmCore()
+            .getDataForIhm().getCurrentUser()),new Comment("2",this.getCurrentMusicController()
+            .getApplication().getIhmCore().getDataForIhm().getCurrentUser()));
+
     listCommentaire.setItems(commentObservableList);
     listCommentaire.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
-      
+
       @Override
       public ListCell<Comment> call(ListView<Comment> param) {
         // TODO Auto-generated method stub
         return new CommentListViewCell();
-      } 
-      
+      }
+
     });
-    
+
   }
 
   /**
@@ -87,7 +91,7 @@ public class CommentsController implements Controller {
    */
   @FXML
   public void commentClick(ActionEvent event) {
-    if(this.music == null) {
+    if (this.music == null) {
       return;
     }
     try {
