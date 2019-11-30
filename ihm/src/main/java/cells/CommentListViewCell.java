@@ -23,6 +23,13 @@ public class CommentListViewCell extends ListCell<Comment> {
   
   private FXMLLoader mLLoader;
   
+  @FXML
+  public void userClicked() {
+    System.out.println("click on label user : " + labelOwner.getText());
+    
+  }
+  
+  
   @Override
   protected void updateItem(Comment comment,boolean empty) {
     super.updateItem(comment, empty);
@@ -47,7 +54,8 @@ public class CommentListViewCell extends ListCell<Comment> {
       this.labelOwner.setText(comment.getOwner().getUsername());
       this.comment.setText(comment.getComment());
       this.comment.setEditable(false);
-
+      this.comment.resize(getWidth(), getHeight());
+      
       setText(null);
       setGraphic(anchorPane);
     }
