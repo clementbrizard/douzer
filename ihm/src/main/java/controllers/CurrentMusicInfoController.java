@@ -71,7 +71,9 @@ public class CurrentMusicInfoController implements Controller {
   public void init(Music music) {
     // TODO link currentMusicInfoController with MainController instead of IhmCore
     this.currentMusic = music;
+    
     commentCurrentMusicController.init(music);
+    commentCurrentMusicController.setCurrentMusicController(this);
   }
 
   public Music getCurrentMusic() {

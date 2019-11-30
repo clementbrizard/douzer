@@ -54,6 +54,7 @@ public class CommentsController implements Controller {
   public void init(Music music) {
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
+    
     //listCommentaire.setCellFactory(value);
 
   }
@@ -63,6 +64,9 @@ public class CommentsController implements Controller {
    */
   @FXML
   public void commentClick(ActionEvent event) {
+    if(this.music == null) {
+      return;
+    }
     try {
       // Initialize shareScene and shareController
       FXMLLoader newComment = new FXMLLoader(getClass().getResource("/fxml/CommentPopupView.fxml"));
