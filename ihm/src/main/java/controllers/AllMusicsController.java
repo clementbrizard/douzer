@@ -8,14 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 
@@ -138,6 +135,10 @@ public class AllMusicsController implements Controller {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Show labels for advanced reserch for All musics view.
+   * @param event the clic ont the button "Recherche avancée".
+   */
   @FXML
   public void showAdvancedSearch(ActionEvent event) {
     if (tfSearch.isDisabled()) {
@@ -162,6 +163,10 @@ public class AllMusicsController implements Controller {
     AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
   }
 
+  /**
+   * Search all musics that correspond to the labels content.
+   * @param event The click on the search button.
+   */
   @FXML
   public void searchMusics(MouseEvent event) {
 

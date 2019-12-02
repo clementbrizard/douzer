@@ -9,8 +9,8 @@ import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.event.ActionEvent;
 import java.util.stream.Stream;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,8 +19,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 /**
  * central view show up my musics.
@@ -168,7 +168,10 @@ public class MyMusicsController implements Controller {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
-
+  /**
+   * Shox labels for advanced research on My Musics view.
+   * @param event The click on the button "Recherche avancée".
+   */
   @FXML
   public void showAdvancedSearch(ActionEvent event) {
     if (tfSearch.isDisabled()) {
@@ -188,7 +191,10 @@ public class MyMusicsController implements Controller {
     }
   }
 
-
+  /**
+   * Search music request corresponding to the labels content.
+   * @param event The click on the search button.
+   */
   @FXML
   public void searchMusics(MouseEvent event) {
 
