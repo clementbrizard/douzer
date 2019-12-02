@@ -20,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 public class CentralFrameController implements Controller {
 
   public static final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
-  public static final String allMusicsAdvancedSearchView = "/fxml/AllMusicsAdvancedSearchView.fxml";
   public static final String profileEditView = "/fxml/MyAccountView.fxml";
   public static final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
   public static final String distantUserView = "/fxml/UserProfileView.fxml";
