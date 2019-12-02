@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
@@ -9,10 +10,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AllMusicsController">
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AllMusicsController">
    <children>
       <BorderPane>
          <center>
@@ -27,7 +29,7 @@
                          </columns>
                      </TableView>
                      <TextField fx:id="tfSearch" layoutX="110.0" layoutY="24.0" prefHeight="31.0" prefWidth="473.0" promptText="Rechercher" />
-                     <ImageView fx:id="ivSearchAll" fitHeight="26.0" fitWidth="26.0" layoutX="586.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="ivSearchAll" onMouseClicked="#searchMusics" fitHeight="26.0" fitWidth="26.0" layoutX="586.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
                          <image>
                              <Image url="@../images/searchSymbol.png" />
                          </image>
@@ -47,7 +49,7 @@
                              <Image url="@../images/minusSymbol.png" />
                          </image>
                      </ImageView>
-                     <Button fx:id="btnAdvancedSearch" layoutX="111.0" layoutY="59.0" text="Recherche avancée" underline="true" />
+                     <Button fx:id="btnAdvancedSearch" onAction="#showAdvancedSearch" layoutX="111.0" layoutY="59.0" text="Recherche avancée" underline="true" />
                   <TextField fx:id="tfSearchTitle" layoutX="68.0" layoutY="97.0" prefHeight="31.0" prefWidth="250.0" promptText="Titre" />
                   <TextField fx:id="tfSearchArtist" layoutX="68.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Artist" />
                   <TextField fx:id="tfSearchAlbum" layoutX="323.0" layoutY="96.0" prefHeight="31.0" prefWidth="250.0" promptText="Album" />
@@ -56,11 +58,20 @@
              </Pane>
          </center>
          <top>
-               <Label fx:id="lblTitle" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Tous les morceaux" textFill="WHITE" BorderPane.alignment="CENTER">
-                   <font>
-                       <Font size="24.0" />
-                   </font>
-               </Label>
+             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;">
+                 <children>
+                     <Button fx:id="btnMyMusicsCenter" onAction="#changeFrameToMyMusics" text="Mes musiques" translateX="-204">
+                         <padding>
+                             <Insets bottom="5" left="8" right="8" top="5" />
+                         </padding>
+                     </Button>
+                     <Label fx:id="lblTitle" alignment="CENTER" blendMode="ADD" contentDisplay="CENTER" text="Tous les morceaux" textAlignment="CENTER" textFill="WHITE" translateX="-70">
+                         <font>
+                             <Font size="24.0" />
+                         </font>
+                     </Label>
+                 </children>
+             </HBox>
          </top>
       </BorderPane>
    </children>

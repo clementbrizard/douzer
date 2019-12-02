@@ -25,8 +25,6 @@ import javafx.scene.input.MouseEvent;
 public class AllMusicsController implements Controller {
 
   @FXML
-  private Button btnAdvancedSearch;
-  @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
   private TableColumn<MusicMetadata, String> artistCol;
@@ -46,8 +44,6 @@ public class AllMusicsController implements Controller {
   private TextField tfSearchAlbum;
   @FXML
   private TextField tfSearchDuration;
-  @FXML
-  private ImageView ivSearchAll;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
@@ -103,7 +99,6 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
-
   }
 
   /**
@@ -111,6 +106,7 @@ public class AllMusicsController implements Controller {
    * this method has to be called right after the creation of the view.
    */
   public void init() {
+
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
@@ -119,87 +115,16 @@ public class AllMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
-    this.tfSearchTitle.setVisible(false);
-    this.tfSearchArtist.setVisible(false);
-    this.tfSearchAlbum.setVisible(false);
-    this.tfSearchDuration.setVisible(false);
-
-    this.btnAdvancedSearch.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        if (tfSearchTitle.isVisible()) {
-          tfSearchTitle.setVisible(false);
-        } else {
-          tfSearchTitle.setVisible(true);
-        }
-
-        if (tfSearchArtist.isVisible()) {
-          tfSearchArtist.setVisible(false);
-        } else {
-          tfSearchArtist.setVisible(true);
-        }
-
-        if (tfSearchAlbum.isVisible()) {
-          tfSearchAlbum.setVisible(false);
-        } else {
-          tfSearchAlbum.setVisible(true);
-        }
-
-        if (tfSearchDuration.isVisible()) {
-          tfSearchDuration.setVisible(false);
-        } else {
-          tfSearchDuration.setVisible(true);
-        }
-
-        if (tfSearch.isDisable()) {
-          tfSearch.setDisable(false);
-        } else {
-          tfSearch.setDisable(true);
-        }
-      }
-    });
-
-    this.ivSearchAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-
-        SearchQuery query = new SearchQuery();
-
-        if (tfSearch.isVisible()) {
-          query.withText(tfSearch.getText());
-        } else {
-          if (tfSearchTitle.getText() != null) {
-            query.withTitle(tfSearchTitle.getText());
-          }
-
-          if (tfSearchArtist != null) {
-            query.withArtist(tfSearchArtist.getText());
-          }
-
-          if (tfSearchAlbum != null) {
-            query.withArtist(tfSearchAlbum.getText());
-          }
-
-          if (tfSearchDuration != null) {
-            query.withArtist(tfSearchDuration.getText());
-          }
-        }
-
-        Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm().getMusics(query); //TODO rename
-
-        updateMusics(searchResults);
-      }
-    });
-
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
       e.printStackTrace();
     }
+
+    tfSearchTitle.setVisible(false);
+    tfSearchArtist.setVisible(false);
+    tfSearchAlbum.setVisible(false);
+    tfSearchDuration.setVisible(false);
   }
 
   public void displayAvailableMusics() {
@@ -213,8 +138,65 @@ public class AllMusicsController implements Controller {
         .collect(Collectors.toList());
   }
 
+  @FXML
+  public void showAdvancedSearch(ActionEvent event) {
+    if (tfSearch.isDisabled()) {
+      tfSearch.setDisable(false);
+      tfSearchTitle.setVisible(false);
+      tfSearchArtist.setVisible(false);
+      tfSearchAlbum.setVisible(false);
+      tfSearchDuration.setVisible(false);
+
+    } else {
+      tfSearch.setDisable(true);
+      tfSearchTitle.setVisible(true);
+      tfSearchArtist.setVisible(true);
+      tfSearchAlbum.setVisible(true);
+      tfSearchDuration.setVisible(true);
+
+    }
+  }
+
+  @FXML
+  public void changeFrameToMyMusics(ActionEvent event) {
+    AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
+  }
+
+  @FXML
+  public void searchMusics(MouseEvent event) {
+
+    SearchQuery query = new SearchQuery();
+
+    if (tfSearch.isDisabled()) {
+      query.withText(tfSearch.getText());
+    } else {
+      if (tfSearchTitle.getText() != null) {
+        query.withTitle(tfSearchTitle.getText());
+      }
+
+      if (tfSearchArtist != null) {
+        query.withArtist(tfSearchArtist.getText());
+      }
+
+      if (tfSearchAlbum != null) {
+        query.withArtist(tfSearchAlbum.getText());
+      }
+
+      if (tfSearchDuration != null) {
+        query.withArtist(tfSearchDuration.getText());
+      }
+    }
+
+    Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().getMusics(query); //TODO rename
+
+    updateMusics(searchResults);
+  }
+
   private void updateMusics(Stream<Music> newMusics) {
     tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
   }
-
 }

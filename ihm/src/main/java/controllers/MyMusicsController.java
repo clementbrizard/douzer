@@ -1,21 +1,25 @@
 package controllers;
 
+import com.sun.javafx.logging.Logger;
+
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import java.util.stream.Stream;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import javafx.scene.input.MouseEvent;
 
 /**
@@ -23,8 +27,6 @@ import javafx.scene.input.MouseEvent;
  */
 public class MyMusicsController implements Controller {
 
-  @FXML
-  private Button btnAdvancedSearchMm;
   @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
@@ -36,96 +38,56 @@ public class MyMusicsController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, Duration> durationCol;
   @FXML
-  private TextField tfSearchMm;
+  private TextField tfSearch;
   @FXML
-  private TextField tfSearchTitleMm;
+  private TextField tfSearchTitle;
   @FXML
-  private TextField tfSearchArtistMm;
+  private TextField tfSearchArtist;
   @FXML
-  private TextField tfSearchAlbumMm;
+  private TextField tfSearchAlbum;
   @FXML
-  private TextField tfSearchDurationMm;
-  @FXML
-  private ImageView ivSearchAllMm;
+  private TextField tfSearchDuration;
+
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
 
   private CentralFrameController centralFrameController;
+  private Scene addMusicScene;
 
-  //Getters
+  private Logger logger;
 
-  /**
-   * getter of newMusicController.
-   *
-   * @return a NewMusicController
-   * @see NewMusicController
-   */
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+    //logger = LogManager.getLogger();
+  }
+
+
   public NewMusicController getNewMusicController() {
     return newMusicController;
   }
 
-  /**
-   * getter of searchMusicController.
-   *
-   * @return a SearchMusicController
-   * @see SearchMusicController
-   */
-  public SearchMusicController getSearchMusicController() {
-    return searchMusicController;
-  }
-
-  /**
-   * getter of centralFrameController.
-   *
-   * @return a CentralFrameController
-   * @see CentralFrameController
-   */
-  public CentralFrameController getCentralFrameController() {
-    return centralFrameController;
-  }
-
-  //Setters
-
-  /**
-   * setter of NewMusicController.
-   *
-   * @param newMusicController the new newMusicController
-   * @see NewMusicController
-   */
   public void setNewMusicController(NewMusicController newMusicController) {
     this.newMusicController = newMusicController;
   }
 
-  /**
-   * setter of searchMusicController.
-   *
-   * @param searchMusicController the new SearchMusicController
-   * @see SearchMusicController
-   */
+  public SearchMusicController getSearchMusicController() {
+    return searchMusicController;
+  }
+
   public void setSearchMusicController(SearchMusicController searchMusicController) {
     this.searchMusicController = searchMusicController;
   }
 
-  /**
-   * setter of centralFrameController.
-   *
-   * @param centralFrameController the new CentralFrameController
-   * @see CentralFrameController
-   */
+  public CentralFrameController getCentralFrameController() {
+    return centralFrameController;
+  }
+
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
   }
 
-  // Other methods
-
-  /**
-   * the initialize method of the Controller call by Javafx when we create the view of AllMusics.
-   */
-  @Override
-  public void initialize() {
-
-  }
 
   /**
    * Setup the table columns to receive data,
@@ -141,81 +103,10 @@ public class MyMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
-    this.tfSearchTitleMm.setVisible(false);
-    this.tfSearchArtistMm.setVisible(false);
-    this.tfSearchAlbumMm.setVisible(false);
-    this.tfSearchDurationMm.setVisible(false);
-
-    this.btnAdvancedSearchMm.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        if (tfSearchTitleMm.isVisible()) {
-          tfSearchTitleMm.setVisible(false);
-        } else {
-          tfSearchTitleMm.setVisible(true);
-        }
-
-        if (tfSearchArtistMm.isVisible()) {
-          tfSearchArtistMm.setVisible(false);
-        } else {
-          tfSearchArtistMm.setVisible(true);
-        }
-
-        if (tfSearchAlbumMm.isVisible()) {
-          tfSearchAlbumMm.setVisible(false);
-        } else {
-          tfSearchAlbumMm.setVisible(true);
-        }
-
-        if (tfSearchDurationMm.isVisible()) {
-          tfSearchDurationMm.setVisible(false);
-        } else {
-          tfSearchDurationMm.setVisible(true);
-        }
-
-        if (tfSearchMm.isDisable()) {
-          tfSearchMm.setDisable(false);
-        } else {
-          tfSearchMm.setDisable(true);
-        }
-      }
-    });
-
-    this.ivSearchAllMm.setOnMouseClicked(new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-
-        SearchQuery query = new SearchQuery();
-
-        if (tfSearchMm.isVisible()) {
-          query.withText(tfSearchMm.getText());
-        } else {
-          if (tfSearchTitleMm.getText() != null) {
-            query.withTitle(tfSearchTitleMm.getText());
-          }
-
-          if (tfSearchArtistMm != null) {
-            query.withArtist(tfSearchArtistMm.getText());
-          }
-
-          if (tfSearchAlbumMm != null) {
-            query.withArtist(tfSearchAlbumMm.getText());
-          }
-
-          if (tfSearchDurationMm != null) {
-            query.withArtist(tfSearchDurationMm.getText());
-          }
-        }
-
-        Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm().getMusics(query); //TODO rename
-
-        updateMusics(searchResults);
-      }
-    });
+    tfSearchTitle.setVisible(false);
+    tfSearchArtist.setVisible(false);
+    tfSearchAlbum.setVisible(false);
+    tfSearchDuration.setVisible(false);
 
     try {
       this.displayAvailableMusics();
@@ -238,6 +129,98 @@ public class MyMusicsController implements Controller {
         .getIhmCore().getDataForIhm().getLocalMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
+  }
+
+  /**
+   * the Button who will show the windows to add music.
+   */
+  @FXML
+  public void addMusic() {
+    System.out.println("buton");
+    try {
+      // Initialize shareScene and shareController
+      FXMLLoader addMusicLoader = new FXMLLoader(getClass().getResource("/fxml/NewMusicView.fxml"));
+      Parent addMusicParent = addMusicLoader.load();
+      addMusicScene = new Scene(addMusicParent);
+      NewMusicController newMusicController = addMusicLoader.getController();
+      this.setNewMusicController(newMusicController);
+      newMusicController.setMyMusicsController(this);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    Stage musicSharingPopup = new Stage();
+    musicSharingPopup.setTitle("Ajout musique");
+    musicSharingPopup.setScene(this.addMusicScene);
+
+    // Set position of second window, relatively to primary window.
+    //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
+    //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
+
+    // Show sharing popup.
+    musicSharingPopup.show();
+
+  }
+
+  @FXML
+  public void changeFrameToAllMusics(ActionEvent event) {
+    MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
+  }
+
+
+  @FXML
+  public void showAdvancedSearch(ActionEvent event) {
+    if (tfSearch.isDisabled()) {
+      tfSearch.setDisable(false);
+      tfSearchTitle.setVisible(false);
+      tfSearchArtist.setVisible(false);
+      tfSearchAlbum.setVisible(false);
+      tfSearchDuration.setVisible(false);
+
+    } else {
+      tfSearch.setDisable(true);
+      tfSearchTitle.setVisible(true);
+      tfSearchArtist.setVisible(true);
+      tfSearchAlbum.setVisible(true);
+      tfSearchDuration.setVisible(true);
+
+    }
+  }
+
+
+  @FXML
+  public void searchMusics(MouseEvent event) {
+
+    SearchQuery query = new SearchQuery();
+
+    if (tfSearch.isVisible()) {
+      query.withText(tfSearch.getText());
+    } else {
+      if (tfSearchTitle.getText() != null) {
+        query.withTitle(tfSearchTitle.getText());
+      }
+
+      if (tfSearchArtist != null) {
+        query.withArtist(tfSearchArtist.getText());
+      }
+
+      if (tfSearchAlbum != null) {
+        query.withArtist(tfSearchAlbum.getText());
+      }
+
+      if (tfSearchDuration != null) {
+        query.withArtist(tfSearchDuration.getText());
+      }
+    }
+
+    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().getMusics(query); //TODO rename
+
+    updateMusics(searchResults);
   }
 
   private void updateMusics(Stream<Music> newMusics) {

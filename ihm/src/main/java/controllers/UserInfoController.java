@@ -6,16 +6,27 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
- * Controller used for managing the top left view 
+ * Controller used for managing the top left view
  * with the nickname and the buttons to modify profile and disconnect.
  */
 public class UserInfoController implements Controller {
+  private static final Logger logger = LogManager.getLogger();
+
   @FXML
   private Label lblUserPseudo;
   @FXML
   private Button btnModifyProfile;
+  @FXML
+  private Button btnDisconnect;
+
+  @FXML
+  private Button btnLogout;
+
   private MainController mainController;
 
   // Getters
@@ -34,7 +45,8 @@ public class UserInfoController implements Controller {
   // Other methods
 
   @Override
-  public void initialize() { }
+  public void initialize() {
+  }
 
   /**
    * Initialize the field with default data.
@@ -58,7 +70,13 @@ public class UserInfoController implements Controller {
     lblUserPseudo.setText(
         name
     );
+    this.connectButtons();
+  }
 
+  /**
+   * Connects the buttons to functions.
+   */
+  private void connectButtons() {
     this.btnModifyProfile.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
@@ -66,6 +84,22 @@ public class UserInfoController implements Controller {
             .setCentralContentProfileEdit();
       }
     });
-  }
 
+    this.btnDisconnect.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        try {
+          UserInfoController.this.getMainController().getApplication()
+              .getIhmCore().getDataForIhm().logout();
+        } catch (UnsupportedOperationException ex) {
+          ex.printStackTrace();
+        }
+
+        UserInfoController.this.getMainController().getApplication().getPrimaryStage().setScene(
+            UserInfoController.this.getMainController().getApplication().getLoginScene());
+      }
+    });
+  }
 }
+
+
