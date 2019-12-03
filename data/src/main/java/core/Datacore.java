@@ -31,7 +31,7 @@ public class Datacore {
     this.ihm = ihm;
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
-    this.allIps = new HashSet<>(); //TODO: import from CSV
+    this.allIps = new HashSet<>();
     this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
   }
 
@@ -107,6 +107,10 @@ public class Datacore {
 
   public Set<InetAddress> getAllIps() {
     return allIps;
+  }
+
+  public void setAllIps(HashSet<InetAddress> allIps) {
+    this.allIps = allIps;
   }
 
   public Stream<InetAddress> getOnlineIps() {

@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.security.auth.login.LoginException;
 
@@ -32,7 +33,7 @@ public abstract class Login {
     }
   }
 
-  private static Collection<InetAddress> getInitialIpsFromConfig(Path filePath)
+  private static Set<InetAddress> getInitialIpsFromConfig(Path filePath)
       throws IOException {
     Properties prop = new Properties();
     InputStream is = new FileInputStream(filePath.toFile());
@@ -43,7 +44,7 @@ public abstract class Login {
         .map(String::trim)
         .map(Login::getIpFromString)
         .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
   /**
@@ -89,6 +90,8 @@ public abstract class Login {
         .collect(Collectors.toCollection(HashSet::new)));
     // TODO: template for filename
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
-    dc.net.connect(payload, getInitialIpsFromConfig(configPath));
+    Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
+    dc.setAllIps((HashSet<InetAddress>) ips);
+    dc.net.connect(payload, ips);
   }
 }
