@@ -332,6 +332,7 @@ public class NewMusicController implements Controller {
             .addMusic(meta, file.getAbsolutePath());
 
         this.getMyMusicsController().displayAvailableMusics();
+        //close window
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
 
