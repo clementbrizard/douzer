@@ -3,11 +3,10 @@ package controllers;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Iterator;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +21,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import org.apache.logging.log4j.LogManager;
 
 //replace by javadocs
@@ -349,15 +347,40 @@ public class DetailsMusicController implements Controller {
     if (!checkFields()) {
       return;
     }
-    localMusic.getMetadata().setTitle(textFieldTitre.getText());
-    localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+    if (localMusic.getMetadata().getTitle() != textFieldTitre.getText()
+        || localMusic.getMetadata().getAlbum() != textFieldAlbum.getText()
+        || localMusic.getMetadata().getArtist() != textFieldArtiste.getText()) {
+
+      this.getMyMusicsController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .deleteMusic(localMusic, false);
+
+      localMusic.getMetadata().setTitle(textFieldTitre.getText());
+      localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
+      localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+
+      try {
+        this.getMyMusicsController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .addMusic(localMusic.getMetadata(), localMusic.getMp3Path());
+      } catch (FileNotFoundException e) {
+        LogManager.getLogger()
+            .error("File not found for music : {}".format(localMusic.getMp3Path()));
+      }
+      this.getMyMusicsController().displayAvailableMusics();
+    }
+
     if (note > 0) {
       this.getMyMusicsController().getApplication()
       .getIhmCore().getDataForIhm().rateMusic(localMusic, note);
     }
 
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
+
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();
   }
 
