@@ -31,7 +31,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
@@ -60,7 +65,7 @@ public class DataForIhmImpl implements DataForIhm {
       );
 
       newMusic.getOwners().add(dc.getCurrentUser());
-      
+
       dc.getCurrentUser().getMusics().add(newMusic);
       dc.addMusic(newMusic);
     } else {
@@ -160,8 +165,13 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public MusicMetadata parseMusicMetadata(String path)
-      throws IOException, UnsupportedTagException, InvalidDataException {
-    MusicMetadata metadata = new MusicMetadata();
+      throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException {
+
+    String hash = new String(
+        MessageDigest.getInstance("MD5").digest(Files.readAllBytes(Paths.get(path)))
+    );
+
+    MusicMetadata metadata = new MusicMetadata(hash);
     Mp3File mp3File = new Mp3File(path);
 
     metadata.setDuration(Duration.ofSeconds(mp3File.getLengthInSeconds()));
@@ -205,7 +215,8 @@ public class DataForIhmImpl implements DataForIhm {
     this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
-  @Override public void notifyMusicUpdate(LocalMusic music) {
+  @Override
+  public void notifyMusicUpdate(LocalMusic music) {
     if (music.isShared()) {
       UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
       this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
