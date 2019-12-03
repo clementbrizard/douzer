@@ -1,6 +1,6 @@
 package features;
 
-import static core.Datacore.getStartLogger;
+import static core.Datacore.getLogger;
 
 import core.Datacore;
 
@@ -24,9 +24,9 @@ public class DeleteMusic {
       if (deleteLocal) {
         File file = new File(music.getMp3Path());
         if (file.delete()) {
-          getStartLogger().info(music.getMetadata().getTitle() + "is deleted locally");
+          getLogger().info(music.getMetadata().getTitle() + "is deleted locally");
         } else {
-          getStartLogger().error("Delete operation for the local music has failed.");
+          getLogger().error("Delete operation for the local music has failed.");
         }
       }
     }
