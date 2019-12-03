@@ -140,16 +140,21 @@ public class DetailsMusicController implements Controller {
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getRatings() != null) {
-        LocalUser userlocal = new LocalUser();
+        LocalUser userlocal = getMyMusicsController()
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
 
-
-        if (localMusic.getMetadata().getRatings().get(userlocal) != null) {
-          System.out.println("recherche de la note de l'utilisateur courrant");
-          Integer rating = localMusic.getMetadata().getRatings().get(new User());
+        Integer rating;
+        if ((rating = localMusic.getMetadata().getRatings().get(userlocal)) != null) {
           setStars(rating.intValue());
         }
       }
     }
+    LogManager.getLogger().info("Fin d'Initialisation de DetailsMusicController");
   }
 
   /**
@@ -359,8 +364,30 @@ public class DetailsMusicController implements Controller {
     this.getMyMusicsController().displayAvailableMusics();
 
     if (note > 0) {
-      this.getMyMusicsController().getApplication()
-      .getIhmCore().getDataForIhm().rateMusic(localMusic, note);
+      try {
+        this.getMyMusicsController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .rateMusic(localMusic, note);
+      } catch (UnsupportedOperationException e) {
+        LogManager.getLogger().error(e.getMessage());
+        
+        LocalUser userlocal = getMyMusicsController()
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
+        
+        if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
+          localMusic.getMetadata().getRatings().put(userlocal, note);
+        } else {
+          localMusic.getMetadata().getRatings().replace(userlocal, note);
+        }
+        
+      }
     }
 
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
