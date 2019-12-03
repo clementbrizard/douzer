@@ -6,6 +6,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
+import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
@@ -21,6 +22,7 @@ import features.LogoutPayload;
 import features.Search;
 import features.ShareMusicsPayload;
 import features.UnshareMusics;
+import features.UpdateMusicsPayload;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,7 +32,6 @@ import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -63,7 +64,13 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addComment(Music music, String comment) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    // Add a new Comment created from the String and this current LocalUser
+    music.getMetadata().getComments().add(new Comment(comment, this.dc.getCurrentUser()));
+
+    this.dc.net.sendToUsers(
+        new UpdateMusicsPayload(Collections.singleton(music)),
+        this.dc.getIps()
+    );
   }
 
   @Override
