@@ -10,6 +10,7 @@ import datamodel.SearchQuery;
 import datamodel.User;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -63,7 +64,7 @@ public interface DataForIhm {
    * @return MusicMetaData object containing the extracted metadata
    */
   MusicMetadata parseMusicMetadata(String path)
-          throws IOException, UnsupportedTagException, InvalidDataException;
+      throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException;
 
   void rateMusic(Music music, int rating);
 

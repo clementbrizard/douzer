@@ -67,7 +67,7 @@ public class CurrentMusicInfoController implements Controller {
   public void init() {
     // TODO Initialize currentMusic with the current music
     // TODO link currentMusicInfoController with MainController instead of IhmCore
-    this.currentMusic = new LocalMusic(new MusicMetadata(), "pathTest.mp3");
+    this.currentMusic = new LocalMusic(new MusicMetadata("JeSuisUnHashLOL"), "pathTest.mp3");
     this.currentMusic.setShared(true);
     this.currentMusic.getMetadata().setTitle("Ceci est un test");
 
