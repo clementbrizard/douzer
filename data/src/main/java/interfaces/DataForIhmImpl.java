@@ -121,7 +121,7 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void modifyUser(LocalUser user) {
+  public void notifyUserUpdate(LocalUser user) {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
@@ -170,6 +170,10 @@ public class DataForIhmImpl implements DataForIhm {
   public void shareMusics(Collection<LocalMusic> musics) {
     ShareMusicsPayload payload = new ShareMusicsPayload(musics);
     this.dc.net.sendToUsers(payload, this.dc.getIps());
+  }
+
+  @Override public void notifyMusicUpdate(LocalMusic music) {
+    throw new UnsupportedOperationException("Not implemented yet");
   }
 
   @Override
