@@ -178,9 +178,18 @@ public class MyMusicsController implements Controller {
         showMusicInformation(musicInformation);
       }
     });
-
-    // Add "Informations" menu item to ContextMenu.
-    contextMenu.getItems().addAll(itemInformation);
+    
+    MenuItem playMusic = new MenuItem("Play");
+    playMusic.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        getCentralFrameController().getMainController().getPlayerController().playerOnMusic(musicInformation.getMp3Path());
+      }
+    });
+    
+    
+    // Add MenuItem to ContextMenu
+    contextMenu.getItems().addAll(itemInformation,playMusic);
   }
 
   /**
