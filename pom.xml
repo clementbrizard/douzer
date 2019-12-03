@@ -8,6 +8,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+	<sonar.host.url>http://vps758705.ovh.net:9000</sonar.host.url>
     </properties>
 
     <groupId>lo23</groupId>
@@ -77,6 +78,11 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.2</version>
                 </plugin>
+		<plugin>
+		    <groupId>org.sonarsource.scanner.maven</groupId>
+		    <artifactId>sonar-maven-plugin</artifactId>
+		    <version>3.6.0.1398</version>
+	        </plugin>
             </plugins>
         </pluginManagement>
         <resources>
