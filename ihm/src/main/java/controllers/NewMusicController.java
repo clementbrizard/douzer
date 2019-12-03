@@ -128,6 +128,10 @@ public class NewMusicController implements Controller {
    */
   public void setMyMusicsController(MyMusicsController myMusicsController) {
     this.myMusicsController = myMusicsController;
+
+    this.textUploader.setText(this.getMyMusicsController().getCentralFrameController()
+        .getMainController().getApplication().getIhmCore().getDataForIhm()
+        .getCurrentUser().getUsername());
   }
 
   // Other methods
@@ -151,8 +155,6 @@ public class NewMusicController implements Controller {
     this.dateYear.setEditable(true);
 
     this.textUploader.setEditable(false);
-    /** TODO : get the username from the current session */
-    this.textUploader.setText("Maxime");
 
     this.tags = FXCollections.observableArrayList();
     this.listViewTags.setItems(tags);
@@ -330,6 +332,7 @@ public class NewMusicController implements Controller {
             .addMusic(meta, file.getAbsolutePath());
 
         this.getMyMusicsController().displayAvailableMusics();
+        //close window
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
 
