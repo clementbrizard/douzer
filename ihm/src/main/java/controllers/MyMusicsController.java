@@ -155,18 +155,19 @@ public class MyMusicsController implements Controller {
    */
   public void displayAvailableMusics() {
     List<MusicMetadata> listMusic = this.parseMusic();
-    
+
     tvMusics.getItems().setAll(listMusic);
   }
 
 
   private List<MusicMetadata> parseMusic() {
     this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
-            .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toCollection(ArrayList::new)));
-    
+            .getIhmCore().getDataForIhm().getLocalMusics()
+            .collect(Collectors.toCollection(ArrayList::new)));
+
     List<MusicMetadata> l = new ArrayList<MusicMetadata>();
-    
-    for(int i = 0 ; i < this.listMusics.size(); i++) {
+
+    for (int i = 0; i < this.listMusics.size(); i++) {
       l.add(listMusics.get(i).getMetadata());
     }
     return l;
