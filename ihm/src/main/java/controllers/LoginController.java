@@ -57,6 +57,7 @@ public class LoginController implements Controller {
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
+      System.out.println("login ok");
   }
 
   @FXML
