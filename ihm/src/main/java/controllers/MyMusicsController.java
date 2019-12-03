@@ -1,10 +1,10 @@
 package controllers;
 
 import com.sun.javafx.logging.Logger;
-
-import datamodel.Music;
 import core.Application;
 import datamodel.LocalMusic;
+
+import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
@@ -19,17 +19,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
+
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
