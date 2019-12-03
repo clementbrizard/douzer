@@ -24,14 +24,19 @@ import features.ShareMusicsPayload;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -69,7 +74,7 @@ public class DataForIhmImpl implements DataForIhm {
 
     this.dc.net.sendToUsers(
         new UpdateMusicsPayload(Collections.singleton(music)),
-        this.dc.getIps()
+        this.dc.getOnlineIps()
     );
   }
 
@@ -92,6 +97,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void logout() throws IOException {
+    // TODO: create feature class
     LocalUser currentUser = this.dc.getCurrentUser();
     currentUser.setConnected(false);
     try {
@@ -102,7 +108,24 @@ public class DataForIhmImpl implements DataForIhm {
     }
 
     LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
-    this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
+    this.dc.net.disconnect(payload, this.dc.getOnlineIps().collect(Collectors.toList()));
+
+    Properties prop = new Properties();
+    // TODO: template for filename
+    Path userPropFilePath = currentUser.getSavePath()
+        .resolve(currentUser.getUsername() + "-config.properties");
+    File userConfigFile = new File(userPropFilePath.toString());
+
+    if (userConfigFile.exists()) {
+      prop.load(new FileInputStream(userPropFilePath.toString()));
+      String ipsStr = this.dc.getAllIps().stream()
+          .map(InetAddress::toString)
+          .collect(Collectors.joining(","));
+      prop.setProperty("ips", ipsStr);
+      prop.store(new FileOutputStream(userPropFilePath.toString()), null);
+    } else {
+      throw new FileNotFoundException("Warning: user property file not found in the save path");
+    }
 
     this.dc.wipe();
   }
@@ -177,10 +200,11 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void shareMusics(Collection<LocalMusic> musics) {
     ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-    this.dc.net.sendToUsers(payload, this.dc.getIps());
+    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
-  @Override public void notifyMusicUpdate(LocalMusic music) {
+  @Override
+  public void notifyMusicUpdate(LocalMusic music) {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
