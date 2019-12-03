@@ -79,6 +79,10 @@ public interface DataForIhm {
 
   Stream<User> getOnlineUsers();
 
+  Stream<User> getOnlineContacts(LocalUser user);
+
+  Stream<User> getOfflineContacts(LocalUser user);
+
   Stream<Music> getAvailableMusics();
 
   Stream<LocalMusic> getLocalMusics();

@@ -229,6 +229,16 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
+  public Stream<User> getOnlineContacts(LocalUser user) {
+    return dc.getOnlineContacts(user);
+  }
+
+  @Override
+  public Stream<User> getOfflineContacts(LocalUser user) {
+    return dc.getOfflineContacts(user);
+  }
+
+  @Override
   public Stream<Music> getAvailableMusics() {
     throw new UnsupportedOperationException("Not implemented yet");
   }

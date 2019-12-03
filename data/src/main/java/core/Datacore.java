@@ -85,6 +85,16 @@ public class Datacore {
         .filter(u -> !(u instanceof LocalUser));
   }
 
+  public Stream<User> getOnlineContacts(LocalUser user) {
+    return this.getOnlineUsers().filter(u -> (user.getContacts().contains(u)));
+  }
+
+  public Stream<User> getOfflineContacts(LocalUser user) {
+    return users.values().stream()
+        .filter(u -> !(u.isConnected()))
+        .filter(u -> (user.getContacts().contains(u)));
+  }
+
   public Stream<Music> getMusics() {
     return musics.values().stream();
   }
