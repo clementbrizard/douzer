@@ -4,7 +4,6 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Iterator;
 import javafx.collections.FXCollections;
@@ -347,32 +346,17 @@ public class DetailsMusicController implements Controller {
     if (!checkFields()) {
       return;
     }
-    if (localMusic.getMetadata().getTitle() != textFieldTitre.getText()
-        || localMusic.getMetadata().getAlbum() != textFieldAlbum.getText()
-        || localMusic.getMetadata().getArtist() != textFieldArtiste.getText()) {
+    localMusic.getMetadata().setTitle(textFieldTitre.getText());
+    localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
+    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
 
-      this.getMyMusicsController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .deleteMusic(localMusic, false);
+    this.getMyMusicsController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyMusicUpdate(localMusic);
 
-      localMusic.getMetadata().setTitle(textFieldTitre.getText());
-      localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-      localMusic.getMetadata().setArtist(textFieldArtiste.getText());
-
-      try {
-        this.getMyMusicsController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .addMusic(localMusic.getMetadata(), localMusic.getMp3Path());
-      } catch (FileNotFoundException e) {
-        LogManager.getLogger()
-            .error("File not found for music : {}".format(localMusic.getMp3Path()));
-      }
-      this.getMyMusicsController().displayAvailableMusics();
-    }
+    this.getMyMusicsController().displayAvailableMusics();
 
     if (note > 0) {
       this.getMyMusicsController().getApplication()
