@@ -52,6 +52,7 @@ public class PlayerController implements Controller {
   private ArrayList<LocalMusic> arrayMusic;
 
   private int musicID = 0;
+  private long totalDuration = 0;
 
   @Override
   public void initialize() {
@@ -70,13 +71,12 @@ public class PlayerController implements Controller {
   private MediaPlayer createPlayer(String url) {
     final Media media = new Media(new File(url).toURI().toString());
     final MediaPlayer player = new MediaPlayer(media);
-    System.out.println("[PlayerController]+++++ " + url);
     return player;
   }
 
   public void playerOnMusic(String url) {
     players.clear();
-    players.add(createPlayer(url));    
+    players.add(createPlayer(url));   
     musicID = 0;
   }
   
@@ -86,8 +86,14 @@ public class PlayerController implements Controller {
   private void playPauseSong() {
 
     if (players.size() != 0) {
+      
+      if(arrayMusic.get(musicID).getMetadata().getDuration() != null) {
+        totalDuration = arrayMusic.get(this.musicID).getMetadata().getDuration().toMillis() ;
+      } else {
+        totalDuration = (long) 180000.0 ;
+      }
 
-      updateValues();
+      updateValues(totalDuration);
 
       mediaPlayer = players.get(musicID);
       mediaPlayer.setVolume(100);
@@ -129,7 +135,6 @@ public class PlayerController implements Controller {
 
       });
     } else {
-      System.out.println("appuie sur start");
       Stream<LocalMusic> streamMusic = mainController
           .getApplication()
           .getIhmCore()
@@ -143,15 +148,16 @@ public class PlayerController implements Controller {
   /**
    * Update GUI values.
    */
-  private void updateValues() {
+  private void updateValues(long totalDuration) {
     Thread thread = new Thread(() -> {
       do {
         Platform.runLater(() -> {
           if ((mediaPlayer.getStatus() != MediaPlayer.Status.PAUSED)
               && (mediaPlayer.getStatus() != MediaPlayer.Status.STOPPED)
               && (mediaPlayer.getStatus() != MediaPlayer.Status.READY)) {
+            
             lblTime.setText(secToMin((long) mediaPlayer.getCurrentTime().toSeconds()));
-            double totalDuration = 180000.0;
+            
             double timer = (mediaPlayer.getCurrentTime().toMillis() / totalDuration);
             pgMusicProgress.setProgress(timer);
 

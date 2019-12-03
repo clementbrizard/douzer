@@ -322,7 +322,7 @@ public class NewMusicController implements Controller {
       meta.setArtist(textArtist.getText());
       meta.setAlbum(textAlbum.getText());
       meta.setReleaseYear(Year.of(dateYear.getValue()));
-
+      
       try {
         myMusicsController.getCentralFrameController()
             .getMainController()
