@@ -35,7 +35,7 @@ class LocalUsersFileHandlerTest {
     testUser.setFirstName("John");
     testUser.setLastName("Oliver");
     testUser.getContacts().add(new Contact(friendUser));
-    LocalMusic music = new LocalMusic(new MusicMetadata(), "testDir1");
+    LocalMusic music = new LocalMusic(new MusicMetadata("JesuisUnHashLOL"), "testDir1");
     music.getMetadata().setArtist("Vulfpeck");
     music.getOwners().add(testUser);
     testUser.getMusics().add(music);

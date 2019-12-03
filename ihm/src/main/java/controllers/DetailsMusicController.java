@@ -3,11 +3,9 @@ package controllers;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
-
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Iterator;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,7 +20,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
 import org.apache.logging.log4j.LogManager;
 
 //replace by javadocs
@@ -143,16 +140,21 @@ public class DetailsMusicController implements Controller {
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getRatings() != null) {
-        LocalUser userlocal = new LocalUser();
+        LocalUser userlocal = getMyMusicsController()
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
 
-
-        if (localMusic.getMetadata().getRatings().get(userlocal) != null) {
-          System.out.println("recherche de la note de l'utilisateur courrant");
-          Integer rating = localMusic.getMetadata().getRatings().get(new User());
+        Integer rating;
+        if ((rating = localMusic.getMetadata().getRatings().get(userlocal)) != null) {
           setStars(rating.intValue());
         }
       }
     }
+    LogManager.getLogger().info("Fin d'Initialisation de DetailsMusicController");
   }
 
   /**
@@ -352,12 +354,44 @@ public class DetailsMusicController implements Controller {
     localMusic.getMetadata().setTitle(textFieldTitre.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+
+    this.getMyMusicsController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyMusicUpdate(localMusic);
+
+    this.getMyMusicsController().displayAvailableMusics();
+
     if (note > 0) {
-      this.getMyMusicsController().getApplication()
-      .getIhmCore().getDataForIhm().rateMusic(localMusic, note);
+      try {
+        this.getMyMusicsController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .rateMusic(localMusic, note);
+      } catch (UnsupportedOperationException e) {
+        LogManager.getLogger().error(e.getMessage());
+        
+        LocalUser userlocal = getMyMusicsController()
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
+        
+        if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
+          localMusic.getMetadata().getRatings().put(userlocal, note);
+        } else {
+          localMusic.getMetadata().getRatings().replace(userlocal, note);
+        }
+        
+      }
     }
 
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
+
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();
   }
 

@@ -169,6 +169,7 @@ public class MyMusicsController implements Controller {
 
 
   private List<MusicMetadata> parseMusic() {
+    listMusics.clear();
     this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
             .getIhmCore().getDataForIhm().getLocalMusics()
             .collect(Collectors.toCollection(ArrayList::new)));

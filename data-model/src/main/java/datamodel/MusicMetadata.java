@@ -28,7 +28,8 @@ public class MusicMetadata implements java.io.Serializable {
   /**
    * MusicMetadata constructor.
    */
-  public MusicMetadata() {
+  public MusicMetadata(String hash) {
+    this.hash = hash;
     this.tags = new HashSet<>();
     this.ratings = new HashMap<>();
     this.comments = new ArrayList<>();
