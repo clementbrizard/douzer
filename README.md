@@ -1,5 +1,7 @@
 # Development
 
+[![Quality Gate Status](http://vps758705.ovh.net:9000/api/project_badges/measure?project=lo23%3Alo23-root&metric=alert_status)](http://vps758705.ovh.net:9000/dashboard?id=lo23%3Alo23-root)
+
 Development repository for LO23 music sharing application.
 
 For Gitlab worfkow, coding conventions and other documentation, please refer to the [wiki](https://gitlab.utc.fr/lo23-a19-mardi/development/wikis/home).
