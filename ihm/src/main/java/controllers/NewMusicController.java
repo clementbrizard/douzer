@@ -1,7 +1,11 @@
 package controllers;
 
+import com.mpatric.mp3agic.InvalidDataException;
+import com.mpatric.mp3agic.UnsupportedTagException;
 import datamodel.MusicMetadata;
 import java.io.File;
+import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.Year;
 import javafx.collections.FXCollections;
@@ -317,27 +321,52 @@ public class NewMusicController implements Controller {
     if (valid) {
       newMusicLogger.info("Entry valid");
 
-      MusicMetadata meta = new MusicMetadata();
-      meta.setTitle(textTitle.getText());
-      meta.setArtist(textArtist.getText());
-      meta.setAlbum(textAlbum.getText());
-      meta.setReleaseYear(Year.of(dateYear.getValue()));
-
+      MusicMetadata meta = null;
       try {
-        myMusicsController.getCentralFrameController()
+        meta = myMusicsController.getCentralFrameController()
             .getMainController()
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
-            .addMusic(meta, file.getAbsolutePath());
+            .parseMusicMetadata(file.getAbsolutePath());
 
-        this.getMyMusicsController().displayAvailableMusics();
-        //close window
-        Stage stage = (Stage) this.textFile.getScene().getWindow();
-        stage.close();
+        // TODO: use meta to prefill the form
+        meta.setTitle(textTitle.getText());
+        meta.setArtist(textArtist.getText());
+        meta.setAlbum(textAlbum.getText());
+        meta.setReleaseYear(Year.of(dateYear.getValue()));
 
-      } catch (java.io.FileNotFoundException e) {
-        newMusicLogger.error("File not found : " + file.getAbsolutePath());
+        try {
+          myMusicsController.getCentralFrameController()
+              .getMainController()
+              .getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .addMusic(meta, file.getAbsolutePath());
+
+          this.getMyMusicsController().displayAvailableMusics();
+          Stage stage = (Stage) this.textFile.getScene().getWindow();
+          stage.close();
+
+        } catch (java.io.FileNotFoundException e) {
+          newMusicLogger.error("File not found : " + file.getAbsolutePath());
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+        // TODO: interrupt the music addition
+        return;
+      } catch (UnsupportedTagException e) {
+        e.printStackTrace();
+        // TODO: interrupt the music addition
+        return;
+      } catch (InvalidDataException e) {
+        e.printStackTrace();
+        // TODO: interrupt the music addition
+        return;
+      } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        // TODO: interrupt the music addition
+        return;
       }
 
     } else {

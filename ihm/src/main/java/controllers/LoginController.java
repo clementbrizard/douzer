@@ -28,7 +28,8 @@ public class LoginController implements Controller {
   // Other methods
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @FXML
   private void actionLogin() {
@@ -44,13 +45,13 @@ public class LoginController implements Controller {
     } catch (LoginException le) {
 
       le.printStackTrace();
-      
+
       Notifications.create()
-              .title("Connection failed")
-              .text("It seems you entered a wrong username/password. Try again.")
-              .darkStyle()
-              .showWarning();
-      
+          .title("Connection failed")
+          .text("It seems you entered a wrong username/password. Try again.")
+          .darkStyle()
+          .showWarning();
+
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
