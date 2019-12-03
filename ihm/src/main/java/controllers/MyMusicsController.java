@@ -135,8 +135,8 @@ public class MyMusicsController implements Controller {
     // Create ContextMenu
     contextMenu = new ContextMenu();
 
-    MenuItem item1 = new MenuItem("Informations");
-    item1.setOnAction(new EventHandler<ActionEvent>() {
+    MenuItem itemInformation = new MenuItem("Informations");
+    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
 
@@ -145,20 +145,8 @@ public class MyMusicsController implements Controller {
       }
     });
 
-    /*MenuItem item2 = new MenuItem("Menu Item 2");
-    item2.setOnAction(new EventHandler<ActionEvent>() {
-
-      @Override
-      public void handle(ActionEvent event) {
-        System.out.println("Click On second Item");
-      }
-    });*/
     // Add MenuItem to ContextMenu
-    contextMenu.getItems().addAll(item1);//, item2);
-
-    // When user right-click on TvMusics
-
-
+    contextMenu.getItems().addAll(itemInformation);
   }
 
 
@@ -166,17 +154,22 @@ public class MyMusicsController implements Controller {
    * Refreshes the table with getLocalMusics() from DataForIhm.
    */
   public void displayAvailableMusics() {
-    tvMusics.getItems().setAll(this.parseMusic());
+    List<MusicMetadata> listMusic = this.parseMusic();
+    
+    tvMusics.getItems().setAll(listMusic);
   }
 
 
   private List<MusicMetadata> parseMusic() {
     this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
-            .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toList()));
-
-    return this.getCentralFrameController().getMainController().getApplication()
-            .getIhmCore().getDataForIhm().getLocalMusics()
-            .map(x -> x.getMetadata()).collect(Collectors.toList());
+            .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toCollection(ArrayList::new)));
+    
+    List<MusicMetadata> l = new ArrayList<MusicMetadata>();
+    
+    for(int i = 0 ; i < this.listMusics.size(); i++) {
+      l.add(listMusics.get(i).getMetadata());
+    }
+    return l;
   }
 
   /**
