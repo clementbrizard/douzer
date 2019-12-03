@@ -1,13 +1,10 @@
 package controllers;
 
 import core.Application;
-import core.IhmCore;
-
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import javax.security.auth.login.LoginException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,6 +54,7 @@ public class LoginController implements Controller {
     } catch (IOException ioe) {
       ioe.printStackTrace();
     }
+    System.out.println("login ok");
   }
 
   @FXML
