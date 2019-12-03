@@ -74,7 +74,7 @@ public class DataForIhmImpl implements DataForIhm {
 
     this.dc.net.sendToUsers(
         new UpdateMusicsPayload(Collections.singleton(music)),
-        this.dc.getIps()
+        this.dc.getOnlineIps()
     );
   }
 

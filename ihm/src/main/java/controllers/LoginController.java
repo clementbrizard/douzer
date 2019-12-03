@@ -66,7 +66,7 @@ public class LoginController implements Controller {
     
     if (login) {
       //change for the main view
-      System.out.println("passage du login passé");
+      System.out.println("login ok");
     }
   }
 
