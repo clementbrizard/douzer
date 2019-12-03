@@ -2,6 +2,7 @@ package core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -10,9 +11,12 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.MusicMetadata;
 import datamodel.User;
-import exceptions.LocalUsersFileException;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +28,13 @@ class LocalUsersFileHandlerTest {
 
   @BeforeEach
   void setUp() {
+    File file = Paths.get("").resolve(path).toFile();
+    try {
+      file.createNewFile();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
     handler = new LocalUsersFileHandler(path);
     User friendUser = new User();
     friendUser.setUsername("mark");
@@ -50,16 +61,18 @@ class LocalUsersFileHandlerTest {
   }
 
   @Test
-  void contains() throws LocalUsersFileException {
+  void contains() throws IOException {
     assertFalse(handler.contains(testUser),
         "User not in the file so contains should be false");
+
     handler.add(testUser);
-    assertTrue(handler.contains(testUser),
-        "User in the file so contains should be true");
+    assertTrue(handler.contains(testUser), "User in the file so contains should be true");
+
+    assertFalse(handler.contains(null));
   }
 
   @Test
-  void addAndGetUserTest() throws LocalUsersFileException {
+  void getUserTest() throws IOException {
     handler.add(testUser);
 
     LocalUser loadedFromObject = handler.getUser(testUser);
@@ -67,22 +80,33 @@ class LocalUsersFileHandlerTest {
 
     assertEquals(loadedFromObject, testUser);
     assertEquals(loadedFromUsername, testUser);
+
+    LocalUser testUser2 = new LocalUser();
+    testUser2.setUsername("Billy");
+    testUser2.setSavePath(Paths.get("testDir1/testDir2/../testDir3"));
+
+    handler.add(testUser2);
+    assertEquals(handler.getUser(testUser), testUser);
+    assertEquals(handler.getUser(testUser2), testUser2);
+    assertEquals(handler.getUser("Billy"), testUser2);
   }
 
   @Test
-  void update() throws LocalUsersFileException {
+  void update() throws IOException {
     handler.add(testUser);
-    testUser.setFirstName("Bob");
+    testUser.setFirstName("NewName");
     handler.update(testUser);
-    LocalUser loaded = handler.getUser(testUser);
 
-    assertEquals(loaded, testUser,
-        "User should be updated in the file");
+    assertEquals(testUser, handler.getUser(testUser));
   }
 
   @Test
-  void remove() throws LocalUsersFileException {
+  void remove() throws IOException {
     handler.add(testUser);
+    handler.remove(testUser);
+    assertFalse(handler.contains(testUser),
+        "User should be removed from the file");
+
     handler.remove(testUser);
     assertFalse(handler.contains(testUser),
         "User should be removed from the file");

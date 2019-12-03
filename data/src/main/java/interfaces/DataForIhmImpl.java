@@ -13,7 +13,6 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
-import exceptions.LocalUsersFileException;
 import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
@@ -94,12 +93,8 @@ public class DataForIhmImpl implements DataForIhm {
   public void logout() throws IOException {
     LocalUser currentUser = this.dc.getCurrentUser();
     currentUser.setConnected(false);
-    try {
-      // Updates the written currentUser in case it has been modified
-      this.dc.getLocalUsersFileHandler().update(currentUser);
-    } catch (LocalUsersFileException e) {
-      throw new IOException(e);
-    }
+    // Updates the written currentUser in case it has been modified
+    this.dc.getLocalUsersFileHandler().update(currentUser);
 
     LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
     this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
