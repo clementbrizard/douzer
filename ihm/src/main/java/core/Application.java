@@ -288,7 +288,7 @@ public class Application extends javafx.application.Application {
     // Handle window closing
     primaryStage.setOnCloseRequest(event -> {
       applicationLogger.info("Stage is closing");
-      if (this.ihmCore.getDataForIhm() != null) {
+      if (primaryStage.getScene() == mainScene) {
         try {
           this.ihmCore.getDataForIhm().logout();
         } catch (UnsupportedOperationException | IOException ex) {

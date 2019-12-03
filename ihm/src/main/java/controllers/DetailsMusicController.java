@@ -3,28 +3,37 @@ package controllers;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
+
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Iterator;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //replace by javadocs
 //central view to show all information about on music
 public class DetailsMusicController implements Controller {
+
+  private static final Logger detailsLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldTitre;
@@ -72,6 +81,14 @@ public class DetailsMusicController implements Controller {
   @FXML
   private ImageView imageEtoile5;
 
+  @FXML
+  private RadioButton radioPublic;
+
+  @FXML
+  private RadioButton radioPrivate;
+
+  private ToggleGroup shareStatusGroup;
+
   private MyMusicsController myMusicsController;
 
   private int note = 0;
@@ -90,12 +107,29 @@ public class DetailsMusicController implements Controller {
    * @param localMusic the music clicked
    */
   public void initMusic(LocalMusic localMusic) {
+    detailsLogger.info(localMusic.isSharedToAll());
+
+    this.shareStatusGroup = new ToggleGroup();
+    this.radioPrivate.setToggleGroup(this.shareStatusGroup);
+
+    // Private => not shared => false
+    this.radioPrivate.setUserData(false);
+    this.radioPublic.setToggleGroup(this.shareStatusGroup);
+
+    // Public => shared => true
+    this.radioPublic.setUserData(true);
+
     this.localMusic = localMusic;
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTitle() != null) {
         textFieldTitre.setText(localMusic.getMetadata().getTitle());
       }
+    }
+
+    if (localMusic.getMetadata() != null) {
+      radioPublic.setSelected(localMusic.isSharedToAll());
+      radioPrivate.setSelected(!localMusic.isSharedToAll());
     }
 
     if (localMusic.getMetadata() != null) {
@@ -278,26 +312,26 @@ public class DetailsMusicController implements Controller {
 
     buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
 
-        @Override
-        public void handle(MouseEvent event) {
-          System.out.println("clique sur add tag");
-          boolean tagexist = false;
-          if (localMusic.getMetadata() != null) {
-            if (localMusic.getMetadata().getTags() != null) {
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur add tag");
+        boolean tagexist = false;
+        if (localMusic.getMetadata() != null) {
+          if (localMusic.getMetadata().getTags() != null) {
 
-              Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
-              while (itMusicTag.hasNext()) {
-                if (itMusicTag.next().equals(textFieldAddTag.getText())) {
-                  tagexist = true;
-                }
+            Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
+            while (itMusicTag.hasNext()) {
+              if (itMusicTag.next().equals(textFieldAddTag.getText())) {
+                tagexist = true;
               }
             }
           }
-          if (!tagexist) {
-            tags.add(textFieldAddTag.getText());
-          }
-          //give new tag or new tag list to data
         }
+        if (!tagexist) {
+          tags.add(textFieldAddTag.getText());
+        }
+        //give new tag or new tag list to data
+      }
     }));
 
   }
@@ -344,6 +378,7 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Function updates the value of modified fields.
+   *
    * @param action button Validation is clicked.
    */
   public void validation(ActionEvent action) {
@@ -372,7 +407,7 @@ public class DetailsMusicController implements Controller {
           .rateMusic(localMusic, note);
       } catch (UnsupportedOperationException e) {
         LogManager.getLogger().error(e.getMessage());
-        
+
         LocalUser userlocal = getMyMusicsController()
             .getCentralFrameController()
             .getMainController()
@@ -380,13 +415,13 @@ public class DetailsMusicController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .getCurrentUser();
-        
+
         if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
           localMusic.getMetadata().getRatings().put(userlocal, note);
         } else {
           localMusic.getMetadata().getRatings().replace(userlocal, note);
         }
-        
+
       }
     }
 

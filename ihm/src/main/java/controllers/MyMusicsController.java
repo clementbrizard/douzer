@@ -1,7 +1,5 @@
 package controllers;
 
-import com.sun.javafx.logging.Logger;
-
 import core.Application;
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
@@ -28,10 +26,13 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //replace by javadocs
 //central view with all user music
 public class MyMusicsController implements Controller {
+  public static final Logger myMusicsLogger = LogManager.getLogger();
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -59,14 +60,11 @@ public class MyMusicsController implements Controller {
   private LocalMusic musicInformation;
   private ArrayList<LocalMusic> listMusics;
 
-  private Logger logger;
-
-  private  ContextMenu contextMenu;
+  private ContextMenu contextMenu;
 
   @Override
   public void initialize() {
     // TODO Auto-generated method stub
-    //logger = LogManager.getLogger();
     listMusics = new ArrayList<LocalMusic>();
 
   }

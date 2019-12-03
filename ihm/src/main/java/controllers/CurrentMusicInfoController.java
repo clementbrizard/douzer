@@ -146,6 +146,7 @@ public class CurrentMusicInfoController implements Controller {
 
     // Show sharing popup.
     musicSharingPopup.show();
+    currentMusicInfoLogger.debug(((LocalMusic) this.currentMusic).isSharedToAll());
   }
 
 }

@@ -104,18 +104,21 @@ public class ShareController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .shareMusic((LocalMusic) currentMusic);
+        shareLogger.info("Music is shared");
       } else {
         currentMusicInfoController
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
             .unshareMusic((LocalMusic) currentMusic);
+        shareLogger.info("Music is unshared");
       }
     } catch (Exception e) {
       shareLogger.error(e);
     }
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
+
     stage.close();
   }
 
@@ -139,10 +142,12 @@ public class ShareController implements Controller {
    */
   public void initializeCurrentMusicInfo(Music currentMusic) {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
+    shareLogger.debug(((LocalMusic) this.currentMusic).isSharedToAll());
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
     if (currentMusic instanceof LocalMusic) {
-      this.radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
+      radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
+      radioPrivate.setSelected(!((LocalMusic) this.currentMusic).isSharedToAll());
     }
   }
-
 }
+
