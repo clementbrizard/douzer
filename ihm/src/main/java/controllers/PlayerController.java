@@ -60,10 +60,6 @@ public class PlayerController implements Controller {
     ivPlay.setOnMouseClicked(e -> {
       playPauseSong();
     });
-
-    String test = Paths.get("ihm","src","main","resources", "music").toFile().getAbsolutePath();
-
-    playerOnMusic(test+"/Shrek.mp3");
   }
 
   /**
@@ -78,7 +74,7 @@ public class PlayerController implements Controller {
     return player;
   }
 
-  private void playerOnMusic(String url) {
+  public void playerOnMusic(String url) {
     players.clear();
     players.add(createPlayer(url));    
     musicID = 0;

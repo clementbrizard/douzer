@@ -120,7 +120,6 @@ public class MainController implements Controller {
     }
     try {
       this.playerController.setMainController(this);
-      this.playerController.setPlayerText("Test artist", "Test music");
     } catch (UnsupportedOperationException e) {
       logger.warn("Player Controller calls : " + e.getMessage());
     }
