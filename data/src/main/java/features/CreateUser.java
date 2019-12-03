@@ -2,18 +2,14 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
-import java.io.EOFException;
+import exceptions.data.LocalUsersFileException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Properties;
-import javax.security.auth.login.LoginException;
 
 public abstract class CreateUser {
   /**
@@ -27,7 +23,7 @@ public abstract class CreateUser {
    * @param user LocalUser given by IHM
    */
   public static void run(LocalUser user, Datacore dc, InputStream defaultPropInputStream)
-      throws IOException, LoginException {
+      throws IOException {
     //Create file config.properties
     Properties defaultProp = new Properties();
     // TODO: template for filename
@@ -45,26 +41,11 @@ public abstract class CreateUser {
       defaultProp.store(new FileOutputStream(userPropFilePath.toString()), null);
     }
 
-    File localUsersFile = Paths.get(Datacore.LOCAL_USERS_FILENAME).toFile();
-    if (!localUsersFile.exists()) {
-      // not yet created, so we assume it is the first user
+    try {
+      dc.getLocalUsersFileHandler().add(user);
       Login.run(dc, user);
-    } else {
-      FileInputStream file = new FileInputStream(localUsersFile);
-      ObjectInputStream reader = new ObjectInputStream(file);
-      LocalUser otherUser;
-      try {
-        do {
-          otherUser = (LocalUser) reader.readObject();
-        } while (!(user.getUsername().equals(otherUser.getUsername())));
-      } catch (EOFException e) {
-        //Log user immediately after creation
-        Login.run(dc, user);
-        return;
-      } catch (ClassNotFoundException e) {
-        throw new LoginException("Local save may be corrupted or outdated");
-      }
-      throw new LoginException(("Username already exists"));
+    } catch (LocalUsersFileException e) {
+      throw new IOException(e);
     }
   }
 }

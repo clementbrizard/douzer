@@ -2,6 +2,7 @@ package controllers;
 
 import core.Application;
 import datamodel.LocalMusic;
+import datamodel.Music;
 import datamodel.MusicMetadata;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -29,22 +30,25 @@ public class CurrentMusicInfoController implements Controller {
 
   @FXML
   private ProgressBar downloadProgress;
+  
+  @FXML
+  private CommentsController commentCurrentMusicController;
 
   private ShareController shareController;
-  private NewCommentController newCommentController;
+  private CommentsController newCommentController;
   private MainController mainController;
 
   private Scene shareScene;
 
   private Application application;
-  private LocalMusic currentMusic;
+  private Music currentMusic;
 
   // Getters
   public ShareController getShareController() {
     return shareController;
   }
 
-  public NewCommentController getNewCommentController() {
+  public CommentsController getNewCommentController() {
     return newCommentController;
   }
 
@@ -64,16 +68,16 @@ public class CurrentMusicInfoController implements Controller {
     // TODO Auto-generated method stub
   }
 
-  public void init() {
-    // TODO Initialize currentMusic with the current music
+  public void init(Music music) {
     // TODO link currentMusicInfoController with MainController instead of IhmCore
-    this.currentMusic = new LocalMusic(new MusicMetadata(), "pathTest.mp3");
-    this.currentMusic.setShared(true);
-    this.currentMusic.getMetadata().setTitle("Ceci est un test");
+    this.currentMusic = music;
 
+    commentCurrentMusicController.setCurrentMusicController(this);
+    commentCurrentMusicController.init(music);
+    
   }
 
-  public LocalMusic getCurrentMusic() {
+  public Music getCurrentMusic() {
     return this.currentMusic;
   }
 
@@ -82,7 +86,7 @@ public class CurrentMusicInfoController implements Controller {
     this.shareController = shareController;
   }
 
-  public void setNewCommentController(NewCommentController newCommentController) {
+  public void setNewCommentController(CommentsController newCommentController) {
     this.newCommentController = newCommentController;
   }
 

@@ -1,11 +1,9 @@
 package controllers;
 
 import datamodel.MusicMetadata;
-
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Date;
-
+import java.time.Year;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,7 +23,6 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * Pop-up a view when the user want to add a music from a local file.
- * TODO : Do a popup
  */
 public class NewMusicController implements Controller {
   private static final Logger newMusicLogger = LogManager.getLogger();
@@ -322,7 +319,7 @@ public class NewMusicController implements Controller {
       meta.setTitle(textTitle.getText());
       meta.setArtist(textArtist.getText());
       meta.setAlbum(textAlbum.getText());
-      meta.setReleaseDate(new Date(dateYear.getValue()));
+      meta.setReleaseYear(Year.of(dateYear.getValue()));
 
       try {
         myMusicsController.getCentralFrameController()
@@ -332,7 +329,9 @@ public class NewMusicController implements Controller {
             .getDataForIhm()
             .addMusic(meta, file.getAbsolutePath());
 
-        //TODO : Exit the window
+        this.getMyMusicsController().displayAvailableMusics();
+        Stage stage = (Stage) this.textFile.getScene().getWindow();
+        stage.close();
 
       } catch (java.io.FileNotFoundException e) {
         newMusicLogger.error("File not found : " + file.getAbsolutePath());

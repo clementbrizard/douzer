@@ -3,6 +3,7 @@ package controllers;
 import core.Application;
 import datamodel.LocalUser;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -93,7 +94,7 @@ public class SignUpController implements Controller {
     final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
     final Path avatarPath = avatarFile.toPath();
     // Get the image from the avatar path
-    Image avatarImg = null;
+    BufferedImage avatarImg = null;
     try {
       avatarImg = ImageIO.read(avatarFile);
     } catch (java.io.IOException ex) {

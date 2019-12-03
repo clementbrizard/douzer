@@ -21,7 +21,7 @@
          <center>
              <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;">
                  <children>
-                     <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" prefHeight="384.0" prefWidth="505.0">
+                     <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" prefHeight="384.0" prefWidth="505.0" onMouseClicked="#handleClickTableView">
                          <columns>
                              <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
                              <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />

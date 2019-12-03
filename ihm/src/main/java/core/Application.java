@@ -7,6 +7,7 @@ import controllers.SignUpController;
 
 import java.awt.Toolkit;
 
+import java.io.IOException;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -47,7 +48,7 @@ public class Application extends javafx.application.Application {
 
   // Constructor
   public Application() {
-    applicationLogger.info("IhmCore start");
+    applicationLogger.info("Application start");
   }
 
   // Getters for scenes
@@ -290,7 +291,7 @@ public class Application extends javafx.application.Application {
       if (this.ihmCore.getDataForIhm() != null) {
         try {
           this.ihmCore.getDataForIhm().logout();
-        } catch (UnsupportedOperationException ex) {
+        } catch (UnsupportedOperationException | IOException ex) {
           ex.printStackTrace();
         }
       }
