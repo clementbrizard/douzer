@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="593.0" prefWidth="687.0" style="-fx-background-color: #9FC5F8;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewCommentController">
+   <children>
+      <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Déposer un commentaire" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="textAreaComment" layoutX="43.0" layoutY="223.0" prefHeight="207.0" prefWidth="602.0" />
+      <Text layoutX="270.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mon commentaire : " />
+      <Text layoutX="76.0" layoutY="131.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ma notation : " />
+      <ImageView fx:id="imageEtoile1" fitHeight="32.0" fitWidth="32.0" layoutX="200.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imageEtoile2" fitHeight="32.0" fitWidth="32.0" layoutX="251.0" layoutY="109.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imageEtoile3" fitHeight="32.0" fitWidth="32.0" layoutX="305.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imageEtoile4" fitHeight="32.0" fitWidth="32.0" layoutX="358.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imageEtoile5" fitHeight="32.0" fitWidth="32.0" layoutX="411.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/EmptyStarSymbol.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="validation" layoutX="592.0" layoutY="540.0" mnemonicParsing="false" text="Valider" onAction="#comment" />
+   </children>
+</Pane>

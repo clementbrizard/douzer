@@ -192,6 +192,7 @@ public class CentralFrameController implements Controller {
       this.myMusicsController = myMusicsLoader.getController();
       this.myMusicsController.setCentralFrameController(this);
       this.myMusicsController.init();
+      this.myMusicsController.setApplication(this.mainController.getApplication());
 
       FXMLLoader distantUserLoader = new FXMLLoader(
           getClass().getResource(CentralFrameController.distantUserView));
