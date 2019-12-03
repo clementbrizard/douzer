@@ -16,7 +16,7 @@
                    </font>
                </Label>
                <Button fx:id="btnModifyProfile" layoutX="14.0" layoutY="60.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Modifier le profil" />
-               <Button fx:id="btnDisconnect" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" style="-fx-background-color: #FF0000; -fx-border-color: #000000;" text="Déconnexion" textFill="WHITE" />
+               <Button fx:id="btnLogout" layoutX="14.0" layoutY="100.0" mnemonicParsing="false" style="-fx-background-color: #FF0000; -fx-border-color: #000000;" text="Déconnexion" textFill="WHITE" onAction="#logout"/>
            </children>
        </Pane>
    </children>

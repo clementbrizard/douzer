@@ -1,5 +1,7 @@
 package controllers;
 
+import datamodel.LocalUser;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -52,27 +54,27 @@ public class UserInfoController implements Controller {
    * Initialize the field with default data.
    */
   public void init() {
-    String name = "";
-    if (this.mainController
+    String name = this.mainController
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getCurrentUser() == null) {
-      name = "Booba";
-    } else {
-      name = this.mainController
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .getCurrentUser()
-          .getUsername();
-    }
-    lblUserPseudo.setText(
-        name
-    );
+        .getCurrentUser()
+        .getUsername();
+
+    lblUserPseudo.setText(name);
     this.connectButtons();
   }
 
+  @FXML
+  private void logout(ActionEvent event) {
+    try {
+      this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
+      this.mainController.getApplication().showLoginScene();
+    } catch (IOException e) {
+      logger.error(e);
+    }
+  }
+    
   /**
    * Connects the buttons to functions.
    */
@@ -82,21 +84,6 @@ public class UserInfoController implements Controller {
       public void handle(ActionEvent event) {
         UserInfoController.this.mainController.getCentralFrameController()
             .setCentralContentProfileEdit();
-      }
-    });
-
-    this.btnDisconnect.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        try {
-          UserInfoController.this.getMainController().getApplication()
-              .getIhmCore().getDataForIhm().logout();
-        } catch (UnsupportedOperationException ex) {
-          ex.printStackTrace();
-        }
-
-        UserInfoController.this.getMainController().getApplication().getPrimaryStage().setScene(
-            UserInfoController.this.getMainController().getApplication().getLoginScene());
       }
     });
   }

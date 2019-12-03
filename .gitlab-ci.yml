@@ -1,4 +1,4 @@
-image: maven:3-jdk-8
+image: registry.gitlab.utc.fr/lo23-a19-mardi/development
 
 variables:
   # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
@@ -9,15 +9,6 @@ variables:
 cache:
   paths:
     - .m2/repository
-    - jdk1.8.0_212
-
-before_script:
-  - if [ ! -d "jdk1.8.0_212" ]; then
-  - wget https://github.com/frekele/oracle-java/releases/download/8u212-b10/jdk-8u212-linux-x64.tar.gz
-  - tar zxvf jdk-8u212-linux-x64.tar.gz
-  - rm jdk-8u212-linux-x64.tar.gz
-  - fi
-  - export JAVA_HOME="$(pwd)/jdk1.8.0_212"
 
 build:
   stage: build
@@ -26,10 +17,16 @@ build:
   tags:
     - docker
 
+test:
+  stage: test
+  script:
+    - mvn test $MAVEN_CLI_OPTS
+  tags:
+    - docker
+
 style:
   stage: test
   script: 
     - mvn checkstyle:check $MAVEN_CLI_OPTS
-    - mvn test $MAVEN_CLI_OPTS
   tags:
     - docker

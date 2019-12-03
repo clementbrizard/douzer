@@ -1,7 +1,7 @@
 import core.Application;
 import core.DataProvider;
 import core.IhmCore;
-import exceptions.DataException;
+import exceptions.data.DataException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import provider.NetworkProvider;

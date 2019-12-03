@@ -1,6 +1,7 @@
 package core;
 
 import interfaces.DataForIhm;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * The IhmCore will start the HCI of the Application, manage controllers and stage changes.
@@ -32,6 +33,7 @@ public class IhmCore {
 
   public static IhmCore init() {
     if (ihmCore == null) {
+      LogManager.getLogger().info("IhmCore start");
       ihmCore = new IhmCore();
 
       ihmCore.ihmForData = new IhmForData(ihmCore);

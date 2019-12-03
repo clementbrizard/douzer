@@ -129,8 +129,8 @@ public class AllMusicsController implements Controller {
   }
 
   private List<MusicMetadata> parseMusic() {
-    return this.getCentralFrameController().getMainController().getApplication()
-        .getIhmCore().getDataForIhm().getAvailableMusics()
+    return this.getCentralFrameController().getMainController().getApplication().getIhmCore()
+        .getDataForIhm().getLocalMusics()
         .map(x -> x.getMetadata())
         .collect(Collectors.toList());
   }
@@ -196,7 +196,7 @@ public class AllMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().getMusics(query); //TODO rename
+        .getDataForIhm().searchMusics(query); //TODO rename
 
     updateMusics(searchResults);
   }

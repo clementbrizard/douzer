@@ -1,17 +1,15 @@
 package features;
 
 import core.Datacore;
+import datamodel.Contact;
 import datamodel.LocalUser;
-import datamodel.Music;
-import java.io.EOFException;
+import exceptions.data.LocalUsersFileException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -20,24 +18,6 @@ import java.util.stream.Collectors;
 import javax.security.auth.login.LoginException;
 
 public abstract class Login {
-  private static LocalUser loadUserFromDisk(Path filePath, String username, String password)
-      throws IOException, LoginException {
-    FileInputStream file = new FileInputStream(filePath.toFile());
-    ObjectInputStream reader = new ObjectInputStream(file);
-    LocalUser user;
-    try {
-      do {
-        user = (LocalUser) reader.readObject();
-      } while (!(user.getUsername().equals(username) && user.verifyPassword(password)));
-    } catch (EOFException e) {
-      throw new LoginException("No such user found");
-    } catch (ClassNotFoundException e) {
-      throw new LoginException("Local save may be corrupted or outdated");
-    }
-
-    return user;
-  }
-
   private static InetAddress getIpFromString(String ip) {
     if (ip.isEmpty()) {
       return null;
@@ -75,11 +55,18 @@ public abstract class Login {
    * @throws LoginException When the user can't be found
    */
   public static void run(Datacore dc, String username, String password)
-      throws IOException, LoginException {
-    Path savePath = Paths.get("").toAbsolutePath();
-    LocalUser user = loadUserFromDisk(savePath.resolve(dc.LOCAL_USERS_FILENAME),
-        username, password);
-    run(dc, user);
+      throws LoginException, IOException {
+    try {
+      LocalUser user = dc.getLocalUsersFileHandler().getUser(username);
+
+      if (!user.verifyPassword(password)) {
+        throw new LoginException("Wrong user password");
+      }
+
+      run(dc, user);
+    } catch (LocalUsersFileException e) {
+      throw new LoginException("No such user found");
+    }
   }
 
   /**
@@ -91,9 +78,11 @@ public abstract class Login {
    */
   public static void run(Datacore dc, LocalUser user)
       throws IOException {
+    user.setConnected(true);
     dc.setCurrentUser(user);
     dc.addUser(user);
     user.getMusics().forEach(dc::addMusic);
+    user.getContacts().stream().map(Contact::getUser).forEach(dc::addUser);
 
     LoginPayload payload = new LoginPayload(user);
     // TODO: template for filename
