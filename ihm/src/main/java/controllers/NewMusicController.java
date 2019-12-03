@@ -130,8 +130,8 @@ public class NewMusicController implements Controller {
     this.myMusicsController = myMusicsController;
 
     this.textUploader.setText(this.getMyMusicsController().getCentralFrameController()
-    .getMainController().getApplication().getIhmCore().getDataForIhm()
-    .getCurrentUser().getUsername());
+        .getMainController().getApplication().getIhmCore().getDataForIhm()
+        .getCurrentUser().getUsername());
   }
 
   // Other methods
