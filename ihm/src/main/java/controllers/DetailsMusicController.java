@@ -273,7 +273,7 @@ public class DetailsMusicController implements Controller {
         note = 5;
       }
     }));
-    
+
     buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
 
         @Override
