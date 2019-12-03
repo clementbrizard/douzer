@@ -6,13 +6,52 @@ import java.util.Collection;
 import java.util.stream.Stream;
 
 public interface Net {
-  void sendToUser(Serializable payload, InetAddress ip);
+  
+  /**
+   * Sends a message containing the string payload to the given ip.
+   * If the current user is not connected then it conects it.
+   * 
+   * @param payload content of the message
+   * @param ipDest ip address of the receiver
+   */
+  void sendToUser(Serializable payload, InetAddress ipDest);
 
-  void sendToUsers(Serializable payload, Stream<InetAddress> ips);
+  /**
+   * Sends a message containing the string payload to the given ipS.
+   * If the current user is not connected then it conects it.
+   * 
+   * @param payload content of the message
+   * @param ipsDest ip addresses of the receivers
+   */
+  void sendToUsers(Serializable payload, Stream<InetAddress> ipsDest);
 
+  /**
+   * Sends a request to download the distant file identified by the given
+   * hash from differents IPs (list of users who have the mp3). The list is
+   * used to manage errors
+   * 
+   * @param ownerIps ips where the music can be downloaded
+   * @param musicHash hash of the music to download
+   */
   void requestDownload(Stream<InetAddress> ownerIps, String musicHash);
 
-  void connect(Serializable payload, Collection<InetAddress> ips);
+  /**
+   * Deprecated : sendToUser(s) now connects the user if it is not connected.
+   * Connect the user to the network. Create a server thread to listen network and
+   * sends a payload to the known network.
+   * 
+   * @param payload data to transmit to the network
+   * @param knownIPs known nodes of the network
+   */
+  @Deprecated
+  void connect(Serializable payload, Collection<InetAddress> knownIPs);
 
-  void disconnect(Serializable payload, Collection<InetAddress> ips);
+  /**
+   * Stop all interactions between user and network and notifies the network that
+   * the user has been disconnected.
+   * 
+   * @param payload data to inform the network we are disconnected
+   * @param knownIPs known ips in the network
+   */
+  void disconnect(Serializable payload, Collection<InetAddress> knownIPs);
 }
