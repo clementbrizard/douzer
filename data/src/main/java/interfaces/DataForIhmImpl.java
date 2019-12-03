@@ -23,6 +23,7 @@ import features.Search;
 import features.ShareMusicsPayload;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
+import features.UpdateUserPayload;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -153,7 +154,8 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void notifyUserUpdate(LocalUser user) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    UpdateUserPayload payload = new UpdateUserPayload(user);
+    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
   @Override
@@ -203,9 +205,11 @@ public class DataForIhmImpl implements DataForIhm {
     this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
-  @Override
-  public void notifyMusicUpdate(LocalMusic music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  @Override public void notifyMusicUpdate(LocalMusic music) {
+    if (music.isShared()) {
+      UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
+      this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+    }
   }
 
   @Override
