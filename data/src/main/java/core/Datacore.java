@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 public class Datacore {
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
   private final LocalUsersFileHandler localUsersFileHandler;
-  private static final Logger startLogger = LogManager.getLogger();
+  private static final Logger logger = LogManager.getLogger();
   public Net net;
   public Ihm ihm;
   private volatile HashMap<UUID, User> users;
@@ -35,8 +35,8 @@ public class Datacore {
     this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
   }
 
-  public static Logger getStartLogger() {
-    return startLogger;
+  public static Logger getLogger() {
+    return logger;
   }
 
   /**
