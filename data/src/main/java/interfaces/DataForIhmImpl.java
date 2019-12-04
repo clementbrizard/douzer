@@ -216,7 +216,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void notifyMusicUpdate(LocalMusic music) {
-    if (music.isShared()) {
+    if (music.isSharedToAll()) {
       UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
       this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
     }

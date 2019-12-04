@@ -21,7 +21,7 @@ public class LoginPayload extends ShareMusicsPayload {
   LoginPayload(LocalUser user, Set<InetAddress> addresses) {
     super(
         user.getMusics().stream()
-            .filter(LocalMusic::isShared)
+            .filter(LocalMusic::isSharedToAll)
             .collect(Collectors.toSet())
     );
     // copy constructor instead of cast to not send sensitive info over the network
