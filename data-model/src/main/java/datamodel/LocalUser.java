@@ -133,6 +133,6 @@ public class LocalUser extends User {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), pwdHash, friends, savePath, musics, playlist);
+    return Objects.hash(super.hashCode());
   }
 }

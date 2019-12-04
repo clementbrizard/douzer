@@ -66,6 +66,6 @@ public class LocalMusic extends Music {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), shared, mp3Path);
+    return Objects.hash(super.hashCode());
   }
 }

@@ -57,6 +57,5 @@ public class Music implements java.io.Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(metadata);
-    // no hash on owners so no infinite recursion
   }
 }

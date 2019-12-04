@@ -168,6 +168,6 @@ public class MusicMetadata implements java.io.Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(hash, title, artist, album, duration, releaseYear, tags, ratings, comments);
+    return Objects.hash(hash);
   }
 }
