@@ -1,7 +1,6 @@
 package features;
 
 import core.Datacore;
-import datamodel.Contact;
 import datamodel.LocalUser;
 import exceptions.data.LocalUsersFileException;
 import java.io.FileInputStream;
@@ -84,7 +83,7 @@ public abstract class Login {
     dc.setCurrentUser(user);
     dc.addUser(user);
     user.getMusics().forEach(dc::addMusic);
-    user.getContacts().stream().map(Contact::getUser).forEach(dc::addUser);
+    user.getFriends().forEach(dc::addUser);
 
     LoginPayload payload = new LoginPayload(user, dc.getOnlineIps()
         .collect(Collectors.toCollection(HashSet::new)));
