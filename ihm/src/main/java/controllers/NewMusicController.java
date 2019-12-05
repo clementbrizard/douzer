@@ -112,6 +112,11 @@ public class NewMusicController implements Controller {
    * Reference to parent controller.
    */
   private MyMusicsController myMusicsController;
+  
+  /**
+   * the metadata of the selected music.
+   */
+  private MusicMetadata meta;
 
   // Getters
 
@@ -190,6 +195,52 @@ public class NewMusicController implements Controller {
       this.hasChosenFile = true;
       this.textFile.setText(this.file.getAbsolutePath());
       this.textFile.setStyle(null);
+
+      try {
+        newMusicLogger.info("remplissage des champs par defaut");
+        meta = myMusicsController.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .parseMusicMetadata(file.getAbsolutePath());
+        
+        if (meta.getAlbum() != null) {
+          this.textAlbum.setText(meta.getAlbum());
+        } else {
+          this.textAlbum.setText("");
+        }
+        if (meta.getArtist() != null) {
+          this.textArtist.setText(meta.getArtist());
+        } else {
+          this.textArtist.setText("");
+        }
+        if (meta.getTitle() != null) {
+          this.textTitle.setText(meta.getTitle());
+        } else {
+          this.textTitle.setText("");
+        }
+        if (meta.getReleaseYear() != null) {
+          newMusicLogger.info("remplissage de l'année par : " + meta.getReleaseYear().getValue());
+          this.dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1000,LocalDate.now().getYear() , meta.getReleaseYear().getValue()));
+        } else {
+          this.dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1000,LocalDate.now().getYear() , LocalDate.now().getYear()));
+        }
+        
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      } catch (UnsupportedTagException e) {
+        e.printStackTrace();
+        return;
+      } catch (InvalidDataException e) {
+        e.printStackTrace();
+        return;
+      } catch (NoSuchAlgorithmException e) {
+        e.printStackTrace();
+        return;
+      }
+      
     }
   }
 
@@ -320,21 +371,11 @@ public class NewMusicController implements Controller {
     // Add music if valid
     if (valid) {
       newMusicLogger.info("Entry valid");
-
-      MusicMetadata meta = null;
-      try {
-        meta = myMusicsController.getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .parseMusicMetadata(file.getAbsolutePath());
-
-        // TODO: use meta to prefill the form
-        meta.setTitle(textTitle.getText());
-        meta.setArtist(textArtist.getText());
-        meta.setAlbum(textAlbum.getText());
-        meta.setReleaseYear(Year.of(dateYear.getValue()));
+      
+      meta.setTitle(textTitle.getText());
+      meta.setArtist(textArtist.getText());
+      meta.setAlbum(textAlbum.getText());
+      meta.setReleaseYear(Year.of(dateYear.getValue()));
 
         try {
           myMusicsController.getCentralFrameController()
@@ -351,23 +392,7 @@ public class NewMusicController implements Controller {
         } catch (java.io.FileNotFoundException e) {
           newMusicLogger.error("File not found : " + file.getAbsolutePath());
         }
-      } catch (IOException e) {
-        e.printStackTrace();
-        // TODO: interrupt the music addition
-        return;
-      } catch (UnsupportedTagException e) {
-        e.printStackTrace();
-        // TODO: interrupt the music addition
-        return;
-      } catch (InvalidDataException e) {
-        e.printStackTrace();
-        // TODO: interrupt the music addition
-        return;
-      } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
-        // TODO: interrupt the music addition
-        return;
-      }
+
 
     } else {
       newMusicLogger.error("Entry not valid");
