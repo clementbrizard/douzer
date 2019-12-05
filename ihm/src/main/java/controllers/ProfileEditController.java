@@ -1,5 +1,8 @@
 package controllers;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+
 //replace by javadocs
 //central view who permit the user to edit his profile
 public class ProfileEditController implements Controller {
@@ -45,5 +48,10 @@ public class ProfileEditController implements Controller {
 
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  @FXML
+  public void changeFrameToMyMusics(ActionEvent event) {
+    ProfileEditController.this.centralFrameController.setCentralContentMyMusics();
   }
 }
