@@ -67,11 +67,11 @@ public class ProfileEditController implements Controller {
   public void setExportProfileController(ExportProfileController exportProfileController) {
     this.exportProfileController = exportProfileController;
   }
-  
+
   public void setPasswordEditController(PasswordEditController passwordEditController) {
     this.passwordEditController = passwordEditController;
   }
-  
+
   public void setProfileDeletionController(ProfileDeletionController profileDeletionController) {
     this.profileDeletionController = profileDeletionController;
   }
