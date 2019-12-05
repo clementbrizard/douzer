@@ -223,33 +223,39 @@ public class NewMusicController implements Controller {
         }
         if (meta.getReleaseYear() != null) {
           newMusicLogger.info("remplissage de l'année par : " + meta.getReleaseYear().getValue());
-          this.dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1000,LocalDate.now().getYear() , meta.getReleaseYear().getValue()));
+          this.dateYear.setValueFactory(new SpinnerValueFactory
+              .IntegerSpinnerValueFactory(1000,
+                  LocalDate.now().getYear(), 
+                  meta.getReleaseYear().getValue()));
         } else {
-          this.dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1000,LocalDate.now().getYear() , LocalDate.now().getYear()));
+          this.dateYear.setValueFactory(new SpinnerValueFactory
+              .IntegerSpinnerValueFactory(1000,
+                  LocalDate.now().getYear(),
+                  LocalDate.now().getYear()));
         }
         
       } catch (IOException e) {
         e.printStackTrace();
         Notifications.create()
-        .title("Ajout de la musique raté")
-        .text("le fichier selectionné ne correspond pas au bon format")
-        .darkStyle()
-        .showWarning();
+          .title("Ajout de la musique raté")
+          .text("le fichier selectionné ne correspond pas au bon format")
+          .darkStyle()
+          .showWarning();
         return;
       } catch (UnsupportedTagException e) {
         e.printStackTrace();
         Notifications.create()
-        .title("Ajout de la musique raté")
-        .text("les tags ne correspondent pas au fichier")
-        .darkStyle()
-        .showWarning();
+          .title("Ajout de la musique raté")
+          .text("les tags ne correspondent pas au fichier")
+          .darkStyle()
+          .showWarning();
         return;
       } catch (InvalidDataException e) {
         Notifications.create()
-        .title("Ajout de la musique raté")
-        .text("des erreurs dans le format de données on été detectées")
-        .darkStyle()
-        .showWarning();
+          .title("Ajout de la musique raté")
+          .text("des erreurs dans le format de données on été detectées")
+          .darkStyle()
+          .showWarning();
         e.printStackTrace();
         return;
       } catch (NoSuchAlgorithmException e) {
@@ -393,28 +399,24 @@ public class NewMusicController implements Controller {
       meta.setAlbum(textAlbum.getText());
       meta.setReleaseYear(Year.of(dateYear.getValue()));
 
-        try {
-          myMusicsController.getCentralFrameController()
-              .getMainController()
-              .getApplication()
-              .getIhmCore()
-              .getDataForIhm()
-              .addMusic(meta, file.getAbsolutePath());
-
-          this.getMyMusicsController().displayAvailableMusics();
-          Stage stage = (Stage) this.textFile.getScene().getWindow();
-          stage.close();
-
-        } catch (java.io.FileNotFoundException e) {
-          newMusicLogger.error("File not found : " + file.getAbsolutePath());
-          Notifications.create()
+      try {
+        myMusicsController.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .addMusic(meta, file.getAbsolutePath());
+        this.getMyMusicsController().displayAvailableMusics();
+        Stage stage = (Stage) this.textFile.getScene().getWindow();
+        stage.close();
+      } catch (java.io.FileNotFoundException e) {
+        newMusicLogger.error("File not found : " + file.getAbsolutePath());
+        Notifications.create()
           .title("Ajout de la musique raté")
           .text("le fichier selectionné ne correspond pas au bon format")
           .darkStyle()
           .showWarning();
-        }
-
-
+      }
     } else {
       newMusicLogger.error("Entry not valid");
     }
