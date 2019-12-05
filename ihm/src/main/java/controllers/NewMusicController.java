@@ -24,6 +24,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 /**
  * Pop-up a view when the user want to add a music from a local file.
@@ -229,11 +230,26 @@ public class NewMusicController implements Controller {
         
       } catch (IOException e) {
         e.printStackTrace();
+        Notifications.create()
+        .title("Ajout de la musique raté")
+        .text("le fichier selectionné ne correspond pas au bon format")
+        .darkStyle()
+        .showWarning();
         return;
       } catch (UnsupportedTagException e) {
         e.printStackTrace();
+        Notifications.create()
+        .title("Ajout de la musique raté")
+        .text("les tags ne correspondent pas au fichier")
+        .darkStyle()
+        .showWarning();
         return;
       } catch (InvalidDataException e) {
+        Notifications.create()
+        .title("Ajout de la musique raté")
+        .text("des erreurs dans le format de données on été detectées")
+        .darkStyle()
+        .showWarning();
         e.printStackTrace();
         return;
       } catch (NoSuchAlgorithmException e) {
@@ -391,6 +407,11 @@ public class NewMusicController implements Controller {
 
         } catch (java.io.FileNotFoundException e) {
           newMusicLogger.error("File not found : " + file.getAbsolutePath());
+          Notifications.create()
+          .title("Ajout de la musique raté")
+          .text("le fichier selectionné ne correspond pas au bon format")
+          .darkStyle()
+          .showWarning();
         }
 
 
