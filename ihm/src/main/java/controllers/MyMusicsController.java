@@ -1,36 +1,38 @@
 package controllers;
 
 import com.sun.javafx.logging.Logger;
-
 import core.Application;
 import datamodel.LocalMusic;
+
+import datamodel.Music;
 import datamodel.MusicMetadata;
-import java.io.IOException;
+import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
+
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-//replace by javadocs
-//central view with all user music
+/**
+ * central view show up my musics.
+ */
 public class MyMusicsController implements Controller {
 
   @FXML
@@ -43,9 +45,17 @@ public class MyMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
   private TableColumn<MusicMetadata, Duration> durationCol;
-
   @FXML
-  private Button btnAddMusic;
+  private TextField tfSearch;
+  @FXML
+  private TextField tfSearchTitle;
+  @FXML
+  private TextField tfSearchArtist;
+  @FXML
+  private TextField tfSearchAlbum;
+  @FXML
+  private TextField tfSearchDuration;
+
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
@@ -124,6 +134,11 @@ public class MyMusicsController implements Controller {
     this.durationCol.setCellValueFactory(
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
+
+    tfSearchTitle.setVisible(false);
+    tfSearchArtist.setVisible(false);
+    tfSearchAlbum.setVisible(false);
+    tfSearchDuration.setVisible(false);
 
     try {
       this.displayAvailableMusics();
@@ -268,6 +283,71 @@ public class MyMusicsController implements Controller {
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
+  }
+
+  /**
+   * Shox labels for advanced research on My Musics view.
+   * @param event The click on the button "Recherche avancée".
+   */
+  @FXML
+  public void showAdvancedSearch(ActionEvent event) {
+    if (tfSearch.isDisabled()) {
+      tfSearch.setDisable(false);
+      tfSearchTitle.setVisible(false);
+      tfSearchArtist.setVisible(false);
+      tfSearchAlbum.setVisible(false);
+      tfSearchDuration.setVisible(false);
+
+    } else {
+      tfSearch.setDisable(true);
+      tfSearchTitle.setVisible(true);
+      tfSearchArtist.setVisible(true);
+      tfSearchAlbum.setVisible(true);
+      tfSearchDuration.setVisible(true);
+
+    }
+  }
+
+  /**
+   * Search music request corresponding to the labels content.
+   * @param event The click on the search button.
+   */
+  @FXML
+  public void searchMusics(MouseEvent event) {
+
+    SearchQuery query = new SearchQuery();
+
+    if (tfSearch.isVisible()) {
+      query.withText(tfSearch.getText());
+    } else {
+      if (tfSearchTitle.getText() != null) {
+        query.withTitle(tfSearchTitle.getText());
+      }
+
+      if (tfSearchArtist != null) {
+        query.withArtist(tfSearchArtist.getText());
+      }
+
+      if (tfSearchAlbum != null) {
+        query.withArtist(tfSearchAlbum.getText());
+      }
+
+      if (tfSearchDuration != null) {
+        query.withArtist(tfSearchDuration.getText());
+      }
+    }
+
+    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().searchMusics(query); //TODO rename
+
+    updateMusics(searchResults);
+  }
+
+  private void updateMusics(Stream<Music> newMusics) {
+    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
   }
 
 }
