@@ -1,6 +1,37 @@
-.header-section {
+.root {
     -fx-font-size: 14px;
-    -fx-border-color: #000000;
+    -fx-font-family: "Open Sans";
+    -fx-background-color: rgba(79, 101, 126, 0.11);
+}
+
+Button:hover {
+    -fx-cursor: hand;
+}
+
+.header-section {
+    -fx-min-height: 50.0px;
+    -fx-min-width: 720.0px;
+    -fx-padding: 0.6em;
+    -fx-font-size: 20px;
     -fx-background-color: #2b78e4;
-    -fx-border-width: 2;
+    -fx-border-width: 0 0 0 0;
+    -fx-border-color: rgba(25, 70, 133, 0.8);
+}
+
+.header-section Label {
+    -fx-text-fill: white;
+    -fx-font-family: "Open Sans Semibold";
+}
+
+.header-section Button {
+    -fx-padding: 4px 8px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #ffffff;
+    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, rgba(25, 70, 133, 0.11), rgba(25, 70, 133, 0.8));
+    -fx-border-width: 1;
+    -fx-border-color: rgba(25, 70, 133, 0.8);
+}
+
+.header-section Button:hover {
+    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(25, 70, 133, 0.11), rgba(25, 70, 133, 0.8));
 }
