@@ -141,7 +141,7 @@ public class ShareController implements Controller {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
     if (currentMusic instanceof LocalMusic) {
-      this.radioPublic.setSelected(((LocalMusic) this.currentMusic).isShared());
+      this.radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
     }
   }
 
