@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-import datamodel.Contact;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.MusicMetadata;
@@ -34,7 +33,7 @@ class LocalUsersFileHandlerTest {
     testUser.setPassword("hunter2");
     testUser.setFirstName("John");
     testUser.setLastName("Oliver");
-    testUser.getContacts().add(new Contact(friendUser));
+    testUser.getFriends().add(friendUser);
     LocalMusic music = new LocalMusic(new MusicMetadata("JesuisUnHashLOL"), "testDir1");
     music.getMetadata().setArtist("Vulfpeck");
     music.getOwners().add(testUser);

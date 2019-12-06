@@ -34,7 +34,6 @@ import java.net.InetAddress;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
@@ -217,7 +216,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void notifyMusicUpdate(LocalMusic music) {
-    if (music.isShared()) {
+    if (music.isSharedToAll()) {
       UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
       this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
     }
