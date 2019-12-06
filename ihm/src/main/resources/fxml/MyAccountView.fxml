@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
@@ -15,18 +14,15 @@
 <?import javafx.scene.text.Font?>
 
 <?import java.net.URL?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProfileEditController" stylesheets="@../css/main.css">
+<?import javafx.scene.layout.HBox?>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProfileEditController">
    <children>
       <BorderPane>
          <center>
-             <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;">
+             <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0">
                  <children>
                       <Button fx:id="buttonSave" layoutX="161.0" layoutY="535.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="405.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Sauvegarder" />
-                      <Label layoutX="209.0" layoutY="418.0" text="Prénom">
-                         <font>
-                            <Font size="18.0" />
-                         </font>
-                      </Label>
+                      <Label layoutX="209.0" layoutY="418.0" text="Prénom"/>
                       <TextField fx:id="textFieldLastName" layoutX="349.0" layoutY="368.0" prefHeight="31.0" prefWidth="188.0" />
                       <Label fx:id="labelPseudo" layoutX="335.0" layoutY="323.0" text="Pseudo">
                          <font>
@@ -68,24 +64,14 @@
              </Pane>
          </center>
          <top>
-             <BorderPane prefHeight="50.0" prefWidth="720.0" styleClass="header-section">
+             <BorderPane styleClass="header-section">
                  <left>
-                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToMyMusics" text="Mes musiques" BorderPane.alignment="CENTER_LEFT">
-                         <padding>
-                             <Insets bottom="5" left="8" right="8" top="5" />
-                         </padding>
-                     <BorderPane.margin>
-                        <Insets left="10.0" />
-                     </BorderPane.margin>
-                     </Button>
+                     <Label fx:id="lblTitle" text="Modification du profil"/>
                  </left>
-                 <center>
-                     <Label fx:id="lblTitle" alignment="CENTER" blendMode="ADD" contentDisplay="CENTER" text="Modification du profil" textAlignment="CENTER" textFill="WHITE">
-                         <font>
-                             <Font size="24.0" />
-                         </font>
-                     </Label>
-                 </center>
+                 <right>
+                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToMyMusics"
+                             text="Mes musiques"/>
+                 </right>
              </BorderPane>
          </top>
       </BorderPane>
