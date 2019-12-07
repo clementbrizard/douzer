@@ -1,10 +1,12 @@
 package controllers;
 
-import core.IhmCore;
+import core.Application;
 import datamodel.LocalUser;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,17 +14,20 @@ import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 
 /**
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
-
-  private IhmCore ihmCore;
+  private static final Logger signUpLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldFirstName;
@@ -47,12 +52,30 @@ public class SignUpController implements Controller {
 
   @FXML
   private FileChooser avatarFileChooser = new FileChooser();
+
+  @FXML
+  private TextField avatarFilePath;
+
+  @FXML
+  private DirectoryChooser saveProfileDirectoryChooser = new DirectoryChooser();
+
+  @FXML
+  private TextField profileFilePath;
+
   private File avatarFile = null;
+  private File directoryChosenForSavingProfile = null;
+  private Application application;
+
+  // Setters
+
+  public void setApplication(Application application) {
+    this.application = application;
+  }
 
   @Override
-  public void initialize() {
+  public void initialize() {}
 
-  }
+  // Other methods
 
   /**
    * Called upon clicking the button to confirm sign up.
@@ -69,14 +92,22 @@ public class SignUpController implements Controller {
     final String lastName = textFieldLastName.getText();
 
     final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
-    //Avatar ???
+    final Path avatarPath = avatarFile.toPath();
+    // Get the image from the avatar path
+    BufferedImage avatarImg = null;
+    try {
+      avatarImg = ImageIO.read(avatarFile);
+    } catch (java.io.IOException ex) {
+      // Image could not be loaded
+      // log it ?
+    }
+
     final String secretQuestion = textFieldSecretQuestion.getText();
     final String secretAnswer = textFieldSecretAnswer.getText();
 
-    System.out.println("Signing up as user " + userName);
+    signUpLogger.info("Signing up as user {}.", userName);
 
-    //TODO: actual savepath
-    final String currentDir = System.getProperty("user.dir");
+    final Path profileSavePath = directoryChosenForSavingProfile.toPath();
 
     LocalUser user = new LocalUser();
 
@@ -86,11 +117,14 @@ public class SignUpController implements Controller {
     user.setFirstName(firstName);
     user.setLastName(lastName);
     user.setDateOfBirth(dateOfBirth);
-    user.setSavePath(Paths.get(currentDir));
+    user.setSavePath(profileSavePath);
+    user.setAvatar(avatarImg);
 
     try {
-      ihmCore.getDataForIhm().createUser(user);
-      ihmCore.showAllMusicsCenterScene();
+      application.getIhmCore().getDataForIhm().createUser(user);
+      application.showMainScene();
+      application.getMainController().init();
+
 
     } catch (IOException | LoginException se) {
 
@@ -110,7 +144,7 @@ public class SignUpController implements Controller {
    * Switches back to the login window.
    */
   public void actionCancel() {
-    ihmCore.showLoginScene();
+    application.showLoginScene();
   }
 
   /**
@@ -123,9 +157,14 @@ public class SignUpController implements Controller {
     //TODO: add extension filter
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
+    avatarFilePath.setText(avatarFile.getAbsolutePath());
+
   }
 
-  public void setIhmCore(IhmCore ihmCore) {
-    this.ihmCore = ihmCore;
+  public void actionSaveProfileDirChoose(ActionEvent event) {
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    directoryChosenForSavingProfile = saveProfileDirectoryChooser.showDialog(primaryStage);
+    profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
   }
+
 }

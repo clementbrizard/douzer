@@ -8,6 +8,8 @@ import interfaces.Ihm;
 import interfaces.Net;
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
@@ -16,19 +18,25 @@ import org.apache.logging.log4j.Logger;
 public class Datacore {
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
   private final LocalUsersFileHandler localUsersFileHandler;
+  private static final Logger logger = LogManager.getLogger();
   public Net net;
   public Ihm ihm;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
-  private static final Logger startLogger = LogManager.getLogger();
+  private volatile HashSet<InetAddress> allIps;
 
   Datacore(Net net, Ihm ihm) {
     this.net = net;
     this.ihm = ihm;
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
+    this.allIps = new HashSet<>();
     this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
+  }
+
+  public static Logger getLogger() {
+    return logger;
   }
 
   /**
@@ -97,6 +105,18 @@ public class Datacore {
     this.currentUser = user;
   }
 
+  public Set<InetAddress> getAllIps() {
+    return allIps;
+  }
+
+  public void setAllIps(HashSet<InetAddress> allIps) {
+    this.allIps = allIps;
+  }
+
+  public Stream<InetAddress> getOnlineIps() {
+    return this.getOnlineUsers().map(User::getIp);
+  }
+
   public LocalUsersFileHandler getLocalUsersFileHandler() {
     return localUsersFileHandler;
   }
@@ -108,7 +128,7 @@ public class Datacore {
 
   public Stream<LocalMusic> getLocalMusics() {
     return this.musics.values().stream()
-        .filter(m -> !(m instanceof LocalMusic)).map(m -> (LocalMusic) m);
+        .filter(m -> (m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
   /**
@@ -150,7 +170,6 @@ public class Datacore {
       music2.getMetadata().getTags().addAll(music1.getMetadata().getTags());
       music2.getMetadata().getComments().addAll(music1.getMetadata().getComments());
       music2.getMetadata().getRatings().putAll(music1.getMetadata().getRatings());
-
       music1.getMetadata().updateMusicMetadata(music2.getMetadata());
     } else {
       // else, music1 is the most recent, so we just merge set attributes
@@ -181,14 +200,5 @@ public class Datacore {
     this.users.clear();
     this.musics.clear();
     this.currentUser = null;
-  }
-
-  public Stream<InetAddress> getIps() {
-    return this.getOnlineUsers()
-        .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
-  }
-
-  public static Logger getStartLogger() {
-    return startLogger;
   }
 }

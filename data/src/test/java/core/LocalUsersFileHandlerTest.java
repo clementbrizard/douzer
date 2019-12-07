@@ -2,11 +2,9 @@ package core;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-import datamodel.Contact;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.MusicMetadata;
@@ -42,8 +40,8 @@ class LocalUsersFileHandlerTest {
     testUser1.setPassword("hunter2");
     testUser1.setFirstName("John");
     testUser1.setLastName("Oliver");
-    testUser1.getContacts().add(new Contact(friendUser));
-    LocalMusic music = new LocalMusic(new MusicMetadata(), "testDir1");
+    testUser1.getFriends().add(friendUser);
+    LocalMusic music = new LocalMusic(new MusicMetadata("JesuisUnHashLOL"), "testDir1");
     music.getMetadata().setArtist("Vulfpeck");
     music.getOwners().add(testUser1);
     testUser1.getMusics().add(music);

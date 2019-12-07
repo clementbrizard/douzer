@@ -18,7 +18,7 @@ public class LogoutPayload extends Payload {
   @Override
   public void run(Datacore dc) {
     User disconnectedUser = dc.getUser(uuid);
-    // this line is not useless if the user is referenced in a Contact
+    // this line is not useless if the user is referenced is a friend
     disconnectedUser.setConnected(false);
     dc.ihm.notifyUserDisconnection(disconnectedUser);
     dc.removeOwner(disconnectedUser);

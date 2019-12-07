@@ -7,68 +7,80 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="IHM.Controller">
-    <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
-        <children>
-            <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" prefHeight="384.0" prefWidth="505.0">
-                <columns>
-                    <TableColumn prefWidth="129.0" text="Artiste" />
-                    <TableColumn prefWidth="152.0" text="Titre" />
-                    <TableColumn prefWidth="131.0" text="Album" />
-                    <TableColumn minWidth="4.0" prefWidth="92.0" text="Durée" />
-                </columns>
-            </TableView>
-            <TextField fx:id="tfSearch" layoutX="209.0" layoutY="64.0" prefHeight="31.0" prefWidth="347.0" promptText="Rechercher" />
-            <ImageView fx:id="ivRandom" fitHeight="33.0" fitWidth="36.0" layoutX="86.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/randomArrow.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivSearch" fitHeight="35.0" fitWidth="38.0" layoutX="564.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/searchSymbol.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivPlay" fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/playSymbol.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivShare" fitHeight="31.0" fitWidth="31.0" layoutX="629.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/shareSymbol.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivDeleteLocal" fitHeight="12.0" fitWidth="76.0" layoutX="588.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/minusSymbol.png" />
-                </image>
-            </ImageView>
-            <Button fx:id="btnAddMusic" layoutX="500.0" layoutY="116.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" />
-            <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="25.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/returnArrow.png" />
-                </image>
-            </ImageView>
-            <Label fx:id="lblAdvancedSearch" layoutX="209.0" layoutY="95.0" text="Recherche avancée" underline="true" />
-            <Label fx:id="lblTitle" alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Mes Morceaux" textFill="WHITE">
-                <font>
-                    <Font size="24.0" />
-                </font>
-            </Label>
-        </children>
-    </Pane>
-    <columnConstraints>
-        <ColumnConstraints />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-    </rowConstraints>
-</GridPane>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MyMusicsController">
+   <children>
+      <BorderPane>
+         <center>
+             <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;">
+                 <children>
+                     <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" prefHeight="384.0" prefWidth="505.0" onMouseClicked="#handleClickTableView">
+                         <columns>
+                             <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
+                             <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />
+                             <TableColumn fx:id="albumCol" prefWidth="131.0" text="Album" />
+                             <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="92.0" text="Durée" />
+                         </columns>
+                     </TableView>
+                     <TextField fx:id="tfSearch" layoutX="209.0" layoutY="64.0" prefHeight="31.0" prefWidth="347.0" promptText="Rechercher" />
+                     <ImageView fx:id="ivRandom" fitHeight="33.0" fitWidth="36.0" layoutX="86.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../images/randomArrow.png" />
+                         </image>
+                     </ImageView>
+                     <ImageView fx:id="ivSearch" fitHeight="35.0" fitWidth="38.0" layoutX="564.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../images/searchSymbol.png" />
+                         </image>
+                     </ImageView>
+                     <ImageView fx:id="ivPlay" fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../images/playSymbol.png" />
+                         </image>
+                     </ImageView>
+                     <ImageView fx:id="ivShare" fitHeight="31.0" fitWidth="31.0" layoutX="629.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../images/shareSymbol.png" />
+                         </image>
+                     </ImageView>
+                     <ImageView fx:id="ivDeleteLocal" fitHeight="12.0" fitWidth="76.0" layoutX="588.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../images/minusSymbol.png" />
+                         </image>
+                     </ImageView>
+                     <Button fx:id="btnAddMusic" layoutX="500.0" layoutY="116.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" onAction="#addMusic" />
+                     <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="25.0" layoutY="62.0" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                             <Image url="@../images/returnArrow.png" />
+                         </image>
+                     </ImageView>
+                     <Label fx:id="lblAdvancedSearch" layoutX="209.0" layoutY="95.0" text="Recherche avancée" underline="true" />
+                 </children>
+             </Pane>
+         </center>
+         <top>
+             <HBox alignment="CENTER" prefHeight="50.0" prefWidth="720.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;">
+                 <children>
+                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToAllMusics" text="Toutes les musiques" translateX="-204">
+                         <padding>
+                             <Insets bottom="5" left="8" right="8" top="5" />
+                         </padding>
+                     </Button>
+                     <Label fx:id="lblTitle" alignment="CENTER" blendMode="ADD" contentDisplay="CENTER" text="Mes morceaux" textAlignment="CENTER" textFill="WHITE" translateX="-70">
+                         <font>
+                             <Font size="24.0" />
+                         </font>
+                     </Label>
+                 </children>
+             </HBox>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

@@ -1,88 +1,75 @@
 package controllers;
 
-import core.IhmCore;
-
+import core.Application;
 import java.io.IOException;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import javax.security.auth.login.LoginException;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
-
 
 /**
  * Controller used for the login view.
  */
 public class LoginController implements Controller {
 
-  private IhmCore ihmcore;
+  private static final Logger loginLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldPseudo;
+
   @FXML
   private PasswordField textFieldPassword;
 
+  private Application application;
+
+  // Other methods
+
   @Override
   public void initialize() {
-
   }
 
   @FXML
   private void actionLogin() {
-
-
-
-    // TODO try with the real view, connect to data
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
-    System.out.println("Pseudo:" + userName + ", pass: " + password);
-    boolean login = true;
 
-    
+    loginLogger.info("User {} logged in", userName);
     try {
-      ihmcore.getDataForIhm().login(userName, password);
-      //Go to Main view
+      this.application.getIhmCore().getDataForIhm().login(userName, password);
+      application.getMainController().init();
+      this.application.showMainScene();
 
     } catch (LoginException le) {
 
       le.printStackTrace();
-      
-      login = false;
-      
+
       Notifications.create()
-              .title("Connection failed")
-              .text("It seems you entered a wrong username/password. Try again.")
-              .darkStyle()
-              .showWarning();
-      
+          .title("Connection failed")
+          .text("It seems you entered a wrong username/password. Try again.")
+          .darkStyle()
+          .showWarning();
+
     } catch (IOException ioe) {
-      
-      login = false;
       ioe.printStackTrace();
     }
-    
-    if (login) {
-      //change for the main view
-      System.out.println("passage du login passé");
-    }
+    System.out.println("login ok");
   }
 
   @FXML
   private void actionSignup() {
-    ihmcore.showSignupScene();
+    application.showSignUpScene();
   }
 
   @FXML
   private void actionForgottenPassword() {
-    ihmcore.showForgottenPasswordScene();
-
+    application.showForgottenPasswordScene();
   }
 
-  public void setIhmCore(IhmCore ihmcore) {
-    this.ihmcore = ihmcore;
+  public void setApplication(Application application) {
+    this.application = application;
   }
 
 }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="755.0" prefWidth="241.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CurrentMusicInfoController">
+  <children>
+    <GridPane alignment="CENTER" layoutX="0.0" layoutY="0.0" prefHeight="755.0" prefWidth="241.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;;">
+      <children>
+        <fx:include fx:id="commentCurrentMusic" source="CommentCurrentMusicView.fxml" />
+      </children>
+      <children>
+        <ProgressBar fx:id="downloadProgress" prefWidth="200.0" progress="0.63" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Button fx:id="btnShare" mnemonicParsing="false" onAction="#share" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Partager" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+      </children>
+      <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="662.3999877929688" minHeight="10.0" prefHeight="657.6" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="245.60002746582035" minHeight="0.0" prefHeight="44.799999999999955" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="134.60001220703123" minHeight="10.0" prefHeight="49.5999755859375" vgrow="SOMETIMES" />
+      </rowConstraints>
+    </GridPane>
+  </children>
+</AnchorPane>
