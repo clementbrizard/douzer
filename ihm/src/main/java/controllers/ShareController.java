@@ -104,6 +104,7 @@ public class ShareController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .shareMusic((LocalMusic) currentMusic);
+        ((LocalMusic) currentMusic).setSharedToAll(true);
         shareLogger.debug("Music is shared");
       } else {
         currentMusicInfoController
@@ -111,6 +112,7 @@ public class ShareController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .unshareMusic((LocalMusic) currentMusic);
+        ((LocalMusic) currentMusic).setSharedToAll(false);
         shareLogger.debug("Music is unshared");
       }
     } catch (Exception e) {
@@ -118,8 +120,8 @@ public class ShareController implements Controller {
     }
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
+    // update the current music storage
     this.currentMusicInfoController.getApplication().getIhmCore().getDataForIhm().notifyMusicUpdate((LocalMusic) this.currentMusic);
-    shareLogger.debug("Notify music update");
     stage.close();
   }
 
