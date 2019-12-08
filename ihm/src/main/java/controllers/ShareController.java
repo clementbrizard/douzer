@@ -105,7 +105,6 @@ public class ShareController implements Controller {
             .getDataForIhm()
             .shareMusic((LocalMusic) currentMusic);
         ((LocalMusic) currentMusic).setSharedToAll(true);
-        shareLogger.debug("Music is shared");
       } else {
         currentMusicInfoController
             .getApplication()
@@ -113,7 +112,6 @@ public class ShareController implements Controller {
             .getDataForIhm()
             .unshareMusic((LocalMusic) currentMusic);
         ((LocalMusic) currentMusic).setSharedToAll(false);
-        shareLogger.debug("Music is unshared");
       }
     } catch (Exception e) {
       shareLogger.error(e);
@@ -149,7 +147,6 @@ public class ShareController implements Controller {
    */
   public void initializeCurrentMusicInfo(Music currentMusic) {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
-    shareLogger.debug(((LocalMusic) this.currentMusic).isSharedToAll());
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
     if (currentMusic instanceof LocalMusic) {
       radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
