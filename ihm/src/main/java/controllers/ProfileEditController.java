@@ -91,6 +91,8 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getUsername();
 
+    lblUserPseudo.setText("Profil de " + pseudo);
+
     String firstName = this.centralFrameController
             .getMainController()
             .getApplication()
@@ -98,6 +100,8 @@ public class ProfileEditController implements Controller {
             .getDataForIhm()
             .getCurrentUser()
             .getFirstName();
+
+    textFieldFirstName.setText(firstName);
 
     String lastName = this.centralFrameController
             .getMainController()
@@ -107,9 +111,19 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getLastName();
 
-    lblUserPseudo.setText("Profil de " + pseudo);
-    textFieldFirstName.setText(firstName);
     textFieldLastName.setText(lastName);
+
+    String birthDate = this.centralFrameController
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getDateOfBirth()
+            .toString();
+
+    datePickerBirth.setPromptText(birthDate);
+    /*datePickerBirth.setValue(datePickerBirth.getConverter().fromString(birthDate));*/
   }
 
   @FXML
