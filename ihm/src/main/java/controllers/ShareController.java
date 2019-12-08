@@ -120,8 +120,12 @@ public class ShareController implements Controller {
     }
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
-    // update the current music storage
-    this.currentMusicInfoController.getApplication().getIhmCore().getDataForIhm().notifyMusicUpdate((LocalMusic) this.currentMusic);
+    // notify the update of the current music
+    this.currentMusicInfoController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyMusicUpdate((LocalMusic) this.currentMusic);
     stage.close();
   }
 
