@@ -22,7 +22,7 @@ public class LocalUsersFileHandler {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
 
-    if (!savePath.toFile().exists()) {
+    if (!this.filePath.toFile().exists()) {
       // Create the file with an empty Map of LocalUsers.
       setLocalUsers(new HashMap<>());
     }
