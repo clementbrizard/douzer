@@ -1,7 +1,5 @@
 package controllers;
 
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -9,7 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.controlsfx.control.Notifications;
 
 //replace by javadocs
 //central view that permit the user to edit his profile
@@ -30,18 +27,18 @@ public class ProfileEditController implements Controller {
   /*@FXML
   private ImageView imgAvatar;*/
 
-  @FXML
-  private Label lblSaved;
-
   private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;
   private PasswordEditController passwordEditController;
   private ProfileDeletionController profileDeletionController;
-
-  private static final Logger logger = LogManager.getLogger();
-
-  // Getters
-
+  
+  private CentralFrameController centralFrameController;
+  
+  @Override
+  public void initialize() {
+    // TODO Auto-generated method stub
+  }
+  
   public ExportProfileController getExportProfileController() {
     return exportProfileController;
   }
@@ -94,8 +91,6 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getUsername();
 
-    lblUserPseudo.setText("Profil de " + pseudo);
-
     String firstName = this.centralFrameController
             .getMainController()
             .getApplication()
@@ -103,8 +98,6 @@ public class ProfileEditController implements Controller {
             .getDataForIhm()
             .getCurrentUser()
             .getFirstName();
-
-    textFieldFirstName.setText(firstName);
 
     String lastName = this.centralFrameController
             .getMainController()
@@ -114,19 +107,9 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getLastName();
 
+    lblUserPseudo.setText("Profil de " + pseudo);
+    textFieldFirstName.setText(firstName);
     textFieldLastName.setText(lastName);
-
-    String birthDate = this.centralFrameController
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser()
-            .getDateOfBirth()
-            .toString();
-
-    datePickerBirth.setPromptText(birthDate);
-    /*datePickerBirth.setValue(datePickerBirth.getConverter().fromString(birthDate));*/
   }
 
   @FXML
