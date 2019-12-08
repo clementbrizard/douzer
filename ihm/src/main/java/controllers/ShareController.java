@@ -153,5 +153,5 @@ public class ShareController implements Controller {
       radioPrivate.setSelected(!((LocalMusic) this.currentMusic).isSharedToAll());
     }
   }
-
 }
+
