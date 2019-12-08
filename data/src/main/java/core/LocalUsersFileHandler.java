@@ -18,9 +18,12 @@ import java.util.Map;
 public class LocalUsersFileHandler {
   private Path filePath;
 
-  LocalUsersFileHandler(String filePath) {
+  LocalUsersFileHandler(String filePath) throws IOException {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
+
+    // Create the file with an empty Map of LocalUsers.
+    setLocalUsers(new HashMap<>());
   }
 
   private void setLocalUsers(Map<String, LocalUser> localUsers) throws IOException {

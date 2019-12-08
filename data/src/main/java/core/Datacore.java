@@ -6,6 +6,7 @@ import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,7 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 public class Datacore {
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
-  private final LocalUsersFileHandler localUsersFileHandler;
+  private LocalUsersFileHandler localUsersFileHandler;
   private static final Logger logger = LogManager.getLogger();
   public Net net;
   public Ihm ihm;
@@ -32,7 +33,11 @@ public class Datacore {
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
     this.allIps = new HashSet<>();
-    this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
+    try {
+      this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
+    } catch (IOException e) {
+      logger.error(e);
+    }
   }
 
   public static Logger getLogger() {

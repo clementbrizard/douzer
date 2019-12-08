@@ -23,14 +23,12 @@ class LocalUsersFileHandlerTest {
 
   @BeforeEach
   void setUp() {
-    File file = Paths.get("").resolve(path).toFile();
     try {
-      file.createNewFile();
+      handler = new LocalUsersFileHandler(path);
     } catch (IOException e) {
       e.printStackTrace();
     }
 
-    handler = new LocalUsersFileHandler(path);
     User friendUser = new User();
     friendUser.setUsername("mark");
 
