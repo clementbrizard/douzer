@@ -2,7 +2,6 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
-import exceptions.data.LocalUsersFileException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -65,7 +64,7 @@ public abstract class Login {
       }
 
       run(dc, user);
-    } catch (LocalUsersFileException e) {
+    } catch (NullPointerException e) {
       throw new LoginException("No such user found");
     }
   }
