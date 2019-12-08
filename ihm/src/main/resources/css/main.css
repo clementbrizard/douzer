@@ -8,14 +8,29 @@ Button:hover {
     -fx-cursor: hand;
 }
 
+.form-field {
+    -fx-padding: 4px 8px;
+    -fx-text-fill: rgb(43, 120, 228);
+    -fx-border-color: rgb(43, 120, 228);
+    -fx-background-color: rgba(255, 255, 255, 0.55);
+
+}
+.form-field:focused {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #2a58af;
+    -fx-text-fill: #2a58af;
+}
+
+/*
+ * HEADER
+ */
 .header-section {
     -fx-min-height: 50.0px;
     -fx-min-width: 720.0px;
     -fx-padding: 0.6em;
     -fx-font-size: 20px;
     -fx-background-color: #2b78e4;
-    -fx-border-width: 0 0 0 0;
-    -fx-border-color: rgba(25, 70, 133, 0.8);
+    -fx-border-width: 0;
 }
 
 .header-section Label {
@@ -27,11 +42,70 @@ Button:hover {
     -fx-padding: 4px 8px;
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
-    -fx-background-color: linear-gradient(from 75% 75% to 100% 100%, rgba(25, 70, 133, 0.11), rgba(25, 70, 133, 0.8));
+    -fx-background-color: linear-gradient(from 55% 55% to 100% 100%, rgba(25, 70, 133, 0.11), rgba(25, 70, 133, 0.8));
     -fx-border-width: 1;
     -fx-border-color: rgba(25, 70, 133, 0.8);
 }
 
 .header-section Button:hover {
-    -fx-background-color: linear-gradient(from 25% 25% to 100% 100%, rgba(25, 70, 133, 0.11), rgba(25, 70, 133, 0.8));
+    -fx-background-color: linear-gradient(from 70% 70% to 100% 100%, rgba(79, 101, 126, 0.11), rgba(25, 70, 133, 0.8));
+}
+
+.header-section Button:pressed {
+    -fx-background-color: linear-gradient(from 80% 80% to 100% 100%, rgba(79, 101, 126, 0.11), rgba(25, 70, 133, 0.8));
+    -fx-text-fill: #ff6812;
+    -fx-border-color: #ff6812;
+}
+
+/*
+ * CENTER
+ */
+.central-center-section {
+    -fx-min-height: 605px;
+    -fx-min-width: 720px;
+    -fx-padding: 1em;
+    -fx-border-width: 0;
+}
+
+.central-center-section > HBox {
+    -fx-padding: 0.8em 0;
+    -fx-border-width: 0 0 0.6 0;
+    -fx-border-color: rgba(25, 70, 133, 1);
+}
+
+.center-sub-title {
+    -fx-font-size: 18px;
+    -fx-font-family: "Open Sans Semibold";
+    -fx-padding: 0 0 0 0.5em;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-color: #ff6812;
+}
+
+.form-lbl {
+    -fx-label-padding: 0 0 0.25em 0;
+}
+
+.form-btn {
+    -fx-padding: 4px 8px;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2b78e4;
+    -fx-background-color: linear-gradient(from 55% 55% to 100% 100%, rgba(255, 255, 255, 0.8), rgba(25, 70, 133, 0.11));
+    -fx-border-width: 1;
+    -fx-border-color: #2b78e4;
+}
+
+.form-btn:hover {
+    -fx-background-color: linear-gradient(from 70% 70% to 100% 100%, rgba(255, 255, 255, 0.8), rgba(25, 70, 133, 0.11));
+}
+
+.form-btn:pressed {
+    -fx-background-color: linear-gradient(from 80% 80% to 100% 100%, rgba(255, 255, 255, 0.8), rgba(25, 70, 133, 0.11));
+    -fx-text-fill: #2a58af;
+    -fx-border-color: #2a58af;
+}
+
+.form-btn-hbox {
+    -fx-border-width: 0;
+    -fx-padding: 1em;
+    -fx-spacing: 0.5em;
 }

@@ -2,52 +2,111 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //replace by javadocs
-//central view who permit the user to edit his profile
+//central view that permit the user to edit his profile
 public class ProfileEditController implements Controller {
-  
+
+  @FXML
+  private Label lblUserPseudo;
+
+  @FXML
+  private TextField textFieldFirstName;
+
+  @FXML
+  private TextField textFieldLastName;
+
+  @FXML
+  private DatePicker datePickerBirth;
+
+  /*@FXML
+  private ImageView imgAvatar;*/
+
+  private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;
   private PasswordEditController passwordEditController;
   private ProfileDeletionController profileDeletionController;
-  
-  private CentralFrameController centralFrameController;
-  
-  @Override
-  public void initialize() {
-    // TODO Auto-generated method stub
-  }
-  
+
+  private static final Logger logger = LogManager.getLogger();
+
+  // Getters
+
   public ExportProfileController getExportProfileController() {
     return exportProfileController;
   }
-  
-  public void setExportProfileController(ExportProfileController exportProfileController) {
-    this.exportProfileController = exportProfileController;
-  }
-  
+
   public PasswordEditController getPasswordEditController() {
     return passwordEditController;
-  }
-  
-  public void setPasswordEditController(PasswordEditController passwordEditController) {
-    this.passwordEditController = passwordEditController;
   }
 
   public ProfileDeletionController getProfileDeletionController() {
     return profileDeletionController;
   }
-  
-  public void setProfileDeletionController(ProfileDeletionController profileDeletionController) {
-    this.profileDeletionController = profileDeletionController;
-  }
-  
+
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
   }
 
+  // Setters
+
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  public void setExportProfileController(ExportProfileController exportProfileController) {
+    this.exportProfileController = exportProfileController;
+  }
+  
+  public void setPasswordEditController(PasswordEditController passwordEditController) {
+    this.passwordEditController = passwordEditController;
+  }
+  
+  public void setProfileDeletionController(ProfileDeletionController profileDeletionController) {
+    this.profileDeletionController = profileDeletionController;
+  }
+
+  // Other methods
+
+  @Override
+  public void initialize() {
+  }
+
+  /**
+   * Initialize the fields with default data.
+   */
+  public void init() {
+    String pseudo = this.centralFrameController
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getUsername();
+
+    String firstName = this.centralFrameController
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getFirstName();
+
+    String lastName = this.centralFrameController
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getLastName();
+
+    lblUserPseudo.setText("Profil de " + pseudo);
+    textFieldFirstName.setText(firstName);
+    textFieldLastName.setText(lastName);
   }
 
   @FXML
