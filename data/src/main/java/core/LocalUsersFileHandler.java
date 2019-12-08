@@ -22,8 +22,10 @@ public class LocalUsersFileHandler {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
 
-    // Create the file with an empty Map of LocalUsers.
-    setLocalUsers(new HashMap<>());
+    if (!savePath.toFile().exists()) {
+      // Create the file with an empty Map of LocalUsers.
+      setLocalUsers(new HashMap<>());
+    }
   }
 
   private void setLocalUsers(Map<String, LocalUser> localUsers) throws IOException {
