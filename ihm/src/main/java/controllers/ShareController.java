@@ -104,21 +104,22 @@ public class ShareController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .shareMusic((LocalMusic) currentMusic);
-        shareLogger.info("Music is shared");
+        shareLogger.debug("Music is shared");
       } else {
         currentMusicInfoController
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
             .unshareMusic((LocalMusic) currentMusic);
-        shareLogger.info("Music is unshared");
+        shareLogger.debug("Music is unshared");
       }
     } catch (Exception e) {
       shareLogger.error(e);
     }
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
-
+    this.currentMusicInfoController.getApplication().getIhmCore().getDataForIhm().notifyMusicUpdate((LocalMusic) this.currentMusic);
+    shareLogger.debug("Notify music update");
     stage.close();
   }
 

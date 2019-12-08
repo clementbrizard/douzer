@@ -426,7 +426,7 @@ public class DetailsMusicController implements Controller {
     }
 
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
-
+    this.myMusicsController.getApplication().getIhmCore().getDataForIhm().notifyMusicUpdate((LocalMusic) this.localMusic);
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();
   }
 
