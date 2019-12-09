@@ -36,6 +36,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * getter of searchMusicController.
+   *
    * @return a SearchMusicController
    * @see SearchMusicController
    */
@@ -45,6 +46,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * getter of centralFrameController.
+   *
    * @return a CentralFrameController
    * @see CentralFrameController
    */
@@ -56,6 +58,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * setter of searchMusicController.
+   *
    * @param searchMusicController the new SearchMusicController
    * @see SearchMusicController
    */
@@ -65,6 +68,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * setter of centralFrameController.
+   *
    * @param centralFrameController the new CentralFrameController
    * @see CentralFrameController
    */
@@ -82,10 +86,11 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Setup the table columns to receive data, 
+   * Setup the table columns to receive data,
    * this method has to be called right after the creation of the view.
    */
   public void init() {
+
 
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
