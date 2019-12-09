@@ -1,5 +1,7 @@
 package controllers;
 
+import org.apache.logging.log4j.LogManager;
+
 import cells.CommentListViewCell;
 import datamodel.Comment;
 import datamodel.LocalMusic;
@@ -41,7 +43,7 @@ public class CommentsController implements Controller {
 
   private ObservableList<Comment> commentObservableList;
 
-  public CurrentMusicInfoController getCurrentMusicController() {
+  public CurrentMusicInfoController getCurrentMusicInfoController() {
     return currentMusicInfoController;
   }
 
@@ -63,27 +65,33 @@ public class CommentsController implements Controller {
    * @param music Object Music.
    */
   public void init(Music music) {
+
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
-    commentObservableList = FXCollections.observableArrayList();
+    if(commentObservableList == null) {
+      commentObservableList = FXCollections.observableArrayList();
+    }
+    else {
+      commentObservableList.clear();
+    }
     commentObservableList.addAll(music.getMetadata().getComments());
 
-    commentObservableList.addAll(
-        new Comment("test1",this.getCurrentMusicController().getApplication().getIhmCore()
-            .getDataForIhm().getCurrentUser()),new Comment("2",this.getCurrentMusicController()
-            .getApplication().getIhmCore().getDataForIhm().getCurrentUser()));
+    /*commentObservableList.addAll(
+        new Comment("test1",this.getCurrentMusicInfoController().getApplication().getIhmCore()
+            .getDataForIhm().getCurrentUser()),new Comment("2",this.getCurrentMusicInfoController()
+            .getApplication().getIhmCore().getDataForIhm().getCurrentUser()));*/
 
     listCommentaire.setItems(commentObservableList);
+    
     listCommentaire.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
-
       @Override
       public ListCell<Comment> call(ListView<Comment> param) {
-        // TODO Auto-generated method stub
-        return new CommentListViewCell();
+        CommentListViewCell c = new CommentListViewCell();
+        c.setMusic(music);
+        //controller for each comment
+        return c;
       }
-
     });
-
   }
 
   /**

@@ -206,11 +206,18 @@ public class NewCommentController implements Controller {
     if (!check()) {
       return;
     }
+    
+    //add comment
     this.getCommentsController()
-    .getCurrentMusicController()
+    .getCurrentMusicInfoController()
     .getApplication()
     .getIhmCore()
     .getDataForIhm().addComment(music, textAreaComment.getText());
+    
+    //reload the view of comment
+    this.getCommentsController().init(music);
+    
+    //close the popup
     ((Stage) this.validation.getScene().getWindow()).close();
   }
 
