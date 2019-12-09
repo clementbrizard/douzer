@@ -30,7 +30,7 @@ public class CurrentMusicInfoController implements Controller {
 
   @FXML
   private ProgressBar downloadProgress;
-  
+
   @FXML
   private CommentsController commentCurrentMusicController;
 
@@ -74,7 +74,7 @@ public class CurrentMusicInfoController implements Controller {
 
     commentCurrentMusicController.setCurrentMusicController(this);
     commentCurrentMusicController.init(music);
-    
+
   }
 
   public Music getCurrentMusic() {
