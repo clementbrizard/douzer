@@ -66,10 +66,14 @@ public class NewCommentController implements Controller {
     this.commentsController = commentsController;
   }
 
+  /**
+   * init the new comment view with a music.
+   * @param music the music whose we want to add our comment
+   */
   public void init(Music music) {
     this.music = music;
     this.music.getMetadata().getRatings().forEach((user,note) -> {
-      if(user.equals(getCommentsController()
+      if (user.equals(getCommentsController()
           .getCurrentMusicInfoController()
           .getApplication()
           .getIhmCore()

@@ -1,11 +1,9 @@
 package controllers;
 
-import org.apache.logging.log4j.LogManager;
-
 import cells.CommentListViewCell;
 import datamodel.Comment;
-import datamodel.LocalMusic;
 import datamodel.Music;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +18,8 @@ import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import org.apache.logging.log4j.LogManager;
 
 //replace by javadocs
 //popup view when click on Comment Button on CurrentMusicInfoController
@@ -72,10 +72,9 @@ public class CommentsController implements Controller {
 
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
-    if(commentObservableList == null) {
+    if (commentObservableList == null) {
       commentObservableList = FXCollections.observableArrayList();
-    }
-    else {
+    } else {
       commentObservableList.clear();
     }
     commentObservableList.addAll(music.getMetadata().getComments());
@@ -107,7 +106,7 @@ public class CommentsController implements Controller {
       return;
     }
     try {
-      // Initialize shareScene and shareController
+      //Initialize shareScene and shareController
       FXMLLoader newComment = new FXMLLoader(getClass().getResource("/fxml/CommentPopupView.fxml"));
       Parent newCommentParent = newComment.load();
       newCommentLoader = new Scene(newCommentParent);

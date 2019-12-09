@@ -390,13 +390,14 @@ public class DetailsMusicController implements Controller {
       }
     }
 
-    //if the same music is show in the comment view, update the comment view in order to have the same stars
-    if(localMusic.equals(getMyMusicsController()
+    /*if the same music is show in the comment view,
+      update the comment view in order to have the same stars*/
+    if (localMusic.equals(getMyMusicsController()
         .getCentralFrameController()
         .getMainController()
         .getCurrentMusicInfoController()
         .getCommentCurrentMusicController()
-        .getMusic())){
+        .getMusic())) {
 
       getMyMusicsController()
       .getCentralFrameController()

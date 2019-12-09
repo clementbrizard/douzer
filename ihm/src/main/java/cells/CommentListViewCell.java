@@ -1,14 +1,10 @@
 package cells;
 
 import datamodel.Comment;
-import datamodel.LocalUser;
 import datamodel.Music;
-import datamodel.User;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.apache.logging.log4j.LogManager;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +14,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+
+import org.apache.logging.log4j.LogManager;
 
 public class CommentListViewCell extends ListCell<Comment> {
 
@@ -80,7 +78,7 @@ public class CommentListViewCell extends ListCell<Comment> {
 
       }
       
-      music.getMetadata().getRatings().forEach( (user,note) -> {
+      music.getMetadata().getRatings().forEach((user,note) -> {
         if (user.equals(comment.getOwner())) {
           ifUserNote = true;
           setStars(note);
@@ -106,8 +104,12 @@ public class CommentListViewCell extends ListCell<Comment> {
     this.music = music;
   }
   
+  /**
+   * set the amout of stars link to the rating if 0 don't show any stars.
+   * @param rating int the rating of music
+   */
   public void setStars(int rating) {
-    if (rating == 0 ) {
+    if (rating == 0) {
       imageEtoile1.setVisible(false);
       imageEtoile2.setVisible(false);
       imageEtoile3.setVisible(false);
