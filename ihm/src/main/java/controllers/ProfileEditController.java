@@ -1,12 +1,23 @@
 package controllers;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.RenderedImage;
+import java.awt.image.WritableRaster;
 import java.time.format.DateTimeFormatter;
+import java.util.Hashtable;
 import java.util.Locale;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
@@ -27,8 +38,8 @@ public class ProfileEditController implements Controller {
   @FXML
   private DatePicker datePickerBirth;
 
-  /*@FXML
-  private ImageView imgAvatar;*/
+  @FXML
+  private ImageView imgAvatar;
 
   @FXML
   private Label lblSaved;
@@ -83,12 +94,30 @@ public class ProfileEditController implements Controller {
 
   @Override
   public void initialize() {
-  }
-
+  }  
+  
   /**
    * Initialize the fields with default data.
    */
   public void init() {
+    
+    //get the image
+    RenderedImage imgRend = this.centralFrameController
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser()
+        .getAvatar();
+
+    //thanks to SwingFXUtils we can convert a bufferedImage into an Image
+    Image img = SwingFXUtils.toFXImage(convertRenderedImage(imgRend),null); 
+    imgAvatar.setImage(img);
+    
+    //the clip to have a circled image
+    Circle clip = new Circle(imgAvatar.getFitHeight() / 2,imgAvatar.getFitWidth() / 2,35);
+    imgAvatar.setClip(clip);
+    
     String pseudo = this.centralFrameController
             .getMainController()
             .getApplication()
@@ -130,6 +159,33 @@ public class ProfileEditController implements Controller {
 
     datePickerBirth.setPromptText(birthDate);
     /*datePickerBirth.setValue(datePickerBirth.getConverter().fromString(birthDate));*/
+  }
+  
+  /**
+   * this function permit ton convert a RenderedImage into a BufferedImage
+   * i take this function here http://www.jguru.com/faq/view.jsp?EID=114602.
+   * @param img a RenderedImage
+   * @return a BufferedImage
+   */
+  private BufferedImage convertRenderedImage(RenderedImage img) {
+    if (img instanceof BufferedImage) {
+      return (BufferedImage)img;  
+    }   
+    ColorModel cm = img.getColorModel();
+    int width = img.getWidth();
+    int height = img.getHeight();
+    WritableRaster raster = cm.createCompatibleWritableRaster(width, height);
+    boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+    Hashtable properties = new Hashtable();
+    String[] keys = img.getPropertyNames();
+    if (keys != null) {
+      for (int i = 0; i < keys.length; i++) {
+        properties.put(keys[i], img.getProperty(keys[i]));
+      }
+    }
+    BufferedImage result = new BufferedImage(cm, raster, isAlphaPremultiplied, properties);
+    img.copyData(raster);
+    return result;
   }
 
   @FXML

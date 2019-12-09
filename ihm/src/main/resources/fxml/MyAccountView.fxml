@@ -51,12 +51,11 @@
                          <VBox>
                              <Label text="Avatar" styleClass="form-lbl"/>
                              <HBox>
-                                 <Circle fx:id="imageViewAvatar" fill="WHITE" radius="40" />
-                                 <!--<ImageView fx:id="imgAvatar" preserveRatio="true">
-                                     <image >
-                                         <Image preserveRatio="true" smooth="true">
-                                     </image>
-                                 </ImageView>-->
+                                     <ImageView fx:id="imgAvatar" preserveRatio="true" fitHeight="100" fitWidth="100" >
+								          <image>
+								            <Image preserveRatio="true" smooth="true" url="@../images/EmptyStarSymbol.png" />
+								         </image>
+                                     </ImageView>
                              </HBox>
                          </VBox>
                      </HBox>
