@@ -1,6 +1,5 @@
 package controllers;
 
-import com.sun.javafx.logging.Logger;
 import core.Application;
 import datamodel.LocalMusic;
 
@@ -68,8 +67,6 @@ public class MyMusicsController implements Controller {
 
   private LocalMusic musicInformation;
   private ArrayList<LocalMusic> listMusics;
-
-  private Logger logger;
 
   private  ContextMenu contextMenu;
 
