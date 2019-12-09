@@ -14,12 +14,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
- * central view show up all music in the network.
+ * Central view show up all music in the network.
  */
 public class AllMusicsController implements Controller {
+  private static final Logger allMusicsLogger = LogManager.getLogger();
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -115,7 +118,7 @@ public class AllMusicsController implements Controller {
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
-      e.printStackTrace();
+      allMusicsLogger.error(e);
     }
 
     tfSearchTitle.setVisible(false);
@@ -136,7 +139,7 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Show labels for advanced reserch for All musics view.
+   * Show labels for advanced search for All musics view.
    * @param event the clic ont the button "Recherche avancée".
    */
   @FXML
@@ -171,6 +174,7 @@ public class AllMusicsController implements Controller {
   public void searchMusics(MouseEvent event) {
 
     SearchQuery query = new SearchQuery();
+    allMusicsLogger.debug(tfSearch.isDisabled());
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
