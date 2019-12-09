@@ -317,7 +317,7 @@ public class MyMusicsController implements Controller {
 
     SearchQuery query = new SearchQuery();
 
-    if (tfSearch.isVisible()) {
+    if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
       if (tfSearchTitle.getText() != null) {

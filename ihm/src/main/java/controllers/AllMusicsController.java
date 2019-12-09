@@ -171,8 +171,7 @@ public class AllMusicsController implements Controller {
   public void searchMusics(MouseEvent event) {
 
     SearchQuery query = new SearchQuery();
-
-    if (tfSearch.isDisabled()) {
+    if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
       if (tfSearchTitle.getText() != null) {
