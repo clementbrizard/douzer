@@ -284,7 +284,7 @@ public class DetailsMusicController implements Controller {
           boolean tagexist = false;
           if (localMusic.getMetadata() != null) {
             if (localMusic.getMetadata().getTags() != null) {
-              
+
               Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
               while (itMusicTag.hasNext()) {
                 if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
@@ -389,9 +389,24 @@ public class DetailsMusicController implements Controller {
         
       }
     }
-    
+
+    //if the same music is show in the comment view, update the comment view in order to have the same stars
+    if(localMusic.equals(getMyMusicsController()
+        .getCentralFrameController()
+        .getMainController()
+        .getCurrentMusicInfoController()
+        .getCommentCurrentMusicController()
+        .getMusic())){
+
+      getMyMusicsController()
+      .getCentralFrameController()
+      .getMainController()
+      .getCurrentMusicInfoController()
+      .getCommentCurrentMusicController().init(localMusic);
+    }
+
     localMusic.getMetadata().getTags().addAll(tags);
-    
+
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
 
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();

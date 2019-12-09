@@ -58,6 +58,10 @@ public class CommentsController implements Controller {
   public void setNewCommentController(NewCommentController newCommentController) {
     this.newCommentController = newCommentController;
   }
+  
+  public Music getMusic() {
+    return music;
+  }
 
 
   /**

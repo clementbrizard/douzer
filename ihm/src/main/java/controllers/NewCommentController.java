@@ -68,6 +68,16 @@ public class NewCommentController implements Controller {
 
   public void init(Music music) {
     this.music = music;
+    this.music.getMetadata().getRatings().forEach((user,note) -> {
+      if(user.equals(getCommentsController()
+          .getCurrentMusicInfoController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser())) {
+        setStars(note);
+      }
+    });
   }
 
   /**
@@ -213,6 +223,21 @@ public class NewCommentController implements Controller {
     .getApplication()
     .getIhmCore()
     .getDataForIhm().addComment(music, textAreaComment.getText());
+    
+    if (note > 0) {
+      LocalUser userlocal = getCommentsController()
+          .getCurrentMusicInfoController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser();
+      
+      if (music.getMetadata().getRatings().get(userlocal) == null) {
+        music.getMetadata().getRatings().put(userlocal, note);
+      } else {
+        music.getMetadata().getRatings().replace(userlocal, note);
+      }
+    }
     
     //reload the view of comment
     this.getCommentsController().init(music);
