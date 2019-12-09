@@ -25,6 +25,7 @@ import org.controlsfx.control.Notifications;
 //replace by javadocs
 //central view that permit the user to edit his profile
 public class ProfileEditController implements Controller {
+  private static final Logger logger = LogManager.getLogger();
 
   @FXML
   private Label lblUserPseudo;
@@ -48,14 +49,9 @@ public class ProfileEditController implements Controller {
   private ExportProfileController exportProfileController;
   private PasswordEditController passwordEditController;
   private ProfileDeletionController profileDeletionController;
-  
-  private CentralFrameController centralFrameController;
-  
-  @Override
-  public void initialize() {
-    // TODO Auto-generated method stub
-  }
-  
+
+  // Getters
+
   public ExportProfileController getExportProfileController() {
     return exportProfileController;
   }
