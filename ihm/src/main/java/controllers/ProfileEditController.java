@@ -1,5 +1,7 @@
 package controllers;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -7,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 //replace by javadocs
 //central view that permit the user to edit his profile
@@ -26,6 +29,9 @@ public class ProfileEditController implements Controller {
 
   /*@FXML
   private ImageView imgAvatar;*/
+
+  @FXML
+  private Label lblSaved;
 
   private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;
@@ -126,5 +132,50 @@ public class ProfileEditController implements Controller {
   @FXML
   public void changeFrameToMyMusics(ActionEvent event) {
     ProfileEditController.this.centralFrameController.setCentralContentMyMusics();
+  }
+
+  /**
+   * Saving of the updated user profile parameters.
+   * And sending of a confirmation notification
+   * @param event a click on the save button
+   */
+  @FXML
+  public void save(ActionEvent event) {
+    ProfileEditController.this.centralFrameController.getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .setFirstName(textFieldFirstName.getText());
+
+    ProfileEditController.this.centralFrameController.getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .setLastName(textFieldLastName.getText());
+
+    /*ProfileEditController.this.centralFrameController.getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .setDateOfBirth(datePickerBirth.getValue());
+
+    logger.debug("Dob to set : " + datePickerBirth.getValue().toString());
+
+    logger.debug("getDob : " +     ProfileEditController.this.centralFrameController
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getDateOfBirth();*/
+
+    Notifications.create()
+            .title("Sauvegarde effectuée")
+            .text("Vos informations de profil ont bien été mises à jour.")
+            .darkStyle()
+            .showInformation();
   }
 }
