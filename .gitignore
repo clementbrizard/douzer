@@ -208,4 +208,7 @@ nbdist/
 ### Users file ###
 lo23-users.ser
 
+### Properties file ###
+*.properties
+
 # End of https://www.gitignore.io/api/java,maven,eclipse,netbeans,intellij+all

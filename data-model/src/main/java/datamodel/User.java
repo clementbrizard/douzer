@@ -166,6 +166,6 @@ public class User implements java.io.Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(uuid, username, avatar, firstName, lastName, dateOfBirth, connected, ip);
+    return Objects.hash(uuid);
   }
 }
