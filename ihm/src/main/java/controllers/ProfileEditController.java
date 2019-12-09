@@ -162,8 +162,8 @@ public class ProfileEditController implements Controller {
   }
   
   /**
-   * this function permit ton convert a RenderedImage into a BufferedImage
-   * i take this function here http://www.jguru.com/faq/view.jsp?EID=114602.
+   * this function permit to convert a RenderedImage into a BufferedImage
+   * I took this function here http://www.jguru.com/faq/view.jsp?EID=114602.
    * @param img a RenderedImage
    * @return a BufferedImage
    */
