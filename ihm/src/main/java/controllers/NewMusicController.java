@@ -235,7 +235,7 @@ public class NewMusicController implements Controller {
         }
         
       } catch (IOException e) {
-        e.printStackTrace();
+        newMusicLogger.error(e);
         Notifications.create()
           .title("Ajout de la musique raté")
           .text("le fichier selectionné ne correspond pas au bon format")
@@ -243,7 +243,7 @@ public class NewMusicController implements Controller {
           .showWarning();
         return;
       } catch (UnsupportedTagException e) {
-        e.printStackTrace();
+        newMusicLogger.error(e);
         Notifications.create()
           .title("Ajout de la musique raté")
           .text("les tags ne correspondent pas au fichier")
@@ -256,10 +256,10 @@ public class NewMusicController implements Controller {
           .text("des erreurs dans le format de données on été detectées")
           .darkStyle()
           .showWarning();
-        e.printStackTrace();
+        newMusicLogger.error(e);
         return;
       } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
+        newMusicLogger.error(e);
         return;
       }
       
