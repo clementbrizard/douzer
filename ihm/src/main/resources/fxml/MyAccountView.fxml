@@ -50,12 +50,16 @@
                      <HBox>
                          <VBox>
                              <Label text="Avatar" styleClass="form-lbl"/>
-                             <HBox>
-                                     <ImageView fx:id="imgAvatar" preserveRatio="true" fitHeight="100" fitWidth="100" >
-								          <image>
-								            <Image preserveRatio="true" smooth="true" url="@../images/EmptyStarSymbol.png" />
-								         </image>
-                                     </ImageView>
+                             <HBox styleClass="avatar-hbox">
+                                 <ImageView fx:id="imgAvatar" preserveRatio="true" fitHeight="100" fitWidth="100" >
+                                      <image>
+                                        <Image preserveRatio="true" smooth="true"  url="@../images/EmptyStarSymbol.png" />
+                                     </image>
+                                 </ImageView>
+                                 <VBox styleClass="form-btn-hbox">
+                                     <Button fx:id="buttonEditAvatar" onAction="#avatarEdition" styleClass="form-btn" text="éditer" />
+                                     <Button fx:id="buttonDeleteAvatar" onAction="#avatarDeletion" styleClass="form-btn" text="supprimer" />
+                                 </VBox>
                              </HBox>
                          </VBox>
                      </HBox>

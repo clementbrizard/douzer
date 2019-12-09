@@ -109,3 +109,7 @@ Button:hover {
     -fx-padding: 1em;
     -fx-spacing: 0.5em;
 }
+
+.avatar-hbox {
+    -fx-padding: 0;
+}

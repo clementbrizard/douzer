@@ -193,6 +193,15 @@ public class ProfileEditController implements Controller {
     ProfileEditController.this.centralFrameController.setCentralContentMyMusics();
   }
 
+  @FXML
+  public void avatarEdition(ActionEvent event) {
+
+  }
+
+  @FXML
+  public void avatarDeletion(ActionEvent event) {
+  }
+
   /**
    * Saving of the updated user profile parameters.
    * And sending of a confirmation notification
