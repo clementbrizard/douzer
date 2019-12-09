@@ -1,22 +1,28 @@
 package controllers;
 
+import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
- * central view show up all music in the network.
+ * Central view show up all music in the network.
  */
 public class AllMusicsController implements Controller {
+  private static final Logger allMusicsLogger = LogManager.getLogger();
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -28,6 +34,16 @@ public class AllMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
   private TableColumn<MusicMetadata, Duration> durationCol;
+  @FXML
+  private TextField tfSearch;
+  @FXML
+  private TextField tfSearchTitle;
+  @FXML
+  private TextField tfSearchArtist;
+  @FXML
+  private TextField tfSearchAlbum;
+  @FXML
+  private TextField tfSearchDuration;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
@@ -36,6 +52,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * getter of searchMusicController.
+   *
    * @return a SearchMusicController
    * @see SearchMusicController
    */
@@ -45,6 +62,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * getter of centralFrameController.
+   *
    * @return a CentralFrameController
    * @see CentralFrameController
    */
@@ -56,6 +74,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * setter of searchMusicController.
+   *
    * @param searchMusicController the new SearchMusicController
    * @see SearchMusicController
    */
@@ -65,6 +84,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * setter of centralFrameController.
+   *
    * @param centralFrameController the new CentralFrameController
    * @see CentralFrameController
    */
@@ -82,7 +102,7 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Setup the table columns to receive data, 
+   * Setup the table columns to receive data,
    * this method has to be called right after the creation of the view.
    */
   public void init() {
@@ -98,8 +118,13 @@ public class AllMusicsController implements Controller {
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
-      e.printStackTrace();
+      allMusicsLogger.error(e);
     }
+
+    tfSearchTitle.setVisible(false);
+    tfSearchArtist.setVisible(false);
+    tfSearchAlbum.setVisible(false);
+    tfSearchDuration.setVisible(false);
   }
 
   public void displayAvailableMusics() {
@@ -113,9 +138,27 @@ public class AllMusicsController implements Controller {
         .collect(Collectors.toList());
   }
 
+  /**
+   * Show labels for advanced search for All musics view.
+   * @param event the clic ont the button "Recherche avancée".
+   */
   @FXML
-  public void changeFrameToAdvancedSearch(ActionEvent event) {
-    AllMusicsController.this.centralFrameController.setCentralContentAllMusicsAdvancedSearch();
+  public void showAdvancedSearch(ActionEvent event) {
+    if (tfSearch.isDisabled()) {
+      tfSearch.setDisable(false);
+      tfSearchTitle.setVisible(false);
+      tfSearchArtist.setVisible(false);
+      tfSearchAlbum.setVisible(false);
+      tfSearchDuration.setVisible(false);
+
+    } else {
+      tfSearch.setDisable(true);
+      tfSearchTitle.setVisible(true);
+      tfSearchArtist.setVisible(true);
+      tfSearchAlbum.setVisible(true);
+      tfSearchDuration.setVisible(true);
+
+    }
   }
 
   @FXML
@@ -123,4 +166,45 @@ public class AllMusicsController implements Controller {
     AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
   }
 
+  /**
+   * Search all musics that correspond to the labels content.
+   * @param event The click on the search button.
+   */
+  @FXML
+  public void searchMusics(MouseEvent event) {
+
+    SearchQuery query = new SearchQuery();
+    allMusicsLogger.debug(tfSearch.isDisabled());
+    if (!tfSearch.isDisabled()) {
+      query.withText(tfSearch.getText());
+    } else {
+      if (tfSearchTitle.getText() != null) {
+        query.withTitle(tfSearchTitle.getText());
+      }
+
+      if (tfSearchArtist != null) {
+        query.withArtist(tfSearchArtist.getText());
+      }
+
+      if (tfSearchAlbum != null) {
+        query.withArtist(tfSearchAlbum.getText());
+      }
+
+      if (tfSearchDuration != null) {
+        query.withArtist(tfSearchDuration.getText());
+      }
+    }
+
+    Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().searchMusics(query); //TODO rename
+
+    updateMusics(searchResults);
+  }
+
+  private void updateMusics(Stream<Music> newMusics) {
+    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+  }
 }
