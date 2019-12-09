@@ -17,11 +17,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Datacore {
-  private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
-  private LocalUsersFileHandler localUsersFileHandler;
   private static final Logger logger = LogManager.getLogger();
+  private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
   public Net net;
   public Ihm ihm;
+  private LocalUsersFileHandler localUsersFileHandler;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
