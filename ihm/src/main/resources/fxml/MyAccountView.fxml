@@ -50,12 +50,14 @@
                      <HBox>
                          <VBox>
                              <Label text="Avatar" styleClass="form-lbl"/>
-                             <Circle fx:id="imageViewAvatar" fill="WHITE" radius="40" />
-                             <!--<ImageView fx:id="imgAvatar" preserveRatio="true">
-                                 <image >
-                                     <Image preserveRatio="true" smooth="true">
-                                 </image>
-                             </ImageView>-->
+                             <HBox>
+                                 <Circle fx:id="imageViewAvatar" fill="WHITE" radius="40" />
+                                 <!--<ImageView fx:id="imgAvatar" preserveRatio="true">
+                                     <image >
+                                         <Image preserveRatio="true" smooth="true">
+                                     </image>
+                                 </ImageView>-->
+                             </HBox>
                          </VBox>
                      </HBox>
                      <HBox styleClass="form-btn-hbox">
