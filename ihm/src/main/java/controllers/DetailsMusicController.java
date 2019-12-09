@@ -284,17 +284,17 @@ public class DetailsMusicController implements Controller {
           boolean tagexist = false;
           if (localMusic.getMetadata() != null) {
             if (localMusic.getMetadata().getTags() != null) {
-
+              
               Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
               while (itMusicTag.hasNext()) {
-                if (itMusicTag.next().equals(textFieldAddTag.getText())) {
+                if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
                   tagexist = true;
                 }
               }
             }
           }
-          if (!tagexist) {
-            tags.add(textFieldAddTag.getText());
+          if (!tagexist && !textFieldAddTag.getText().trim().equals("")) {
+            tags.add(textFieldAddTag.getText().trim());
           }
           //give new tag or new tag list to data
         }
@@ -389,7 +389,9 @@ public class DetailsMusicController implements Controller {
         
       }
     }
-
+    
+    localMusic.getMetadata().getTags().addAll(tags);
+    
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
 
     ((Stage) this.textFieldTitre.getScene().getWindow()).close();
