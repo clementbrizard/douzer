@@ -22,8 +22,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 
-//replace by javadocs
-//central view that permit the user to edit his profile
+/**
+ *  Central view that permit the user to edit his profile.
+ */
 public class ProfileEditController implements Controller {
   private static final Logger logger = LogManager.getLogger();
 
