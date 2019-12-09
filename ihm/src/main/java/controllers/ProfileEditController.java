@@ -1,5 +1,7 @@
 package controllers;
 
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
@@ -7,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 //replace by javadocs
 //central view that permit the user to edit his profile
@@ -26,6 +29,9 @@ public class ProfileEditController implements Controller {
 
   /*@FXML
   private ImageView imgAvatar;*/
+
+  @FXML
+  private Label lblSaved;
 
   private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;

@@ -59,7 +59,7 @@
                          </VBox>
                      </HBox>
                      <HBox styleClass="form-btn-hbox">
-                        <Button fx:id="buttonSave" styleClass="form-btn" text="Sauvegarder" />
+                        <Button fx:id="buttonSave" onAction="#save" styleClass="form-btn" text="Sauvegarder" />
                      </HBox>
                      <!--<ImageView fx:id="imageViewAddAvatar" fitHeight="31.0" fitWidth="32.0" layoutX="429.0" layoutY="128.0" pickOnBounds="true" preserveRatio="true">
                          <image>
