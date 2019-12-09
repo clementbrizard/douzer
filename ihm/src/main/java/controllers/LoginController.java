@@ -36,15 +36,14 @@ public class LoginController implements Controller {
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
 
-    loginLogger.info("User {} logged in", userName);
     try {
       this.application.getIhmCore().getDataForIhm().login(userName, password);
       application.getMainController().init();
       this.application.showMainScene();
 
-    } catch (LoginException le) {
+    } catch (LoginException e) {
 
-      le.printStackTrace();
+      loginLogger.error(e);
 
       Notifications.create()
           .title("Connection failed")
@@ -52,10 +51,9 @@ public class LoginController implements Controller {
           .darkStyle()
           .showWarning();
 
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
+    } catch (IOException e) {
+      loginLogger.error(e);
     }
-    System.out.println("login ok");
   }
 
   @FXML

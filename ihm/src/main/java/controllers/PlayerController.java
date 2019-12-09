@@ -6,10 +6,11 @@ import javafx.scene.control.Label;
 //replace by javadocs
 //the view of the music player down in the middle
 public class PlayerController implements Controller {
-  
-  private MainController mainController;
+
   @FXML
   Label lblArtistMusicName;
+
+  private MainController mainController;
 
   @Override
   public void initialize() {
