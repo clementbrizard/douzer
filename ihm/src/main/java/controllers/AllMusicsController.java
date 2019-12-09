@@ -1,5 +1,6 @@
 package controllers;
 
+import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
