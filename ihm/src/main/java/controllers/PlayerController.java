@@ -2,24 +2,33 @@ package controllers;
 
 import datamodel.LocalMusic;
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 
 /**
  * PlayerMusic Controller.
  */
 public class PlayerController implements Controller {
+
+  @FXML
+  private ProgressBar pgMusicProgress;
+
+  @FXML
+  private Button play;
 
   @FXML
   private Label songInfo;
@@ -30,37 +39,84 @@ public class PlayerController implements Controller {
   @FXML
   private Label fullTime;
 
-  @FXML
-  private ImageView ivPlay;
-
-  @FXML
-  private ImageView ivPause;
-
-  @FXML
-  private ImageView ivNext;
-
-  @FXML
-  private ImageView ivBefore;
-
-  @FXML
-  private ProgressBar pgMusicProgress;
-
   private MainController mainController;
 
-  private List<MediaPlayer> players;
-  private MediaPlayer mediaPlayer;
-  private ArrayList<LocalMusic> arrayMusic;
+  private final Image pauseIcon = new Image(
+      getClass().getResourceAsStream("../images/pauseSymbol.png")
+  );
 
-  private int musicID = 0;
-  private long totalDuration = 0;
+  private final Image playIcon = new Image(
+      getClass().getResourceAsStream("../images/playSymbol.png")
+  );
+
+  private int currentIndex = -1;
+  private boolean isPlaying = false;
+  private Duration duration;
+
+  private MediaPlayer player;
+  private ArrayList<MediaPlayer> medias;
+  private ArrayList<LocalMusic> arrayMusic;
 
   @Override
   public void initialize() {
-    players = new ArrayList<MediaPlayer>();
+    medias = new ArrayList<MediaPlayer>();
+    isPlaying = false;
 
-    ivPlay.setOnMouseClicked(e -> {
-      playPauseSong();
+    // Click on progressBar
+    pgMusicProgress.setOnMouseClicked(e -> seekMusic(
+        new Duration(
+        (int) Math.round(((double)e.getX()
+            / (double)pgMusicProgress.getWidth())
+            * pgMusicProgress.getMaxWidth()))
+        )
+    );
+  }
+
+  /**
+   * Function null.
+   * @param duration : Duration
+   * @return
+   */
+  public void seekMusic(Duration duration) {
+    if (player != null) {
+      player.seek(duration);
+    }
+  }
+
+  /**
+   * Function Play only one song.
+   * @param url : MusicPath
+   * @return
+   */
+  public void playerOnMusic(String url) {
+
+    if (isPlaying) {
+      player.stop();
+    }
+
+    updateArrayMusic();
+
+    for (int i = 0; i < arrayMusic.size(); i++) {
+      if (url.equals(arrayMusic.get(i).getMp3Path())) {
+        currentIndex = i;
+      }
+    }
+
+    player = medias.get(currentIndex);
+    showSongInfo(arrayMusic.get(currentIndex));
+
+    isPlaying = true;
+
+    player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
+                                              Duration oldValue,
+                                              Duration newValue) -> {
+      duration = player.getMedia().getDuration();
+      updateValues();
     });
+
+    player.play();
+    play.setGraphic(new ImageView(pauseIcon));
+
   }
 
   /**
@@ -70,107 +126,99 @@ public class PlayerController implements Controller {
    */
   private MediaPlayer createPlayer(String url) {
     final Media media = new Media(new File(url).toURI().toString());
-    final MediaPlayer player = new MediaPlayer(media);
-    return player;
+    return new MediaPlayer(media);
   }
 
-  public void playerOnMusic(String url) {
-    players.clear();
-    players.add(createPlayer(url));   
-    musicID = 0;
-  }
-  
   /**
-   * Function to interact with musicPlayer : Play, Pause, Next, Previous.
+   * Function Refresh ArrayMusic.
+   * @return
    */
-  private void playPauseSong() {
+  private void updateArrayMusic() {
+    medias.clear();
 
-    if (players.size() != 0) {
-      
-      if(arrayMusic.get(musicID).getMetadata().getDuration() != null) {
-        totalDuration = arrayMusic.get(this.musicID).getMetadata().getDuration().toMillis() ;
+    Stream<LocalMusic> streamMusic = mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getLocalMusics();
+    arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
+    arrayMusic.forEach(musicPath -> medias.add(createPlayer(musicPath.getMp3Path())));
+  }
+
+  /**
+   * Function playBack : play the music before.
+   * @return
+   */
+  @FXML
+  private void playBack(ActionEvent e) {
+    if (currentIndex != -1) {
+      if (currentIndex - 1 >= 0) {
+        currentIndex--;
       } else {
-        totalDuration = (long) 180000.0 ;
+        currentIndex = medias.size() - 1;
       }
 
-      updateValues(totalDuration);
-
-      mediaPlayer = players.get(musicID);
-      mediaPlayer.setVolume(100);
-      mediaPlayer.play();
-
-      if(arrayMusic != null && arrayMusic.size() == 0)
-        showSongInfo(arrayMusic.get(musicID));
-      playIcon();
-
-      ivPause.setOnMouseClicked(e -> {
-        mediaPlayer.pause();
-        pauseIcon();
-      });
-
-      ivNext.setOnMouseClicked(e -> {
-        if (musicID + 1 < players.size()) {
-          musicID++;
-        } else {
-          musicID = 0;
-        }
-
-        pgMusicProgress.setProgress(0.0);
-        mediaPlayer.stop();
-        playPauseSong();
-
-      });
-
-      ivBefore.setOnMouseClicked(e -> {
-        if (musicID - 1 >= 0) {
-          musicID--;
-        } else {
-          musicID = players.size() - 1;
-        }
-
-        pgMusicProgress.setProgress(0.0);
-        mediaPlayer.stop();
-
-        playPauseSong();
-
-      });
-    } else {
-      Stream<LocalMusic> streamMusic = mainController
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .getLocalMusics();
-      arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
-      arrayMusic.forEach(musicPath -> players.add(createPlayer(musicPath.getMp3Path())));
+      playerOnMusic(arrayMusic.get(currentIndex).getMp3Path());
     }
   }
 
   /**
-   * Update GUI values.
+   * Function playNext: play the next music.
+   * @return
    */
-  private void updateValues(long totalDuration) {
-    Thread thread = new Thread(() -> {
-      do {
-        Platform.runLater(() -> {
-          if ((mediaPlayer.getStatus() != MediaPlayer.Status.PAUSED)
-              && (mediaPlayer.getStatus() != MediaPlayer.Status.STOPPED)
-              && (mediaPlayer.getStatus() != MediaPlayer.Status.READY)) {
-            
-            lblTime.setText(secToMin((long) mediaPlayer.getCurrentTime().toSeconds()));
-            
-            double timer = (mediaPlayer.getCurrentTime().toMillis() / totalDuration);
-            pgMusicProgress.setProgress(timer);
+  @FXML
+  private void playNext(ActionEvent e) {
+    if (currentIndex != -1) {
+      if (currentIndex + 1 < medias.size()) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      playerOnMusic(arrayMusic.get(currentIndex).getMp3Path());
+    }
+  }
 
-          }
-        });
-        try {
-          Thread.sleep(100);
-        } catch (InterruptedException ex) {
-          break;
-        }
-      } while (!players.isEmpty());
-    });
-    thread.start();
+  /**
+   * Function playPause: Play and Pause button interactions.
+   * @return
+   */
+  @FXML
+  private void playPause(ActionEvent e) {
+    if (currentIndex != -1) {
+      if (isPlaying) {
+        play.setGraphic(new ImageView(playIcon));
+        isPlaying = false;
+        player.pause();
+      } else {
+        play.setGraphic(new ImageView(pauseIcon));
+        isPlaying = true;
+        player.play();
+      }
+    }
+  }
+
+  /**
+   * Function updateValues: Update GUI (progressBar and timer).
+   * @return
+   */
+  protected void updateValues() {
+    if (pgMusicProgress != null && duration != null) {
+      Platform.runLater(() -> {
+        Duration currentTime = player.getCurrentTime();
+
+        lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
+
+        double totalDuration = arrayMusic.get(this.currentIndex)
+            .getMetadata()
+            .getDuration()
+            .toMillis();
+        
+        double timer = (currentTime.toMillis() / totalDuration);
+
+        pgMusicProgress.setProgress(timer);
+
+      });
+    }
   }
 
   /**
@@ -181,32 +229,12 @@ public class PlayerController implements Controller {
     if (song != null) {
       songInfo.setText(song.getMetadata().getArtist() + " - " + song.getMetadata().getTitle());
       lblTime.setText("0:00");
-      fullTime.setText(song.getMetadata().getDuration().toString());
+      fullTime.setText(secToMin(song.getMetadata().getDuration().getSeconds()));
     } else {
       songInfo.setText("-");
       lblTime.setText("0:00");
       fullTime.setText("-");
     }
-  }
-
-  /**
-   * Update playButton apperance.
-   */
-  private void playIcon() {
-    ivPlay.setVisible(false);
-    ivPlay.setDisable(true);
-    ivPause.setVisible(true);
-    ivPause.setDisable(false);
-  }
-
-  /**
-   * Update pauseButton apperance.
-   */
-  private void pauseIcon() {
-    ivPause.setVisible(false);
-    ivPause.setDisable(true);
-    ivPlay.setVisible(true);
-    ivPlay.setDisable(false);
   }
 
   /**
@@ -232,4 +260,6 @@ public class PlayerController implements Controller {
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
+
+
 }
