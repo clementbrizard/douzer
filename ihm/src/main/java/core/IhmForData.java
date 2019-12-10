@@ -1,9 +1,6 @@
 package core;
 
-import controllers.AllMusicsController;
-import controllers.CurrentMusicInfoController;
-import controllers.DetailsMusicController;
-import controllers.OnlineUsersListController;
+import controllers.*;
 import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.User;
@@ -74,7 +71,7 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyDownloadProgress(Music music, int integer) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    LogManager.getLogger().warn("La fonction d'affichage du téléchargement n'est pas encore liée");
   }
 
   /**
@@ -142,7 +139,15 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void updateUser(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication().getMainController().getCentralFrameController().getDistantUserController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    LogManager.getLogger().warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 
   /**
@@ -152,6 +157,14 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserDeletion(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication().getMainController().getCentralFrameController().getDistantUserController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    LogManager.getLogger().warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 }
