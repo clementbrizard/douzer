@@ -302,12 +302,12 @@ public class MyMusicsController implements Controller {
       }
 
       if (tfSearchAlbum != null) {
-        query.withArtist(tfSearchAlbum.getText());
+        query.withAlbum(tfSearchAlbum.getText());
       }
 
-      if (tfSearchDuration != null) {
+      /*if (tfSearchDuration != null) {
         query.withArtist(tfSearchDuration.getText());
-      }
+      }*/
     }
 
     Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
