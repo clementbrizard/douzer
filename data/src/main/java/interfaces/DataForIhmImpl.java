@@ -6,13 +6,13 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
+import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.User;
-import exceptions.LocalUsersFileException;
 import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
@@ -21,6 +21,8 @@ import features.LogoutPayload;
 import features.Search;
 import features.ShareMusicsPayload;
 import features.UnshareMusics;
+import features.UpdateMusicsPayload;
+import features.UpdateUserPayload;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,12 +31,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.Properties;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -67,7 +75,13 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void addComment(Music music, String comment) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    // Add a new Comment created from the String and this current LocalUser
+    music.getMetadata().getComments().add(new Comment(comment, this.dc.getCurrentUser()));
+
+    this.dc.net.sendToUsers(
+        new UpdateMusicsPayload(Collections.singleton(music)),
+        this.dc.getOnlineIps()
+    );
   }
 
   @Override
@@ -89,17 +103,31 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void logout() throws IOException {
+    // TODO: create feature class
     LocalUser currentUser = this.dc.getCurrentUser();
     currentUser.setConnected(false);
-    try {
-      // Updates the written currentUser in case it has been modified
-      this.dc.getLocalUsersFileHandler().update(currentUser);
-    } catch (LocalUsersFileException e) {
-      throw new IOException(e);
-    }
+    // Updates the written currentUser in case it has been modified
+    this.dc.getLocalUsersFileHandler().update(currentUser);
 
     LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
-    this.dc.net.disconnect(payload, this.dc.getIps().collect(Collectors.toList()));
+    this.dc.net.disconnect(payload, this.dc.getOnlineIps().collect(Collectors.toList()));
+
+    Properties prop = new Properties();
+    // TODO: template for filename
+    Path userPropFilePath = currentUser.getSavePath()
+        .resolve(currentUser.getUsername() + "-config.properties");
+    File userConfigFile = new File(userPropFilePath.toString());
+
+    if (userConfigFile.exists()) {
+      prop.load(new FileInputStream(userPropFilePath.toString()));
+      String ipsStr = this.dc.getAllIps().stream()
+          .map(InetAddress::toString)
+          .collect(Collectors.joining(","));
+      prop.setProperty("ips", ipsStr);
+      prop.store(new FileOutputStream(userPropFilePath.toString()), null);
+    } else {
+      throw new FileNotFoundException("Warning: user property file not found in the save path");
+    }
 
     this.dc.wipe();
   }
@@ -155,14 +183,20 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void modifyUser(LocalUser user) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void notifyUserUpdate(LocalUser user) {
+    UpdateUserPayload payload = new UpdateUserPayload(user);
+    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
   @Override
   public MusicMetadata parseMusicMetadata(String path)
-      throws IOException, UnsupportedTagException, InvalidDataException {
-    MusicMetadata metadata = new MusicMetadata();
+      throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException {
+
+    String hash = new String(
+        MessageDigest.getInstance("MD5").digest(Files.readAllBytes(Paths.get(path)))
+    );
+
+    MusicMetadata metadata = new MusicMetadata(hash);
     Mp3File mp3File = new Mp3File(path);
 
     metadata.setDuration(Duration.ofSeconds(mp3File.getLengthInSeconds()));
@@ -203,7 +237,15 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void shareMusics(Collection<LocalMusic> musics) {
     ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-    this.dc.net.sendToUsers(payload, this.dc.getIps());
+    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+  }
+
+  @Override
+  public void notifyMusicUpdate(LocalMusic music) {
+    if (music.isSharedToAll()) {
+      UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
+      this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+    }
   }
 
   @Override
@@ -219,7 +261,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public Stream<User> getOnlineUsers() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.dc.getOnlineUsers();
   }
 
   @Override

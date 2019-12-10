@@ -21,7 +21,7 @@ public abstract class UnshareMusics {
     Collection<String> musicHashs = musics.stream()
         .map(m -> m.getMetadata().getHash()).collect(Collectors.toList());
     UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, u.getUuid());
-    dc.net.sendToUsers(payload, dc.getIps());
+    dc.net.sendToUsers(payload, dc.getOnlineIps());
   }
 
   public static void unshareMusic(LocalMusic music, Datacore dc) {

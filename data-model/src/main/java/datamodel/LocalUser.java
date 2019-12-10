@@ -15,8 +15,17 @@ import java.util.Set;
 
 public class LocalUser extends User {
   private static MessageDigest messageDigest;
+
+  static {
+    try {
+      messageDigest = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      e.printStackTrace();
+    }
+  }
+
   private String pwdHash;
-  private Set<Contact> contacts;
+  private Set<User> friends;
   // Path is not serializable, handle serialization with readObject writeObject below.
   private transient Path savePath;
   private Set<LocalMusic> musics;
@@ -26,15 +35,9 @@ public class LocalUser extends User {
    * Default constructor.
    */
   public LocalUser() {
-    this.contacts = new HashSet<>();
+    this.friends = new HashSet<>();
     this.musics = new HashSet<>();
     this.playlist = new ArrayList<>();
-
-    try {
-      messageDigest = MessageDigest.getInstance("SHA-256");
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
   }
 
   /**
@@ -58,12 +61,12 @@ public class LocalUser extends User {
     return (new String(messageDigest.digest())).equals(this.pwdHash);
   }
 
-  public Set<Contact> getContacts() {
-    return contacts;
+  public Set<User> getFriends() {
+    return this.friends;
   }
 
-  public void setContacts(Set<Contact> contacts) {
-    this.contacts = contacts;
+  public void setFriends(Set<User> friends) {
+    this.friends = friends;
   }
 
   public Set<LocalMusic> getMusics() {
@@ -101,7 +104,7 @@ public class LocalUser extends User {
     String savePathString = stream.readUTF();
     setSavePath(Paths.get(savePathString).toAbsolutePath());
 
-    this.contacts.stream().map(Contact::getUser).forEach(u -> u.setConnected(false));
+    this.friends.forEach(u -> u.setConnected(false));
 
     // Add himself as owner of its musics
     Set<User> owners = new HashSet<>();
@@ -122,7 +125,7 @@ public class LocalUser extends User {
     }
     LocalUser localUser = (LocalUser) o;
     return Objects.equals(pwdHash, localUser.pwdHash)
-        && Objects.equals(contacts, localUser.contacts)
+        && Objects.equals(friends, localUser.friends)
         && Objects.equals(savePath, localUser.savePath)
         && Objects.equals(musics, localUser.musics)
         && Objects.equals(playlist, localUser.playlist);
@@ -130,6 +133,6 @@ public class LocalUser extends User {
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), pwdHash, contacts, savePath, musics, playlist);
+    return Objects.hash(super.hashCode());
   }
 }

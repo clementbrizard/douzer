@@ -1,10 +1,7 @@
 package core;
 
 import datamodel.LocalUser;
-import exceptions.LocalUsersFileException;
-
 import java.io.EOFException;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class allows to access a LocalUsersFile.
@@ -19,9 +18,26 @@ import java.nio.file.Paths;
 public class LocalUsersFileHandler {
   private Path filePath;
 
-  LocalUsersFileHandler(String filePath) {
+  LocalUsersFileHandler(String filePath) throws IOException {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
+
+    if (!this.filePath.toFile().exists()) {
+      // Create the file with an empty Map of LocalUsers.
+      setLocalUsers(new HashMap<>());
+    }
+  }
+
+  private void setLocalUsers(Map<String, LocalUser> localUsers) throws IOException {
+    // This also clear the file
+    try (FileOutputStream file = new FileOutputStream(this.filePath.toFile());
+         ObjectOutputStream writer = new ObjectOutputStream(file)) {
+      if (!localUsers.isEmpty()) {
+        writer.writeObject(localUsers);
+      }
+    } catch (IOException e) {
+      throw new IOException("Local save may be corrupted or outdated");
+    }
   }
 
   /**
@@ -30,10 +46,10 @@ public class LocalUsersFileHandler {
    * @param localUser Checked LocalUser.
    * @return True if the related LocalUsers exists in the LocalUsersFile.
    */
-  public boolean contains(LocalUser localUser) {
+  public boolean contains(LocalUser localUser) throws IOException {
     try {
       return getUser(localUser) != null;
-    } catch (LocalUsersFileException e) {
+    } catch (NullPointerException e) {
       return false;
     }
   }
@@ -43,68 +59,39 @@ public class LocalUsersFileHandler {
    * If it already exist, this is ignored.
    *
    * @param localUser Added LocalUser.
-   * @throws LocalUsersFileException if the file is not accessible.
+   * @throws IOException if the file is not accessible.
    */
-  public void add(LocalUser localUser) throws LocalUsersFileException {
-    if (contains(localUser)) {
-      return;
-    }
-
-    try {
-      FileOutputStream file = new FileOutputStream(this.filePath.toFile());
-      ObjectOutputStream writer = new ObjectOutputStream(file);
-      writer.writeObject(localUser);
-    } catch (IOException e) {
-      throw new LocalUsersFileException("Local save may be corrupted or outdated");
-    }
+  public void add(LocalUser localUser) throws IOException {
+    Map<String, LocalUser> localUsers = getAll();
+    localUsers.put(localUser.getUsername(), localUser);
+    setLocalUsers(localUsers);
   }
 
   /**
    * Update a LocalUser on the LocalUsersFile.
    *
    * @param localUser Updated LocalUser.
-   * @throws LocalUsersFileException if the file is not accessible.
+   * @throws IOException if the file is not accessible.
    */
-  public void update(LocalUser localUser) throws LocalUsersFileException {
-    remove(localUser);
-    add(localUser);
+  public void update(LocalUser localUser) throws IOException {
+    Map<String, LocalUser> localUsers = getAll();
+    localUsers.remove(localUser.getUsername());
+    localUsers.put(localUser.getUsername(), localUser);
+    setLocalUsers(localUsers);
   }
 
   /**
    * Remove a LocalUser on the LocalUsersFile.
-   * Use a temp file, copy all user but skip user to remove
-   * Rename temp file as original one
    * @param localUser Removed LocalUser.
-   * @throws LocalUsersFileException if the file is not accessible.
+   * @throws IOException if the file is not accessible.
    */
-  public void remove(LocalUser localUser) throws LocalUsersFileException {
-    File temp = new File("_temp_" + localUser.getUuid());
-
-    try {
-      FileInputStream file = new FileInputStream(this.filePath.toFile());
-      ObjectInputStream reader = new ObjectInputStream(file);
-      FileOutputStream tempFile = new FileOutputStream(temp);
-      ObjectOutputStream writer = new ObjectOutputStream(tempFile);
-      LocalUser user;
-
-      while (true) {
-        user = (LocalUser) reader.readObject();
-        if (!(user.getUuid().equals(localUser.getUuid()))) {
-          writer.writeObject(user);
-        }
-      }
-    } catch (EOFException e) {
-      //Replace old file with the new one
-      boolean renameSucess = temp.renameTo(this.filePath.toFile());
-      if (!renameSucess) {
-        throw new LocalUsersFileException("File was not successfully renamed");
-      }
-    } catch (ClassNotFoundException | IOException e) {
-      throw new LocalUsersFileException("Local save may be corrupted or outdated");
-    }
+  public void remove(LocalUser localUser) throws IOException {
+    Map<String, LocalUser> localUsers = getAll();
+    localUsers.remove(localUser.getUsername());
+    setLocalUsers(localUsers);
   }
 
-  public void removeAll() throws LocalUsersFileException {
+  public void removeAll() throws IOException {
     throw new UnsupportedOperationException("Not implemented yet");
   }
 
@@ -112,35 +99,39 @@ public class LocalUsersFileHandler {
    * Returns a LocalUser if it is in the LocalUsersFile.
    *
    * @param username Wanted LocalUser's username.
-   * @return the LocalUser or null if it does not exist.
-   * @throws LocalUsersFileException if the file is not accessible.
+   * @return the LocalUser or throws an NullPointerException if it does not exist.
+   * @throws NullPointerException if the user is not found.
+   * @throws IOException if the file is not accessible.
    */
-  public LocalUser getUser(String username) throws LocalUsersFileException {
-    LocalUser user;
-
-    try {
-      FileInputStream file = new FileInputStream(this.filePath.toFile());
-      ObjectInputStream reader = new ObjectInputStream(file);
-      do {
-        user = (LocalUser) reader.readObject();
-      } while (!(user.getUsername().equals(username)));
-    } catch (EOFException e) {
-      throw new LocalUsersFileException("No such user found");
-    } catch (ClassNotFoundException | IOException e) {
-      throw new LocalUsersFileException("Local save may be corrupted or outdated");
+  public LocalUser getUser(String username) throws IOException {
+    LocalUser localUser = getAll().get(username);
+    if (localUser != null) {
+      return localUser;
     }
-
-    return user;
+    throw new NullPointerException("No such user found");
   }
 
   /**
    * Returns a LocalUser if it is in the LocalUsersFile.
    *
    * @param localUser Updated LocalUser.
-   * @return the LocalUser or null if it does not exist.
-   * @throws LocalUsersFileException if the file is not accessible.
+   * @return the LocalUser or throws an NullPointerException if it does not exist.
+   * @throws NullPointerException if the user is not found.
+   * @throws IOException if the file is not accessible.
    */
-  public LocalUser getUser(LocalUser localUser) throws LocalUsersFileException {
+  public LocalUser getUser(LocalUser localUser) throws IOException {
     return getUser(localUser.getUsername());
+  }
+
+  @SuppressWarnings("unchecked")
+  private Map<String, LocalUser> getAll() throws IOException {
+    try (FileInputStream file = new FileInputStream(this.filePath.toFile());
+         ObjectInputStream reader = new ObjectInputStream(file)) {
+      return (Map<String, LocalUser>) reader.readObject();
+    } catch (EOFException e) {
+      return new HashMap<>();
+    } catch (IOException | ClassNotFoundException e) {
+      throw new IOException("Local save may be corrupted or outdated: " + e);
+    }
   }
 }

@@ -10,6 +10,7 @@ import datamodel.SearchQuery;
 import datamodel.User;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -24,6 +25,11 @@ public interface DataForIhm {
    */
   void addMusic(MusicMetadata music, String path) throws FileNotFoundException;
 
+  /**
+   * Add a Comment to the specified Music.
+   * @param music Updated Music
+   * @param comment Added comment as a String
+   */
   void addComment(Music music, String comment);
 
   /**
@@ -50,7 +56,7 @@ public interface DataForIhm {
 
   void login(String username, String password) throws IOException, LoginException;
 
-  void modifyUser(LocalUser user);
+  void notifyUserUpdate(LocalUser user);
 
   /**
    * Extract metadata from mp3 file.
@@ -58,7 +64,7 @@ public interface DataForIhm {
    * @return MusicMetaData object containing the extracted metadata
    */
   MusicMetadata parseMusicMetadata(String path)
-          throws IOException, UnsupportedTagException, InvalidDataException;
+      throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException;
 
 
 
@@ -67,6 +73,8 @@ public interface DataForIhm {
   void shareMusic(LocalMusic music);
 
   void shareMusics(Collection<LocalMusic> musics);
+
+  void notifyMusicUpdate(LocalMusic music);
 
   void unshareMusic(LocalMusic music);
 

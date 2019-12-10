@@ -1,6 +1,9 @@
 package interfaces;
 
 import core.Datacore;
+import core.Payload;
+import exceptions.data.DataException;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -15,7 +18,14 @@ public class DataForNetImpl implements DataForNet {
 
   @Override
   public void process(Serializable payload, InetAddress sourceIp) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    try {
+      Payload receivedPayload = (Payload) payload;
+      receivedPayload.process(this.dc, sourceIp);
+    } catch (ClassCastException e) {
+      Datacore.getLogger().error("Received object is not a payload.");
+    } catch (DataException e) {
+      Datacore.getLogger().error(e);
+    }
   }
 
   @Override

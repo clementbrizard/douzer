@@ -7,7 +7,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class LocalMusic extends Music {
-  private boolean shared;
+  private boolean sharedToAll;
+  private boolean sharedToFriends;
   private String mp3Path;
 
   public LocalMusic(MusicMetadata metadata, Set<User> owners) {
@@ -19,12 +20,20 @@ public class LocalMusic extends Music {
     this.mp3Path = mp3Path;
   }
 
-  public boolean isShared() {
-    return shared;
+  public boolean isSharedToAll() {
+    return sharedToAll;
   }
 
-  public void setShared(boolean shared) {
-    this.shared = shared;
+  public void setSharedToAll(boolean sharedToAll) {
+    this.sharedToAll = sharedToAll;
+  }
+
+  public boolean isSharedToFriends() {
+    return sharedToFriends;
+  }
+
+  public void setSharedToFriends(boolean sharedToFriends) {
+    this.sharedToFriends = sharedToFriends;
   }
 
   public String getMp3Path() {
@@ -60,12 +69,13 @@ public class LocalMusic extends Music {
       return false;
     }
     LocalMusic that = (LocalMusic) o;
-    return shared == that.shared
+    return sharedToAll == that.sharedToAll
+        && sharedToFriends == that.sharedToFriends
         && Objects.equals(mp3Path, that.mp3Path);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), shared, mp3Path);
+    return Objects.hash(super.hashCode());
   }
 }

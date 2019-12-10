@@ -1,18 +1,25 @@
 package datamodel;
 
 import java.awt.Image;
+import java.awt.image.RenderedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
+import javax.imageio.ImageIO;
 
 public class User implements java.io.Serializable {
   private UUID uuid;
   private String username;
-  private Image avatar;
+  private transient RenderedImage avatar;
   private String firstName;
   private String lastName;
-  private Date dateOfBirth;
+  private LocalDate dateOfBirth;
   private boolean connected;
   private InetAddress ip;
   private Date timeStamp;
@@ -50,11 +57,11 @@ public class User implements java.io.Serializable {
     this.username = username;
   }
 
-  public Image getAvatar() {
+  public RenderedImage getAvatar() {
     return avatar;
   }
 
-  public void setAvatar(Image avatar) {
+  public void setAvatar(RenderedImage avatar) {
     updateTimeStamp();
     this.avatar = avatar;
   }
@@ -77,11 +84,11 @@ public class User implements java.io.Serializable {
     this.lastName = lastName;
   }
 
-  public Date getDateOfBirth() {
+  public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
 
-  public void setDateOfBirth(Date dateOfBirth) {
+  public void setDateOfBirth(LocalDate dateOfBirth) {
     updateTimeStamp();
     this.dateOfBirth = dateOfBirth;
   }
@@ -127,6 +134,18 @@ public class User implements java.io.Serializable {
     updateTimeStamp();
   }
 
+  private void writeObject(ObjectOutputStream stream) throws IOException {
+    stream.defaultWriteObject();
+    if (this.avatar != null) {
+      ImageIO.write(this.avatar, "png", stream);
+    }
+  }
+
+  private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+    stream.defaultReadObject();
+    this.avatar = ImageIO.read(stream);
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -148,6 +167,6 @@ public class User implements java.io.Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(uuid, username, avatar, firstName, lastName, dateOfBirth, connected, ip);
+    return Objects.hash(uuid);
   }
 }
