@@ -1,6 +1,5 @@
 package features;
 
-import com.sun.org.apache.xml.internal.serializer.utils.BoolStack;
 import core.Datacore;
 import datamodel.LocalUser;
 import datamodel.ShareStatus;
@@ -32,7 +31,7 @@ public class LoginPayload extends ShareMusicsPayload {
     this.isResponse = false;
   }
 
-  LoginPayload(LocalUser user, Set<InetAddress> addresses, boolean isResponse) {
+  private LoginPayload(LocalUser user, Set<InetAddress> addresses, boolean isResponse) {
     super(user,
         user.getLocalMusics().stream()
             .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
@@ -50,24 +49,33 @@ public class LoginPayload extends ShareMusicsPayload {
     dc.getAllIps().add(senderIp);
     this.user.setIp(senderIp);
     dc.addUser(this.user);
-    //dc.ihm.notifyUserConnection(this.user);
-
-    // Preparing login payload for unknown IPs
-    LoginPayload payload = new LoginPayload(dc.getCurrentUser(), dc.getAllIps(), true);
+    dc.ihm.notifyUserConnection(this.user);
 
     // Answer to sender
     if (!this.isResponse) {
-      dc.net.sendToUser(payload, senderIp);
+      LoginPayload responsePayload = new LoginPayload(
+          dc.getCurrentUser(),
+          dc.getAllIps().stream()
+              .filter(ip -> ip != senderIp)
+              .collect(Collectors.toSet()),
+          true
+      );
+      dc.net.sendToUser(responsePayload, senderIp);
     }
-    
+
+    // Preparing login payload for unknown IPs
+    LoginPayload payload = new LoginPayload(
+        dc.getCurrentUser(),
+        dc.getAllIps()
+    );
+
     // Connecting to unknown IPs
-    this.ips.stream()
-        .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
-        .forEach(ip -> {
-          System.out.println("SendingSS");
-          dc.net.sendToUser(payload, ip);
-          dc.getAllIps().add(ip);
-        });
+    dc.net.sendToUsers(
+        payload,
+        this.ips.stream()
+            .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
+            .peek(ip -> dc.getAllIps().add(ip))
+    );
     super.run(dc); // update musics
   }
 }

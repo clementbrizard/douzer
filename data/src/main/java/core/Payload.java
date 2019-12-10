@@ -6,11 +6,12 @@ import java.net.InetAddress;
 import java.util.UUID;
 
 public abstract class Payload implements java.io.Serializable {
-  private UUID senderUuid;
+  protected UUID senderUuid;
 
-  public Payload(LocalUser user){
-    senderUuid = user.getUuid();
+  public Payload(LocalUser sender) {
+    senderUuid = sender.getUuid();
   }
+
   /**
    * Will be overridden for login only in order to access the IP.
    *

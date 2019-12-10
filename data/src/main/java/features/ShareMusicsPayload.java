@@ -12,6 +12,6 @@ import java.util.stream.Collectors;
 public class ShareMusicsPayload extends UpdateMusicsPayload {
 
   public ShareMusicsPayload(LocalUser user, Collection<LocalMusic> musics) {
-    super(user, musics.stream().map(m -> (Music) m).collect(Collectors.toList()));
+    super(user, musics.stream().map(Music::new).collect(Collectors.toList()));
   }
 }

@@ -10,6 +10,11 @@ public class Music implements java.io.Serializable {
   private transient MusicMetadata metadata;
   private transient Set<User> owners;
 
+  public Music(Music other) {
+    this.metadata = other.metadata;
+    this.owners = other.owners;
+  }
+
   public Music(MusicMetadata metadata) {
     this.metadata = metadata;
     this.owners = new HashSet<>();
