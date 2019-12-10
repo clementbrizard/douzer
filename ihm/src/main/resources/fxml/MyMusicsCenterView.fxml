@@ -28,7 +28,7 @@
                              <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="92.0" text="Durée" />
                          </columns>
                      </TableView>
-                     <TextField fx:id="tfSearch" layoutX="147.0" layoutY="16.0" prefHeight="31.0" prefWidth="347.0" promptText="Rechercher" onKeyReleased="#searchMusics"/>
+                     <TextField fx:id="tfSearch" layoutX="147.0" layoutY="16.0" prefHeight="31.0" prefWidth="347.0" promptText="Rechercher" />
                      <ImageView fx:id="ivRandom" fitHeight="33.0" fitWidth="36.0" layoutX="68.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                          <image>
                              <Image url="@../images/randomArrow.png" />
