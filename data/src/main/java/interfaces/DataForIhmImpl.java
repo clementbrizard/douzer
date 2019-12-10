@@ -114,12 +114,12 @@ public class DataForIhmImpl implements DataForIhm {
     // TODO: template for filename
     Path userPropFilePath = currentUser.getSavePath()
         .resolve(currentUser.getUsername() + "-config.properties");
-    File userConfigFile = new File(userPropFilePath.toString());
+    File userConfigFile = userPropFilePath.toFile();
 
     if (userConfigFile.exists()) {
       prop.load(new FileInputStream(userPropFilePath.toString()));
       String ipsStr = this.dc.getAllIps().stream()
-          .map(InetAddress::toString)
+          .map(InetAddress::getHostAddress)
           .collect(Collectors.joining(","));
       prop.setProperty("ips", ipsStr);
       prop.store(new FileOutputStream(userPropFilePath.toString()), null);
