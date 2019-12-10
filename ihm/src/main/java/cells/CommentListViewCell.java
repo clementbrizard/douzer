@@ -86,8 +86,8 @@ public class CommentListViewCell extends ListCell<Comment> {
       });
 
     } else {
-      File fullStarFile = new File("ihm/src/main/resources/images/FullStarSymbol.png");
-      File emptyStarFile = new File("ihm/src/main/resources/images/EmptyStarSymbol.png");
+      File fullStarFile = new File("../ihm/src/main/resources/images/FullStarSymbol.png");
+      File emptyStarFile = new File("../ihm/src/main/resources/images/EmptyStarSymbol.png");
 
       try {
         InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
