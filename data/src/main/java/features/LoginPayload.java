@@ -17,9 +17,10 @@ import java.util.stream.Collectors;
 public class LoginPayload extends ShareMusicsPayload {
   private User user;
   private Set<InetAddress> ips;
+  private boolean isResponse;
 
   LoginPayload(LocalUser user, Set<InetAddress> addresses) {
-    super(
+    super(user,
         user.getLocalMusics().stream()
             .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
             .collect(Collectors.toSet())
@@ -27,6 +28,19 @@ public class LoginPayload extends ShareMusicsPayload {
     // copy constructor instead of cast to not send sensitive info over the network
     this.user = new User(user);
     this.ips = new HashSet<>(addresses);
+    this.isResponse = false;
+  }
+
+  private LoginPayload(LocalUser user, Set<InetAddress> addresses, boolean isResponse) {
+    super(user,
+        user.getLocalMusics().stream()
+            .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
+            .collect(Collectors.toSet())
+    );
+    // copy constructor instead of cast to not send sensitive info over the network
+    this.user = new User(user);
+    this.ips = new HashSet<>(addresses);
+    this.isResponse = isResponse;
   }
 
   @Override
@@ -37,19 +51,31 @@ public class LoginPayload extends ShareMusicsPayload {
     dc.addUser(this.user);
     dc.ihm.notifyUserConnection(this.user);
 
-    // Preparing login payload for unknown IPs
-    LoginPayload payload = new LoginPayload(dc.getCurrentUser(), dc.getAllIps());
-
     // Answer to sender
-    dc.net.sendToUser(payload, senderIp);
+    if (!this.isResponse) {
+      LoginPayload responsePayload = new LoginPayload(
+          dc.getCurrentUser(),
+          dc.getAllIps().stream()
+              .filter(ip -> ip != senderIp)
+              .collect(Collectors.toSet()),
+          true
+      );
+      dc.net.sendToUser(responsePayload, senderIp);
+    }
+
+    // Preparing login payload for unknown IPs
+    LoginPayload payload = new LoginPayload(
+        dc.getCurrentUser(),
+        dc.getAllIps()
+    );
 
     // Connecting to unknown IPs
-    this.ips.stream()
-        .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
-        .forEach(ip -> {
-          dc.net.sendToUser(payload, ip);
-          dc.getAllIps().add(ip);
-        });
+    dc.net.sendToUsers(
+        payload,
+        this.ips.stream()
+            .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
+            .peek(ip -> dc.getAllIps().add(ip))
+    );
     super.run(dc); // update musics
   }
 }

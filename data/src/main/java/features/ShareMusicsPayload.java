@@ -1,6 +1,7 @@
 package features;
 
 import datamodel.LocalMusic;
+import datamodel.LocalUser;
 import datamodel.Music;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
  */
 public class ShareMusicsPayload extends UpdateMusicsPayload {
 
-  public ShareMusicsPayload(Collection<LocalMusic> musics) {
-    super(musics.stream().map(m -> (Music) m).collect(Collectors.toList()));
+  public ShareMusicsPayload(LocalUser user, Collection<LocalMusic> musics) {
+    super(user, musics.stream().map(Music::new).collect(Collectors.toList()));
   }
 }

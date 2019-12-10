@@ -35,12 +35,12 @@ public abstract class UnshareMusics {
     );
 
     UnshareMusicsPayload payloadForFriends = new UnshareMusicsPayload(
-        musicHashsForNonFriends,
-        dc.getCurrentUser().getUuid()
+        dc.getCurrentUser(),
+        musicHashsForNonFriends
     );
     UnshareMusicsPayload payloadForAll = new UnshareMusicsPayload(
-        musicHashsForAll,
-        dc.getCurrentUser().getUuid()
+        dc.getCurrentUser(),
+        musicHashsForAll
     );
 
     dc.net.sendToUsers(payloadForAll, dc.getOnlineIps());
