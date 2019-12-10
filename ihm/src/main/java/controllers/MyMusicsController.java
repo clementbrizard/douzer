@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import java.util.stream.Stream;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -139,6 +142,24 @@ public class MyMusicsController implements Controller {
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
     tfSearchDuration.setVisible(false);
+    
+    ChangeListener<String> textListener = new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observable,
+              String oldValue, String newValue) {
+          searchMusics();
+      }
+    };
+    
+    tfSearchTitle.textProperty().addListener(textListener);
+    tfSearchArtist.textProperty().addListener(textListener);
+    tfSearchAlbum.textProperty().addListener(textListener);
+    tfSearchDuration.textProperty().addListener(textListener);
+    
+    //event when the user edit the textField
+    tfSearchTitle.textProperty().addListener(textListener);
+    
+    
 
     try {
       this.displayAvailableMusics();
@@ -339,5 +360,4 @@ public class MyMusicsController implements Controller {
     // Show music info popup.
     musicDetailsPopup.show();
   }
-
 }
