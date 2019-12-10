@@ -168,6 +168,36 @@ public class CurrentMusicInfoController implements Controller {
     musicSharingPopup.show();
   }
 
+  /**
+   * Update the download progress bar value.
+   *
+   * @param progress dowload progress, between 0 and 100
+   * @param music    The music that is downloaded
+   */
+  public void updateDownloadProgressBar(Music music, int progress) {
+    downloadProgress.setProgress(progress / 100);
+    // We update central views when download is done
+    if (progress == 100) {
+      Notifications.create()
+          .title("Download done")
+          .text(music.getMetadata().getTitle() + " - " + music.getMetadata().getArtist())
+          .darkStyle()
+          .showWarning();
+      this.application
+          .getMainController()
+          .getCentralFrameController()
+          .getMyMusicsController()
+          .init();
+      this.application
+          .getMainController()
+          .getCentralFrameController()
+          .getAllMusicsController()
+          .init();
+      // Reinitialize progress bar with 0
+      downloadProgress.setProgress(0);
+    }
+  }
+
 }
 
 
