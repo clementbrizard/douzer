@@ -20,6 +20,7 @@ import features.DeleteUser;
 import features.Login;
 import features.LogoutPayload;
 import features.Search;
+import features.ShareMusics;
 import features.ShareMusicsPayload;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
@@ -40,8 +41,10 @@ import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -69,6 +72,7 @@ public class DataForIhmImpl implements DataForIhm {
 
       dc.getCurrentUser().getLocalMusics().add(newMusic);
       dc.addMusic(newMusic);
+      this.shareMusic(newMusic);
     } else {
       throw new FileNotFoundException("This file doesn't exist");
     }
@@ -208,8 +212,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void shareMusics(Collection<LocalMusic> musics) {
-    ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+    ShareMusics.run(this.dc, musics);
   }
 
   @Override
@@ -220,25 +223,27 @@ public class DataForIhmImpl implements DataForIhm {
         this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
         break;
       case FRIENDS:
+        this.unshareMusic(music);
         this.dc.net.sendToUsers(
             payload,
-            this.dc.getCurrentUser().getFriends().stream().map(User::getIp)
+            this.dc.getOnlineFriendsIps()
         );
         break;
       default:
-        break;
+        this.unshareMusic(music);
     }
+    this.unshareMusic(music);
   }
 
   @Override
   public void unshareMusic(LocalMusic music) {
-    UnshareMusics.unshareMusic(music, dc);
+    UnshareMusics.unshareMusic(music, this.dc);
   }
 
 
   @Override
   public void unshareMusics(Collection<LocalMusic> musics) {
-    UnshareMusics.run(musics, dc);
+    UnshareMusics.run(musics, this.dc);
   }
 
   @Override

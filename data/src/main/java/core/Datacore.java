@@ -77,7 +77,7 @@ public class Datacore {
     this.users.remove(user.getUuid());
   }
 
-  public HashMap<UUID, User> getUsers() {
+  HashMap<UUID, User> getUsers() {
     return users;
   }
 
@@ -112,6 +112,16 @@ public class Datacore {
 
   public Set<InetAddress> getAllIps() {
     return allIps;
+  }
+
+  public Stream<InetAddress> getOnlineFriendsIps() {
+    return this.getCurrentUser().getFriends().stream().filter(User::isConnected).map(User::getIp);
+  }
+
+  public Stream<InetAddress> getOnlineNonFriendsIps() {
+    return this.users.values().stream()
+        .filter(u -> !this.getCurrentUser().getFriends().contains(u))
+        .map(User::getIp);
   }
 
   public void setAllIps(HashSet<InetAddress> allIps) {
