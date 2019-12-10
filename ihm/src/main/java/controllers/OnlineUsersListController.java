@@ -8,6 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * The left middle view containing all connected users.
@@ -37,11 +38,20 @@ public class OnlineUsersListController implements Controller {
     }
   }
 
+  public void addNewOnlineUser(User user) {
+    lvwOnlineUsers.getItems().add(user.getIp().toString());
+  }
+
+  public void removeOnlineUser(User user) {
+    lvwOnlineUsers.getItems().removeAll(user.getIp().toString());
+  }
+
   /**
    * Fills the view with the ips of users.
    **/
 
   public void displayOnlineUsers() {
+    LogManager.getLogger().info("Refresh online users");
     Stream<User> users = this.mainController
         .getApplication()
         .getIhmCore()

@@ -1,8 +1,12 @@
 package core;
 
+import controllers.OnlineUsersListController;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * integration for Ihm interface.
@@ -27,7 +31,15 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserConnection(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    OnlineUsersListController controller;
+    try {
+      controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controller.addNewOnlineUser(user);
   }
 
   /**
