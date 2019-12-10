@@ -81,7 +81,7 @@ public abstract class Login {
     user.setConnected(true);
     dc.setCurrentUser(user);
     dc.addUser(user);
-    user.getMusics().forEach(dc::addMusic);
+    user.getLocalMusics().forEach(dc::addMusic);
     user.getFriends().forEach(dc::addUser);
 
     LoginPayload payload = new LoginPayload(user, dc.getOnlineIps()

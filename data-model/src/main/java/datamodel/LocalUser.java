@@ -14,6 +14,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class LocalUser extends User {
+  private static final long serialVersionUID = 1L;
   private static MessageDigest messageDigest;
 
   static {
@@ -28,7 +29,7 @@ public class LocalUser extends User {
   private Set<User> friends;
   // Path is not serializable, handle serialization with readObject writeObject below.
   private transient Path savePath;
-  private Set<LocalMusic> musics;
+  private Set<LocalMusic> localMusics;
   private List<LocalMusic> playlist;
 
   /**
@@ -36,7 +37,7 @@ public class LocalUser extends User {
    */
   public LocalUser() {
     this.friends = new HashSet<>();
-    this.musics = new HashSet<>();
+    this.localMusics = new HashSet<>();
     this.playlist = new ArrayList<>();
   }
 
@@ -69,12 +70,12 @@ public class LocalUser extends User {
     this.friends = friends;
   }
 
-  public Set<LocalMusic> getMusics() {
-    return musics;
+  public Set<LocalMusic> getLocalMusics() {
+    return localMusics;
   }
 
-  public void setMusics(Set<LocalMusic> musics) {
-    this.musics = musics;
+  public void setLocalMusics(Set<LocalMusic> localMusics) {
+    this.localMusics = localMusics;
   }
 
   public List<LocalMusic> getPlaylist() {
@@ -109,7 +110,7 @@ public class LocalUser extends User {
     // Add himself as owner of its musics
     Set<User> owners = new HashSet<>();
     owners.add(this);
-    musics.forEach(localMusic -> localMusic.setOwners(owners));
+    localMusics.forEach(localMusic -> localMusic.setOwners(owners));
   }
 
   @Override
@@ -127,7 +128,7 @@ public class LocalUser extends User {
     return Objects.equals(pwdHash, localUser.pwdHash)
         && Objects.equals(friends, localUser.friends)
         && Objects.equals(savePath, localUser.savePath)
-        && Objects.equals(musics, localUser.musics)
+        && Objects.equals(localMusics, localUser.localMusics)
         && Objects.equals(playlist, localUser.playlist);
   }
 

@@ -35,12 +35,14 @@
             <Spinner fx:id="dateYear" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="labelYear" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Année" GridPane.columnIndex="2" GridPane.rowIndex="2" />
             <Label fx:id="labelUploader" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Uploader" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <HBox fx:id="hboxRadioButton" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <VBox fx:id="vboxRadioButton" style="-fx-padding: 5px;" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
-                  <RadioButton fx:id="radioPublic" mnemonicParsing="false" text="Public" />
-                  <RadioButton fx:id="radioPrivate" mnemonicParsing="false" text="Private" />
+                   <Label fx:id="title" text="Visibilité:" />
+                   <RadioButton fx:id="radioPrivate" mnemonicParsing="false" text="Privée" />
+                  <RadioButton fx:id="radioFriends" mnemonicParsing="false" text="Aux amis seulement" />
+                  <RadioButton fx:id="radioPublic" mnemonicParsing="false" text="Publique" />
                </children>
-            </HBox>
+            </VBox>
             <HBox fx:id="hboxFileChoice" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
                <children>
                   <Label fx:id="labelFileChoice" text="Choisir le fichier" />

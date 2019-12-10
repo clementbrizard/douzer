@@ -29,6 +29,9 @@ public class ShareController implements Controller {
   private RadioButton radioPublic;
 
   @FXML
+  private RadioButton radioFriends;
+
+  @FXML
   private RadioButton radioPrivate;
 
   @FXML
@@ -77,13 +80,9 @@ public class ShareController implements Controller {
   public void initialize() {
     this.shareStatusGroup = new ToggleGroup();
     this.radioPrivate.setToggleGroup(this.shareStatusGroup);
-
-    // Private => not shared => false
-    this.radioPrivate.setUserData(false);
+    this.radioFriends.setToggleGroup(this.shareStatusGroup);
     this.radioPublic.setToggleGroup(this.shareStatusGroup);
 
-    // Public => shared => true
-    this.radioPublic.setUserData(true);
   }
 
   /**
@@ -141,7 +140,17 @@ public class ShareController implements Controller {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
     if (currentMusic instanceof LocalMusic) {
-      this.radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
+      switch (((LocalMusic) this.currentMusic).getShareStatus()) {
+        case PUBLIC:
+          this.radioPublic.setSelected(true);
+          break;
+        case FRIENDS:
+          this.radioFriends.setSelected(true);
+          break;
+        default:
+          this.radioPrivate.setSelected(true);
+          break;
+      }
     }
   }
 

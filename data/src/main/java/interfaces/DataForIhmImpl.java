@@ -12,6 +12,7 @@ import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
+import datamodel.ShareStatus;
 import datamodel.User;
 import features.CreateUser;
 import features.DeleteMusic;
@@ -54,17 +55,19 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
+  public void addMusic(MusicMetadata music, String path, ShareStatus shareStatus)
+      throws FileNotFoundException {
     File f = new File(path);
     if (f.exists() && !f.isDirectory()) {
       LocalMusic newMusic = new LocalMusic(
           music,
-          path
+          path,
+          shareStatus
       );
 
       newMusic.getOwners().add(dc.getCurrentUser());
 
-      dc.getCurrentUser().getMusics().add(newMusic);
+      dc.getCurrentUser().getLocalMusics().add(newMusic);
       dc.addMusic(newMusic);
     } else {
       throw new FileNotFoundException("This file doesn't exist");
@@ -211,9 +214,19 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void notifyMusicUpdate(LocalMusic music) {
-    if (music.isSharedToAll()) {
-      UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
-      this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+    UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
+    switch (music.getShareStatus()) {
+      case PUBLIC:
+        this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+        break;
+      case FRIENDS:
+        this.dc.net.sendToUsers(
+            payload,
+            this.dc.getCurrentUser().getFriends().stream().map(User::getIp)
+        );
+        break;
+      default:
+        break;
     }
   }
 
