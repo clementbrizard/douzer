@@ -1,7 +1,10 @@
 package core;
 
 import controllers.AllMusicsController;
+import controllers.CurrentMusicInfoController;
+import controllers.DetailsMusicController;
 import controllers.OnlineUsersListController;
+import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
@@ -81,15 +84,37 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void updateMusic(Music music) {
-    AllMusicsController controller;
+    AllMusicsController controllerAllMusic;
     try {
-      controller = this.ihmCore.getApplication().getMainController().getCentralFrameController().getAllMusicsController();
+      controllerAllMusic = this.ihmCore.getApplication().getMainController().getCentralFrameController().getAllMusicsController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    controller.searchMusics(null);
+    controllerAllMusic.searchMusics(null);
+
+    CurrentMusicInfoController controllerCurrentMusic;
+    try {
+      controllerCurrentMusic = this.ihmCore.getApplication().getMainController().getCurrentMusicInfoController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    if (controllerCurrentMusic.getCurrentMusic().equals(music))
+      controllerCurrentMusic.init(music);
+
+    DetailsMusicController controllerDetails;
+    try {
+      controllerDetails = this.ihmCore.getApplication().getMainController().getCentralFrameController().getDetailsMusicController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    if (controllerDetails.getLocalMusic().equals(music))
+      controllerDetails.initMusic((LocalMusic)music);
   }
 
   /**
