@@ -186,7 +186,7 @@ public class MyMusicsController implements Controller {
       }
     });
 
-    MenuItem itemDelete = new MenuItem("Delete");
+    MenuItem itemDelete = new MenuItem("Supprimer");
     itemDelete.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
@@ -216,10 +216,10 @@ public class MyMusicsController implements Controller {
     Alert alert = new Alert(AlertType.CONFIRMATION);
     alert.setTitle("Confirmation");
     alert.setHeaderText("Confirmation");
-    alert.setContentText("Confirmer la suppression des musiques selectionné\"");
-    
     ButtonType appDelete = new ButtonType("Seulement sur l'application");
     ButtonType appDiskDelete = new ButtonType("Sur l'application et sur le disque");
+    alert.setContentText("Confirmer la suppression des musiques selectionnées\"");
+
     ButtonType buttonTypeCancel = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
     
     alert.getButtonTypes().setAll(appDelete, appDiskDelete, buttonTypeCancel);
