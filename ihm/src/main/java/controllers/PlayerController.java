@@ -61,15 +61,16 @@ public class PlayerController implements Controller {
   public void initialize() {
     medias = new ArrayList<MediaPlayer>();
     isPlaying = false;
-
+    
     // Click on progressBar
-    pgMusicProgress.setOnMouseClicked(e -> seekMusic(
-        new Duration(
-        (int) Math.round(((double)e.getX()
-            / (double)pgMusicProgress.getWidth())
-            * pgMusicProgress.getMaxWidth()))
-        )
-    );
+    pgMusicProgress.setOnMouseClicked(e ->{
+      double dx = e.getX();
+      double dwidth = pgMusicProgress.getWidth();
+      double progression = (dx / dwidth);
+      double milliseconds = (progression * player.getTotalDuration().toMillis());
+      Duration duration = new Duration(milliseconds);
+      player.seek(duration);
+    });
   }
 
   /**
