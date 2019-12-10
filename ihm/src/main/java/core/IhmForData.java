@@ -1,8 +1,18 @@
 package core;
 
+import controllers.AllMusicsController;
+import controllers.CurrentMusicInfoController;
+import controllers.DistantUserController;
+import controllers.MyMusicsController;
+import controllers.OnlineUsersListController;
+import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
+
+import javafx.scene.input.MouseEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * integration for Ihm interface.
@@ -27,7 +37,15 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserConnection(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    OnlineUsersListController controller;
+    try {
+      controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controller.addNewOnlineUser(user);
   }
 
   /**
@@ -38,7 +56,15 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserDisconnection(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    OnlineUsersListController controller;
+    try {
+      controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controller.removeOnlineUser(user);
   }
 
   /**
@@ -49,7 +75,8 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyDownloadProgress(Music music, int integer) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    LogManager.getLogger()
+        .warn("La fonction d'affichage du téléchargement n'est pas encore liée");
   }
 
   /**
@@ -59,7 +86,33 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void updateMusic(Music music) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    AllMusicsController controllerAllMusic;
+    try {
+      controllerAllMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getAllMusicsController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controllerAllMusic.searchMusics(null);
+
+    CurrentMusicInfoController controllerCurrentMusic;
+    try {
+      controllerCurrentMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCurrentMusicInfoController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    if (controllerCurrentMusic.getCurrentMusic() != null
+        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
+      controllerCurrentMusic.init(music);
+    }
   }
 
   /**
@@ -69,7 +122,33 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyMusicDeletion(Music music) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    AllMusicsController controllerAllMusic;
+    try {
+      controllerAllMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getAllMusicsController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controllerAllMusic.searchMusics(null);
+
+    CurrentMusicInfoController controllerCurrentMusic;
+    try {
+      controllerCurrentMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCurrentMusicInfoController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    if (controllerCurrentMusic.getCurrentMusic() != null
+        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
+      controllerCurrentMusic.init(null);
+    }
   }
 
   /**
@@ -79,7 +158,19 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void updateUser(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    LogManager.getLogger()
+        .warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 
   /**
@@ -89,6 +180,18 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserDeletion(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    LogManager.getLogger()
+        .warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 }
