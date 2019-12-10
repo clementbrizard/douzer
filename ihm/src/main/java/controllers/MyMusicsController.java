@@ -29,13 +29,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * Central view show up my musics.
  */
 public class MyMusicsController implements Controller {
-  public static final Logger myMusicsLogger = LogManager.getLogger();
+  private static final org.apache.logging.log4j.Logger myMusicsLogger = LogManager.getLogger();
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -70,7 +69,7 @@ public class MyMusicsController implements Controller {
   private LocalMusic musicInformation;
   private ArrayList<LocalMusic> listMusics;
 
-  private ContextMenu contextMenu;
+  private  ContextMenu contextMenu;
 
   // Getters
 

@@ -104,26 +104,18 @@ public class ShareController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .shareMusic((LocalMusic) currentMusic);
-        ((LocalMusic) currentMusic).setSharedToAll(true);
       } else {
         currentMusicInfoController
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
             .unshareMusic((LocalMusic) currentMusic);
-        ((LocalMusic) currentMusic).setSharedToAll(false);
       }
     } catch (Exception e) {
       shareLogger.error(e);
     }
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
-    // notify the update of the current music
-    this.currentMusicInfoController
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .notifyMusicUpdate((LocalMusic) this.currentMusic);
     stage.close();
   }
 
@@ -149,9 +141,8 @@ public class ShareController implements Controller {
     this.currentMusic = currentMusicInfoController.getCurrentMusic();
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
     if (currentMusic instanceof LocalMusic) {
-      radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
-      radioPrivate.setSelected(!((LocalMusic) this.currentMusic).isSharedToAll());
+      this.radioPublic.setSelected(((LocalMusic) this.currentMusic).isSharedToAll());
     }
   }
-}
 
+}
