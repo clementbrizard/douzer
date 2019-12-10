@@ -8,9 +8,12 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.Iterator;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -20,6 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -97,7 +101,7 @@ public class NewMusicController implements Controller {
   /**
    * List of tags.
    */
-  private ObservableList tags;
+  private ObservableList<String> tags;
 
   /**
    * Mp3 file.
@@ -321,10 +325,10 @@ public class NewMusicController implements Controller {
   @FXML
   private void addTag(ActionEvent event) {
     if (!this.textNewTag.getText().isEmpty() && !this.tags.contains(this.textNewTag.getText())) {
-      this.tags.add(this.textNewTag.getText());
+      this.tags.add(this.textNewTag.getText().trim());
       this.textNewTag.clear();
     }
-  }
+  }  
 
   /**
    * Delete the selected tag (if the key pressed is DELETE or BACK_SPACE).
@@ -398,7 +402,7 @@ public class NewMusicController implements Controller {
       meta.setArtist(textArtist.getText());
       meta.setAlbum(textAlbum.getText());
       meta.setReleaseYear(Year.of(dateYear.getValue()));
-
+      meta.getTags().addAll(tags);
       try {
         myMusicsController.getCentralFrameController()
             .getMainController()

@@ -136,6 +136,7 @@ public class DetailsMusicController implements Controller {
           tags.add(textFieldAddTag.getText().trim());
         }
         //give new tag or new tag list to data
+        textFieldAddTag.clear();
       }
     }));
   }
