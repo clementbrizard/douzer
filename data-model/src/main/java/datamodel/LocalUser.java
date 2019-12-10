@@ -142,4 +142,9 @@ public class LocalUser extends User {
     return this.getContacts().stream()
         .map(Contact::getUser).filter(User::isConnected).map(User::getIp);
   }
+
+  public Stream<InetAddress> getContactsOnlineIps() {
+    return this.getContacts().stream()
+        .map(Contact::getUser).filter(User::isConnected).map(User::getIp);
+  }
 }
