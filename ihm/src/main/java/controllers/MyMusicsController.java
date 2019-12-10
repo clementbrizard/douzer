@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -142,7 +144,7 @@ public class MyMusicsController implements Controller {
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
     tfSearchDuration.setVisible(false);
-    
+
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
@@ -150,16 +152,16 @@ public class MyMusicsController implements Controller {
           searchMusics();
       }
     };
-    
+
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
     tfSearchDuration.textProperty().addListener(textListener);
-    
+
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
-    
-    
+
+
 
     try {
       this.displayAvailableMusics();
@@ -179,9 +181,38 @@ public class MyMusicsController implements Controller {
       }
     });
 
+    MenuItem itemDelete = new MenuItem("Delete");
+    itemDelete.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        ArrayList<LocalMusic> musicsDelete = new ArrayList<LocalMusic>();
+        ObservableList<MusicMetadata> selectedItems = tvMusics.getSelectionModel().getSelectedItems();
+        for (int i = 0;i < selectedItems.size();i++) {
+        for (int j = 0;j < listMusics.size();j++) {
+          if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
+            musicsDelete.add(listMusics.get(j));
+            }
+          }
+        }
+        delete(musicsDelete);
+      }
+    });
+
     // Add "Informations" menu item to ContextMenu.
-    contextMenu.getItems().addAll(itemInformation);
+    contextMenu.getItems().addAll(itemInformation, itemDelete);
   }
+
+  public void delete(ArrayList<LocalMusic> musicsDelete) {
+    for (int i = 0; i < musicsDelete.size(); i++) {
+      try {
+        this.getApplication().getIhmCore().getDataForIhm().deleteMusic(musicsDelete.get(i), true);
+      } catch (NullPointerException e) {
+
+      }
+    }
+    displayAvailableMusics();
+  }
+
 
   /**
    * Refresh the table with getLocalMusics() from DataForIhm.
