@@ -24,6 +24,7 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.FormatDuration;
+import org.controlsfx.control.Notifications;
 
 
 /**
@@ -223,7 +224,46 @@ public class AllMusicsController implements Controller {
   }
 
   /**
+   * Downwload the selected musics.
+   *
+   * @param event not used
+   */
+  @FXML
+  public void download(ActionEvent event) {
+    //TODO Data should send a message to tell if the download has failed or has succeed
+    // The IHM should inform the user about that
+
+    // Creation of the music metadata from the tableView
+    MusicMetadata selectedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
+    LocalUser localUser = this.centralFrameController
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser();
+    Music selectedMusic = new Music(selectedMusicMetadata);
+    try {
+      this.centralFrameController
+          .getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .download(selectedMusic);
+    } catch (Exception e) {
+
+      allMusicsLogger.error(e);
+
+      Notifications.create()
+          .title("Download failed")
+          .darkStyle()
+          .showWarning();
+
+    }
+  }
+
+  /**
    * Search all musics that correspond to the labels content.
+   *
    */
   @FXML
   public void searchMusics() {
