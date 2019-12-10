@@ -162,7 +162,6 @@ public class ProfileEditController implements Controller {
     Circle clip = new Circle(imgAvatar.getFitHeight() / 2,
             imgAvatar.getFitWidth() / 2,
             circleRadius);
-    clip.setStyle("-fx-background-color: white;");
     paneImgAvatar.setClip(clip);
     
     String pseudo = this.centralFrameController
