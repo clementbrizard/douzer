@@ -67,7 +67,7 @@ public class PlayerController implements Controller {
     isPlaying = false;
     
     // Click on progressBar
-    pgMusicProgress.setOnMouseClicked(e ->{
+    pgMusicProgress.setOnMouseClicked(e -> {
       double dx = e.getX();
       double dwidth = pgMusicProgress.getWidth();
       double progression = (dx / dwidth);
@@ -88,11 +88,10 @@ public class PlayerController implements Controller {
     }
   }
 
-  public void PlayerOnMusic() {
+  public void playerOnMusic() {
     if (this.arrayMusic.isEmpty()) {
       player.stop();
-    }
-    else {
+    } else {
       playerOnMusic(arrayMusic.get(0).getMp3Path());
     }
     
@@ -167,7 +166,7 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playBack(ActionEvent e) {
-    if (arrayMusic.size() == 1 ){
+    if (arrayMusic.size() == 1) {
       return;
     }
     if (currentIndex != -1) {

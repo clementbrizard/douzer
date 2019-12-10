@@ -189,9 +189,12 @@ public class MyMusicsController implements Controller {
         ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
         
         //get the list of music clicked
-        ObservableList<MusicMetadata> selectedItems =  tvMusics.getSelectionModel().getSelectedItems();
-        for (int i = 0 ; i < selectedItems.size() ; i++) {
-          for (int j = 0 ; j < listMusics.size() ; j++) {
+        ObservableList<MusicMetadata> selectedItems =  tvMusics
+            .getSelectionModel()
+            .getSelectedItems();
+        
+        for (int i = 0;i < selectedItems.size();i++) {
+          for (int j = 0;j < listMusics.size();j++) {
             if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
               listMusicClicked.add(listMusics.get(j));
             }
@@ -201,15 +204,20 @@ public class MyMusicsController implements Controller {
         //add to the list with right click play to the list
         if (listMusicClicked.isEmpty()) {
           listMusicClicked.add(musicInformation);
-        }
-        else {
+        } else {
           if (!listMusicClicked.contains(musicInformation)) {
             listMusicClicked.add(musicInformation);
           }
         }
-        getCentralFrameController().getMainController().getPlayerController().setArrayMusic(listMusicClicked);
-        getCentralFrameController().getMainController().getPlayerController().PlayerOnMusic();
-        //getCentralFrameController().getMainController().getPlayerController().playerOnMusic(musicInformation.getMp3Path());
+        getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .setArrayMusic(listMusicClicked);
+        
+        getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .playerOnMusic();
       }
     });
     
