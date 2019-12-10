@@ -29,6 +29,8 @@ public class MainController implements Controller {
   private DownloadController downloadController;
   @FXML
   private CurrentMusicInfoController currentMusicInfoController;
+  @FXML
+  private MyPlaylistsController myPlaylistsController;
 
   private Application application;
 
@@ -151,6 +153,12 @@ public class MainController implements Controller {
       this.currentMusicInfoController.setApplication(this.application);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
+    }
+    try {
+      this.myPlaylistsController.setMainController(this);
+      this.myPlaylistsController.init();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("My Playlists Controller calls : " + e.getMessage());
     }
   }
 

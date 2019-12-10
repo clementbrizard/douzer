@@ -329,7 +329,7 @@ public class NewMusicController implements Controller {
             .getDataForIhm()
             .addMusic(meta, file.getAbsolutePath());
 
-        this.getMyMusicsController().displayAvailableMusics();
+        this.getMyMusicsController().displayLocalMusics();
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
 

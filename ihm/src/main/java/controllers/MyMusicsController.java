@@ -5,10 +5,8 @@ import com.sun.javafx.logging.Logger;
 import core.Application;
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.event.ActionEvent;
@@ -32,6 +30,9 @@ import javafx.stage.Stage;
 //replace by javadocs
 //central view with all user music
 public class MyMusicsController implements Controller {
+
+  @FXML
+  private Label lblTitle;
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -126,7 +127,7 @@ public class MyMusicsController implements Controller {
     );
 
     try {
-      this.displayAvailableMusics();
+      this.displayLocalMusics();
     } catch (UnsupportedOperationException e) {
       e.printStackTrace();
     }
@@ -165,18 +166,17 @@ public class MyMusicsController implements Controller {
   /**
    * Refreshes the table with getLocalMusics() from DataForIhm.
    */
-  public void displayAvailableMusics() {
-    tvMusics.getItems().setAll(this.parseMusic());
+  public void displayLocalMusics() {
+    this.listMusics.clear();
+    this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
+        .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toList()));
+
+    this.updateTableMusics();
   }
 
-
-  private List<MusicMetadata> parseMusic() {
-    this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
-            .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toList()));
-
-    return this.getCentralFrameController().getMainController().getApplication()
-            .getIhmCore().getDataForIhm().getLocalMusics()
-            .map(x -> x.getMetadata()).collect(Collectors.toList());
+  private void updateTableMusics() {
+    tvMusics.getItems().clear();
+    this.listMusics.forEach(m -> tvMusics.getItems().add(m.getMetadata()));
   }
 
   /**
@@ -273,6 +273,22 @@ public class MyMusicsController implements Controller {
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
+  }
+
+  public void setTopText(String text) {
+    this.lblTitle.setText(text);
+    this.listMusics.clear();
+    /*
+    this.listMusics.addAll(this.getApplication().getIhmCore().getDataForIhm().getPlaylists().filter(p -> p.getName() == text)
+        .map(p -> p.getMusics()));
+    this.updateTableMusics();
+
+     */
+  }
+
+  public void reset() {
+    this.lblTitle.setText("Mes morceaux");
+    this.displayLocalMusics();
   }
 
 }
