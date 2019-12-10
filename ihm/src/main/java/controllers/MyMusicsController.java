@@ -9,6 +9,7 @@ import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import java.util.stream.Stream;
@@ -23,6 +24,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -198,6 +203,7 @@ public class MyMusicsController implements Controller {
             }
           }
         delete(musicsDelete);
+        displayAvailableMusics();
       }
     });
 
@@ -206,11 +212,41 @@ public class MyMusicsController implements Controller {
   }
 
   public void delete(ArrayList<LocalMusic> musicsDelete) {
-    for (int i = 0; i < musicsDelete.size(); i++) {
-      try {
-        this.getApplication().getIhmCore().getDataForIhm().deleteMusic(musicsDelete.get(i), true);
-      } catch (NullPointerException e) {
-        LogManager.getLogger().error(e);
+    
+    Alert alert = new Alert(AlertType.CONFIRMATION);
+    alert.setTitle("Confirmation");
+    alert.setHeaderText("Confirmation");
+    alert.setContentText("Confirmer la suppression des musiques selectionné\"");
+    
+    ButtonType appDelete = new ButtonType("Seulement sur l'application");
+    ButtonType appDiskDelete = new ButtonType("Sur l'application et sur le disque");
+    ButtonType buttonTypeCancel = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
+    
+    alert.getButtonTypes().setAll(appDelete, appDiskDelete, buttonTypeCancel);
+    
+    Optional<ButtonType> result = alert.showAndWait();
+    boolean delete = false;
+    boolean deleteDisk = false;
+    
+    if (result.get() == appDelete){
+      delete = true;
+    } else if (result.get() == appDiskDelete) {
+      delete = true;
+      deleteDisk = true;
+    } else if (result.get() == buttonTypeCancel) {
+        delete = false;
+    } else {
+      delete = false;
+    }
+    
+    if(delete) {
+      for (int i = 0; i < musicsDelete.size(); i++) {
+        try {
+          this.getApplication().getIhmCore().getDataForIhm().deleteMusic(musicsDelete.get(i), deleteDisk);
+        } catch (NullPointerException e) {
+          LogManager.getLogger().error(e);
+          e.printStackTrace();
+        }
       }
     }
     displayAvailableMusics();
