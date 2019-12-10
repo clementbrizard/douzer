@@ -12,6 +12,9 @@ public class IhmCore {
   private DataForIhm dataForIhm;
   private IhmForData ihmForData;
 
+  private IhmCore() {
+  }
+
   public DataForIhm getDataForIhm() {
     return dataForIhm;
   }
@@ -26,9 +29,6 @@ public class IhmCore {
 
   public void setIhmForData(IhmForData ihmForData) {
     this.ihmForData = ihmForData;
-  }
-
-  private IhmCore() {
   }
 
   public static IhmCore init() {

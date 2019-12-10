@@ -2,7 +2,6 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
-import exceptions.data.LocalUsersFileException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,12 +40,8 @@ public abstract class CreateUser {
       defaultProp.store(new FileOutputStream(userPropFilePath.toString()), null);
     }
 
-    try {
-      dc.getLocalUsersFileHandler().add(user);
-      Login.run(dc, user);
-    } catch (LocalUsersFileException e) {
-      throw new IOException(e);
-    }
+    dc.getLocalUsersFileHandler().add(user);
+    Login.run(dc, user);
   }
 }
 
