@@ -3,14 +3,18 @@ package controllers;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import datamodel.MusicMetadata;
+import datamodel.ShareStatus;
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.Iterator;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -20,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -72,6 +77,12 @@ public class NewMusicController implements Controller {
   private RadioButton radioPublic;
 
   /**
+   * RadioButton to select friends sharing.
+   */
+  @FXML
+  private RadioButton radioFriends;
+
+  /**
    * RadioButton to select private sharing (no sharing).
    */
   @FXML
@@ -97,7 +108,7 @@ public class NewMusicController implements Controller {
   /**
    * List of tags.
    */
-  private ObservableList tags;
+  private ObservableList<String> tags;
 
   /**
    * Mp3 file.
@@ -113,7 +124,7 @@ public class NewMusicController implements Controller {
    * Reference to parent controller.
    */
   private MyMusicsController myMusicsController;
-  
+
   /**
    * the metadata of the selected music.
    */
@@ -153,12 +164,11 @@ public class NewMusicController implements Controller {
   public void initialize() {
     this.shareStatusGroup = new ToggleGroup();
     this.radioPrivate.setToggleGroup(this.shareStatusGroup);
-    // Private => not shared => false
-    this.radioPrivate.setUserData(false);
+    this.radioFriends.setToggleGroup(this.shareStatusGroup);
     this.radioPublic.setToggleGroup(this.shareStatusGroup);
-    // Public => shared => true
-    this.radioPublic.setUserData(true);
-    this.radioPublic.setSelected(true);
+
+    this.radioPrivate.setUserData(true);
+    this.radioPrivate.setSelected(true);
 
     this.dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
         1000, LocalDate.now().getYear(), LocalDate.now().getYear(), 1));
@@ -205,7 +215,7 @@ public class NewMusicController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .parseMusicMetadata(file.getAbsolutePath());
-        
+
         if (meta.getAlbum() != null) {
           this.textAlbum.setText(meta.getAlbum());
         } else {
@@ -225,44 +235,44 @@ public class NewMusicController implements Controller {
           newMusicLogger.info("remplissage de l'année par : " + meta.getReleaseYear().getValue());
           this.dateYear.setValueFactory(new SpinnerValueFactory
               .IntegerSpinnerValueFactory(1000,
-                  LocalDate.now().getYear(), 
-                  meta.getReleaseYear().getValue()));
+              LocalDate.now().getYear(),
+              meta.getReleaseYear().getValue()));
         } else {
           this.dateYear.setValueFactory(new SpinnerValueFactory
               .IntegerSpinnerValueFactory(1000,
-                  LocalDate.now().getYear(),
-                  LocalDate.now().getYear()));
+              LocalDate.now().getYear(),
+              LocalDate.now().getYear()));
         }
-        
+
       } catch (IOException e) {
         newMusicLogger.error(e);
         Notifications.create()
-          .title("Ajout de la musique raté")
-          .text("le fichier selectionné ne correspond pas au bon format")
-          .darkStyle()
-          .showWarning();
+            .title("Ajout de la musique raté")
+            .text("le fichier selectionné ne correspond pas au bon format")
+            .darkStyle()
+            .showWarning();
         return;
       } catch (UnsupportedTagException e) {
         newMusicLogger.error(e);
         Notifications.create()
-          .title("Ajout de la musique raté")
-          .text("les tags ne correspondent pas au fichier")
-          .darkStyle()
-          .showWarning();
+            .title("Ajout de la musique raté")
+            .text("les tags ne correspondent pas au fichier")
+            .darkStyle()
+            .showWarning();
         return;
       } catch (InvalidDataException e) {
         Notifications.create()
-          .title("Ajout de la musique raté")
-          .text("des erreurs dans le format de données on été detectées")
-          .darkStyle()
-          .showWarning();
+            .title("Ajout de la musique raté")
+            .text("des erreurs dans le format de données on été detectées")
+            .darkStyle()
+            .showWarning();
         newMusicLogger.error(e);
         return;
       } catch (NoSuchAlgorithmException e) {
         newMusicLogger.error(e);
         return;
       }
-      
+
     }
   }
 
@@ -321,7 +331,7 @@ public class NewMusicController implements Controller {
   @FXML
   private void addTag(ActionEvent event) {
     if (!this.textNewTag.getText().isEmpty() && !this.tags.contains(this.textNewTag.getText())) {
-      this.tags.add(this.textNewTag.getText());
+      this.tags.add(this.textNewTag.getText().trim());
       this.textNewTag.clear();
     }
   }
@@ -355,7 +365,7 @@ public class NewMusicController implements Controller {
     newMusicLogger.info("Album : {}", textAlbum.getText());
     newMusicLogger.info("Uploader : {}", textUploader.getText());
     newMusicLogger.info("Share status : {} ",
-        (Boolean) shareStatusGroup.getSelectedToggle().getUserData() ? "Public" : "Private");
+        shareStatusGroup.getSelectedToggle().getUserData());
     newMusicLogger.info("Date : {}", dateYear.getValue());
     newMusicLogger.info("Tags :");
     Boolean first = true;
@@ -393,11 +403,19 @@ public class NewMusicController implements Controller {
     // Add music if valid
     if (valid) {
       newMusicLogger.info("Entry valid");
-      
+
       meta.setTitle(textTitle.getText());
       meta.setArtist(textArtist.getText());
       meta.setAlbum(textAlbum.getText());
       meta.setReleaseYear(Year.of(dateYear.getValue()));
+      meta.getTags().addAll(tags);
+
+      ShareStatus shareStatus = ShareStatus.PRIVATE;
+      if (this.radioPublic.isSelected()) {
+        shareStatus = ShareStatus.PUBLIC;
+      } else if (this.radioFriends.isSelected()) {
+        shareStatus = ShareStatus.FRIENDS;
+      }
 
       try {
         myMusicsController.getCentralFrameController()
@@ -405,17 +423,17 @@ public class NewMusicController implements Controller {
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
-            .addMusic(meta, file.getAbsolutePath());
+            .addMusic(meta, file.getAbsolutePath(), shareStatus);
         this.getMyMusicsController().displayAvailableMusics();
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
       } catch (java.io.FileNotFoundException e) {
         newMusicLogger.error("File not found : " + file.getAbsolutePath());
         Notifications.create()
-          .title("Ajout de la musique raté")
-          .text("le fichier selectionné ne correspond pas au bon format")
-          .darkStyle()
-          .showWarning();
+            .title("Ajout de la musique raté")
+            .text("le fichier selectionné ne correspond pas au bon format")
+            .darkStyle()
+            .showWarning();
       }
     } else {
       newMusicLogger.error("Entry not valid");

@@ -95,6 +95,16 @@ public class MusicMetadata implements java.io.Serializable {
     this.ratings = ratings;
   }
 
+  public void addRating(User user, int rating) {
+    updateTimeStamp();
+    this.ratings.put(user, rating);
+  }
+
+  public void deleteRating(User user, int rating) {
+    updateTimeStamp();
+    this.ratings.remove(user, rating);
+  }
+
   public List<Comment> getComments() {
     return comments;
   }
