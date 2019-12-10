@@ -4,8 +4,14 @@ import datamodel.Comment;
 import datamodel.Music;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -13,11 +19,14 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CommentListViewCell extends ListCell<Comment> {
+  private static final Logger commentLogger = LogManager.getLogger();
 
   @FXML
   TextArea comment;
@@ -29,20 +38,22 @@ public class CommentListViewCell extends ListCell<Comment> {
   private Label labelOwner;
   
   @FXML
-  private ImageView imageEtoile1;
+  private ImageView starOne;
 
   @FXML
-  private ImageView imageEtoile2;
+  private ImageView starTwo;
 
   @FXML
-  private ImageView imageEtoile3;
+  private ImageView starThree;
 
   @FXML
-  private ImageView imageEtoile4;
+  private ImageView starFour;
 
   @FXML
-  private ImageView imageEtoile5;
-  
+  private ImageView starFive;
+
+  // Map of rating stars to access them dynamically.
+  private Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
 
   private FXMLLoader mlLoader;
   
@@ -109,73 +120,39 @@ public class CommentListViewCell extends ListCell<Comment> {
    * @param rating int the rating of music
    */
   public void setStars(int rating) {
+    // Fill stars map.
+    starsMap.put(1, starOne);
+    starsMap.put(2, starTwo);
+    starsMap.put(3, starThree);
+    starsMap.put(4, starFour);
+    starsMap.put(5, starFive);
+
     if (rating == 0) {
-      imageEtoile1.setVisible(false);
-      imageEtoile2.setVisible(false);
-      imageEtoile3.setVisible(false);
-      imageEtoile4.setVisible(false);
-      imageEtoile5.setVisible(false);
+      starsMap.forEach((k, v) -> {
+        v.setVisible(false);
+      });
+    } else {
+      File fullStarFile = new File("ihm/src/main/resources/images/FullStarSymbol.png");
+      File emptyStarFile = new File("ihm/src/main/resources/images/EmptyStarSymbol.png");
+
+      try {
+        InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
+        InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
+        Image fullStarImage = new Image(fullStarInputStream);
+        Image emptyStarImage = new Image(emptyStarInputStream);
+
+        for (int i = 1; i <= rating; i++) {
+          starsMap.get(i).setImage(fullStarImage);
+        }
+
+        for (int i = rating + 1; i <= 5; i++) {
+          starsMap.get(i).setImage(emptyStarImage);
+        }
+      } catch (FileNotFoundException e) {
+        commentLogger.error(e);
+      }
     }
-    if (rating == 1) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 2) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 3) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 4) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 5) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-    }
+
   }
   
 }
