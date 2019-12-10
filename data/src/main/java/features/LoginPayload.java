@@ -1,5 +1,6 @@
 package features;
 
+import com.sun.org.apache.xml.internal.serializer.utils.BoolStack;
 import core.Datacore;
 import datamodel.LocalUser;
 import datamodel.ShareStatus;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class LoginPayload extends ShareMusicsPayload {
   private User user;
   private Set<InetAddress> ips;
+  private boolean isResponse;
 
   LoginPayload(LocalUser user, Set<InetAddress> addresses) {
     super(user,
@@ -27,6 +29,19 @@ public class LoginPayload extends ShareMusicsPayload {
     // copy constructor instead of cast to not send sensitive info over the network
     this.user = new User(user);
     this.ips = new HashSet<>(addresses);
+    this.isResponse = false;
+  }
+
+  LoginPayload(LocalUser user, Set<InetAddress> addresses, boolean isResponse) {
+    super(user,
+        user.getLocalMusics().stream()
+            .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
+            .collect(Collectors.toSet())
+    );
+    // copy constructor instead of cast to not send sensitive info over the network
+    this.user = new User(user);
+    this.ips = new HashSet<>(addresses);
+    this.isResponse = isResponse;
   }
 
   @Override
@@ -35,18 +50,21 @@ public class LoginPayload extends ShareMusicsPayload {
     dc.getAllIps().add(senderIp);
     this.user.setIp(senderIp);
     dc.addUser(this.user);
-    dc.ihm.notifyUserConnection(this.user);
+    //dc.ihm.notifyUserConnection(this.user);
 
     // Preparing login payload for unknown IPs
-    LoginPayload payload = new LoginPayload(dc.getCurrentUser(), dc.getAllIps());
+    LoginPayload payload = new LoginPayload(dc.getCurrentUser(), dc.getAllIps(), true);
 
     // Answer to sender
-    dc.net.sendToUser(payload, senderIp);
-
+    if (!this.isResponse) {
+      dc.net.sendToUser(payload, senderIp);
+    }
+    
     // Connecting to unknown IPs
     this.ips.stream()
         .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
         .forEach(ip -> {
+          System.out.println("SendingSS");
           dc.net.sendToUser(payload, ip);
           dc.getAllIps().add(ip);
         });
