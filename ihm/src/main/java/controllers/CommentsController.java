@@ -2,8 +2,8 @@ package controllers;
 
 import cells.CommentListViewCell;
 import datamodel.Comment;
-import datamodel.LocalMusic;
 import datamodel.Music;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,16 +19,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
-//replace by javadocs
-//popup view when click on Comment Button on CurrentMusicInfoController
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+/**
+ * Handle display of selected musics' comments
+ * and pop up of comment form for selected music.
+ */
 public class CommentsController implements Controller {
-
-  private Scene newCommentLoader;
-
-  private CurrentMusicInfoController currentMusicInfoController;
-  private NewCommentController newCommentController;
-
-  private Music music;
+  private static final Logger commentsLogger = LogManager.getLogger();
 
   @FXML
   private Button commentButton;
@@ -39,63 +38,74 @@ public class CommentsController implements Controller {
   @FXML
   private ListView<Comment> listCommentaire;
 
+  private Scene newCommentLoader;
+
+  private Music music;
   private ObservableList<Comment> commentObservableList;
 
-  public CurrentMusicInfoController getCurrentMusicController() {
-    return currentMusicInfoController;
-  }
+  private CurrentMusicInfoController currentMusicInfoController;
+  private NewCommentController newCommentController;
 
-  public void setCurrentMusicController(CurrentMusicInfoController currentMusicController) {
-    this.currentMusicInfoController = currentMusicController;
+  public CurrentMusicInfoController getCurrentMusicInfoController() {
+    return currentMusicInfoController;
   }
 
   public NewCommentController getNewCommentController() {
     return newCommentController;
   }
 
+  public void setCurrentMusicController(CurrentMusicInfoController currentMusicController) {
+    this.currentMusicInfoController = currentMusicController;
+  }
+
   public void setNewCommentController(NewCommentController newCommentController) {
     this.newCommentController = newCommentController;
   }
-
+  
+  public Music getMusic() {
+    return music;
+  }
 
   /**
    * This function displays the music's comments.
    * @param music Object Music.
    */
   public void init(Music music) {
+
     this.music = music;
     titleMusic.setText(music.getMetadata().getTitle());
-    commentObservableList = FXCollections.observableArrayList();
+    if (commentObservableList == null) {
+      commentObservableList = FXCollections.observableArrayList();
+    } else {
+      commentObservableList.clear();
+    }
+
     commentObservableList.addAll(music.getMetadata().getComments());
-
-    commentObservableList.addAll(
-        new Comment("test1",this.getCurrentMusicController().getApplication().getIhmCore()
-            .getDataForIhm().getCurrentUser()),new Comment("2",this.getCurrentMusicController()
-            .getApplication().getIhmCore().getDataForIhm().getCurrentUser()));
-
     listCommentaire.setItems(commentObservableList);
+    
     listCommentaire.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
-
       @Override
       public ListCell<Comment> call(ListView<Comment> param) {
-        // TODO Auto-generated method stub
-        return new CommentListViewCell();
+        CommentListViewCell c = new CommentListViewCell();
+        c.setMusic(music);
+
+        //controller for each comment
+        return c;
       }
-
     });
-
   }
 
   /**
-   * we show the CommentPopupView for the Current LocalMusic.
+   * We show the CommentPopupView for the Current LocalMusic.
    */
   @FXML
   public void commentClick(ActionEvent event) {
     if (this.music == null) {
       return;
     }
+
     try {
-      // Initialize shareScene and shareController
+      //Initialize scene and controller
       FXMLLoader newComment = new FXMLLoader(getClass().getResource("/fxml/CommentPopupView.fxml"));
       Parent newCommentParent = newComment.load();
       newCommentLoader = new Scene(newCommentParent);
@@ -106,28 +116,19 @@ public class CommentsController implements Controller {
       newCommentController.init(this.music);
 
     } catch (Exception e) {
-      e.printStackTrace();
+      commentsLogger.debug(e);
     }
 
     Stage newCommentPopup = new Stage();
     newCommentPopup.setTitle("Commentaire");
     newCommentPopup.setScene(this.newCommentLoader);
 
-    // Set position of second window, relatively to primary window.
-    //musicSharingPopup.setX(application.getPrimaryStage().getX() + 200);
-    //musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
-
-
-    // Show sharing popup.
+    // Show popup.
     newCommentPopup.initModality(Modality.APPLICATION_MODAL);
     newCommentPopup.showAndWait();
-    //newCommentPopup.show();
   }
 
   @Override
-  public void initialize() {
-
-  }
-
+  public void initialize() {}
 
 }

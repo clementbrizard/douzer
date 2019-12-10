@@ -6,9 +6,14 @@ import datamodel.Music;
 import datamodel.User;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,11 +29,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class NewCommentController implements Controller {
+  private static final Logger newCommentLogger = LogManager.getLogger();
 
   private Music music;
 
@@ -41,21 +47,24 @@ public class NewCommentController implements Controller {
   private TextArea textAreaComment;
 
   @FXML
-  private ImageView imageEtoile1;
+  private ImageView starOne;
 
   @FXML
-  private ImageView imageEtoile2;
+  private ImageView starTwo;
 
   @FXML
-  private ImageView imageEtoile3;
+  private ImageView starThree;
 
   @FXML
-  private ImageView imageEtoile4;
+  private ImageView starFour;
 
   @FXML
-  private ImageView imageEtoile5;
+  private ImageView starFive;
 
-  private int note = 0;
+  // Map of rating stars to access them dynamically.
+  private Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
+
+  private int rate = 0;
 
 
   public CommentsController getCommentsController() {
@@ -66,75 +75,47 @@ public class NewCommentController implements Controller {
     this.commentsController = commentsController;
   }
 
+  /**
+   * init the new comment view with a music.
+   * @param music the music whose we want to add our comment
+   */
   public void init(Music music) {
     this.music = music;
+    this.music.getMetadata().getRatings().forEach((user,note) -> {
+      if (user.equals(getCommentsController()
+          .getCurrentMusicInfoController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser())) {
+        setStars(note);
+      }
+    });
   }
 
   /**
    * Sets the stars to the value set by user.
    * @param rating the rating of the current user
    */
-
   public void setStars(int rating) {
-    if (rating == 1) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 2) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 3) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 4) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 5) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
+    File fullStarFile = new File(getClass().getResource("/images/FullStarSymbol.png").getFile());
+    File emptyStarFile = new File(getClass().getResource("/images/EmptyStarSymbol.png").getFile());
+
+    try {
+      InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
+      InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
+      Image fullStarImage = new Image(fullStarInputStream);
+      Image emptyStarImage = new Image(emptyStarInputStream);
+
+      for (int i = 1; i <= rating; i++) {
+        starsMap.get(i).setImage(fullStarImage);
+      }
+
+      for (int i = rating + 1; i <= 5; i++) {
+        starsMap.get(i).setImage(emptyStarImage);
+      }
+    } catch (FileNotFoundException e) {
+      newCommentLogger.error(e);
     }
   }
 
@@ -143,50 +124,23 @@ public class NewCommentController implements Controller {
    */
   @Override
   public void initialize() {
-    imageEtoile1.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 1");
-        setStars(1);
-        note = 1;
-      }
-    }));
+    // Fill stars map.
+    starsMap.put(1, starOne);
+    starsMap.put(2, starTwo);
+    starsMap.put(3, starThree);
+    starsMap.put(4, starFour);
+    starsMap.put(5, starFive);
 
-    imageEtoile2.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 2");
-        setStars(2);
-        note = 2;
-      }
-    }));
-
-    imageEtoile3.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 3");
-        setStars(3);
-        note = 3;
-      }
-    }));
-
-    imageEtoile4.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 4");
-        setStars(4);
-        note = 4;
-      }
-    }));
-
-    imageEtoile5.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 5");
-        setStars(5);
-        note = 5;
-      }
-    }));
+    // Set event handler for each star.
+    starsMap.forEach((k, v) -> {
+      v.setOnMousePressed((new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+          setStars(k);
+          rate = k;
+        }
+      }));
+    });
 
   }
 
@@ -206,11 +160,33 @@ public class NewCommentController implements Controller {
     if (!check()) {
       return;
     }
+    
+    //add comment
     this.getCommentsController()
-    .getCurrentMusicController()
+    .getCurrentMusicInfoController()
     .getApplication()
     .getIhmCore()
     .getDataForIhm().addComment(music, textAreaComment.getText());
+    
+    if (rate > 0) {
+      LocalUser userlocal = getCommentsController()
+          .getCurrentMusicInfoController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser();
+      
+      if (music.getMetadata().getRatings().get(userlocal) == null) {
+        music.getMetadata().getRatings().put(userlocal, rate);
+      } else {
+        music.getMetadata().getRatings().replace(userlocal, rate);
+      }
+    }
+    
+    //reload the view of comment
+    this.getCommentsController().init(music);
+    
+    //close the popup
     ((Stage) this.validation.getScene().getWindow()).close();
   }
 

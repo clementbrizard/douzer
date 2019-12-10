@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Logger;
 
 
 /*
- * Right panel controller. Contains informations about the current music, sharing button,
- * download progress bar
+ * Right panel controller. Contains information about the current music, sharing button,
+ * download progress bar.
  */
 public class CurrentMusicInfoController implements Controller {
 
@@ -35,20 +35,24 @@ public class CurrentMusicInfoController implements Controller {
   private CommentsController commentCurrentMusicController;
 
   private ShareController shareController;
-  private CommentsController newCommentController;
+  private NewCommentController newCommentController;
   private MainController mainController;
 
   private Scene shareScene;
 
   private Application application;
   private Music currentMusic;
-
+  
   // Getters
   public ShareController getShareController() {
     return shareController;
   }
 
-  public CommentsController getNewCommentController() {
+  public CommentsController getCommentCurrentMusicController() {
+    return commentCurrentMusicController;
+  }
+  
+  public NewCommentController getNewCommentController() {
     return newCommentController;
   }
 
@@ -86,7 +90,7 @@ public class CurrentMusicInfoController implements Controller {
     this.shareController = shareController;
   }
 
-  public void setNewCommentController(CommentsController newCommentController) {
+  public void setNewCommentController(NewCommentController newCommentController) {
     this.newCommentController = newCommentController;
   }
 

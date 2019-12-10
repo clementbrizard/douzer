@@ -4,8 +4,13 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,16 +26,19 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-//replace by javadocs
-//central view to show all information about on music
+/**
+ * Central view to show all information about a music.
+ */
 public class DetailsMusicController implements Controller {
+  private static final Logger detailsMusicLogger = LogManager.getLogger();
 
   @FXML
-  private TextField textFieldTitre;
+  private TextField textFieldTitle;
 
   @FXML
-  private TextField textFieldArtiste;
+  private TextField textFieldArtist;
 
   @FXML
   private TextField textFieldAlbum;
@@ -52,29 +60,32 @@ public class DetailsMusicController implements Controller {
   private LocalMusic localMusic;
 
   @FXML
-  private Button buttonValider;
+  private Button validateButton;
 
   @FXML
   private Button buttonAddTag;
 
   @FXML
-  private ImageView imageEtoile1;
+  private ImageView starOne;
 
   @FXML
-  private ImageView imageEtoile2;
+  private ImageView startTwo;
 
   @FXML
-  private ImageView imageEtoile3;
+  private ImageView starThree;
 
   @FXML
-  private ImageView imageEtoile4;
+  private ImageView startFour;
 
   @FXML
-  private ImageView imageEtoile5;
+  private ImageView starFive;
 
   private MyMusicsController myMusicsController;
 
-  private int note = 0;
+  private int rate = 0;
+
+  // Map of rating stars to access then dynamically.
+  private Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
 
   public MyMusicsController getMyMusicsController() {
     return this.myMusicsController;
@@ -84,23 +95,69 @@ public class DetailsMusicController implements Controller {
     this.myMusicsController = myMusicsController;
   }
 
+  @Override
+  public void initialize() {
+    // Fill stars map.
+    starsMap.put(1, starOne);
+    starsMap.put(2, startTwo);
+    starsMap.put(3, starThree);
+    starsMap.put(4, startFour);
+    starsMap.put(5, starFive);
+
+    // Set event handler for each star.
+    starsMap.forEach((k, v) -> {
+      v.setOnMousePressed((new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+          setStars(k);
+          rate = k;
+        }
+      }));
+    });
+
+    buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
+
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur add tag");
+        boolean hasTag = false;
+        if (localMusic.getMetadata() != null) {
+          if (localMusic.getMetadata().getTags() != null) {
+
+            Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
+            while (itMusicTag.hasNext()) {
+              if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
+                hasTag = true;
+              }
+            }
+          }
+        }
+        if (!hasTag && !textFieldAddTag.getText().trim().equals("")) {
+          tags.add(textFieldAddTag.getText().trim());
+        }
+        //give new tag or new tag list to data
+        textFieldAddTag.clear();
+      }
+    }));
+  }
+
   /**
-   * After the initialisation with initialize() of the controller execute this function with
-   * the localMusic where the user has click .
-   * @param localMusic the music clicked
+   * After the initialisation of the controller, call this method with
+   * the localMusic on which the user clicked.
+   * @param localMusic the clicked music
    */
   public void initMusic(LocalMusic localMusic) {
     this.localMusic = localMusic;
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTitle() != null) {
-        textFieldTitre.setText(localMusic.getMetadata().getTitle());
+        textFieldTitle.setText(localMusic.getMetadata().getTitle());
       }
     }
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getArtist() != null) {
-        textFieldArtiste.setText(localMusic.getMetadata().getArtist());
+        textFieldArtist.setText(localMusic.getMetadata().getArtist());
       }
     }
 
@@ -154,7 +211,6 @@ public class DetailsMusicController implements Controller {
         }
       }
     }
-    LogManager.getLogger().info("Fin d'Initialisation de DetailsMusicController");
   }
 
   /**
@@ -163,143 +219,25 @@ public class DetailsMusicController implements Controller {
    */
 
   public void setStars(int rating) {
-    if (rating == 1) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 2) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 3) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 4) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 5) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-    }
-  }
+    File fullStarFile = new File(getClass().getResource("/images/FullStarSymbol.png").getFile());
+    File emptyStarFile = new File(getClass().getResource("/images/EmptyStarSymbol.png").getFile());
 
-  /**
-   * Function changes the rating and the stars display when star is clicked.
-   */
-  @Override
-  public void initialize() {
+    try {
+      InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
+      InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
+      Image fullStarImage = new Image(fullStarInputStream);
+      Image emptyStarImage = new Image(emptyStarInputStream);
 
-    imageEtoile1.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 1");
-        setStars(1);
-        note = 1;
+      for (int i = 1; i <= rating; i++) {
+        starsMap.get(i).setImage(fullStarImage);
       }
-    }));
 
-    imageEtoile2.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 2");
-        setStars(2);
-        note = 2;
+      for (int i = rating + 1; i <= 5; i++) {
+        starsMap.get(i).setImage(emptyStarImage);
       }
-    }));
-
-    imageEtoile3.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 3");
-        setStars(3);
-        note = 3;
-      }
-    }));
-
-    imageEtoile4.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 4");
-        setStars(4);
-        note = 4;
-      }
-    }));
-
-    imageEtoile5.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 5");
-        setStars(5);
-        note = 5;
-      }
-    }));
-
-    buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
-
-        @Override
-        public void handle(MouseEvent event) {
-          System.out.println("clique sur add tag");
-          boolean tagexist = false;
-          if (localMusic.getMetadata() != null) {
-            if (localMusic.getMetadata().getTags() != null) {
-              
-              Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
-              while (itMusicTag.hasNext()) {
-                if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
-                  tagexist = true;
-                }
-              }
-            }
-          }
-          if (!tagexist && !textFieldAddTag.getText().trim().equals("")) {
-            tags.add(textFieldAddTag.getText().trim());
-          }
-          //give new tag or new tag list to data
-        }
-    }));
-
+    } catch (FileNotFoundException e) {
+      detailsMusicLogger.error(e);
+    }
   }
 
   /**
@@ -308,28 +246,28 @@ public class DetailsMusicController implements Controller {
    */
   public Boolean checkFields() {
     Boolean bool = true;
-    if (textFieldTitre.getText() == null || textFieldTitre.getText().trim().equals("")) {
+
+    if (textFieldTitle.getText() == null || textFieldTitle.getText().trim().equals("")) {
       bool = false;
-      textFieldTitre.setStyle(" -fx-background-color:red;");
+      textFieldTitle.setStyle(" -fx-background-color:red;");
     } else {
-      textFieldTitre.setStyle(" -fx-background-color:white;");
+      textFieldTitle.setStyle(" -fx-background-color:white;");
     }
-    if (textFieldArtiste.getText() == null || textFieldArtiste.getText().trim().equals("")) {
+
+    if (textFieldArtist.getText() == null || textFieldArtist.getText().trim().equals("")) {
       bool = false;
-      textFieldArtiste.setStyle(" -fx-background-color:red;");
+      textFieldArtist.setStyle(" -fx-background-color:red;");
     } else {
-      textFieldArtiste.setStyle(" -fx-background-color:white;");
+      textFieldArtist.setStyle(" -fx-background-color:white;");
     }
+
     if (textFieldAlbum.getText() == null || textFieldAlbum.getText().trim().equals("")) {
       bool = false;
       textFieldAlbum.setStyle(" -fx-background-color:red;");
     } else {
       textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
-    //if (textFieldAnnee.getText() == null || textFieldAnnee.getText().trim().equals("")) {
-    //  bool = false;
-    //  textFieldAnnee.setStyle(" -fx-background-color:red;");
-    //}
+
     if (textFieldLastUploader.getText() == null
         || textFieldLastUploader.getText().trim().equals("")) {
       bool = false;
@@ -338,12 +276,11 @@ public class DetailsMusicController implements Controller {
       textFieldLastUploader.setStyle(" -fx-background-color:white;");
     }
 
-
     return bool;
   }
 
   /**
-   * Function updates the value of modified fields.
+   * Function to update the value of modified fields.
    * @param action button Validation is clicked.
    */
   public void validation(ActionEvent action) {
@@ -351,9 +288,9 @@ public class DetailsMusicController implements Controller {
     if (!checkFields()) {
       return;
     }
-    localMusic.getMetadata().setTitle(textFieldTitre.getText());
+    localMusic.getMetadata().setTitle(textFieldTitle.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+    localMusic.getMetadata().setArtist(textFieldArtist.getText());
 
     this.getMyMusicsController()
         .getApplication()
@@ -363,38 +300,53 @@ public class DetailsMusicController implements Controller {
 
     this.getMyMusicsController().displayAvailableMusics();
 
-    if (note > 0) {
+    if (rate > 0) {
       try {
         this.getMyMusicsController()
           .getApplication()
           .getIhmCore()
           .getDataForIhm()
-          .rateMusic(localMusic, note);
+          .rateMusic(localMusic, rate);
       } catch (UnsupportedOperationException e) {
-        LogManager.getLogger().error(e.getMessage());
+        detailsMusicLogger.error(e);
+      }
         
-        LocalUser userlocal = getMyMusicsController()
-            .getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser();
-        
-        if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
-          localMusic.getMetadata().getRatings().put(userlocal, note);
-        } else {
-          localMusic.getMetadata().getRatings().replace(userlocal, note);
-        }
-        
+      LocalUser userlocal = getMyMusicsController()
+          .getCentralFrameController()
+          .getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser();
+
+      if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
+        localMusic.getMetadata().getRatings().put(userlocal, rate);
+      } else {
+        localMusic.getMetadata().getRatings().replace(userlocal, rate);
       }
     }
-    
-    localMusic.getMetadata().getTags().addAll(tags);
-    
-    LogManager.getLogger().info("Change Field TODO with Data function if exist");
 
-    ((Stage) this.textFieldTitre.getScene().getWindow()).close();
+    // If the same music is shown in the comment view,
+    // update the comment view in order to have the same stars.
+    if (localMusic.equals(getMyMusicsController()
+        .getCentralFrameController()
+        .getMainController()
+        .getCurrentMusicInfoController()
+        .getCommentCurrentMusicController()
+        .getMusic())) {
+
+      getMyMusicsController()
+      .getCentralFrameController()
+      .getMainController()
+      .getCurrentMusicInfoController()
+      .getCommentCurrentMusicController().init(localMusic);
+    }
+
+    localMusic.getMetadata().getTags().addAll(tags);
+
+    //TODO change field with Data function if exists
+
+    ((Stage) this.textFieldTitle.getScene().getWindow()).close();
   }
 
 }
