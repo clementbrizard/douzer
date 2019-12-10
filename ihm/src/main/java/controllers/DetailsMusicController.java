@@ -35,10 +35,10 @@ public class DetailsMusicController implements Controller {
   private static final Logger detailsMusicLogger = LogManager.getLogger();
 
   @FXML
-  private TextField textFieldTitre;
+  private TextField textFieldTitle;
 
   @FXML
-  private TextField textFieldArtiste;
+  private TextField textFieldArtist;
 
   @FXML
   private TextField textFieldAlbum;
@@ -60,7 +60,7 @@ public class DetailsMusicController implements Controller {
   private LocalMusic localMusic;
 
   @FXML
-  private Button buttonValider;
+  private Button validateButton;
 
   @FXML
   private Button buttonAddTag;
@@ -120,19 +120,19 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         System.out.println("clique sur add tag");
-        boolean tagexist = false;
+        boolean hasTag = false;
         if (localMusic.getMetadata() != null) {
           if (localMusic.getMetadata().getTags() != null) {
 
             Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
             while (itMusicTag.hasNext()) {
               if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
-                tagexist = true;
+                hasTag = true;
               }
             }
           }
         }
-        if (!tagexist && !textFieldAddTag.getText().trim().equals("")) {
+        if (!hasTag && !textFieldAddTag.getText().trim().equals("")) {
           tags.add(textFieldAddTag.getText().trim());
         }
         //give new tag or new tag list to data
@@ -141,22 +141,22 @@ public class DetailsMusicController implements Controller {
   }
 
   /**
-   * After the initialisation with initialize() of the controller execute this function with
-   * the localMusic where the user has click .
-   * @param localMusic the music clicked
+   * After the initialisation of the controller, call this method with
+   * the localMusic on which the user clicked.
+   * @param localMusic the clicked music
    */
   public void initMusic(LocalMusic localMusic) {
     this.localMusic = localMusic;
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTitle() != null) {
-        textFieldTitre.setText(localMusic.getMetadata().getTitle());
+        textFieldTitle.setText(localMusic.getMetadata().getTitle());
       }
     }
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getArtist() != null) {
-        textFieldArtiste.setText(localMusic.getMetadata().getArtist());
+        textFieldArtist.setText(localMusic.getMetadata().getArtist());
       }
     }
 
@@ -210,7 +210,6 @@ public class DetailsMusicController implements Controller {
         }
       }
     }
-    LogManager.getLogger().info("Fin d'Initialisation de DetailsMusicController");
   }
 
   /**
@@ -246,28 +245,28 @@ public class DetailsMusicController implements Controller {
    */
   public Boolean checkFields() {
     Boolean bool = true;
-    if (textFieldTitre.getText() == null || textFieldTitre.getText().trim().equals("")) {
+
+    if (textFieldTitle.getText() == null || textFieldTitle.getText().trim().equals("")) {
       bool = false;
-      textFieldTitre.setStyle(" -fx-background-color:red;");
+      textFieldTitle.setStyle(" -fx-background-color:red;");
     } else {
-      textFieldTitre.setStyle(" -fx-background-color:white;");
+      textFieldTitle.setStyle(" -fx-background-color:white;");
     }
-    if (textFieldArtiste.getText() == null || textFieldArtiste.getText().trim().equals("")) {
+
+    if (textFieldArtist.getText() == null || textFieldArtist.getText().trim().equals("")) {
       bool = false;
-      textFieldArtiste.setStyle(" -fx-background-color:red;");
+      textFieldArtist.setStyle(" -fx-background-color:red;");
     } else {
-      textFieldArtiste.setStyle(" -fx-background-color:white;");
+      textFieldArtist.setStyle(" -fx-background-color:white;");
     }
+
     if (textFieldAlbum.getText() == null || textFieldAlbum.getText().trim().equals("")) {
       bool = false;
       textFieldAlbum.setStyle(" -fx-background-color:red;");
     } else {
       textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
-    //if (textFieldAnnee.getText() == null || textFieldAnnee.getText().trim().equals("")) {
-    //  bool = false;
-    //  textFieldAnnee.setStyle(" -fx-background-color:red;");
-    //}
+
     if (textFieldLastUploader.getText() == null
         || textFieldLastUploader.getText().trim().equals("")) {
       bool = false;
@@ -276,12 +275,11 @@ public class DetailsMusicController implements Controller {
       textFieldLastUploader.setStyle(" -fx-background-color:white;");
     }
 
-
     return bool;
   }
 
   /**
-   * Function updates the value of modified fields.
+   * Function to update the value of modified fields.
    * @param action button Validation is clicked.
    */
   public void validation(ActionEvent action) {
@@ -289,9 +287,9 @@ public class DetailsMusicController implements Controller {
     if (!checkFields()) {
       return;
     }
-    localMusic.getMetadata().setTitle(textFieldTitre.getText());
+    localMusic.getMetadata().setTitle(textFieldTitle.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-    localMusic.getMetadata().setArtist(textFieldArtiste.getText());
+    localMusic.getMetadata().setArtist(textFieldArtist.getText());
 
     this.getMyMusicsController()
         .getApplication()
@@ -301,35 +299,34 @@ public class DetailsMusicController implements Controller {
 
     this.getMyMusicsController().displayAvailableMusics();
 
-    if (note > 0) {
+    if (rate > 0) {
       try {
         this.getMyMusicsController()
           .getApplication()
           .getIhmCore()
           .getDataForIhm()
-          .rateMusic(localMusic, note);
+          .rateMusic(localMusic, rate);
       } catch (UnsupportedOperationException e) {
-        LogManager.getLogger().error(e.getMessage());
+        detailsMusicLogger.error(e);
+      }
         
-        LocalUser userlocal = getMyMusicsController()
-            .getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser();
-        
-        if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
-          localMusic.getMetadata().getRatings().put(userlocal, note);
-        } else {
-          localMusic.getMetadata().getRatings().replace(userlocal, note);
-        }
-        
+      LocalUser userlocal = getMyMusicsController()
+          .getCentralFrameController()
+          .getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser();
+
+      if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
+        localMusic.getMetadata().getRatings().put(userlocal, rate);
+      } else {
+        localMusic.getMetadata().getRatings().replace(userlocal, rate);
       }
     }
 
-    /*if the same music is show in the comment view,
-      update the comment view in order to have the same stars*/
+    // If the same music is shown in the comment view,
+    // update the comment view in order to have the same stars.
     if (localMusic.equals(getMyMusicsController()
         .getCentralFrameController()
         .getMainController()
@@ -346,9 +343,7 @@ public class DetailsMusicController implements Controller {
 
     localMusic.getMetadata().getTags().addAll(tags);
 
-    LogManager.getLogger().info("Change Field TODO with Data function if exist");
-
-    ((Stage) this.textFieldTitre.getScene().getWindow()).close();
+    ((Stage) this.textFieldTitle.getScene().getWindow()).close();
   }
 
 }
