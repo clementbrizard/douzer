@@ -157,7 +157,7 @@ public class MyMusicsController implements Controller {
     tfSearchDuration.textProperty().addListener(textListener);
     
     //event when the user edit the textField
-    tfSearchTitle.textProperty().addListener(textListener);
+    tfSearch.textProperty().addListener(textListener);
     
     
 
