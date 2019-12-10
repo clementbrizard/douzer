@@ -201,11 +201,6 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void rateMusic(Music music, int rating) {
-    throw new UnsupportedOperationException("Not implemented yet");
-  }
-
-  @Override
   public void shareMusic(LocalMusic music) {
     this.shareMusics(Collections.singleton(music));
   }
@@ -223,14 +218,13 @@ public class DataForIhmImpl implements DataForIhm {
         this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
         break;
       case FRIENDS:
-        this.unshareMusic(music);
         this.dc.net.sendToUsers(
             payload,
             this.dc.getOnlineFriendsIps()
         );
         break;
       default:
-        this.unshareMusic(music);
+        break;
     }
     this.unshareMusic(music);
   }

@@ -37,7 +37,6 @@ public class ShareController implements Controller {
   @FXML
   private Label labelMusic;
 
-  private ToggleGroup shareStatusGroup;
   private Music currentMusic;
 
   private ShareController shareController;
@@ -78,10 +77,10 @@ public class ShareController implements Controller {
    */
   @Override
   public void initialize() {
-    this.shareStatusGroup = new ToggleGroup();
-    this.radioPrivate.setToggleGroup(this.shareStatusGroup);
-    this.radioFriends.setToggleGroup(this.shareStatusGroup);
-    this.radioPublic.setToggleGroup(this.shareStatusGroup);
+    ToggleGroup shareStatusGroup = new ToggleGroup();
+    this.radioPrivate.setToggleGroup(shareStatusGroup);
+    this.radioFriends.setToggleGroup(shareStatusGroup);
+    this.radioPublic.setToggleGroup(shareStatusGroup);
 
   }
 
@@ -97,19 +96,11 @@ public class ShareController implements Controller {
     }
     // if radiobutton Public is selected, the music if shared
     try {
-      if ((Boolean) shareStatusGroup.getSelectedToggle().getUserData()) {
-        currentMusicInfoController
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .shareMusic((LocalMusic) currentMusic);
-      } else {
-        currentMusicInfoController
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .unshareMusic((LocalMusic) currentMusic);
-      }
+      currentMusicInfoController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .notifyMusicUpdate((LocalMusic) currentMusic);
     } catch (Exception e) {
       shareLogger.error(e);
     }

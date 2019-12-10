@@ -161,6 +161,10 @@ public class DetailsMusicController implements Controller {
   }
 
   /**
+   * After the initialisation with initialize() of the controller execute this function with
+   * the localMusic where the user has click .
+   *
+   * @param localMusic the music clicked
    * After the initialisation of the controller, call this method with
    * the localMusic on which the user clicked.
    * @param localMusic the clicked music
@@ -242,6 +246,7 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Sets the stars to the value set by user.
+   *
    * @param rating the rating of the current user
    */
 
@@ -269,6 +274,7 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Function checks that the fields are not null.
+   *
    * @return Boolean, false if there is a nul field.
    */
   public Boolean checkFields() {
@@ -308,6 +314,7 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Function to update the value of modified fields.
+   *
    * @param action button Validation is clicked.
    */
   public void validation(ActionEvent action) {
@@ -329,21 +336,9 @@ public class DetailsMusicController implements Controller {
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtist.getText());
 
-    this.getMyMusicsController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .notifyMusicUpdate(localMusic);
-
     this.getMyMusicsController().displayAvailableMusics();
 
     if (rating > 0) {
-        this.getMyMusicsController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .rateMusic(localMusic, rating);
-
       LocalUser localUser = getMyMusicsController()
           .getCentralFrameController()
           .getMainController()
@@ -352,12 +347,16 @@ public class DetailsMusicController implements Controller {
           .getDataForIhm()
           .getCurrentUser();
 
-      if (localMusic.getMetadata().getRatings().get(localUser) == null) {
-        localMusic.getMetadata().getRatings().put(localUser, rating);
-      } else {
-        localMusic.getMetadata().getRatings().replace(localUser, rating);
-      }
+      localMusic.getMetadata().addRating(localUser, rating);
     }
+
+    localMusic.getMetadata().getTags().addAll(tags);
+
+    this.getMyMusicsController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyMusicUpdate(localMusic);
 
     // If the same music is shown in the comment view,
     // update the comment view in order to have the same stars.
@@ -369,13 +368,13 @@ public class DetailsMusicController implements Controller {
         .getMusic())) {
 
       getMyMusicsController()
-      .getCentralFrameController()
-      .getMainController()
-      .getCurrentMusicInfoController()
-      .getCommentCurrentMusicController().init(localMusic);
+          .getCentralFrameController()
+          .getMainController()
+          .getCurrentMusicInfoController()
+          .getCommentCurrentMusicController().init(localMusic);
     }
 
-    localMusic.getMetadata().getTags().addAll(tags);
+    LogManager.getLogger().info("Change Field TODO with Data function if exist");
 
     //TODO change field with Data function if exists
 

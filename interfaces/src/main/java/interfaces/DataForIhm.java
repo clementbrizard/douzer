@@ -19,7 +19,7 @@ import javax.security.auth.login.LoginException;
 
 public interface DataForIhm {
   /**
-   * Add new local music to the current owner and to the local list.
+   * Add new local music to the current owner and to the local list and shares it.
    *
    * @param music New music metadata
    * @param path  Path of local mp3
@@ -70,8 +70,6 @@ public interface DataForIhm {
    */
   MusicMetadata parseMusicMetadata(String path)
       throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException;
-
-  void rateMusic(Music music, int rating);
 
   void shareMusic(LocalMusic music);
 
