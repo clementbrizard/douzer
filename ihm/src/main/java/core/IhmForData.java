@@ -50,7 +50,15 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserDisconnection(User user) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    OnlineUsersListController controller;
+    try {
+      controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controller.removeOnlineUser(user);
   }
 
   /**
