@@ -231,6 +231,7 @@ public class PlayerController implements Controller {
           lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
           pgMusicProgress.setProgress(timer);
         } else {
+          System.out.println("testEND" + timer);
           play.setGraphic(new ImageView(playIcon));
           isPlaying = false;
           player.stop();
