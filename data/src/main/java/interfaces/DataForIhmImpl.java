@@ -262,4 +262,15 @@ public class DataForIhmImpl implements DataForIhm {
   public Stream<Music> searchMusics(SearchQuery searchQuery) {
     return Search.run(this.dc, searchQuery);
   }
+
+  @Override
+  public void shareMusicToContacts(LocalMusic music) {
+    this.shareMusicsToContacts(Collections.singleton(music));
+  }
+
+  @Override
+  public void shareMusicsToContacts(Collection<LocalMusic> musics) {
+    ShareMusicsPayload payload = new ShareMusicsPayload(musics);
+    this.dc.net.sendToUsers(payload, this.dc.getCurrentUser().getContactsOnlineIps());
+  }
 }
