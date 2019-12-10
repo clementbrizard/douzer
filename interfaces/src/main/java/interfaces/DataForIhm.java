@@ -9,6 +9,7 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
+import exceptions.data.DataException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -60,7 +61,7 @@ public interface DataForIhm {
 
   void exportProfile(String path) throws IOException;
 
-  void importProfile(String path) throws IOException, ClassNotFoundException;
+  void importProfile(String path) throws IOException, ClassNotFoundException, DataException;
 
   void login(String username, String password) throws IOException, LoginException;
 

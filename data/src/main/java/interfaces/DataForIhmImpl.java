@@ -14,6 +14,7 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
+import exceptions.data.DataException;
 import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
@@ -168,28 +169,25 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void importProfile(String path) throws IOException, ClassNotFoundException {
+  public void importProfile(String path) throws IOException, ClassNotFoundException, DataException {
+    FileInputStream fileInputStream = new FileInputStream(path);
+    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+    LocalUser localUser = (LocalUser)objectInputStream.readObject();
+    objectInputStream.close();
+    fileInputStream.close();
+
+    //Check if the username already exists on the local computer. If it doesn't we add the LocalUser.
+    boolean userNameAlreadyExists = false;
     try {
-      FileInputStream fileInputStream = new FileInputStream(path);
-      ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-      LocalUser localUser = (LocalUser)objectInputStream.readObject();
-      objectInputStream.close();
-      fileInputStream.close();
+      dc.getLocalUsersFileHandler().getUser(localUser.getUsername());
+      userNameAlreadyExists = true;
+    } catch (NullPointerException e) {
+      //If we have a NullPointerException, the user doesn't exists.
+      dc.getLocalUsersFileHandler().add(localUser);
+    }
 
-      //We check if the username already exists on our local computer. If it doesn't we add the LocalUser.
-      boolean userNameAlreadyExists = false;
-      try {
-        dc.getLocalUsersFileHandler().getUser(localUser.getUsername());
-        userNameAlreadyExists = true;
-      } catch (LocalUsersFileException e) {
-        dc.getLocalUsersFileHandler().add(localUser);
-      }
-
-      if(userNameAlreadyExists){
-        //Throw UserNotFoundException
-      }
-    } catch (LocalUsersFileException e){
-      throw new IOException(e);
+    if(userNameAlreadyExists){
+      throw new DataException("The user already exists.");
     }
   }
 
