@@ -6,12 +6,16 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Hashtable;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -21,6 +25,9 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,6 +56,11 @@ public class ProfileEditController implements Controller {
 
   @FXML
   private Pane paneImgAvatar;
+
+  @FXML
+  private FileChooser avatarFileChooser = new FileChooser();
+
+  private File avatarFile = null;
 
   private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;
@@ -227,9 +239,41 @@ public class ProfileEditController implements Controller {
     ProfileEditController.this.centralFrameController.setCentralContentMyMusics();
   }
 
-  @FXML
+  /**
+   * Called upon clicking the button to edit user's avatar.
+   * Opens a file dialog to choose avatar file locally.
+   *
+   * @param event The event inducing the button click
+   */
   public void avatarEdition(ActionEvent event) {
+    //TODO: add extension filter
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
 
+    final Path avatarPath = avatarFile.toPath();
+    // Get the image from the avatar path
+    BufferedImage avatarImg = null;
+    try {
+      avatarImg = ImageIO.read(avatarFile);
+      Notifications.create()
+              .title("Nouvel avatar")
+              .text("Votre avatar a bien été mis à jour.")
+              .darkStyle()
+              .showInformation();
+    } catch (java.io.IOException ex) {
+      Notifications.create()
+              .title("Fichier non lisible")
+              .text("Le fichier d'avatar que vous avez téléchargé n'est pas lisible.")
+              .darkStyle()
+              .showError();
+    }
+
+    ProfileEditController.this.centralFrameController.getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .setAvatar(avatarImg);
   }
 
   @FXML
@@ -263,17 +307,6 @@ public class ProfileEditController implements Controller {
             .getDataForIhm()
             .getCurrentUser()
             .setDateOfBirth(datePickerBirth.getValue());
-
-    logger.debug("Dob to set : " + datePickerBirth.getValue().toString());
-
-    logger.debug("getDob : " +     ProfileEditController.this.centralFrameController
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser()
-            .getDateOfBirth()
-            .toString());
 
     Notifications.create()
             .title("Sauvegarde effectuée")
