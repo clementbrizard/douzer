@@ -1,10 +1,12 @@
 package core;
 
+import controllers.AllMusicsController;
 import controllers.OnlineUsersListController;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
 
+import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -79,7 +81,15 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void updateMusic(Music music) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    AllMusicsController controller;
+    try {
+      controller = this.ihmCore.getApplication().getMainController().getCentralFrameController().getAllMusicsController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controller.searchMusics(null);
   }
 
   /**
