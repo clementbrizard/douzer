@@ -97,7 +97,7 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    controllerAllMusic.searchMusics(null);
+    controllerAllMusic.searchMusics();
 
     CurrentMusicInfoController controllerCurrentMusic;
     try {
@@ -133,7 +133,7 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    controllerAllMusic.searchMusics(null);
+    controllerAllMusic.searchMusics();
 
     CurrentMusicInfoController controllerCurrentMusic;
     try {
