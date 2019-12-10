@@ -169,7 +169,7 @@ public class DataForIhmImpl implements DataForIhm {
       dc.getLocalUsersFileHandler().add(localUser);
     }
 
-    if(userNameAlreadyExists){
+    if (userNameAlreadyExists) {
       throw new DataException("The user already exists.");
     }
   }
