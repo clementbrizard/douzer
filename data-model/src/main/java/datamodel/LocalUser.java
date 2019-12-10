@@ -3,6 +3,7 @@ package datamodel;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class LocalUser extends User {
   private static MessageDigest messageDigest;
@@ -131,5 +133,10 @@ public class LocalUser extends User {
   @Override
   public int hashCode() {
     return Objects.hash(super.hashCode(), pwdHash, contacts, savePath, musics, playlist);
+  }
+
+  public Stream<InetAddress> getContactsOnlineIps() {
+    return this.getContacts().stream()
+        .map(Contact::getUser).filter(User::isConnected).map(User::getIp);
   }
 }
