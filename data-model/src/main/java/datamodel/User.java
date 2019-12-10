@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -18,7 +19,7 @@ public class User implements java.io.Serializable {
   private transient RenderedImage avatar;
   private String firstName;
   private String lastName;
-  private Date dateOfBirth;
+  private LocalDate dateOfBirth;
   private boolean connected;
   private InetAddress ip;
   private Date timeStamp;
@@ -83,11 +84,11 @@ public class User implements java.io.Serializable {
     this.lastName = lastName;
   }
 
-  public Date getDateOfBirth() {
+  public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
 
-  public void setDateOfBirth(Date dateOfBirth) {
+  public void setDateOfBirth(LocalDate dateOfBirth) {
     updateTimeStamp();
     this.dateOfBirth = dateOfBirth;
   }
