@@ -39,11 +39,12 @@ public class OnlineUsersListController implements Controller {
   }
 
   public void addNewOnlineUser(User user) {
-    lvwOnlineUsers.getItems().add(user.getIp().toString());
+    if (!lvwOnlineUsers.getItems().contains(user.getUsername()))
+      lvwOnlineUsers.getItems().add(user.getUsername());
   }
 
   public void removeOnlineUser(User user) {
-    lvwOnlineUsers.getItems().removeAll(user.getIp().toString());
+    lvwOnlineUsers.getItems().removeAll(user.getUsername());
   }
 
   /**
@@ -59,7 +60,7 @@ public class OnlineUsersListController implements Controller {
         .getOnlineUsers();
 
     ObservableList<String> items =
-        users.map(user -> user.getIp().toString())
+        users.map(user -> user.getUsername())
              .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
     lvwOnlineUsers.setItems(items);
