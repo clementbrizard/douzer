@@ -3,9 +3,7 @@ package controllers;
 import core.Application;
 import datamodel.LocalMusic;
 import datamodel.Music;
-import datamodel.MusicMetadata;
 import java.io.IOException;
-import java.util.stream.Stream;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +14,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.controlsfx.control.Notifications;
 
 
 /*
@@ -169,45 +166,6 @@ public class CurrentMusicInfoController implements Controller {
 
     // Show sharing popup.
     musicSharingPopup.show();
-  }
-
-  /**
-   * Update the download progress bar value.
-   *
-   * @param progress dowload progress, between 0 and 100
-   * @param music    The music that is downloaded
-   */
-  public void updateDownloadProgressBar(Music music, int progress) {
-    //A negative progress send by data means a download failure
-    if (progress < 0) {
-      Notifications.create()
-          .title("Download failed")
-          .text(music.getMetadata().getTitle() + " - " + music.getMetadata().getArtist())
-          .darkStyle()
-          .showWarning();
-    } else {
-      downloadProgress.setProgress(progress / 100);
-      // We update central views when download is done
-      if (progress == 100) {
-        Notifications.create()
-            .title("Download done")
-            .text(music.getMetadata().getTitle() + " - " + music.getMetadata().getArtist())
-            .darkStyle()
-            .showInformation();
-        this.application
-            .getMainController()
-            .getCentralFrameController()
-            .getMyMusicsController()
-            .init();
-        this.application
-            .getMainController()
-            .getCentralFrameController()
-            .getAllMusicsController()
-            .init();
-        // Reinitialize progress bar with 0
-        downloadProgress.setProgress(0);
-      }
-    }
   }
 
 }
