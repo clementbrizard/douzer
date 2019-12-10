@@ -81,7 +81,7 @@ public abstract class Login {
     user.setConnected(true);
     dc.setCurrentUser(user);
     dc.addUser(user);
-    user.getMusics().forEach(dc::addMusic);
+    user.getLocalMusics().forEach(dc::addMusic);
     user.getFriends().forEach(dc::addUser);
 
     LoginPayload payload = new LoginPayload(user, dc.getOnlineIps()
@@ -90,6 +90,6 @@ public abstract class Login {
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
     dc.setAllIps((HashSet<InetAddress>) ips);
-    dc.net.connect(payload, ips);
+    dc.net.sendToUsers(payload, ips.stream());
   }
 }

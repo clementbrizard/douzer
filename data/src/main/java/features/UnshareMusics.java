@@ -5,6 +5,7 @@ import datamodel.LocalMusic;
 import datamodel.User;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public abstract class UnshareMusics {
@@ -16,12 +17,34 @@ public abstract class UnshareMusics {
    * @param dc datacore
    */
   public static void run(Collection<LocalMusic> musics, Datacore dc) {
-    User u = dc.getCurrentUser();
-    musics.forEach(m -> dc.removeOwner(m, u));
-    Collection<String> musicHashs = musics.stream()
-        .map(m -> m.getMetadata().getHash()).collect(Collectors.toList());
-    UnshareMusicsPayload payload = new UnshareMusicsPayload(musicHashs, u.getUuid());
-    dc.net.sendToUsers(payload, dc.getOnlineIps());
+    HashSet<String> musicHashsForAll = new HashSet<>();
+    HashSet<String> musicHashsForNonFriends = new HashSet<>();
+
+    musics.forEach(m -> {
+          switch (m.getShareStatus()) {
+            case PRIVATE:
+              musicHashsForAll.add(m.getMetadata().getHash());
+              break;
+            case FRIENDS:
+              musicHashsForNonFriends.add(m.getMetadata().getHash());
+              break;
+            default:
+              break;
+          }
+        }
+    );
+
+    UnshareMusicsPayload payloadForFriends = new UnshareMusicsPayload(
+        musicHashsForNonFriends,
+        dc.getCurrentUser().getUuid()
+    );
+    UnshareMusicsPayload payloadForAll = new UnshareMusicsPayload(
+        musicHashsForAll,
+        dc.getCurrentUser().getUuid()
+    );
+
+    dc.net.sendToUsers(payloadForAll, dc.getOnlineIps());
+    dc.net.sendToUsers(payloadForFriends, dc.getOnlineNonFriendsIps());
   }
 
   public static void unshareMusic(LocalMusic music, Datacore dc) {

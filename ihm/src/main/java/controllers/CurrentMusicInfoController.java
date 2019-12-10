@@ -30,7 +30,7 @@ public class CurrentMusicInfoController implements Controller {
 
   @FXML
   private ProgressBar downloadProgress;
-  
+
   @FXML
   private CommentsController commentCurrentMusicController;
 
@@ -78,7 +78,7 @@ public class CurrentMusicInfoController implements Controller {
 
     commentCurrentMusicController.setCurrentMusicController(this);
     commentCurrentMusicController.init(music);
-    
+
   }
 
   public Music getCurrentMusic() {
@@ -123,7 +123,8 @@ public class CurrentMusicInfoController implements Controller {
    */
   @FXML
   private void share(ActionEvent event) {
-    if (this.currentMusic == null) {
+    if (this.currentMusic == null || !(this.currentMusic instanceof LocalMusic)) {
+      // TODO: do not display the button
       return;
     }
     try {
@@ -134,7 +135,7 @@ public class CurrentMusicInfoController implements Controller {
       ShareController shareController = shareLoader.getController();
       this.setShareController(shareController);
       shareController.setCurrentMusicInfoController(this);
-      shareController.initializeCurrentMusicInfo(this.currentMusic);
+      shareController.initializeCurrentMusicInfo((LocalMusic) this.currentMusic);
 
     } catch (IOException e) {
       currentMusicInfoLogger.error(e);

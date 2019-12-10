@@ -43,6 +43,7 @@ public class SendToUserThread extends ThreadExtend {
     } catch (ConnectException e) {
       logger.error("Unable to send message. Is receiver listening ?");
     } catch (Exception e) {
+      logger.error(e);
       e.printStackTrace();
     }
   }

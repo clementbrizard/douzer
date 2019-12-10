@@ -2,6 +2,7 @@ package controllers;
 
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
+import datamodel.ShareStatus;
 import datamodel.User;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,9 +19,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -69,20 +72,31 @@ public class DetailsMusicController implements Controller {
   private ImageView starOne;
 
   @FXML
-  private ImageView startTwo;
+  private ImageView starTwo;
 
   @FXML
   private ImageView starThree;
 
   @FXML
-  private ImageView startFour;
+  private ImageView starFour;
 
   @FXML
   private ImageView starFive;
 
+  @FXML
+  private RadioButton radioPublic;
+
+  @FXML
+  private RadioButton radioFriends;
+
+  @FXML
+  private RadioButton radioPrivate;
+
   private MyMusicsController myMusicsController;
 
-  private int rate = 0;
+  private ToggleGroup shareStatusGroup;
+
+  private int rating = 0;
 
   // Map of rating stars to access then dynamically.
   private Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
@@ -97,11 +111,16 @@ public class DetailsMusicController implements Controller {
 
   @Override
   public void initialize() {
+    this.shareStatusGroup = new ToggleGroup();
+    this.radioPrivate.setToggleGroup(this.shareStatusGroup);
+    this.radioFriends.setToggleGroup(this.shareStatusGroup);
+    this.radioPublic.setToggleGroup(this.shareStatusGroup);
+
     // Fill stars map.
     starsMap.put(1, starOne);
-    starsMap.put(2, startTwo);
+    starsMap.put(2, starTwo);
     starsMap.put(3, starThree);
-    starsMap.put(4, startFour);
+    starsMap.put(4, starFour);
     starsMap.put(5, starFive);
 
     // Set event handler for each star.
@@ -110,7 +129,7 @@ public class DetailsMusicController implements Controller {
         @Override
         public void handle(MouseEvent event) {
           setStars(k);
-          rate = k;
+          rating = k;
         }
       }));
     });
@@ -124,9 +143,8 @@ public class DetailsMusicController implements Controller {
         if (localMusic.getMetadata() != null) {
           if (localMusic.getMetadata().getTags() != null) {
 
-            Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
-            while (itMusicTag.hasNext()) {
-              if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
+            for (String s : localMusic.getMetadata().getTags()) {
+              if (s.trim().equals(textFieldAddTag.getText().trim())) {
                 hasTag = true;
               }
             }
@@ -142,12 +160,27 @@ public class DetailsMusicController implements Controller {
   }
 
   /**
-   * After the initialisation of the controller, call this method with
-   * the localMusic on which the user clicked.
-   * @param localMusic the clicked music
+   * After the initialisation with initialize() of the controller execute this function with
+   * the localMusic where the user has click .
+   *
+   * @param localMusic the music clicked
+   *                   After the initialisation of the controller, call this method with
+   *                   the localMusic on which the user clicked.
    */
   public void initMusic(LocalMusic localMusic) {
     this.localMusic = localMusic;
+
+    switch (localMusic.getShareStatus()) {
+      case PUBLIC:
+        this.radioPublic.setSelected(true);
+        break;
+      case FRIENDS:
+        this.radioFriends.setSelected(true);
+        break;
+      default:
+        this.radioPrivate.setSelected(true);
+        break;
+    }
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTitle() != null) {
@@ -186,18 +219,14 @@ public class DetailsMusicController implements Controller {
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getTags() != null) {
-        Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
-        while (itMusicTag.hasNext()) {
-          tags.add(itMusicTag.next());
-        }
-
+        tags.addAll(localMusic.getMetadata().getTags());
         listViewTagsList.setItems(tags);
       }
     }
 
     if (localMusic.getMetadata() != null) {
       if (localMusic.getMetadata().getRatings() != null) {
-        LocalUser userlocal = getMyMusicsController()
+        LocalUser localUser = getMyMusicsController()
             .getCentralFrameController()
             .getMainController()
             .getApplication()
@@ -206,8 +235,8 @@ public class DetailsMusicController implements Controller {
             .getCurrentUser();
 
         Integer rating;
-        if ((rating = localMusic.getMetadata().getRatings().get(userlocal)) != null) {
-          setStars(rating.intValue());
+        if ((rating = localMusic.getMetadata().getRatings().get(localUser)) != null) {
+          setStars(rating);
         }
       }
     }
@@ -215,6 +244,7 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Sets the stars to the value set by user.
+   *
    * @param rating the rating of the current user
    */
 
@@ -242,10 +272,11 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Function checks that the fields are not null.
+   *
    * @return Boolean, false if there is a nul field.
    */
   public Boolean checkFields() {
-    Boolean bool = true;
+    boolean bool = true;
 
     if (textFieldTitle.getText() == null || textFieldTitle.getText().trim().equals("")) {
       bool = false;
@@ -281,6 +312,7 @@ public class DetailsMusicController implements Controller {
 
   /**
    * Function to update the value of modified fields.
+   *
    * @param action button Validation is clicked.
    */
   public void validation(ActionEvent action) {
@@ -289,29 +321,25 @@ public class DetailsMusicController implements Controller {
       return;
     }
     localMusic.getMetadata().setTitle(textFieldTitle.getText());
+
+    if (this.radioPublic.isSelected()) {
+      localMusic.setShareStatus(ShareStatus.PUBLIC);
+    } else if (this.radioFriends.isSelected()) {
+      localMusic.setShareStatus(ShareStatus.FRIENDS);
+    } else {
+      localMusic.setShareStatus(ShareStatus.PRIVATE);
+    }
+
+    localMusic.getMetadata().setTitle(textFieldTitle.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtist.getText());
 
-    this.getMyMusicsController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .notifyMusicUpdate(localMusic);
-
     this.getMyMusicsController().displayAvailableMusics();
 
-    if (rate > 0) {
-      try {
-        this.getMyMusicsController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .rateMusic(localMusic, rate);
-      } catch (UnsupportedOperationException e) {
-        detailsMusicLogger.error(e);
-      }
-        
-      LocalUser userlocal = getMyMusicsController()
+    if (rating > 0) {
+      localMusic.getMetadata().setArtist(textFieldArtist.getText());
+
+      LocalUser localUser = getMyMusicsController()
           .getCentralFrameController()
           .getMainController()
           .getApplication()
@@ -319,12 +347,16 @@ public class DetailsMusicController implements Controller {
           .getDataForIhm()
           .getCurrentUser();
 
-      if (localMusic.getMetadata().getRatings().get(userlocal) == null) {
-        localMusic.getMetadata().getRatings().put(userlocal, rate);
-      } else {
-        localMusic.getMetadata().getRatings().replace(userlocal, rate);
-      }
+      localMusic.getMetadata().addRating(localUser, rating);
     }
+
+    localMusic.getMetadata().getTags().addAll(tags);
+
+    this.getMyMusicsController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyMusicUpdate(localMusic);
 
     // If the same music is shown in the comment view,
     // update the comment view in order to have the same stars.
@@ -336,13 +368,15 @@ public class DetailsMusicController implements Controller {
         .getMusic())) {
 
       getMyMusicsController()
-      .getCentralFrameController()
-      .getMainController()
-      .getCurrentMusicInfoController()
-      .getCommentCurrentMusicController().init(localMusic);
+          .getCentralFrameController()
+          .getMainController()
+          .getCurrentMusicInfoController()
+          .getCommentCurrentMusicController().init(localMusic);
     }
 
-    localMusic.getMetadata().getTags().addAll(tags);
+    this.getMyMusicsController().displayAvailableMusics();
+
+    LogManager.getLogger().info("Change Field TODO with Data function if exist");
 
     //TODO change field with Data function if exists
 

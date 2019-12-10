@@ -1,8 +1,8 @@
 package features;
 
 import core.Datacore;
-import datamodel.LocalMusic;
 import datamodel.LocalUser;
+import datamodel.ShareStatus;
 import datamodel.User;
 import java.net.InetAddress;
 import java.util.HashSet;
@@ -20,13 +20,13 @@ public class LoginPayload extends ShareMusicsPayload {
 
   LoginPayload(LocalUser user, Set<InetAddress> addresses) {
     super(
-        user.getMusics().stream()
-            .filter(LocalMusic::isSharedToAll)
+        user.getLocalMusics().stream()
+            .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
             .collect(Collectors.toSet())
     );
     // copy constructor instead of cast to not send sensitive info over the network
     this.user = new User(user);
-    this.ips = new HashSet<InetAddress>(addresses);
+    this.ips = new HashSet<>(addresses);
   }
 
   @Override

@@ -17,7 +17,7 @@ public class DeleteMusic {
    * @param dc datacore
    */
   public static void run(LocalMusic music, boolean deleteLocal, Datacore dc) {
-    Set musics = dc.getCurrentUser().getMusics();
+    Set musics = dc.getCurrentUser().getLocalMusics();
     if (musics.contains(music)) {
       UnshareMusics.unshareMusic(music, dc);
       musics.remove(music);

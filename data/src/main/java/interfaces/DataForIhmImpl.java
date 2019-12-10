@@ -12,6 +12,7 @@ import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
+import datamodel.ShareStatus;
 import datamodel.User;
 import features.CreateUser;
 import features.DeleteMusic;
@@ -19,6 +20,7 @@ import features.DeleteUser;
 import features.Login;
 import features.LogoutPayload;
 import features.Search;
+import features.ShareMusics;
 import features.ShareMusicsPayload;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
@@ -39,8 +41,10 @@ import java.time.Duration;
 import java.time.Year;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
@@ -54,18 +58,21 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void addMusic(MusicMetadata music, String path) throws FileNotFoundException {
+  public void addMusic(MusicMetadata music, String path, ShareStatus shareStatus)
+      throws FileNotFoundException {
     File f = new File(path);
     if (f.exists() && !f.isDirectory()) {
       LocalMusic newMusic = new LocalMusic(
           music,
-          path
+          path,
+          shareStatus
       );
 
       newMusic.getOwners().add(dc.getCurrentUser());
 
-      dc.getCurrentUser().getMusics().add(newMusic);
+      dc.getCurrentUser().getLocalMusics().add(newMusic);
       dc.addMusic(newMusic);
+      this.shareMusic(newMusic);
     } else {
       throw new FileNotFoundException("This file doesn't exist");
     }
@@ -194,38 +201,43 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void rateMusic(Music music, int rating) {
-    throw new UnsupportedOperationException("Not implemented yet");
-  }
-
-  @Override
   public void shareMusic(LocalMusic music) {
     this.shareMusics(Collections.singleton(music));
   }
 
   @Override
   public void shareMusics(Collection<LocalMusic> musics) {
-    ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-    this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+    ShareMusics.run(this.dc, musics);
   }
 
   @Override
   public void notifyMusicUpdate(LocalMusic music) {
-    if (music.isSharedToAll()) {
-      UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
-      this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+    UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
+    switch (music.getShareStatus()) {
+      case PUBLIC:
+        this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
+        break;
+      case FRIENDS:
+        this.dc.net.sendToUsers(
+            payload,
+            this.dc.getOnlineFriendsIps()
+        );
+        break;
+      default:
+        break;
     }
+    this.unshareMusic(music);
   }
 
   @Override
   public void unshareMusic(LocalMusic music) {
-    UnshareMusics.unshareMusic(music, dc);
+    UnshareMusics.unshareMusic(music, this.dc);
   }
 
 
   @Override
   public void unshareMusics(Collection<LocalMusic> musics) {
-    UnshareMusics.run(musics, dc);
+    UnshareMusics.run(musics, this.dc);
   }
 
   @Override
