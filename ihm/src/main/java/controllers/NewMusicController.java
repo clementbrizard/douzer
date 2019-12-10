@@ -410,7 +410,6 @@ public class NewMusicController implements Controller {
       meta.setReleaseYear(Year.of(dateYear.getValue()));
       meta.getTags().addAll(tags);
 
-      System.out.println(shareStatusGroup.getSelectedToggle());
       ShareStatus shareStatus = ShareStatus.PRIVATE;
       if (this.radioPublic.isSelected()) {
         shareStatus = ShareStatus.PUBLIC;

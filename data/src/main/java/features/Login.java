@@ -90,6 +90,6 @@ public abstract class Login {
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
     dc.setAllIps((HashSet<InetAddress>) ips);
-    dc.net.connect(payload, ips);
+    dc.net.sendToUsers(payload, ips.stream());
   }
 }

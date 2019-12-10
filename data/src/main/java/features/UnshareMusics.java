@@ -17,8 +17,6 @@ public abstract class UnshareMusics {
    * @param dc datacore
    */
   public static void run(Collection<LocalMusic> musics, Datacore dc) {
-    musics.forEach(m -> dc.removeOwner(m, dc.getCurrentUser()));
-
     HashSet<String> musicHashsForAll = new HashSet<>();
     HashSet<String> musicHashsForNonFriends = new HashSet<>();
 

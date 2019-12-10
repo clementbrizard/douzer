@@ -309,9 +309,14 @@ public class MyMusicsController implements Controller {
     this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
         .getIhmCore().getDataForIhm().getLocalMusics()
         .collect(Collectors.toCollection(ArrayList::new)));
+    List pouet  = this.getCentralFrameController().getMainController().getApplication()
+        .getIhmCore().getDataForIhm().getMusics()
+        .collect(Collectors.toCollection(ArrayList::new));
 
     List<MusicMetadata> l = new ArrayList<MusicMetadata>();
 
+    myMusicsLogger.debug("music list size:" + pouet.size());
+    myMusicsLogger.debug("local music list size:" + this.listMusics.size());
     for (int i = 0; i < this.listMusics.size(); i++) {
       l.add(listMusics.get(i).getMetadata());
     }

@@ -5,6 +5,7 @@ import interfaces.Net;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import provider.NetworkProvider;
@@ -49,12 +50,6 @@ public class NetworkImpl implements Net {
     this.netProvider.createRequestDownloadThread(sourcesIPs, musicHash);
   }
   
-  
-  @Override
-  public void connect(Serializable payload, Collection<InetAddress> knownIPs) {
-    this.netProvider.createServer();
-    sendToUsers(payload, knownIPs.stream());
-  }
   
   @Override
   public void disconnect(Serializable payload, Collection<InetAddress> knownIPs) {

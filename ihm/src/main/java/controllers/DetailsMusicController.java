@@ -92,9 +92,9 @@ public class DetailsMusicController implements Controller {
   @FXML
   private RadioButton radioPrivate;
 
-  private ToggleGroup shareStatusGroup;
-
   private MyMusicsController myMusicsController;
+
+  private ToggleGroup shareStatusGroup;
 
   private int rating = 0;
 
@@ -143,9 +143,8 @@ public class DetailsMusicController implements Controller {
         if (localMusic.getMetadata() != null) {
           if (localMusic.getMetadata().getTags() != null) {
 
-            Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
-            while (itMusicTag.hasNext()) {
-              if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
+            for (String s : localMusic.getMetadata().getTags()) {
+              if (s.trim().equals(textFieldAddTag.getText().trim())) {
                 hasTag = true;
               }
             }
@@ -165,9 +164,8 @@ public class DetailsMusicController implements Controller {
    * the localMusic where the user has click .
    *
    * @param localMusic the music clicked
-   * After the initialisation of the controller, call this method with
-   * the localMusic on which the user clicked.
-   * @param localMusic the clicked music
+   *                   After the initialisation of the controller, call this method with
+   *                   the localMusic on which the user clicked.
    */
   public void initMusic(LocalMusic localMusic) {
     this.localMusic = localMusic;
@@ -339,6 +337,8 @@ public class DetailsMusicController implements Controller {
     this.getMyMusicsController().displayAvailableMusics();
 
     if (rating > 0) {
+      localMusic.getMetadata().setArtist(textFieldArtist.getText());
+
       LocalUser localUser = getMyMusicsController()
           .getCentralFrameController()
           .getMainController()
@@ -373,6 +373,8 @@ public class DetailsMusicController implements Controller {
           .getCurrentMusicInfoController()
           .getCommentCurrentMusicController().init(localMusic);
     }
+
+    this.getMyMusicsController().displayAvailableMusics();
 
     LogManager.getLogger().info("Change Field TODO with Data function if exist");
 

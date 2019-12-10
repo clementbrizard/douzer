@@ -2,6 +2,7 @@ package controllers;
 
 import datamodel.LocalMusic;
 import datamodel.Music;
+import datamodel.ShareStatus;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -37,7 +38,7 @@ public class ShareController implements Controller {
   @FXML
   private Label labelMusic;
 
-  private Music currentMusic;
+  private LocalMusic currentMusic;
 
   private ShareController shareController;
   private CurrentMusicInfoController currentMusicInfoController;
@@ -90,20 +91,19 @@ public class ShareController implements Controller {
   @FXML
   private void confirm(ActionEvent event) {
 
-    if (!(currentMusic instanceof LocalMusic)) {
-      //TODO popup the music is not Local impossible to share then
-      return;
+    if (this.radioPublic.isSelected()) {
+      currentMusic.setShareStatus(ShareStatus.PUBLIC);
+    } else if (this.radioFriends.isSelected()) {
+      currentMusic.setShareStatus(ShareStatus.FRIENDS);
+    } else {
+      currentMusic.setShareStatus(ShareStatus.PRIVATE);
     }
-    // if radiobutton Public is selected, the music if shared
-    try {
-      currentMusicInfoController
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .notifyMusicUpdate((LocalMusic) currentMusic);
-    } catch (Exception e) {
-      shareLogger.error(e);
-    }
+    currentMusicInfoController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyMusicUpdate((LocalMusic) currentMusic);
+
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
     stage.close();
@@ -127,21 +127,18 @@ public class ShareController implements Controller {
    *
    * @param currentMusic the current music
    */
-  public void initializeCurrentMusicInfo(Music currentMusic) {
-    this.currentMusic = currentMusicInfoController.getCurrentMusic();
+  public void initializeCurrentMusicInfo(LocalMusic currentMusic) {
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
-    if (currentMusic instanceof LocalMusic) {
-      switch (((LocalMusic) this.currentMusic).getShareStatus()) {
-        case PUBLIC:
-          this.radioPublic.setSelected(true);
-          break;
-        case FRIENDS:
-          this.radioFriends.setSelected(true);
-          break;
-        default:
-          this.radioPrivate.setSelected(true);
-          break;
-      }
+    switch (((LocalMusic) this.currentMusic).getShareStatus()) {
+      case PUBLIC:
+        this.radioPublic.setSelected(true);
+        break;
+      case FRIENDS:
+        this.radioFriends.setSelected(true);
+        break;
+      default:
+        this.radioPrivate.setSelected(true);
+        break;
     }
   }
 
