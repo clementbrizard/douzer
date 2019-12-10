@@ -227,6 +227,8 @@ public class PlayerController implements Controller {
         
         double timer = (currentTime.toMillis() / totalDuration);
 
+        System.out.println("ee"+timer);
+
         if (timer < 1) {
           lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
           pgMusicProgress.setProgress(timer);
