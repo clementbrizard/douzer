@@ -228,6 +228,7 @@ public class AllMusicsController implements Controller {
   public void searchMusics() {
 
     SearchQuery query = new SearchQuery();
+    allMusicsLogger.debug(tfSearch.isDisabled());
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
