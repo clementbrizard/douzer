@@ -167,6 +167,9 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playBack(ActionEvent e) {
+    if (arrayMusic.size() == 1 ){
+      return;
+    }
     if (currentIndex != -1) {
       if (currentIndex - 1 >= 0) {
         currentIndex--;
@@ -184,6 +187,9 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playNext(ActionEvent e) {
+    if (arrayMusic.size() == 1) {
+      return;
+    }
     if (currentIndex != -1) {
       if (currentIndex + 1 < medias.size()) {
         currentIndex++;
