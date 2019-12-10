@@ -169,14 +169,16 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void importProfile(String path) throws IOException, ClassNotFoundException, DataException {
+  public void importProfile(String path)
+      throws IOException, ClassNotFoundException, DataException {
     FileInputStream fileInputStream = new FileInputStream(path);
     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
     LocalUser localUser = (LocalUser)objectInputStream.readObject();
     objectInputStream.close();
     fileInputStream.close();
 
-    //Check if the username already exists on the local computer. If it doesn't we add the LocalUser.
+    //Check if the username already exists on the local computer.
+    //If it doesn't we add the LocalUser.
     boolean userNameAlreadyExists = false;
     try {
       dc.getLocalUsersFileHandler().getUser(localUser.getUsername());
