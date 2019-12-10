@@ -114,55 +114,7 @@ public class ProfileEditController implements Controller {
    */
   public void init() {
     
-    // get the image
-    RenderedImage imgRend = this.centralFrameController
-        .getMainController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .getCurrentUser()
-        .getAvatar();
-
-    // thanks to SwingFXUtils we can convert a bufferedImage into an Image
-    Image img = SwingFXUtils.toFXImage(convertRenderedImage(imgRend),null);
-    imgAvatar.setImage(img);
-
-    // crop of the image to make square
-    double minSide = min(img.getHeight(), img.getWidth());
-    PixelReader imgReader = img.getPixelReader();
-
-    // if the image isn't square, we crop it
-    if (img.getHeight() != img.getWidth()) {
-      if (img.getHeight() < img.getWidth()) {
-        // define crop in image coordinates:
-        double x = (img.getWidth() - img.getHeight()) / 2;
-        double y = 0;
-        // define the square for cropping
-        Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
-        imgAvatar.setViewport(croppedPortion);
-      } else if (img.getHeight() > img.getWidth()) {
-        // define crop in image coordinates:
-        double x = 0;
-        double y = (img.getHeight() - img.getWidth()) / 2;
-        // define the square for cropping
-        Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
-        imgAvatar.setViewport(croppedPortion);
-      }
-    }
-
-    double circleRadius = 45;
-    paneImgAvatar.setMinWidth(circleRadius * 2);
-    paneImgAvatar.setMinHeight(circleRadius * 2);
-    imgAvatar.setFitHeight(circleRadius * 2);
-    imgAvatar.setFitWidth(circleRadius * 2);
-
-    WritableImage croppedImage = imgAvatar.snapshot(null, null);
-
-    // the clip to have a circled image
-    Circle clip = new Circle(imgAvatar.getFitHeight() / 2,
-            imgAvatar.getFitWidth() / 2,
-            circleRadius);
-    paneImgAvatar.setClip(clip);
+    showAvatar();
     
     String pseudo = this.centralFrameController
             .getMainController()
@@ -233,6 +185,61 @@ public class ProfileEditController implements Controller {
     return result;
   }
 
+  /**
+   * this function show the avatar image.
+   */
+  private void showAvatar() {
+    // get the image
+    RenderedImage imgRend = this.centralFrameController
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getAvatar();
+
+    // thanks to SwingFXUtils we can convert a bufferedImage into an Image
+    Image img = SwingFXUtils.toFXImage(convertRenderedImage(imgRend),null);
+    imgAvatar.setImage(img);
+
+    // crop of the image to make square
+    double minSide = min(img.getHeight(), img.getWidth());
+    PixelReader imgReader = img.getPixelReader();
+
+    // if the image isn't square, we crop it
+    if (img.getHeight() != img.getWidth()) {
+      if (img.getHeight() < img.getWidth()) {
+        // define crop in image coordinates:
+        double x = (img.getWidth() - img.getHeight()) / 2;
+        double y = 0;
+        // define the square for cropping
+        Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
+        imgAvatar.setViewport(croppedPortion);
+      } else if (img.getHeight() > img.getWidth()) {
+        // define crop in image coordinates:
+        double x = 0;
+        double y = (img.getHeight() - img.getWidth()) / 2;
+        // define the square for cropping
+        Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
+        imgAvatar.setViewport(croppedPortion);
+      }
+    }
+
+    double circleRadius = 45;
+    paneImgAvatar.setMinWidth(circleRadius * 2);
+    paneImgAvatar.setMinHeight(circleRadius * 2);
+    imgAvatar.setFitHeight(circleRadius * 2);
+    imgAvatar.setFitWidth(circleRadius * 2);
+
+    WritableImage croppedImage = imgAvatar.snapshot(null, null);
+
+    // the clip to have a circled image
+    Circle clip = new Circle(imgAvatar.getFitHeight() / 2,
+            imgAvatar.getFitWidth() / 2,
+            circleRadius);
+    paneImgAvatar.setClip(clip);
+  }
+
   @FXML
   public void changeFrameToMyMusics(ActionEvent event) {
     ProfileEditController.this.centralFrameController.setCentralContentMyMusics();
@@ -273,10 +280,8 @@ public class ProfileEditController implements Controller {
             .getDataForIhm()
             .getCurrentUser()
             .setAvatar(avatarImg);
-  }
 
-  @FXML
-  public void avatarDeletion(ActionEvent event) {
+    showAvatar();
   }
 
   /**
