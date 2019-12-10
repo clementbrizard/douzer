@@ -186,7 +186,6 @@ public class AllMusicsController implements Controller {
 
   /**
    * Search all musics that correspond to the labels content.
-   * @param event The click on the search button.
    */
   @FXML
   public void searchMusics() {
