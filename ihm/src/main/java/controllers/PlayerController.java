@@ -159,7 +159,7 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playBack(ActionEvent e) {
-    if (arrayMusic != null && arrayMusic.size() == 1) {
+    if (arrayMusic.isEmpty() && arrayMusic.size() == 1) {
       return;
     }
     if (currentIndex != -1) {
@@ -179,7 +179,7 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playNext(ActionEvent e) {
-    if (arrayMusic != null && arrayMusic.size() == 1) {
+    if (arrayMusic.isEmpty() && arrayMusic.size() == 1) {
       return;
     }
     if (currentIndex != -1) {
