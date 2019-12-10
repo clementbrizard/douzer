@@ -147,7 +147,7 @@ public class MainController implements Controller {
 
     try {
       this.currentMusicInfoController.setMainController(this);
-      //this.currentMusicInfoController.init();
+      this.currentMusicInfoController.init(null);
       this.currentMusicInfoController.setApplication(this.application);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());

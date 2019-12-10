@@ -102,19 +102,8 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    if (controllerCurrentMusic.getCurrentMusic().equals(music))
+    if (controllerCurrentMusic.getCurrentMusic() != null && controllerCurrentMusic.getCurrentMusic().equals(music))
       controllerCurrentMusic.init(music);
-
-    DetailsMusicController controllerDetails;
-    try {
-      controllerDetails = this.ihmCore.getApplication().getMainController().getCentralFrameController().getDetailsMusicController();
-    } catch (NullPointerException e) {
-      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
-      e.printStackTrace();
-      return;
-    }
-    if (controllerDetails.getLocalMusic().equals(music))
-      controllerDetails.initMusic((LocalMusic)music);
   }
 
   /**
@@ -124,7 +113,26 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyMusicDeletion(Music music) {
-    throw new UnsupportedOperationException("La fonction n'est pas encore implémentée");
+    AllMusicsController controllerAllMusic;
+    try {
+      controllerAllMusic = this.ihmCore.getApplication().getMainController().getCentralFrameController().getAllMusicsController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    controllerAllMusic.searchMusics(null);
+
+    CurrentMusicInfoController controllerCurrentMusic;
+    try {
+      controllerCurrentMusic = this.ihmCore.getApplication().getMainController().getCurrentMusicInfoController();
+    } catch (NullPointerException e) {
+      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    if (controllerCurrentMusic.getCurrentMusic() != null && controllerCurrentMusic.getCurrentMusic().equals(music))
+      controllerCurrentMusic.init(null);
   }
 
   /**
