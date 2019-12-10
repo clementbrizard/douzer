@@ -186,14 +186,17 @@ public class MyMusicsController implements Controller {
       @Override
       public void handle(ActionEvent event) {
         ArrayList<LocalMusic> musicsDelete = new ArrayList<LocalMusic>();
-        ObservableList<MusicMetadata> selectedItems = tvMusics.getSelectionModel().getSelectedItems();
+        ObservableList<MusicMetadata> selectedItems = tvMusics
+            .getSelectionModel()
+            .getSelectedItems();
+        
         for (int i = 0;i < selectedItems.size();i++) {
-        for (int j = 0;j < listMusics.size();j++) {
-          if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
-            musicsDelete.add(listMusics.get(j));
+          for (int j = 0;j < listMusics.size();j++) {
+            if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
+              musicsDelete.add(listMusics.get(j));
+              }
             }
           }
-        }
         delete(musicsDelete);
       }
     });
@@ -207,7 +210,7 @@ public class MyMusicsController implements Controller {
       try {
         this.getApplication().getIhmCore().getDataForIhm().deleteMusic(musicsDelete.get(i), true);
       } catch (NullPointerException e) {
-
+        LogManager.getLogger().error(e);
       }
     }
     displayAvailableMusics();
