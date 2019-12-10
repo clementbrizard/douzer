@@ -1,5 +1,7 @@
 package controllers;
 
+import static impl.org.controlsfx.tools.MathTools.min;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
@@ -9,11 +11,15 @@ import java.util.Hashtable;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 
 import org.apache.logging.log4j.LogManager;
@@ -42,7 +48,7 @@ public class ProfileEditController implements Controller {
   private ImageView imgAvatar;
 
   @FXML
-  private Label lblSaved;
+  private Pane paneImgAvatar;
 
   private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;
@@ -96,7 +102,7 @@ public class ProfileEditController implements Controller {
    */
   public void init() {
     
-    //get the image
+    // get the image
     RenderedImage imgRend = this.centralFrameController
         .getMainController()
         .getApplication()
@@ -105,13 +111,47 @@ public class ProfileEditController implements Controller {
         .getCurrentUser()
         .getAvatar();
 
-    //thanks to SwingFXUtils we can convert a bufferedImage into an Image
-    Image img = SwingFXUtils.toFXImage(convertRenderedImage(imgRend),null); 
+    // thanks to SwingFXUtils we can convert a bufferedImage into an Image
+    Image img = SwingFXUtils.toFXImage(convertRenderedImage(imgRend),null);
     imgAvatar.setImage(img);
-    
-    //the clip to have a circled image
-    Circle clip = new Circle(imgAvatar.getFitHeight() / 2,imgAvatar.getFitWidth() / 2,35);
-    imgAvatar.setClip(clip);
+
+    // crop of the image to make square
+    double minSide = min(img.getHeight(), img.getWidth());
+    PixelReader imgReader = img.getPixelReader();
+
+    // if the image isn't square, we crop it
+    if (img.getHeight() != img.getWidth()) {
+      if (img.getHeight() < img.getWidth()) {
+        // define crop in image coordinates:
+        double x = (img.getWidth() - img.getHeight()) / 2;
+        double y = 0;
+        // define the square for cropping
+        Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
+        imgAvatar.setViewport(croppedPortion);
+      } else if (img.getHeight() > img.getWidth()) {
+        // define crop in image coordinates:
+        double x = 0;
+        double y = (img.getHeight() - img.getWidth()) / 2;
+        // define the square for cropping
+        Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
+        imgAvatar.setViewport(croppedPortion);
+      }
+    }
+
+    double circleRadius = 45;
+    paneImgAvatar.setMinWidth(circleRadius * 2);
+    paneImgAvatar.setMinHeight(circleRadius * 2);
+    imgAvatar.setFitHeight(circleRadius * 2);
+    imgAvatar.setFitWidth(circleRadius * 2);
+
+    WritableImage croppedImage = imgAvatar.snapshot(null, null);
+
+    // the clip to have a circled image
+    Circle clip = new Circle(imgAvatar.getFitHeight() / 2,
+            imgAvatar.getFitWidth() / 2,
+            circleRadius);
+    clip.setStyle("-fx-background-color: white;");
+    paneImgAvatar.setClip(clip);
     
     String pseudo = this.centralFrameController
             .getMainController()

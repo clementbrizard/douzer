@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <?import javafx.scene.shape.Circle?>
+<?import javafx.scene.layout.Pane?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ProfileEditController">
    <children>
       <BorderPane>
@@ -51,11 +52,13 @@
                          <VBox>
                              <Label text="Avatar" styleClass="form-lbl"/>
                              <HBox styleClass="avatar-hbox">
-                                 <ImageView fx:id="imgAvatar" preserveRatio="true" fitHeight="100" fitWidth="100" >
-                                      <image>
-                                        <Image preserveRatio="true" smooth="true"  url="@../images/EmptyStarSymbol.png" />
-                                     </image>
-                                 </ImageView>
+                                 <Pane fx:id="paneImgAvatar">
+                                     <ImageView fx:id="imgAvatar" preserveRatio="true">
+                                         <image>
+                                             <Image preserveRatio="true" smooth="true"  url="@../images/EmptyStarSymbol.png" />
+                                         </image>
+                                     </ImageView>
+                                 </Pane>
                                  <VBox styleClass="form-btn-hbox">
                                      <Button fx:id="buttonEditAvatar" onAction="#avatarEdition" styleClass="form-btn" text="éditer" />
                                      <Button fx:id="buttonDeleteAvatar" onAction="#avatarDeletion" styleClass="form-btn" text="supprimer" />
