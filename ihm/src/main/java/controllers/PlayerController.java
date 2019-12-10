@@ -57,6 +57,10 @@ public class PlayerController implements Controller {
   private ArrayList<MediaPlayer> medias;
   private ArrayList<LocalMusic> arrayMusic;
 
+  public void setArrayMusic(ArrayList<LocalMusic> arrayMusic) {
+    this.arrayMusic = arrayMusic;
+  }
+  
   @Override
   public void initialize() {
     medias = new ArrayList<MediaPlayer>();
@@ -84,19 +88,29 @@ public class PlayerController implements Controller {
     }
   }
 
+  public void PlayerOnMusic() {
+    if (this.arrayMusic.isEmpty()) {
+      player.stop();
+    }
+    else {
+      playerOnMusic(arrayMusic.get(0).getMp3Path());
+    }
+    
+  }
+  
   /**
    * Function Play only one song.
    * @param url : MusicPath
    * @return
    */
-  public void playerOnMusic(String url) {
+  private void playerOnMusic(String url) {
 
     if (isPlaying) {
       player.stop();
     }
 
     updateArrayMusic();
-
+    
     for (int i = 0; i < arrayMusic.size(); i++) {
       if (url.equals(arrayMusic.get(i).getMp3Path())) {
         currentIndex = i;
@@ -137,11 +151,12 @@ public class PlayerController implements Controller {
   private void updateArrayMusic() {
     medias.clear();
 
-    Stream<LocalMusic> streamMusic = mainController
+    Stream<LocalMusic> streamMusic = this.arrayMusic.stream();
+    /*Stream<LocalMusic> streamMusic = mainController
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getLocalMusics();
+        .getLocalMusics();*/
     arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
     arrayMusic.forEach(musicPath -> medias.add(createPlayer(musicPath.getMp3Path())));
   }
