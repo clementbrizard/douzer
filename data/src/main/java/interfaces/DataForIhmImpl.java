@@ -84,7 +84,7 @@ public class DataForIhmImpl implements DataForIhm {
     music.getMetadata().getComments().add(new Comment(comment, this.dc.getCurrentUser()));
 
     this.dc.net.sendToUsers(
-        new UpdateMusicsPayload(Collections.singleton(music)),
+        new UpdateMusicsPayload(this.dc.getCurrentUser() ,Collections.singleton(music)),
         this.dc.getOnlineIps()
     );
   }
@@ -114,7 +114,7 @@ public class DataForIhmImpl implements DataForIhm {
     // Updates the written currentUser in case it has been modified
     this.dc.getLocalUsersFileHandler().update(currentUser);
 
-    LogoutPayload payload = new LogoutPayload(currentUser.getUuid());
+    LogoutPayload payload = new LogoutPayload(this.dc.getCurrentUser(), currentUser.getUuid());
     this.dc.net.disconnect(payload, this.dc.getOnlineIps().collect(Collectors.toList()));
 
     Properties prop = new Properties();
@@ -212,7 +212,7 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void notifyMusicUpdate(LocalMusic music) {
-    UpdateMusicsPayload payload = new UpdateMusicsPayload(Collections.singleton(music));
+    UpdateMusicsPayload payload = new UpdateMusicsPayload(this.dc.getCurrentUser(), Collections.singleton(music));
     switch (music.getShareStatus()) {
       case PUBLIC:
         this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());

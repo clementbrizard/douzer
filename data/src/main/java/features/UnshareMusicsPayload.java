@@ -2,6 +2,7 @@ package features;
 
 import core.Datacore;
 import core.Payload;
+import datamodel.LocalUser;
 import datamodel.Music;
 import java.util.Collection;
 import java.util.UUID;
@@ -13,7 +14,8 @@ public class UnshareMusicsPayload extends Payload {
   private Collection<String> musicHashs;
   private UUID ownerToRemove;
 
-  public UnshareMusicsPayload(Collection<String> musicHashs, UUID ownerToRemove) {
+  public UnshareMusicsPayload(LocalUser user, Collection<String> musicHashs, UUID ownerToRemove) {
+    super(user);
     this.musicHashs = musicHashs;
     this.ownerToRemove = ownerToRemove;
   }

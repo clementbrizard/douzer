@@ -2,13 +2,15 @@ package features;
 
 import core.Datacore;
 import core.Payload;
+import datamodel.LocalUser;
 import datamodel.User;
 import java.util.UUID;
 
 public class LogoutPayload extends Payload {
   private UUID uuid;
 
-  public LogoutPayload(UUID uuid) {
+  public LogoutPayload(LocalUser user, UUID uuid) {
+    super(user);
     this.uuid = uuid;
   }
 

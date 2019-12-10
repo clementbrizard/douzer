@@ -12,6 +12,7 @@ public class UpdateUserPayload extends Payload {
   private User user;
 
   public UpdateUserPayload(LocalUser u) {
+    super(u);
     this.user = new User(u);
   }
 

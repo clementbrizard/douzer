@@ -19,7 +19,7 @@ public class LoginPayload extends ShareMusicsPayload {
   private Set<InetAddress> ips;
 
   LoginPayload(LocalUser user, Set<InetAddress> addresses) {
-    super(
+    super(user,
         user.getLocalMusics().stream()
             .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
             .collect(Collectors.toSet())

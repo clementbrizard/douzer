@@ -35,10 +35,12 @@ public abstract class UnshareMusics {
     );
 
     UnshareMusicsPayload payloadForFriends = new UnshareMusicsPayload(
+        dc.getCurrentUser(),
         musicHashsForNonFriends,
         dc.getCurrentUser().getUuid()
     );
     UnshareMusicsPayload payloadForAll = new UnshareMusicsPayload(
+        dc.getCurrentUser(),
         musicHashsForAll,
         dc.getCurrentUser().getUuid()
     );

@@ -26,10 +26,10 @@ public class ShareMusics {
         }
     );
 
-    ShareMusicsPayload payloadForAll = new ShareMusicsPayload(musicsForAll);
+    ShareMusicsPayload payloadForAll = new ShareMusicsPayload(dc.getCurrentUser(), musicsForAll);
     dc.net.sendToUsers(payloadForAll, dc.getOnlineIps());
 
-    ShareMusicsPayload payloadForFriends = new ShareMusicsPayload(musicsForFriends);
+    ShareMusicsPayload payloadForFriends = new ShareMusicsPayload(dc.getCurrentUser() ,musicsForFriends);
     dc.net.sendToUsers(payloadForFriends, dc.getOnlineFriendsIps());
   }
 }
