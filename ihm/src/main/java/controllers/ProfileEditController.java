@@ -256,32 +256,38 @@ public class ProfileEditController implements Controller {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
 
-    final Path avatarPath = avatarFile.toPath();
-    // Get the image from the avatar path
-    BufferedImage avatarImg = null;
     try {
+      final Path avatarPath = avatarFile.toPath();
+
+      // Get the image from the avatar path
+      BufferedImage avatarImg = null;
+
       avatarImg = ImageIO.read(avatarFile);
+
+      ProfileEditController.this.centralFrameController.getMainController()
+              .getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .getCurrentUser()
+              .setAvatar(avatarImg);
+
+      showAvatar();
+
       Notifications.create()
               .title("Nouvel avatar")
               .text("Votre avatar a bien été mis à jour.")
               .darkStyle()
               .showInformation();
-    } catch (java.io.IOException ex) {
+
+    } catch (java.io.IOException e) {
       Notifications.create()
               .title("Fichier non lisible")
               .text("Le fichier d'avatar que vous avez téléchargé n'est pas lisible.")
               .darkStyle()
               .showError();
+    } catch (java.lang.NullPointerException e) {
+      logger.warn(e + ": aucun fichier avatar sélectioné.");
     }
-
-    ProfileEditController.this.centralFrameController.getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser()
-            .setAvatar(avatarImg);
-
-    showAvatar();
   }
 
   /**
