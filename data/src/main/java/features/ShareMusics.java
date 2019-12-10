@@ -17,7 +17,7 @@ public class ShareMusics {
             case PUBLIC:
               musicsForAll.add(m);
               break;
-            case PRIVATE:
+            case FRIENDS:
               musicsForFriends.add(m);
               break;
             default:
