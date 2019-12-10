@@ -85,7 +85,7 @@ public class DetailsMusicController implements Controller {
   private int rate = 0;
 
   // Map of rating stars to access then dynamically.
-  Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
+  private Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
 
   public MyMusicsController getMyMusicsController() {
     return this.myMusicsController;
