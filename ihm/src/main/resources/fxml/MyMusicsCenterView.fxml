@@ -34,9 +34,9 @@
                              <Image url="@../images/randomArrow.png" />
                          </image>
                      </ImageView>
-                     <ImageView fx:id="ivPlay" fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="ivSearch" fitHeight="35.0" fitWidth="38.0" layoutX="510.0" layoutY="14.0" onMouseClicked="#searchMusics" pickOnBounds="true" preserveRatio="true">
                          <image>
-                             <Image url="@../images/playSymbol.png" />
+                             <Image url="@../images/searchSymbol.png" />
                          </image>
                      </ImageView>
                      <ImageView fx:id="ivShare" fitHeight="31.0" fitWidth="31.0" layoutX="629.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true">

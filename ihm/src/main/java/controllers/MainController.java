@@ -152,6 +152,5 @@ public class MainController implements Controller {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
     }
   }
-
 }
 
