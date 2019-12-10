@@ -292,7 +292,6 @@ public class MyMusicsController implements Controller {
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
-      myMusicsLogger.debug("recherche avancée");
       if (tfSearchTitle.getText() != null) {
         query.withTitle(tfSearchTitle.getText());
       }
