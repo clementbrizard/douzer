@@ -138,13 +138,8 @@ public class LocalUser extends User {
     return Objects.hash(super.hashCode());
   }
 
-  public Stream<InetAddress> getContactsOnlineIps() {
-    return this.getContacts().stream()
-        .map(Contact::getUser).filter(User::isConnected).map(User::getIp);
-  }
-
-  public Stream<InetAddress> getContactsOnlineIps() {
-    return this.getContacts().stream()
-        .map(Contact::getUser).filter(User::isConnected).map(User::getIp);
+  public Stream<InetAddress> getFriendsOnlineIps() {
+    return this.getFriends().stream()
+        .filter(User::isConnected).map(User::getIp);
   }
 }

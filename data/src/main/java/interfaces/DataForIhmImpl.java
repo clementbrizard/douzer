@@ -264,13 +264,13 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void shareMusicToContacts(LocalMusic music) {
-    this.shareMusicsToContacts(Collections.singleton(music));
+  public void shareMusicToFriends(LocalMusic music) {
+    this.shareMusicsToFriends(Collections.singleton(music));
   }
 
   @Override
-  public void shareMusicsToContacts(Collection<LocalMusic> musics) {
+  public void shareMusicsToFriends(Collection<LocalMusic> musics) {
     ShareMusicsPayload payload = new ShareMusicsPayload(musics);
-    this.dc.net.sendToUsers(payload, this.dc.getCurrentUser().getContactsOnlineIps());
+    this.dc.net.sendToUsers(payload, this.dc.getCurrentUser().getFriendsOnlineIps());
   }
 }

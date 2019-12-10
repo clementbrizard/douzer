@@ -78,9 +78,9 @@ public interface DataForIhm {
 
   void unshareMusics(Collection<LocalMusic> musics);
 
-  void shareMusicToContacts(LocalMusic music);
+  void shareMusicToFriends(LocalMusic music);
 
-  void shareMusicsToContacts(Collection<LocalMusic> musics);
+  void shareMusicsToFriends(Collection<LocalMusic> musics);
 
   Stream<User> getOnlineUsers();
 
