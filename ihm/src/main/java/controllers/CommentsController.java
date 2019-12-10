@@ -73,8 +73,9 @@ public class CommentsController implements Controller {
   public void init(Music music) {
 
     this.music = music;
-    if (music == null)
+    if (music == null) {
       return;
+    }
     titleMusic.setText(music.getMetadata().getTitle());
     if (commentObservableList == null) {
       commentObservableList = FXCollections.observableArrayList();

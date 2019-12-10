@@ -32,9 +32,13 @@ public class IhmCore {
     this.ihmForData = ihmForData;
   }
 
-  public void setApplication(Application application) { this.application = application; }
+  public void setApplication(Application application) {
+    this.application = application;
+  }
 
-  public Application getApplication() { return this.application; }
+  public Application getApplication() {
+    return this.application;
+  }
 
   public static IhmCore init() {
     if (ihmCore == null) {

@@ -1,6 +1,10 @@
 package core;
 
-import controllers.*;
+import controllers.AllMusicsController;
+import controllers.CurrentMusicInfoController;
+import controllers.DistantUserController;
+import controllers.MyMusicsController;
+import controllers.OnlineUsersListController;
 import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.User;
@@ -71,7 +75,8 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyDownloadProgress(Music music, int integer) {
-    LogManager.getLogger().warn("La fonction d'affichage du téléchargement n'est pas encore liée");
+    LogManager.getLogger()
+        .warn("La fonction d'affichage du téléchargement n'est pas encore liée");
   }
 
   /**
@@ -83,7 +88,10 @@ public class IhmForData implements Ihm {
   public void updateMusic(Music music) {
     AllMusicsController controllerAllMusic;
     try {
-      controllerAllMusic = this.ihmCore.getApplication().getMainController().getCentralFrameController().getAllMusicsController();
+      controllerAllMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getAllMusicsController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
@@ -93,14 +101,18 @@ public class IhmForData implements Ihm {
 
     CurrentMusicInfoController controllerCurrentMusic;
     try {
-      controllerCurrentMusic = this.ihmCore.getApplication().getMainController().getCurrentMusicInfoController();
+      controllerCurrentMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCurrentMusicInfoController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    if (controllerCurrentMusic.getCurrentMusic() != null && controllerCurrentMusic.getCurrentMusic().equals(music))
+    if (controllerCurrentMusic.getCurrentMusic() != null
+        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
       controllerCurrentMusic.init(music);
+    }
   }
 
   /**
@@ -112,7 +124,10 @@ public class IhmForData implements Ihm {
   public void notifyMusicDeletion(Music music) {
     AllMusicsController controllerAllMusic;
     try {
-      controllerAllMusic = this.ihmCore.getApplication().getMainController().getCentralFrameController().getAllMusicsController();
+      controllerAllMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getAllMusicsController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
@@ -122,14 +137,18 @@ public class IhmForData implements Ihm {
 
     CurrentMusicInfoController controllerCurrentMusic;
     try {
-      controllerCurrentMusic = this.ihmCore.getApplication().getMainController().getCurrentMusicInfoController();
+      controllerCurrentMusic = this.ihmCore.getApplication()
+          .getMainController()
+          .getCurrentMusicInfoController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    if (controllerCurrentMusic.getCurrentMusic() != null && controllerCurrentMusic.getCurrentMusic().equals(music))
+    if (controllerCurrentMusic.getCurrentMusic() != null
+        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
       controllerCurrentMusic.init(null);
+    }
   }
 
   /**
@@ -141,13 +160,17 @@ public class IhmForData implements Ihm {
   public void updateUser(User user) {
     DistantUserController controllerDistantUser;
     try {
-      controllerDistantUser = this.ihmCore.getApplication().getMainController().getCentralFrameController().getDistantUserController();
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    LogManager.getLogger().warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    LogManager.getLogger()
+        .warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 
   /**
@@ -159,12 +182,16 @@ public class IhmForData implements Ihm {
   public void notifyUserDeletion(User user) {
     DistantUserController controllerDistantUser;
     try {
-      controllerDistantUser = this.ihmCore.getApplication().getMainController().getCentralFrameController().getDistantUserController();
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    LogManager.getLogger().warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    LogManager.getLogger()
+        .warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 }

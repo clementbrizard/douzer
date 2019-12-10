@@ -109,7 +109,9 @@ public class DetailsMusicController implements Controller {
     this.myMusicsController = myMusicsController;
   }
 
-  public LocalMusic getLocalMusic() { return this.localMusic; }
+  public LocalMusic getLocalMusic() {
+    return this.localMusic;
+  }
 
   @Override
   public void initialize() {

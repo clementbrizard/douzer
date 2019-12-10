@@ -39,8 +39,9 @@ public class OnlineUsersListController implements Controller {
   }
 
   public void addNewOnlineUser(User user) {
-    if (!lvwOnlineUsers.getItems().contains(user.getUsername()))
+    if (!lvwOnlineUsers.getItems().contains(user.getUsername())) {
       lvwOnlineUsers.getItems().add(user.getUsername());
+    }
   }
 
   public void removeOnlineUser(User user) {
