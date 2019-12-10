@@ -343,6 +343,8 @@ public class DetailsMusicController implements Controller {
 
     localMusic.getMetadata().getTags().addAll(tags);
 
+    //TODO change field with Data function if exists
+
     ((Stage) this.textFieldTitle.getScene().getWindow()).close();
   }
 
