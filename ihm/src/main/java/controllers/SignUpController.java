@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.Date;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,7 +92,7 @@ public class SignUpController implements Controller {
     final String firstName = textFieldFirstName.getText();
     final String lastName = textFieldLastName.getText();
 
-    final Date dateOfBirth = java.sql.Date.valueOf(datePickerBirth.getValue());
+    final LocalDate dateOfBirth = datePickerBirth.getValue();
     final Path avatarPath = avatarFile.toPath();
     // Get the image from the avatar path
     BufferedImage avatarImg = null;
