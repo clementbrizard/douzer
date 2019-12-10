@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 
 /**
  * the central view who will change often with each subView and their Controllers.
+ *
  * @see MyMusicsController
  * @see DistantUserController
  * @see ProfileEditController
@@ -46,11 +47,11 @@ public class CentralFrameController implements Controller {
 
   private MainController mainController;
 
-
   // Getters
 
   /**
    * getter of allMusicsController the controller of the sub-view AllMusicsCenterView.
+   *
    * @return AllMusicsController
    * @see AllMusicsController
    */
@@ -60,6 +61,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * getter of myMusicsController the controller of the sub-view MyMusicsCenterView.
+   *
    * @return MyMusicsController
    * @see MyMusicsController
    */
@@ -69,6 +71,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * getter of distantUserController the controller of the sub-view OnlineUsersListView.
+   *
    * @return DistantUserController
    * @see DistantUserController
    */
@@ -78,6 +81,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * getter of profileEditController the controller of the sub-view ProfileEditView.
+   *
    * @return ProfileEditController
    * @see ProfileEditController
    */
@@ -87,6 +91,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * getter of detailsMusicController the controller of the sub-view DetailsMusicView.
+   *
    * @return DetailsMusicController
    * @see DetailsMusicController
    */
@@ -96,6 +101,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * getter of mainController the controller of the super-view MainView.
+   *
    * @return MainController
    * @see MainController
    */
@@ -107,6 +113,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * setter of allMusicsController the controller of the sub-view AllMusicsCenterView.
+   *
    * @param allMusicsController the new AllMusicsController
    * @see AllMusicsController
    */
@@ -116,6 +123,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * setter of myMusicsController the controller of the sub-view MyMusicsCenterView.
+   *
    * @param myMusicsController the new MyMusicsController
    * @see MyMusicsController
    */
@@ -125,6 +133,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * setter of distantUserController the controller of the sub-view OnlineUsersListView.
+   *
    * @param distantUserController the new DistantUserController
    * @see DistantUserController
    */
@@ -134,6 +143,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * setter of allMusicsController the controller of the sub-view AllMusicsCenterView.
+   *
    * @param profileEditController the new ProfileEditController
    * @see ProfileEditController
    */
@@ -143,6 +153,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * setter of detailsMusicController the controller of the sub-view DetailsMusicView.
+   *
    * @param detailsMusicController the new DetailsMusicController
    * @see DetailsMusicController
    */
@@ -152,6 +163,7 @@ public class CentralFrameController implements Controller {
 
   /**
    * setter of mainController the controller of the super-view MainView.
+   *
    * @param mainController the new MainController
    * @see MainController
    */
