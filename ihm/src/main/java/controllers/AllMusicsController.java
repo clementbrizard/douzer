@@ -142,7 +142,7 @@ public class AllMusicsController implements Controller {
     tfSearchDuration.textProperty().addListener(textListener);
     
     //event when the user edit the textField
-    tfSearchTitle.textProperty().addListener(textListener);
+    tfSearch.textProperty().addListener(textListener);
   }
 
   public void displayAvailableMusics() {
@@ -191,7 +191,6 @@ public class AllMusicsController implements Controller {
   public void searchMusics() {
 
     SearchQuery query = new SearchQuery();
-    
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
@@ -216,7 +215,7 @@ public class AllMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query); //TODO rename
+        .getDataForIhm().searchMusics(query); 
 
     updateMusics(searchResults);
   }

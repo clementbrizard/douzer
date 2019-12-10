@@ -313,7 +313,7 @@ public class MyMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query); //TODO rename
+        .getDataForIhm().searchMusics(query);
 
     updateMusics(searchResults);
   }
