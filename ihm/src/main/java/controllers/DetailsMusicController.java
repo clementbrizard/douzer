@@ -4,8 +4,13 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.User;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -21,10 +26,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-//replace by javadocs
-//central view to show all information about on music
+/**
+ * Central view to show all information about a music.
+ */
 public class DetailsMusicController implements Controller {
+  private static final Logger detailsMusicLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldTitre;
@@ -58,23 +66,26 @@ public class DetailsMusicController implements Controller {
   private Button buttonAddTag;
 
   @FXML
-  private ImageView imageEtoile1;
+  private ImageView starOne;
 
   @FXML
-  private ImageView imageEtoile2;
+  private ImageView startTwo;
 
   @FXML
-  private ImageView imageEtoile3;
+  private ImageView starThree;
 
   @FXML
-  private ImageView imageEtoile4;
+  private ImageView startFour;
 
   @FXML
-  private ImageView imageEtoile5;
+  private ImageView starFive;
 
   private MyMusicsController myMusicsController;
 
-  private int note = 0;
+  private int rate = 0;
+
+  // Map of rating stars to access then dynamically.
+  Map<Integer, ImageView> starsMap = new HashMap<Integer, ImageView>();
 
   public MyMusicsController getMyMusicsController() {
     return this.myMusicsController;
@@ -82,6 +93,51 @@ public class DetailsMusicController implements Controller {
 
   public void setMyMusicsController(MyMusicsController myMusicsController) {
     this.myMusicsController = myMusicsController;
+  }
+
+  @Override
+  public void initialize() {
+    // Fill stars map.
+    starsMap.put(1, starOne);
+    starsMap.put(2, startTwo);
+    starsMap.put(3, starThree);
+    starsMap.put(4, startFour);
+    starsMap.put(5, starFive);
+
+    // Set event handler for each star.
+    starsMap.forEach((k, v) -> {
+      v.setOnMousePressed((new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent event) {
+          setStars(k);
+          rate = k;
+        }
+      }));
+    });
+
+    buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
+
+      @Override
+      public void handle(MouseEvent event) {
+        System.out.println("clique sur add tag");
+        boolean tagexist = false;
+        if (localMusic.getMetadata() != null) {
+          if (localMusic.getMetadata().getTags() != null) {
+
+            Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
+            while (itMusicTag.hasNext()) {
+              if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
+                tagexist = true;
+              }
+            }
+          }
+        }
+        if (!tagexist && !textFieldAddTag.getText().trim().equals("")) {
+          tags.add(textFieldAddTag.getText().trim());
+        }
+        //give new tag or new tag list to data
+      }
+    }));
   }
 
   /**
@@ -163,143 +219,25 @@ public class DetailsMusicController implements Controller {
    */
 
   public void setStars(int rating) {
-    if (rating == 1) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 2) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 3) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 4) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/EmptyStarSymbol.png").toURI().toString()));
-    }
-    if (rating == 5) {
-      imageEtoile1.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile2.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile3.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile4.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-      imageEtoile5.setImage(new Image(new File(
-          "../ihm/src/main/resources/images/FullStarSymbol.png").toURI().toString()));
-    }
-  }
+    File fullStarFile = new File("ihm/src/main/resources/images/FullStarSymbol.png");
+    File emptyStarFile = new File("ihm/src/main/resources/images/EmptyStarSymbol.png");
 
-  /**
-   * Function changes the rating and the stars display when star is clicked.
-   */
-  @Override
-  public void initialize() {
+    try {
+      InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
+      InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
+      Image fullStarImage = new Image(fullStarInputStream);
+      Image emptyStarImage = new Image(emptyStarInputStream);
 
-    imageEtoile1.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 1");
-        setStars(1);
-        note = 1;
+      for (int i = 1; i <= rating; i++) {
+        starsMap.get(i).setImage(fullStarImage);
       }
-    }));
 
-    imageEtoile2.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 2");
-        setStars(2);
-        note = 2;
+      for (int i = rating + 1; i <= 5; i++) {
+        starsMap.get(i).setImage(emptyStarImage);
       }
-    }));
-
-    imageEtoile3.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 3");
-        setStars(3);
-        note = 3;
-      }
-    }));
-
-    imageEtoile4.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 4");
-        setStars(4);
-        note = 4;
-      }
-    }));
-
-    imageEtoile5.setOnMousePressed((new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent event) {
-        System.out.println("clique sur l'�toile 5");
-        setStars(5);
-        note = 5;
-      }
-    }));
-
-    buttonAddTag.setOnMousePressed((new EventHandler<MouseEvent>() {
-
-        @Override
-        public void handle(MouseEvent event) {
-          System.out.println("clique sur add tag");
-          boolean tagexist = false;
-          if (localMusic.getMetadata() != null) {
-            if (localMusic.getMetadata().getTags() != null) {
-
-              Iterator<String> itMusicTag = localMusic.getMetadata().getTags().iterator();
-              while (itMusicTag.hasNext()) {
-                if (itMusicTag.next().trim().equals(textFieldAddTag.getText().trim())) {
-                  tagexist = true;
-                }
-              }
-            }
-          }
-          if (!tagexist && !textFieldAddTag.getText().trim().equals("")) {
-            tags.add(textFieldAddTag.getText().trim());
-          }
-          //give new tag or new tag list to data
-        }
-    }));
-
+    } catch (FileNotFoundException e) {
+      detailsMusicLogger.error(e);
+    }
   }
 
   /**
