@@ -98,8 +98,8 @@ public class NewCommentController implements Controller {
    * @param rating the rating of the current user
    */
   public void setStars(int rating) {
-    File fullStarFile = new File("../ihm/src/main/resources/images/FullStarSymbol.png");
-    File emptyStarFile = new File("../ihm/src/main/resources/images/EmptyStarSymbol.png");
+    File fullStarFile = new File(getClass().getResource("/images/FullStarSymbol.png").getFile());
+    File emptyStarFile = new File(getClass().getResource("/images/EmptyStarSymbol.png").getFile());
 
     try {
       InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
