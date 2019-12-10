@@ -262,11 +262,9 @@ public class MyMusicsController implements Controller {
 
   /**
    * Search music request corresponding to the labels content.
-   *
-   * @param event The click on the search button.
    */
   @FXML
-  public void searchMusics(MouseEvent event) {
+  public void searchMusics() {
 
     SearchQuery query = new SearchQuery();
 
