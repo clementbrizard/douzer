@@ -28,8 +28,8 @@
       <Label layoutX="428.0" layoutY="96.0" prefHeight="21.0" prefWidth="161.0" style="-fx-background-color: #a9a9a9;" text="Tags" />
       <Label layoutX="386.0" layoutY="400.0" text="Uploader" />
       <TextField fx:id="textFieldLastUploader" layoutX="470.0" layoutY="395.0" prefHeight="31.0" prefWidth="161.0" />
-      <RadioButton fx:id="radioPublic" layoutX="425.0" layoutY="337.0" mnemonicParsing="false" text="Publique" />
-      <RadioButton fx:id="radioPrivate" layoutX="539.0" layoutY="337.0" mnemonicParsing="false" text="Privée" />
+      <RadioButton fx:id="radioButtonPublique" layoutX="425.0" layoutY="337.0" mnemonicParsing="false" text="Publique" />
+      <RadioButton fx:id="radioButtonPrivee" layoutX="539.0" layoutY="337.0" mnemonicParsing="false" text="Privée" />
       <Button fx:id="buttonValider" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider" onAction="#validation"/>
       <ImageView fx:id="imageEtoile1" fitHeight="21.0" fitWidth="21.0" layoutX="106.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
          <image>
