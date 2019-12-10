@@ -8,6 +8,7 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,8 +27,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -211,47 +214,44 @@ public class MyMusicsController implements Controller {
     contextMenu.getItems().addAll(itemInformation, itemDelete);
   }
 
-  public void delete(ArrayList<LocalMusic> musicsDelete) {
-    
-    Alert alert = new Alert(AlertType.CONFIRMATION);
-    alert.setTitle("Confirmation");
-    alert.setHeaderText("Confirmation");
-    ButtonType appDelete = new ButtonType("Seulement sur l'application");
-    ButtonType appDiskDelete = new ButtonType("Sur l'application et sur le disque");
-    alert.setContentText("Confirmer la suppression des musiques selectionnées\"");
+  /**
+   * Delete a list of musics.
+   * @param musicsToDelete the musics to delete
+   */
+  public void delete(ArrayList<LocalMusic> musicsToDelete) {
 
-    ButtonType buttonTypeCancel = new ButtonType("Annuler", ButtonData.CANCEL_CLOSE);
-    
-    alert.getButtonTypes().setAll(appDelete, appDiskDelete, buttonTypeCancel);
-    
-    Optional<ButtonType> result = alert.showAndWait();
-    boolean delete = false;
-    boolean deleteDisk = false;
-    
-    if (result.get() == appDelete){
-      delete = true;
-    } else if (result.get() == appDiskDelete) {
-      delete = true;
-      deleteDisk = true;
-    } else if (result.get() == buttonTypeCancel) {
-        delete = false;
-    } else {
-      delete = false;
-    }
-    
-    if(delete) {
-      for (int i = 0; i < musicsDelete.size(); i++) {
+    final String deleteOnApp = "Seulement sur l'application";
+    final String deleteOnAppAndDisk = "Sur l'application et le disque";
+
+    List<String> deleteOptions = new ArrayList<String>();
+
+    deleteOptions.add(deleteOnApp);
+    deleteOptions.add(deleteOnAppAndDisk);
+
+    ChoiceDialog<String> deleteMusicChoiceDialog = new ChoiceDialog<>(
+        deleteOptions.get(0),
+        deleteOptions);
+
+    deleteMusicChoiceDialog.setHeaderText("Choisissez votre mode de suppression :");
+    deleteMusicChoiceDialog.setTitle("Suppression musique");
+    deleteMusicChoiceDialog.setContentText("Supprimer :");
+
+    Optional<String> deleteChoice = deleteMusicChoiceDialog.showAndWait();
+
+    deleteChoice.ifPresent(choice -> {
+      boolean deleteLocal = choice.equals(deleteOnAppAndDisk);
+      musicsToDelete.forEach(music -> {
         try {
-          this.getApplication().getIhmCore().getDataForIhm().deleteMusic(musicsDelete.get(i), deleteDisk);
+          this.getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .deleteMusic(music, deleteLocal);
         } catch (NullPointerException e) {
-          LogManager.getLogger().error(e);
-          e.printStackTrace();
+          myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
         }
-      }
-    }
-    displayAvailableMusics();
+      });
+    });
   }
-
 
   /**
    * Refresh the table with getLocalMusics() from DataForIhm.
