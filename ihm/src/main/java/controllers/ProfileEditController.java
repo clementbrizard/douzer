@@ -4,10 +4,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.Hashtable;
-import java.util.Locale;
-
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -145,17 +143,16 @@ public class ProfileEditController implements Controller {
 
     textFieldLastName.setText(lastName);
 
-    String birthDate = this.centralFrameController
+    LocalDate birthDate = this.centralFrameController
             .getMainController()
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
             .getCurrentUser()
-            .getDateOfBirth()
-            .toString();
+            .getDateOfBirth();
 
-    datePickerBirth.setPromptText(birthDate);
-    /*datePickerBirth.setValue(datePickerBirth.getConverter().fromString(birthDate));*/
+    datePickerBirth.setPromptText(birthDate.toString());
+    datePickerBirth.setValue(birthDate);
   }
   
   /**
@@ -220,7 +217,7 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .setLastName(textFieldLastName.getText());
 
-    /*ProfileEditController.this.centralFrameController.getMainController()
+    ProfileEditController.this.centralFrameController.getMainController()
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
@@ -235,7 +232,8 @@ public class ProfileEditController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .getCurrentUser()
-            .getDateOfBirth();*/
+            .getDateOfBirth()
+            .toString());
 
     Notifications.create()
             .title("Sauvegarde effectuée")
