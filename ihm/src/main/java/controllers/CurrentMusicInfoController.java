@@ -18,8 +18,8 @@ import org.apache.logging.log4j.Logger;
 
 
 /*
- * Right panel controller. Contains informations about the current music, sharing button,
- * download progress bar
+ * Right panel controller. Contains information about the current music, sharing button,
+ * download progress bar.
  */
 public class CurrentMusicInfoController implements Controller {
 

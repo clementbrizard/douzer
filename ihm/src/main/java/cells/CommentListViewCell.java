@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -19,7 +18,6 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import org.apache.logging.log4j.LogManager;
@@ -63,52 +61,7 @@ public class CommentListViewCell extends ListCell<Comment> {
   
   @FXML
   public void userClicked() {
-    LogManager.getLogger().info("click on label user : " + labelOwner.getText());
-  }
-
-
-  @Override
-  protected void updateItem(Comment comment,boolean empty) {
-    super.updateItem(comment, empty);
-
-    if (empty || comment == null || comment.getComment().trim().equals("")) {
-
-      setText(null);
-      setGraphic(null);
-
-    } else {
-      if (mlLoader == null) {
-        mlLoader = new FXMLLoader(getClass().getResource("/fxml/CommentCustomCell.fxml"));
-        mlLoader.setController(this);
-
-        try {
-          mlLoader.load();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-
-      }
-      
-      music.getMetadata().getRatings().forEach((user,note) -> {
-        if (user.equals(comment.getOwner())) {
-          ifUserNote = true;
-          setStars(note);
-        }
-      });
-      
-      if (!ifUserNote) {
-        setStars(0);
-      }
-      
-      this.labelOwner.setText(comment.getOwner().getUsername());
-      
-      this.comment.setText(comment.getComment());
-      this.comment.setEditable(false);
-      this.comment.resize(getWidth(), getHeight());
-
-      setText(null);
-      setGraphic(anchorPane);
-    }
+    commentLogger.info("click on label user : " + labelOwner.getText());
   }
   
   public void setMusic(Music music) {
@@ -116,7 +69,7 @@ public class CommentListViewCell extends ListCell<Comment> {
   }
   
   /**
-   * set the amout of stars link to the rating if 0 don't show any stars.
+   * set the amount of stars link to the rating if 0 don't show any stars.
    * @param rating int the rating of music
    */
   public void setStars(int rating) {
@@ -131,6 +84,7 @@ public class CommentListViewCell extends ListCell<Comment> {
       starsMap.forEach((k, v) -> {
         v.setVisible(false);
       });
+
     } else {
       File fullStarFile = new File("ihm/src/main/resources/images/FullStarSymbol.png");
       File emptyStarFile = new File("ihm/src/main/resources/images/EmptyStarSymbol.png");
@@ -148,11 +102,52 @@ public class CommentListViewCell extends ListCell<Comment> {
         for (int i = rating + 1; i <= 5; i++) {
           starsMap.get(i).setImage(emptyStarImage);
         }
+
       } catch (FileNotFoundException e) {
         commentLogger.error(e);
       }
     }
-
   }
-  
+
+  @Override
+  protected void updateItem(Comment comment,boolean empty) {
+    super.updateItem(comment, empty);
+
+    if (empty || comment == null || comment.getComment().trim().equals("")) {
+      setText(null);
+      setGraphic(null);
+
+    } else {
+      if (mlLoader == null) {
+        mlLoader = new FXMLLoader(getClass().getResource("/fxml/CommentCustomCell.fxml"));
+        mlLoader.setController(this);
+
+        try {
+          mlLoader.load();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      music.getMetadata().getRatings().forEach((user,note) -> {
+        if (user.equals(comment.getOwner())) {
+          ifUserNote = true;
+          setStars(note);
+        }
+      });
+
+      if (!ifUserNote) {
+        setStars(0);
+      }
+
+      this.labelOwner.setText(comment.getOwner().getUsername());
+
+      this.comment.setText(comment.getComment());
+      this.comment.setEditable(false);
+      this.comment.resize(getWidth(), getHeight());
+
+      setText(null);
+      setGraphic(anchorPane);
+    }
+  }
 }
