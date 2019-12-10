@@ -1,4 +1,5 @@
 package controllers;
+
 import core.Application;
 import datamodel.LocalMusic;
 
@@ -198,6 +199,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * This function implements right click options.
+   *
    * @param click mouse event right click.
    */
   @FXML
@@ -213,7 +215,7 @@ public class MyMusicsController implements Controller {
         }
 
         this.getCentralFrameController().getMainController()
-        .getCurrentMusicInfoController().init(musicInformation);
+            .getCurrentMusicInfoController().init(musicInformation);
       }
     }
 
@@ -237,6 +239,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * Show labels for advanced research on My Musics view.
+   *
    * @param event The click on the button "Recherche avancée".
    */
   @FXML
@@ -260,6 +263,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * Search music request corresponding to the labels content.
+   *
    * @param event The click on the search button.
    */
   @FXML
