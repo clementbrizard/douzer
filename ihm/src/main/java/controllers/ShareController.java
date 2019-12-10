@@ -102,7 +102,7 @@ public class ShareController implements Controller {
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .notifyMusicUpdate((LocalMusic) currentMusic);
+        .notifyMusicUpdate(this.currentMusic);
 
     // closing window
     Stage stage = (Stage) btnConfirm.getScene().getWindow();
@@ -128,8 +128,9 @@ public class ShareController implements Controller {
    * @param currentMusic the current music
    */
   public void initializeCurrentMusicInfo(LocalMusic currentMusic) {
+    this.currentMusic = currentMusic;
     this.labelMusic.setText(currentMusic.getMetadata().getTitle());
-    switch (((LocalMusic) this.currentMusic).getShareStatus()) {
+    switch (this.currentMusic.getShareStatus()) {
       case PUBLIC:
         this.radioPublic.setSelected(true);
         break;

@@ -34,11 +34,11 @@
           text="Tags"/>
    <Label layoutX="386.0" layoutY="400.0" text="Uploader"/>
    <TextField fx:id="textFieldLastUploader" layoutX="470.0" layoutY="395.0" prefHeight="31.0" prefWidth="161.0"/>
-   <Label fx:id="title" text="Visibilité:" layoutX="425.0" layoutY="304.0" mnemonicParsing="false" />
-   <RadioButton fx:id="radioPrivate" layoutX="425.0" layoutY="327.0" mnemonicParsing="false" text="Publique"/>
+   <Label text="Visibilité:" layoutX="425.0" layoutY="304.0" mnemonicParsing="false" />
+   <RadioButton fx:id="radioPrivate" layoutX="425.0" layoutY="327.0" mnemonicParsing="false" text="Privée"/>
    <RadioButton fx:id="radioFriends" layoutX="425.0" layoutY="350.0" mnemonicParsing="false" text="Aux amis seulement"/>
-   <RadioButton fx:id="radioPublic" layoutX="425.0" layoutY="373.0" mnemonicParsing="false" text="Privée"/>
-   <Button fx:id="buttonValider" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider"
+   <RadioButton fx:id="radioPublic" layoutX="425.0" layoutY="373.0" mnemonicParsing="false" text="Publique"/>
+   <Button fx:id="validateButton" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" text="Valider"
            onAction="#validation"/>
    <ImageView fx:id="starOne" fitHeight="21.0" fitWidth="21.0" layoutX="106.0" layoutY="359.0" pickOnBounds="true"
               preserveRatio="true">

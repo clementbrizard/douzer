@@ -72,13 +72,13 @@ public class DetailsMusicController implements Controller {
   private ImageView starOne;
 
   @FXML
-  private ImageView startTwo;
+  private ImageView starTwo;
 
   @FXML
   private ImageView starThree;
 
   @FXML
-  private ImageView startFour;
+  private ImageView starFour;
 
   @FXML
   private ImageView starFive;
@@ -118,9 +118,9 @@ public class DetailsMusicController implements Controller {
 
     // Fill stars map.
     starsMap.put(1, starOne);
-    starsMap.put(2, startTwo);
+    starsMap.put(2, starTwo);
     starsMap.put(3, starThree);
-    starsMap.put(4, startFour);
+    starsMap.put(4, starFour);
     starsMap.put(5, starFive);
 
     // Set event handler for each star.
