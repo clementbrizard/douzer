@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * Controller of the sharing/unsharing popup window.
  */
-  public class ShareController implements Controller {
-    private static final Logger shareLogger = LogManager.getLogger();
+public class ShareController implements Controller {
+  private static final Logger shareLogger = LogManager.getLogger();
 
   @FXML
   private Button btnConfirm;
