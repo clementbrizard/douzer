@@ -50,6 +50,7 @@ public class PlayerController implements Controller {
   );
 
   private int currentIndex = -1;
+  private double progressSave = 0;
   private boolean isPlaying = false;
   private Duration duration;
 
@@ -78,23 +79,15 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function null.
-   * @param duration : Duration
-   * @return
+   * Function playerOnMusic without path.
+   *
    */
-  public void seekMusic(Duration duration) {
-    if (player != null) {
-      player.seek(duration);
-    }
-  }
-
   public void playerOnMusic() {
     if (this.arrayMusic.isEmpty()) {
       player.stop();
     } else {
       playerOnMusic(arrayMusic.get(0).getMp3Path());
     }
-    
   }
   
   /**
@@ -166,7 +159,7 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playBack(ActionEvent e) {
-    if (arrayMusic.size() == 1) {
+    if (arrayMusic != null && arrayMusic.size() == 1) {
       return;
     }
     if (currentIndex != -1) {
@@ -186,7 +179,7 @@ public class PlayerController implements Controller {
    */
   @FXML
   private void playNext(ActionEvent e) {
-    if (arrayMusic.size() == 1) {
+    if (arrayMusic != null && arrayMusic.size() == 1) {
       return;
     }
     if (currentIndex != -1) {
@@ -227,8 +220,6 @@ public class PlayerController implements Controller {
       Platform.runLater(() -> {
         Duration currentTime = player.getCurrentTime();
 
-        lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
-
         double totalDuration = arrayMusic.get(this.currentIndex)
             .getMetadata()
             .getDuration()
@@ -236,7 +227,15 @@ public class PlayerController implements Controller {
         
         double timer = (currentTime.toMillis() / totalDuration);
 
-        pgMusicProgress.setProgress(timer);
+        if (timer < 1) {
+          lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
+          pgMusicProgress.setProgress(timer);
+        } else {
+          play.setGraphic(new ImageView(playIcon));
+          isPlaying = false;
+          player.stop();
+          pgMusicProgress.setProgress(0.0);
+        }
 
       });
     }
