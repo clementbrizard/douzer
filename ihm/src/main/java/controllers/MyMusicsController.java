@@ -10,11 +10,13 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import java.util.stream.Stream;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+
+import javafx.collections.ObservableList;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -23,6 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -161,6 +164,8 @@ public class MyMusicsController implements Controller {
     
     
 
+    tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
     try {
       this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
@@ -178,9 +183,49 @@ public class MyMusicsController implements Controller {
         showMusicInformation(musicInformation);
       }
     });
-
-    // Add "Informations" menu item to ContextMenu.
-    contextMenu.getItems().addAll(itemInformation);
+    
+    MenuItem playMusic = new MenuItem("Play");
+    playMusic.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
+        
+        //get the list of music clicked
+        ObservableList<MusicMetadata> selectedItems =  tvMusics
+            .getSelectionModel()
+            .getSelectedItems();
+        
+        for (int i = 0;i < selectedItems.size();i++) {
+          for (int j = 0;j < listMusics.size();j++) {
+            if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
+              listMusicClicked.add(listMusics.get(j));
+            }
+          }
+        }
+        
+        //add to the list with right click play to the list
+        if (listMusicClicked.isEmpty()) {
+          listMusicClicked.add(musicInformation);
+        } else {
+          if (!listMusicClicked.contains(musicInformation)) {
+            listMusicClicked.add(musicInformation);
+          }
+        }
+        getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .setArrayMusic(listMusicClicked);
+        
+        getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .playerOnMusic();
+      }
+    });
+    
+    
+    // Add MenuItem to ContextMenu
+    contextMenu.getItems().addAll(itemInformation,playMusic);
   }
 
   /**
