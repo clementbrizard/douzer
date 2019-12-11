@@ -4,10 +4,11 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,7 +17,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,7 +46,7 @@ public class AllMusicsController implements Controller {
   @FXML
   private TextField tfSearchAlbum;
   @FXML
-  private TextField tfSearchDuration;
+  private TextField tfSearchTags;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
@@ -127,7 +127,7 @@ public class AllMusicsController implements Controller {
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
-    tfSearchDuration.setVisible(false);
+    tfSearchTags.setVisible(false);
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
@@ -139,7 +139,7 @@ public class AllMusicsController implements Controller {
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
-    tfSearchDuration.textProperty().addListener(textListener);
+    tfSearchTags.textProperty().addListener(textListener);
     
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
@@ -167,14 +167,14 @@ public class AllMusicsController implements Controller {
       tfSearchTitle.setVisible(false);
       tfSearchArtist.setVisible(false);
       tfSearchAlbum.setVisible(false);
-      tfSearchDuration.setVisible(false);
+      tfSearchTags.setVisible(false);
 
     } else {
       tfSearch.setDisable(true);
       tfSearchTitle.setVisible(true);
       tfSearchArtist.setVisible(true);
       tfSearchAlbum.setVisible(true);
-      tfSearchDuration.setVisible(true);
+      tfSearchTags.setVisible(true);
 
     }
   }
@@ -206,9 +206,10 @@ public class AllMusicsController implements Controller {
         query.withAlbum(tfSearchAlbum.getText());
       }
 
-      /*if (tfSearchDuration != null) {
-        query.withArtist(tfSearchDuration.getText());
-      }*/
+      if (tfSearchTags != null) {
+        Collection<String> tags = Arrays.asList(tfSearchTags.getText().split(","));
+        query.withTags(tags);
+      }
     }
 
     Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()

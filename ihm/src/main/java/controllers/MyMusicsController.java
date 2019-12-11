@@ -8,6 +8,8 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -61,7 +63,7 @@ public class MyMusicsController implements Controller {
   @FXML
   private TextField tfSearchAlbum;
   @FXML
-  private TextField tfSearchDuration;
+  private TextField tfSearchTags;
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
@@ -144,7 +146,7 @@ public class MyMusicsController implements Controller {
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
-    tfSearchDuration.setVisible(false);
+    tfSearchTags.setVisible(false);
     
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
@@ -157,7 +159,7 @@ public class MyMusicsController implements Controller {
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
-    tfSearchDuration.textProperty().addListener(textListener);
+    tfSearchTags.textProperty().addListener(textListener);
     
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
@@ -314,14 +316,14 @@ public class MyMusicsController implements Controller {
       tfSearchTitle.setVisible(false);
       tfSearchArtist.setVisible(false);
       tfSearchAlbum.setVisible(false);
-      tfSearchDuration.setVisible(false);
+      tfSearchTags.setVisible(false);
 
     } else {
       tfSearch.setDisable(true);
       tfSearchTitle.setVisible(true);
       tfSearchArtist.setVisible(true);
       tfSearchAlbum.setVisible(true);
-      tfSearchDuration.setVisible(true);
+      tfSearchTags.setVisible(true);
 
     }
   }
@@ -349,9 +351,10 @@ public class MyMusicsController implements Controller {
         query.withAlbum(tfSearchAlbum.getText());
       }
 
-      /*if (tfSearchDuration != null) {
-        query.withArtist(tfSearchDuration.getText());
-      }*/
+      if (tfSearchTags != null) {
+        Collection<String> tags = Arrays.asList(tfSearchTags.getText().split(","));
+        query.withTags(tags);
+      }
     }
 
     Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
