@@ -8,7 +8,7 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,11 +25,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar.ButtonData;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -79,12 +74,15 @@ public class MyMusicsController implements Controller {
   private Scene infoMusicScene;
   private Application application;
 
-  private LocalMusic musicInformation;
-  private ArrayList<LocalMusic> listMusics;
+  // Clicked local music to trigger actions
+  private LocalMusic currentLocalMusic;
+
+  // Local musics hashmap to access them instantly
+  private HashMap<String, LocalMusic> localMusics;
 
   private  ContextMenu contextMenu;
 
-  // Getters
+  /* Getters */
 
   public NewMusicController getNewMusicController() {
     return newMusicController;
@@ -106,7 +104,7 @@ public class MyMusicsController implements Controller {
     return application;
   }
 
-  // Setters
+  /* Setters */
 
   public void setNewMusicController(NewMusicController newMusicController) {
     this.newMusicController = newMusicController;
@@ -128,11 +126,11 @@ public class MyMusicsController implements Controller {
     this.application = application;
   }
 
-  // Other methods
+  /* Initialisation methods */
 
   @Override
   public void initialize() {
-    listMusics = new ArrayList<LocalMusic>();
+    localMusics = new HashMap<String, LocalMusic>();
   }
 
   /**
@@ -148,6 +146,7 @@ public class MyMusicsController implements Controller {
         new PropertyValueFactory<MusicMetadata, Duration>("duration")
     );
 
+    // Hide advanced search fields
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
@@ -161,34 +160,30 @@ public class MyMusicsController implements Controller {
       }
     };
 
+    // Bind listener to simple and advanced search fields for instant search
+    tfSearch.textProperty().addListener(textListener);
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
     tfSearchDuration.textProperty().addListener(textListener);
 
-    //event when the user edit the textField
-    tfSearch.textProperty().addListener(textListener);
+    // Fill musics table
+    this.displayAvailableMusics();
 
-
-
-    try {
-      this.displayAvailableMusics();
-    } catch (UnsupportedOperationException e) {
-      myMusicsLogger.error(e);
-    }
-
-    // Create ContextMenu for getting informations
-    // of music on right click.
+    // Create ContextMenu for getting information
+    // about music on right click.
     contextMenu = new ContextMenu();
 
+    // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
     itemInformation.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        showMusicInformation(musicInformation);
+        showMusicInformation(currentLocalMusic);
       }
     });
 
+    // Add delete item in context menu
     MenuItem itemDelete = new MenuItem("Supprimer");
     itemDelete.setOnAction(new EventHandler<ActionEvent>() {
       @Override
@@ -197,28 +192,197 @@ public class MyMusicsController implements Controller {
         ObservableList<MusicMetadata> selectedItems = tvMusics
             .getSelectionModel()
             .getSelectedItems();
-        
-        for (int i = 0;i < selectedItems.size();i++) {
-          for (int j = 0;j < listMusics.size();j++) {
-            if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
-              musicsDelete.add(listMusics.get(j));
-              }
-            }
-          }
-        delete(musicsDelete);
+
+        selectedItems.forEach(item -> {
+          musicsDelete.add(localMusics.get(item.getHash()));
+        });
+
+        deleteMusics(musicsDelete);
         displayAvailableMusics();
       }
     });
 
-    // Add "Informations" menu item to ContextMenu.
+    // Add information and delete items to context menu
     contextMenu.getItems().addAll(itemInformation, itemDelete);
   }
 
+  /* FXML methods (to handle events from user) */
+
   /**
-   * Delete a list of musics.
+   * Handle mouse events on music table.
+   *
+   * @param click mouse event
+   */
+  @FXML
+  public void handleClickTableView(MouseEvent click) {
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
+
+    // If left click, show current music info at right of the screen
+    if (click.getButton().equals(MouseButton.PRIMARY)) {
+      if (music != null) {
+        currentLocalMusic = localMusics.get(music.getHash());
+
+        this.getCentralFrameController().getMainController()
+            .getCurrentMusicInfoController().init(currentLocalMusic);
+      }
+    }
+
+    // If right click, show context menu
+    if (click.getButton().equals(MouseButton.SECONDARY)) {
+      if (music != null) {
+        currentLocalMusic = localMusics.get(music.getHash());
+        contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
+      }
+    }
+  }
+
+  /**
+   * Handle click on information item in context menu.
+   * @param music the music on which the user right clicked
+   */
+  private void showMusicInformation(LocalMusic music) {
+    try {
+      // Initialize scene and controller.
+      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
+          .getResource("/fxml/MusicDetailsView.fxml"));
+      Parent musicDetailsParent = musicDetailsLoader.load();
+      infoMusicScene = new Scene(musicDetailsParent);
+      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
+      this.setDetailsMusicController(detailsMusicController);
+      detailsMusicController.setMyMusicsController(this);
+      detailsMusicController.initMusic(music);
+
+    } catch (Exception e) {
+      myMusicsLogger.error(e);
+    }
+
+    Stage musicDetailsPopup = new Stage();
+    musicDetailsPopup.setTitle("Info musique");
+    musicDetailsPopup.setScene(this.infoMusicScene);
+
+    // Show music info popup.
+    musicDetailsPopup.show();
+  }
+
+  /**
+   * Handle click on button to add a new music.
+   */
+  @FXML
+  public void addMusic() {
+    try {
+      // Initialize scene and controller of new music pop-up
+      FXMLLoader addMusicLoader = new FXMLLoader(getClass().getResource("/fxml/NewMusicView.fxml"));
+      Parent addMusicParent = addMusicLoader.load();
+      addMusicScene = new Scene(addMusicParent);
+      NewMusicController newMusicController = addMusicLoader.getController();
+      this.setNewMusicController(newMusicController);
+      newMusicController.setMyMusicsController(this);
+
+    } catch (Exception e) {
+      myMusicsLogger.error(e);
+    }
+
+    Stage musicSharingPopup = new Stage();
+    musicSharingPopup.setTitle("Ajout musique");
+    musicSharingPopup.setScene(this.addMusicScene);
+
+    // Show add music popup.
+    musicSharingPopup.show();
+  }
+
+  /**
+   * Handle click on advanced search button.
+   *
+   * @param event The click on the advanced search button
+   */
+  @FXML
+  public void showAdvancedSearch(ActionEvent event) {
+    if (tfSearch.isDisabled()) {
+      tfSearch.setDisable(false);
+      tfSearchTitle.setVisible(false);
+      tfSearchArtist.setVisible(false);
+      tfSearchAlbum.setVisible(false);
+      tfSearchDuration.setVisible(false);
+
+    } else {
+      tfSearch.setDisable(true);
+      tfSearchTitle.setVisible(true);
+      tfSearchArtist.setVisible(true);
+      tfSearchAlbum.setVisible(true);
+      tfSearchDuration.setVisible(true);
+
+    }
+  }
+
+  /**
+   * Handle changes in simple or advanced search fields.
+   */
+  @FXML
+  public void searchMusics() {
+
+    SearchQuery query = new SearchQuery();
+
+    if (!tfSearch.isDisabled()) {
+      query.withText(tfSearch.getText());
+    } else {
+      if (tfSearchTitle.getText() != null) {
+        query.withTitle(tfSearchTitle.getText());
+      }
+
+      if (tfSearchArtist != null) {
+        query.withArtist(tfSearchArtist.getText());
+      }
+
+      if (tfSearchAlbum != null) {
+        query.withAlbum(tfSearchAlbum.getText());
+      }
+
+      /*if (tfSearchDuration != null) {
+        query.withArtist(tfSearchDuration.getText());
+      }*/
+    }
+
+    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().searchMusics(query);
+
+    updateMusicsOnSearch(searchResults);
+  }
+
+  /**
+   * Handle click on all musics button.
+   * @param event the click on all musics button
+   */
+  @FXML
+  public void changeFrameToAllMusics(ActionEvent event) {
+    MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
+  }
+
+  /* Logic methods */
+
+  /**
+   * Refresh the table by retrieving local musics from Data.
+   */
+  public void displayAvailableMusics() {
+    List<MusicMetadata> listMusic = this.retrieveLocalMusics();
+    tvMusics.getItems().setAll(listMusic);
+  }
+
+  /**
+   * Update musics table content with search result.
+   * @param newMusics the search result
+   */
+  private void updateMusicsOnSearch(Stream<Music> newMusics) {
+    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+  }
+
+  /**
+   * Delete a list of one or more musics.
    * @param musicsToDelete the musics to delete
    */
-  public void delete(ArrayList<LocalMusic> musicsToDelete) {
+  public void deleteMusics(ArrayList<LocalMusic> musicsToDelete) {
 
     final String deleteOnApp = "Seulement sur l'application";
     final String deleteOnAppAndDisk = "Sur l'application et le disque";
@@ -254,179 +418,26 @@ public class MyMusicsController implements Controller {
   }
 
   /**
-   * Refresh the table with getLocalMusics() from DataForIhm.
+   * Retrieve user's local musics from Data.
+   * @return list of metadata of user's local musics
    */
-  public void displayAvailableMusics() {
-    List<MusicMetadata> listMusic = this.parseMusic();
-    tvMusics.getItems().setAll(listMusic);
-  }
-
-  /**
-   * The button that show the form to add a music.
-   */
-  @FXML
-  public void addMusic() {
-    try {
-      // Initialize scene and controller.
-      FXMLLoader addMusicLoader = new FXMLLoader(getClass().getResource("/fxml/NewMusicView.fxml"));
-      Parent addMusicParent = addMusicLoader.load();
-      addMusicScene = new Scene(addMusicParent);
-      NewMusicController newMusicController = addMusicLoader.getController();
-      this.setNewMusicController(newMusicController);
-      newMusicController.setMyMusicsController(this);
-
-    } catch (Exception e) {
-      myMusicsLogger.error(e);
-    }
-
-    Stage musicSharingPopup = new Stage();
-    musicSharingPopup.setTitle("Ajout musique");
-    musicSharingPopup.setScene(this.addMusicScene);
-
-    // Show add music popup.
-    musicSharingPopup.show();
-  }
-
-  /**
-   * This function implements right click options.
-   *
-   * @param click mouse event right click.
-   */
-  @FXML
-  public void handleClickTableView(MouseEvent click) {
-    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
-
-    if (click.getButton().equals(MouseButton.PRIMARY)) {
-      if (music != null) {
-        for (int i = 0; i < this.listMusics.size(); i++) {
-          if (this.listMusics.get(i).getMetadata().equals(music)) {
-            musicInformation = listMusics.get(i);
-          }
-        }
-
-        this.getCentralFrameController().getMainController()
-            .getCurrentMusicInfoController().init(musicInformation);
-      }
-    }
-
-    if (click.getButton().equals(MouseButton.SECONDARY)) {
-      if (music != null) {
-        for (int i = 0; i < this.listMusics.size(); i++) {
-          if (this.listMusics.get(i).getMetadata().equals(music)) {
-            musicInformation = listMusics.get(i);
-          }
-        }
-
-        contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
-      }
-    }
-  }
-
-  @FXML
-  public void changeFrameToAllMusics(ActionEvent event) {
-    MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
-  }
-
-  /**
-   * Show labels for advanced research on My Musics view.
-   *
-   * @param event The click on the button "Recherche avancée".
-   */
-  @FXML
-  public void showAdvancedSearch(ActionEvent event) {
-    if (tfSearch.isDisabled()) {
-      tfSearch.setDisable(false);
-      tfSearchTitle.setVisible(false);
-      tfSearchArtist.setVisible(false);
-      tfSearchAlbum.setVisible(false);
-      tfSearchDuration.setVisible(false);
-
-    } else {
-      tfSearch.setDisable(true);
-      tfSearchTitle.setVisible(true);
-      tfSearchArtist.setVisible(true);
-      tfSearchAlbum.setVisible(true);
-      tfSearchDuration.setVisible(true);
-
-    }
-  }
-
-  /**
-   * Search music request corresponding to the labels content.
-   */
-  @FXML
-  public void searchMusics() {
-
-    SearchQuery query = new SearchQuery();
-
-    if (!tfSearch.isDisabled()) {
-      query.withText(tfSearch.getText());
-    } else {
-      if (tfSearchTitle.getText() != null) {
-        query.withTitle(tfSearchTitle.getText());
-      }
-
-      if (tfSearchArtist != null) {
-        query.withArtist(tfSearchArtist.getText());
-      }
-
-      if (tfSearchAlbum != null) {
-        query.withAlbum(tfSearchAlbum.getText());
-      }
-
-      /*if (tfSearchDuration != null) {
-        query.withArtist(tfSearchDuration.getText());
-      }*/
-    }
-
-    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+  private List<MusicMetadata> retrieveLocalMusics() {
+    localMusics.clear();
+    Stream<LocalMusic> localMusicsStream = this
+        .getCentralFrameController()
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query);
+        .getDataForIhm()
+        .getLocalMusics();
 
-    updateMusics(searchResults);
-  }
-
-  private void updateMusics(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
-  }
-
-  private List<MusicMetadata> parseMusic() {
-    listMusics.clear();
-    this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
-        .getIhmCore().getDataForIhm().getLocalMusics()
-        .collect(Collectors.toCollection(ArrayList::new)));
-
-    List<MusicMetadata> l = new ArrayList<MusicMetadata>();
-
-    for (int i = 0; i < this.listMusics.size(); i++) {
-      l.add(listMusics.get(i).getMetadata());
-    }
-    return l;
-  }
-
-  private void showMusicInformation(LocalMusic music) {
-    try {
-      // Initialize scene and controller.
-      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
-          .getResource("/fxml/MusicDetailsView.fxml"));
-      Parent musicDetailsParent = musicDetailsLoader.load();
-      infoMusicScene = new Scene(musicDetailsParent);
-      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
-      this.setDetailsMusicController(detailsMusicController);
-      detailsMusicController.setMyMusicsController(this);
-      detailsMusicController.initMusic(music);
-
-    } catch (Exception e) {
-      myMusicsLogger.error(e);
+    List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
+    for (LocalMusic localMusic : (Iterable<LocalMusic>) localMusicsStream::iterator) {
+      localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+      localMusicsMetadata.add(localMusic.getMetadata());
     }
 
-    Stage musicDetailsPopup = new Stage();
-    musicDetailsPopup.setTitle("Info musique");
-    musicDetailsPopup.setScene(this.infoMusicScene);
-
-    // Show music info popup.
-    musicDetailsPopup.show();
+    return localMusicsMetadata;
   }
+
 }
