@@ -9,9 +9,12 @@ import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -34,7 +37,9 @@ import javafx.scene.input.MouseButton;
 
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
+import utils.FormatDigit;
 
 /**
  * Central view show up my musics.
@@ -51,7 +56,7 @@ public class MyMusicsController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
-  private TableColumn<MusicMetadata, Duration> durationCol;
+  private TableColumn<MusicMetadata, String> durationCol;
   @FXML
   private TextField tfSearch;
   @FXML
@@ -133,13 +138,62 @@ public class MyMusicsController implements Controller {
    * this method has to be called right after the creation of the view.
    */
   public void init() {
-    // "artist", "title", "album", "duration" refer to MusicMetaData attributes
+    // Bind columns to corresponding attributes in MusicMetaData
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
-    this.durationCol.setCellValueFactory(
-        new PropertyValueFactory<MusicMetadata, Duration>("duration")
-    );
+
+    // Duration MusicMetaData attribute has type Duration
+    // so we need to convert it to a string
+    this.durationCol
+        .setCellValueFactory(
+            new Callback<TableColumn.CellDataFeatures<MusicMetadata, String>,
+                ObservableValue<String>>() {
+              public ObservableValue<String> call(
+                  TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
+
+                // Duration toString() returns ISO 8601 duration. We get it and
+                // extract hour, minute and second using a Regex
+
+                // Need to do it because regex is too long
+                String regex = String.join(
+                    "",
+                    "PT((?<hour>\\d{0,2})H)?",
+                    "((?<minute>\\d{0,2})M)?",
+                    "((?<second>\\d{0,2})S?)"
+                );
+
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(metadata.getValue().getDuration().toString());
+                String duration = "";
+
+                while (matcher.find()) {
+                  try {
+                    if (matcher.group("hour") != null) {
+                      duration += FormatDigit.run(matcher.group("hour"));
+                      duration += ":";
+                    }
+
+                    if (matcher.group("minute") != null) {
+                      // We format the minutes only if there are
+                      // hours in the duration
+                      duration += (duration != "")
+                          ? FormatDigit.run(matcher.group("minute"))
+                          : matcher.group("minute");
+                      duration += ":";
+                    }
+
+                    if (matcher.group("second") != null) {
+                      duration += FormatDigit.run(matcher.group("second"));
+                    }
+                  } catch (IllegalStateException e) {
+                    myMusicsLogger.error("Error while getting music {} duration", e);
+                  }
+                }
+
+                return new SimpleStringProperty(duration);
+              }
+            });
 
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
