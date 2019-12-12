@@ -211,7 +211,12 @@ public class AllMusicsController implements Controller {
       }
 
       if (!tfSearchTags.getText().trim().isEmpty()) {
-        Collection<String> tags = Arrays.asList(tfSearchTags.getText().split(","));
+        Collection<String> tags = Arrays.asList(tfSearchTags
+            .getText()
+            .replaceAll("\\s+","")
+            .split(",")
+        );
+
         query.withTags(tags);
       }
     }
