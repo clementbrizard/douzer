@@ -7,17 +7,11 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import java.util.stream.Stream;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -33,7 +27,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
-
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
@@ -198,7 +191,6 @@ public class MyMusicsController implements Controller {
         });
 
         deleteMusics(musicsDelete);
-        displayAvailableMusics();
       }
     });
 
@@ -410,6 +402,7 @@ public class MyMusicsController implements Controller {
               .getIhmCore()
               .getDataForIhm()
               .deleteMusic(music, deleteLocal);
+          this.displayAvailableMusics();
         } catch (NullPointerException e) {
           myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
         }
@@ -423,12 +416,13 @@ public class MyMusicsController implements Controller {
    */
   private List<MusicMetadata> retrieveLocalMusics() {
     localMusics.clear();
-    Stream<LocalMusic> localMusicsStream = this
+    Set<LocalMusic> localMusicsStream = this
         .getCentralFrameController()
         .getMainController()
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
+        .getCurrentUser()
         .getLocalMusics();
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
