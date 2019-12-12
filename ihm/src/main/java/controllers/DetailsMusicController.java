@@ -142,7 +142,6 @@ public class DetailsMusicController implements Controller {
 
       @Override
       public void handle(MouseEvent event) {
-        System.out.println("clique sur add tag");
         boolean hasTag = false;
         if (localMusic.getMetadata() != null) {
           if (localMusic.getMetadata().getTags() != null) {
