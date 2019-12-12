@@ -132,16 +132,16 @@ public class AllMusicsController implements Controller {
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-              String oldValue, String newValue) {
+                          String oldValue, String newValue) {
         searchMusics();
       }
     };
-    
+
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
     tfSearchTags.textProperty().addListener(textListener);
-    
+
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
   }
@@ -159,6 +159,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * Show labels for advanced search for All musics view.
+   *
    * @param event the clic ont the button "Recherche avancée".
    */
   @FXML
@@ -213,7 +214,9 @@ public class AllMusicsController implements Controller {
       if (!tfSearchTags.getText().trim().isEmpty()) {
         Collection<String> tags = Arrays.asList(tfSearchTags
             .getText()
-            .replaceAll("\\s+","")
+            //on remplace les espaces avant et après la virgule,
+            // mais pas ceux contenus dans les tags
+            .replaceAll("\\s*,\\s*", ",")
             .split(",")
         );
 
@@ -225,7 +228,7 @@ public class AllMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query); 
+        .getDataForIhm().searchMusics(query);
 
     updateMusics(searchResults);
   }

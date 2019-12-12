@@ -77,7 +77,7 @@ public class MyMusicsController implements Controller {
   private LocalMusic musicInformation;
   private ArrayList<LocalMusic> listMusics;
 
-  private  ContextMenu contextMenu;
+  private ContextMenu contextMenu;
 
   // Getters
 
@@ -147,24 +147,23 @@ public class MyMusicsController implements Controller {
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
     tfSearchTags.setVisible(false);
-    
+
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-              String oldValue, String newValue) {
-          searchMusics();
+                          String oldValue, String newValue) {
+        searchMusics();
       }
     };
-    
+
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
     tfSearchTags.textProperty().addListener(textListener);
-    
+
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
-    
-    
+
 
     tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -185,26 +184,26 @@ public class MyMusicsController implements Controller {
         showMusicInformation(musicInformation);
       }
     });
-    
+
     MenuItem playMusic = new MenuItem("Play");
     playMusic.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
-        
+
         //get the list of music clicked
-        ObservableList<MusicMetadata> selectedItems =  tvMusics
+        ObservableList<MusicMetadata> selectedItems = tvMusics
             .getSelectionModel()
             .getSelectedItems();
-        
-        for (int i = 0;i < selectedItems.size();i++) {
-          for (int j = 0;j < listMusics.size();j++) {
+
+        for (int i = 0; i < selectedItems.size(); i++) {
+          for (int j = 0; j < listMusics.size(); j++) {
             if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
               listMusicClicked.add(listMusics.get(j));
             }
           }
         }
-        
+
         //add to the list with right click play to the list
         if (listMusicClicked.isEmpty()) {
           listMusicClicked.add(musicInformation);
@@ -214,20 +213,20 @@ public class MyMusicsController implements Controller {
           }
         }
         getCentralFrameController()
-          .getMainController()
-          .getPlayerController()
-          .setArrayMusic(listMusicClicked);
-        
+            .getMainController()
+            .getPlayerController()
+            .setArrayMusic(listMusicClicked);
+
         getCentralFrameController()
-          .getMainController()
-          .getPlayerController()
-          .playerOnMusic();
+            .getMainController()
+            .getPlayerController()
+            .playerOnMusic();
       }
     });
-    
-    
+
+
     // Add MenuItem to ContextMenu
-    contextMenu.getItems().addAll(itemInformation,playMusic);
+    contextMenu.getItems().addAll(itemInformation, playMusic);
   }
 
   /**
@@ -357,7 +356,9 @@ public class MyMusicsController implements Controller {
       if (!tfSearchTags.getText().trim().isEmpty()) {
         Collection<String> tags = Arrays.asList(tfSearchTags
             .getText()
-            .replaceAll("\\s+","")
+            //on remplace les espaces avant et après la virgule,
+            //mais pas ceux contenus dans les tags
+            .replaceAll("\\s*,\\s*", ",")
             .split(",")
         );
 
