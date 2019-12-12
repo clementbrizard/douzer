@@ -31,10 +31,8 @@
             <TextField fx:id="textTitle" onKeyPressed="#titleEdited" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="textArtist" onKeyPressed="#artistEdited" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <TextField fx:id="textAlbum" onKeyPressed="#albumEdited" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="textUploader" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <Spinner fx:id="dateYear" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="labelYear" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Année" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="labelUploader" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Uploader" textAlignment="RIGHT" GridPane.columnIndex="2" GridPane.rowIndex="3" />
             <VBox fx:id="vboxRadioButton" style="-fx-padding: 5px;" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
                    <Label fx:id="title" text="Visibilité:" />
