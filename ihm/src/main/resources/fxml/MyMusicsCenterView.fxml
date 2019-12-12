@@ -39,16 +39,6 @@
                              <Image url="@../images/searchSymbol.png" />
                          </image>
                      </ImageView>
-                     <ImageView fx:id="ivShare" fitHeight="31.0" fitWidth="31.0" layoutX="629.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/shareSymbol.png" />
-                         </image>
-                     </ImageView>
-                     <ImageView fx:id="ivDeleteLocal" fitHeight="12.0" fitWidth="76.0" layoutX="588.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/minusSymbol.png" />
-                         </image>
-                     </ImageView>
                      <Button fx:id="btnAddMusic" layoutX="540.0" layoutY="57.0" mnemonicParsing="false" onAction="#addMusic" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" />
                      <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="20.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                          <image>
