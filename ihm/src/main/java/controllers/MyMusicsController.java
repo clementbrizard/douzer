@@ -339,19 +339,22 @@ public class MyMusicsController implements Controller {
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
-      if (tfSearchTitle.getText() != null) {
+      // TextField default constructor sets the initial text to "" (empty string)
+      // so instead of checking if text is not null (which will be false), we must
+      // check if trimmed text (with leading and trailing whitespaces removed) is not empty.
+      if (!tfSearchTitle.getText().trim().isEmpty()) {
         query.withTitle(tfSearchTitle.getText());
       }
 
-      if (tfSearchArtist != null) {
+      if (!tfSearchArtist.getText().trim().isEmpty()) {
         query.withArtist(tfSearchArtist.getText());
       }
 
-      if (tfSearchAlbum != null) {
+      if (!tfSearchAlbum.getText().trim().isEmpty()) {
         query.withAlbum(tfSearchAlbum.getText());
       }
 
-      if (tfSearchTags != null) {
+      if (!tfSearchTags.getText().trim().isEmpty()) {
         Collection<String> tags = Arrays.asList(tfSearchTags.getText().split(","));
         query.withTags(tags);
       }
