@@ -61,6 +61,11 @@ public class SignUpController implements Controller {
   @FXML
   private TextField profileFilePath;
 
+  // Extension filters for the FileChooser
+  private FileChooser.ExtensionFilter avatarExtensionFilter =
+          new FileChooser.ExtensionFilter(
+                  "fichier image",
+                  "*.jpg", "*.png", "*.gif");
   private File avatarFile = null;
   private File directoryChosenForSavingProfile = null;
   private Application application;
@@ -91,14 +96,16 @@ public class SignUpController implements Controller {
     final String lastName = textFieldLastName.getText();
 
     final LocalDate dateOfBirth = datePickerBirth.getValue();
-    final Path avatarPath = avatarFile.toPath();
-    // Get the image from the avatar path
+
     BufferedImage avatarImg = null;
+
     try {
+      final Path avatarPath = avatarFile.toPath();
+      // Get the image from the avatar path
+
       avatarImg = ImageIO.read(avatarFile);
-    } catch (java.io.IOException ex) {
-      // Image could not be loaded
-      // log it ?
+    } catch (java.io.IOException | java.lang.NullPointerException e) {
+      signUpLogger.warn(e + ": aucun fichier avatar sélectioné.");
     }
 
     final String secretQuestion = textFieldSecretQuestion.getText();
@@ -153,11 +160,14 @@ public class SignUpController implements Controller {
    * @param event The event inducing the button click
    */
   public void actionAvatarChoice(ActionEvent event) {
-    //TODO: add extension filter
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    avatarFileChooser.getExtensionFilters().add(avatarExtensionFilter);
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
-    avatarFilePath.setText(avatarFile.getAbsolutePath());
-
+    try {
+      avatarFilePath.setText(avatarFile.getAbsolutePath());
+    } catch (java.lang.RuntimeException e) {
+      signUpLogger.warn(e + ": aucun fichier avatar sélectioné.");
+    }
   }
 
   public void actionSaveProfileDirChoose(ActionEvent event) {

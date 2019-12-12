@@ -59,12 +59,6 @@ public class NewMusicController implements Controller {
   private TextField textAlbum;
 
   /**
-   * TextField containing the uploader.
-   */
-  @FXML
-  private TextField textUploader;
-
-  /**
    * Spinner for the year.
    */
   @FXML
@@ -149,10 +143,6 @@ public class NewMusicController implements Controller {
    */
   public void setMyMusicsController(MyMusicsController myMusicsController) {
     this.myMusicsController = myMusicsController;
-
-    this.textUploader.setText(this.getMyMusicsController().getCentralFrameController()
-        .getMainController().getApplication().getIhmCore().getDataForIhm()
-        .getCurrentUser().getUsername());
   }
 
   // Other methods
@@ -173,8 +163,6 @@ public class NewMusicController implements Controller {
     this.dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
         1000, LocalDate.now().getYear(), LocalDate.now().getYear(), 1));
     this.dateYear.setEditable(true);
-
-    this.textUploader.setEditable(false);
 
     this.tags = FXCollections.observableArrayList();
     this.listViewTags.setItems(tags);
@@ -363,7 +351,9 @@ public class NewMusicController implements Controller {
     newMusicLogger.info("Title : {}", textTitle.getText());
     newMusicLogger.info("Artist : {}", textArtist.getText());
     newMusicLogger.info("Album : {}", textAlbum.getText());
-    newMusicLogger.info("Uploader : {}", textUploader.getText());
+    newMusicLogger.info("Uploader : {}", this.getMyMusicsController().getCentralFrameController()
+        .getMainController().getApplication().getIhmCore().getDataForIhm()
+        .getCurrentUser().getUsername());
     newMusicLogger.info("Share status : {} ",
         shareStatusGroup.getSelectedToggle().getUserData());
     newMusicLogger.info("Date : {}", dateYear.getValue());

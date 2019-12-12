@@ -3,11 +3,15 @@ package controllers;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -16,9 +20,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.FormatDigit;
 
 
 /**
@@ -36,7 +41,7 @@ public class AllMusicsController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
-  private TableColumn<MusicMetadata, Duration> durationCol;
+  private TableColumn<MusicMetadata, String> durationCol;
   @FXML
   private TextField tfSearch;
   @FXML
@@ -46,7 +51,7 @@ public class AllMusicsController implements Controller {
   @FXML
   private TextField tfSearchAlbum;
   @FXML
-  private TextField tfSearchDuration;
+  private TextField tfSearchTags;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
@@ -114,9 +119,58 @@ public class AllMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
-    this.durationCol.setCellValueFactory(
-        new PropertyValueFactory<MusicMetadata, Duration>("duration")
-    );
+
+    // Duration MusicMetaData attribute has type Duration
+    // so we need to convert it to a string
+    this.durationCol
+        .setCellValueFactory(
+            new Callback<TableColumn.CellDataFeatures<MusicMetadata, String>,
+                ObservableValue<String>>() {
+              public ObservableValue<String> call(
+                  TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
+
+                // Duration toString() returns ISO 8601 duration. We get it and
+                // extract hour, minute and second using a Regex
+
+                // Need to do it because regex is too long
+                String regex = String.join(
+                    "",
+                    "PT((?<hour>\\d{0,2})H)?",
+                    "((?<minute>\\d{0,2})M)?",
+                    "((?<second>\\d{0,2})S?)"
+                );
+
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(metadata.getValue().getDuration().toString());
+                String duration = "";
+
+                while (matcher.find()) {
+                  try {
+                    if (matcher.group("hour") != null) {
+                      duration += FormatDigit.run(matcher.group("hour"));
+                      duration += ":";
+                    }
+
+                    if (matcher.group("minute") != null) {
+                      // We format the minutes only if there are
+                      // hours in the duration
+                      duration += (duration != "")
+                          ? FormatDigit.run(matcher.group("minute"))
+                          : matcher.group("minute");
+                      duration += ":";
+                    }
+
+                    if (matcher.group("second") != null) {
+                      duration += FormatDigit.run(matcher.group("second"));
+                    }
+                  } catch (IllegalStateException e) {
+                    allMusicsLogger.error("Error while getting music {} duration", e);
+                  }
+                }
+
+                return new SimpleStringProperty(duration);
+              }
+            });
 
     try {
       this.displayAvailableMusics();
@@ -127,20 +181,21 @@ public class AllMusicsController implements Controller {
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
-    tfSearchDuration.setVisible(false);
+    tfSearchTags.setVisible(false);
+
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-              String oldValue, String newValue) {
+                          String oldValue, String newValue) {
         searchMusics();
       }
     };
-    
+
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
-    tfSearchDuration.textProperty().addListener(textListener);
-    
+    tfSearchTags.textProperty().addListener(textListener);
+
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
   }
@@ -158,6 +213,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * Show labels for advanced search for All musics view.
+   *
    * @param event the clic ont the button "Recherche avancée".
    */
   @FXML
@@ -167,14 +223,14 @@ public class AllMusicsController implements Controller {
       tfSearchTitle.setVisible(false);
       tfSearchArtist.setVisible(false);
       tfSearchAlbum.setVisible(false);
-      tfSearchDuration.setVisible(false);
+      tfSearchTags.setVisible(false);
 
     } else {
       tfSearch.setDisable(true);
       tfSearchTitle.setVisible(true);
       tfSearchArtist.setVisible(true);
       tfSearchAlbum.setVisible(true);
-      tfSearchDuration.setVisible(true);
+      tfSearchTags.setVisible(true);
 
     }
   }
@@ -194,28 +250,43 @@ public class AllMusicsController implements Controller {
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
-      if (tfSearchTitle.getText() != null) {
+      // TextField default constructor sets the initial text to "" (empty string)
+      // so instead of checking if text is not null (which will be false), we must
+      // check if trimmed text (with leading and trailing whitespaces removed) is not empty.
+      if (!tfSearchTitle.getText().trim().isEmpty()) {
         query.withTitle(tfSearchTitle.getText());
       }
 
-      if (tfSearchArtist != null) {
+      if (!tfSearchArtist.getText().trim().isEmpty()) {
         query.withArtist(tfSearchArtist.getText());
       }
 
-      if (tfSearchAlbum != null) {
+      if (!tfSearchAlbum.getText().trim().isEmpty()) {
         query.withAlbum(tfSearchAlbum.getText());
       }
 
-      /*if (tfSearchDuration != null) {
-        query.withArtist(tfSearchDuration.getText());
-      }*/
+      if (!tfSearchTags.getText().trim().isEmpty()) {
+        //on supprime les espaces avant et après la virgule,
+        // mais pas ceux contenus dans les tags
+        // trim() supprime les espaces après chaque tag
+        //ce qui permet de supprimer les espaces après le dernier tags et
+        // de ne faire la recherche qu'avec les caractères utiles
+        Collection<String> tags = Arrays.asList(tfSearchTags
+            .getText()
+            .trim()
+            .replaceAll("\\s*,\\s*", ",")
+            .split(",")
+        );
+
+        query.withTags(tags);
+      }
     }
 
     Stream<Music> searchResults = AllMusicsController.this.getCentralFrameController()
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query); 
+        .getDataForIhm().searchMusics(query);
 
     updateMusics(searchResults);
   }
