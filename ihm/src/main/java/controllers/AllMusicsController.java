@@ -23,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.FormatDigit;
 
 
 /**
@@ -146,17 +147,21 @@ public class AllMusicsController implements Controller {
                 while (matcher.find()) {
                   try {
                     if (matcher.group("hour") != null) {
-                      duration += matcher.group("hour");
+                      duration += FormatDigit.run(matcher.group("hour"));
                       duration += ":";
                     }
 
                     if (matcher.group("minute") != null) {
-                      duration += matcher.group("minute");
+                      // We format the minutes only if there are
+                      // hours in the duration
+                      duration += (duration != "")
+                          ? FormatDigit.run(matcher.group("minute"))
+                          : matcher.group("minute");
                       duration += ":";
                     }
 
                     if (matcher.group("second") != null) {
-                      duration += matcher.group("second");
+                      duration += FormatDigit.run(matcher.group("second"));
                     }
                   } catch (IllegalStateException e) {
                     allMusicsLogger.error("Error while getting music {} duration", e);
