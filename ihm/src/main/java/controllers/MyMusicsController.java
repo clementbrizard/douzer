@@ -8,6 +8,8 @@ import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +68,7 @@ public class MyMusicsController implements Controller {
   @FXML
   private TextField tfSearchAlbum;
   @FXML
-  private TextField tfSearchDuration;
+  private TextField tfSearchTags;
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
@@ -80,7 +82,7 @@ public class MyMusicsController implements Controller {
   private LocalMusic musicInformation;
   private ArrayList<LocalMusic> listMusics;
 
-  private  ContextMenu contextMenu;
+  private ContextMenu contextMenu;
 
   // Getters
 
@@ -198,25 +200,24 @@ public class MyMusicsController implements Controller {
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
-    tfSearchDuration.setVisible(false);
-    
+    tfSearchTags.setVisible(false);
+
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-              String oldValue, String newValue) {
-          searchMusics();
+                          String oldValue, String newValue) {
+        searchMusics();
       }
     };
-    
+
     tfSearchTitle.textProperty().addListener(textListener);
     tfSearchArtist.textProperty().addListener(textListener);
     tfSearchAlbum.textProperty().addListener(textListener);
-    tfSearchDuration.textProperty().addListener(textListener);
-    
+    tfSearchTags.textProperty().addListener(textListener);
+
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
-    
-    
+
 
     tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
@@ -237,26 +238,26 @@ public class MyMusicsController implements Controller {
         showMusicInformation(musicInformation);
       }
     });
-    
+
     MenuItem playMusic = new MenuItem("Play");
     playMusic.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
-        
+
         //get the list of music clicked
-        ObservableList<MusicMetadata> selectedItems =  tvMusics
+        ObservableList<MusicMetadata> selectedItems = tvMusics
             .getSelectionModel()
             .getSelectedItems();
-        
-        for (int i = 0;i < selectedItems.size();i++) {
-          for (int j = 0;j < listMusics.size();j++) {
+
+        for (int i = 0; i < selectedItems.size(); i++) {
+          for (int j = 0; j < listMusics.size(); j++) {
             if (selectedItems.get(i).equals(listMusics.get(j).getMetadata())) {
               listMusicClicked.add(listMusics.get(j));
             }
           }
         }
-        
+
         //add to the list with right click play to the list
         if (listMusicClicked.isEmpty()) {
           listMusicClicked.add(musicInformation);
@@ -266,20 +267,20 @@ public class MyMusicsController implements Controller {
           }
         }
         getCentralFrameController()
-          .getMainController()
-          .getPlayerController()
-          .setArrayMusic(listMusicClicked);
-        
+            .getMainController()
+            .getPlayerController()
+            .setArrayMusic(listMusicClicked);
+
         getCentralFrameController()
-          .getMainController()
-          .getPlayerController()
-          .playerOnMusic();
+            .getMainController()
+            .getPlayerController()
+            .playerOnMusic();
       }
     });
-    
-    
+
+
     // Add MenuItem to ContextMenu
-    contextMenu.getItems().addAll(itemInformation,playMusic);
+    contextMenu.getItems().addAll(itemInformation, playMusic);
   }
 
   /**
@@ -368,14 +369,14 @@ public class MyMusicsController implements Controller {
       tfSearchTitle.setVisible(false);
       tfSearchArtist.setVisible(false);
       tfSearchAlbum.setVisible(false);
-      tfSearchDuration.setVisible(false);
+      tfSearchTags.setVisible(false);
 
     } else {
       tfSearch.setDisable(true);
       tfSearchTitle.setVisible(true);
       tfSearchArtist.setVisible(true);
       tfSearchAlbum.setVisible(true);
-      tfSearchDuration.setVisible(true);
+      tfSearchTags.setVisible(true);
 
     }
   }
@@ -391,21 +392,36 @@ public class MyMusicsController implements Controller {
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
-      if (tfSearchTitle.getText() != null) {
+      // TextField default constructor sets the initial text to "" (empty string)
+      // so instead of checking if text is not null (which will be false), we must
+      // check if trimmed text (with leading and trailing whitespaces removed) is not empty.
+      if (!tfSearchTitle.getText().trim().isEmpty()) {
         query.withTitle(tfSearchTitle.getText());
       }
 
-      if (tfSearchArtist != null) {
+      if (!tfSearchArtist.getText().trim().isEmpty()) {
         query.withArtist(tfSearchArtist.getText());
       }
 
-      if (tfSearchAlbum != null) {
+      if (!tfSearchAlbum.getText().trim().isEmpty()) {
         query.withAlbum(tfSearchAlbum.getText());
       }
 
-      /*if (tfSearchDuration != null) {
-        query.withArtist(tfSearchDuration.getText());
-      }*/
+      if (!tfSearchTags.getText().trim().isEmpty()) {
+        //on remplace les espaces avant et après la virgule,
+        //mais pas ceux contenus dans les tags
+        // trim() supprime les espaces après chaque tag
+        //ce qui permet de supprimer les espaces après le dernier tags et
+        // de ne faire la recherche qu'avec les caractères utiles
+        Collection<String> tags = Arrays.asList(tfSearchTags
+            .getText()
+            .trim()
+            .replaceAll("\\s*,\\s*", ",")
+            .split(",")
+        );
+
+        query.withTags(tags);
+      }
     }
 
     Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
