@@ -63,9 +63,9 @@ public class SignUpController implements Controller {
 
   // Extension filters for the FileChooser
   private FileChooser.ExtensionFilter avatarExtensionFilter =
-          new FileChooser.ExtensionFilter(
-                  "fichier image",
-                  "*.jpg", "*.png", "*.gif");
+      new FileChooser.ExtensionFilter(
+          "fichier image",
+          "*.jpg", "*.png", "*.gif");
   private File avatarFile = null;
   private File directoryChosenForSavingProfile = null;
   private Application application;
@@ -77,7 +77,8 @@ public class SignUpController implements Controller {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Other methods
 
@@ -166,14 +167,18 @@ public class SignUpController implements Controller {
     try {
       avatarFilePath.setText(avatarFile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      signUpLogger.warn(e + ": aucun fichier avatar sélectioné.");
+      signUpLogger.warn(e + " : aucun fichier avatar sélectioné.");
     }
   }
 
   public void actionSaveProfileDirChoose(ActionEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     directoryChosenForSavingProfile = saveProfileDirectoryChooser.showDialog(primaryStage);
-    profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
+    try {
+      profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
+    } catch (java.lang.RuntimeException e) {
+      signUpLogger.warn(e + " : aucun emplacement de stockage sélectioné.");
+    }
   }
 
 }
