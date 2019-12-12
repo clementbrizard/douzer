@@ -354,10 +354,14 @@ public class MyMusicsController implements Controller {
       }
 
       if (!tfSearchTags.getText().trim().isEmpty()) {
+        //on remplace les espaces avant et après la virgule,
+        //mais pas ceux contenus dans les tags
+        // trim() supprime les espaces après chaque tag
+        //ce qui permet de supprimer les espaces après le dernier tags et
+        // de ne faire la recherche qu'avec les caractères utiles
         Collection<String> tags = Arrays.asList(tfSearchTags
             .getText()
-            //on remplace les espaces avant et après la virgule,
-            //mais pas ceux contenus dans les tags
+            .trim()
             .replaceAll("\\s*,\\s*", ",")
             .split(",")
         );
