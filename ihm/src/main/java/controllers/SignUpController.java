@@ -62,7 +62,7 @@ public class SignUpController implements Controller {
   private TextField profileFilePath;
 
   // Extension filters for the FileChooser
-  FileChooser.ExtensionFilter avatarExtensionFilter =
+  private FileChooser.ExtensionFilter avatarExtensionFilter =
           new FileChooser.ExtensionFilter(
                   "fichier image",
                   "*.jpg", "*.png", "*.gif");
@@ -104,9 +104,8 @@ public class SignUpController implements Controller {
       // Get the image from the avatar path
 
       avatarImg = ImageIO.read(avatarFile);
-    } catch (java.io.IOException ex) {
-      // Image could not be loaded
-      // log it ?
+    } catch (java.io.IOException | java.lang.NullPointerException e) {
+      signUpLogger.warn(e + ": aucun fichier avatar sélectioné.");
     }
 
     final String secretQuestion = textFieldSecretQuestion.getText();
@@ -164,7 +163,11 @@ public class SignUpController implements Controller {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     avatarFileChooser.getExtensionFilters().add(avatarExtensionFilter);
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
-    avatarFilePath.setText(avatarFile.getAbsolutePath());
+    try {
+      avatarFilePath.setText(avatarFile.getAbsolutePath());
+    } catch (java.lang.RuntimeException e) {
+      signUpLogger.warn(e + ": aucun fichier avatar sélectioné.");
+    }
   }
 
   public void actionSaveProfileDirChoose(ActionEvent event) {
