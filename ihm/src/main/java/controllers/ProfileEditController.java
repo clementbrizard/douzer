@@ -252,8 +252,15 @@ public class ProfileEditController implements Controller {
    * @param event The event inducing the button click
    */
   public void avatarEdition(ActionEvent event) {
-    //TODO: add extension filter
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+    // Extension filters for the FileChooser
+    FileChooser.ExtensionFilter avatarExtensionFilter =
+            new FileChooser.ExtensionFilter(
+                    "fichier image",
+                    "*.jpg", "*.png", "*.gif");
+    avatarFileChooser.getExtensionFilters().add(avatarExtensionFilter);
+
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
 
     try {
