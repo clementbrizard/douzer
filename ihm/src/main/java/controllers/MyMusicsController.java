@@ -7,7 +7,11 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.value.ChangeListener;
@@ -66,14 +70,13 @@ public class MyMusicsController implements Controller {
   private Scene addMusicScene;
   private Scene infoMusicScene;
   private Application application;
+  private ContextMenu contextMenu;
 
   // Clicked local music to trigger actions
   private LocalMusic currentLocalMusic;
 
   // Local musics hashmap to access them instantly
   private HashMap<String, LocalMusic> localMusics;
-
-  private  ContextMenu contextMenu;
 
   /* Getters */
 
@@ -148,8 +151,8 @@ public class MyMusicsController implements Controller {
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-              String oldValue, String newValue) {
-          searchMusics();
+                          String oldValue, String newValue) {
+        searchMusics();
       }
     };
 
@@ -226,34 +229,6 @@ public class MyMusicsController implements Controller {
         contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
       }
     }
-  }
-
-  /**
-   * Handle click on information item in context menu.
-   * @param music the music on which the user right clicked
-   */
-  private void showMusicInformation(LocalMusic music) {
-    try {
-      // Initialize scene and controller.
-      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
-          .getResource("/fxml/MusicDetailsView.fxml"));
-      Parent musicDetailsParent = musicDetailsLoader.load();
-      infoMusicScene = new Scene(musicDetailsParent);
-      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
-      this.setDetailsMusicController(detailsMusicController);
-      detailsMusicController.setMyMusicsController(this);
-      detailsMusicController.initMusic(music);
-
-    } catch (Exception e) {
-      myMusicsLogger.error(e);
-    }
-
-    Stage musicDetailsPopup = new Stage();
-    musicDetailsPopup.setTitle("Info musique");
-    musicDetailsPopup.setScene(this.infoMusicScene);
-
-    // Show music info popup.
-    musicDetailsPopup.show();
   }
 
   /**
@@ -345,6 +320,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * Handle click on all musics button.
+   *
    * @param event the click on all musics button
    */
   @FXML
@@ -353,6 +329,35 @@ public class MyMusicsController implements Controller {
   }
 
   /* Logic methods */
+
+  /**
+   * Handle click on information item in context menu.
+   *
+   * @param music the music on which the user right clicked
+   */
+  private void showMusicInformation(LocalMusic music) {
+    try {
+      // Initialize scene and controller.
+      FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
+          .getResource("/fxml/MusicDetailsView.fxml"));
+      Parent musicDetailsParent = musicDetailsLoader.load();
+      infoMusicScene = new Scene(musicDetailsParent);
+      DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
+      this.setDetailsMusicController(detailsMusicController);
+      detailsMusicController.setMyMusicsController(this);
+      detailsMusicController.initMusic(music);
+
+    } catch (Exception e) {
+      myMusicsLogger.error(e);
+    }
+
+    Stage musicDetailsPopup = new Stage();
+    musicDetailsPopup.setTitle("Info musique");
+    musicDetailsPopup.setScene(this.infoMusicScene);
+
+    // Show music info popup.
+    musicDetailsPopup.show();
+  }
 
   /**
    * Refresh the table by retrieving local musics from Data.
@@ -364,6 +369,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * Update musics table content with search result.
+   *
    * @param newMusics the search result
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
@@ -372,6 +378,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * Delete a list of one or more musics.
+   *
    * @param musicsToDelete the musics to delete
    */
   public void deleteMusics(ArrayList<LocalMusic> musicsToDelete) {
@@ -412,6 +419,7 @@ public class MyMusicsController implements Controller {
 
   /**
    * Retrieve user's local musics from Data.
+   *
    * @return list of metadata of user's local musics
    */
   private List<MusicMetadata> retrieveLocalMusics() {
