@@ -286,13 +286,7 @@ public class ProfileEditController implements Controller {
               .darkStyle()
               .showInformation();
 
-    } catch (java.io.IOException e) {
-      Notifications.create()
-              .title("Fichier non lisible")
-              .text("Le fichier d'avatar que vous avez téléchargé n'est pas lisible.")
-              .darkStyle()
-              .showError();
-    } catch (java.lang.NullPointerException e) {
+    } catch (java.io.IOException | java.lang.NullPointerException e) {
       logger.warn(e + ": aucun fichier avatar sélectioné.");
     }
   }
