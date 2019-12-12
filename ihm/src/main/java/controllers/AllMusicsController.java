@@ -128,6 +128,7 @@ public class AllMusicsController implements Controller {
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
     tfSearchTags.setVisible(false);
+
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
