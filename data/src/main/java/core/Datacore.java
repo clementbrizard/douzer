@@ -158,7 +158,7 @@ public class Datacore {
       }
     });
   }
-
+  
   /**
    * Remove the user from the music's owner set
    * and remove the music if it has no more owners.
@@ -206,6 +206,13 @@ public class Datacore {
       user1.updateUser(user2);
     }
     // No else, the user1 is the template
+  }
+  
+  public LocalMusic upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
+    LocalMusic newMusic = new LocalMusic(toUpgrade.getMetadata(), mp3Path);
+    this.musics.remove(toUpgrade.getMetadata().getHash());
+    this.addMusic(newMusic);
+    return newMusic;
   }
 
   /**

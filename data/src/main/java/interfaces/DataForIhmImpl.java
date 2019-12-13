@@ -39,6 +39,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -149,7 +150,14 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void download(Music music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayList<InetAddress> ownersIPs = new ArrayList<InetAddress>();
+    String musicHash = music.getMetadata().getHash();
+    
+    for (User owner : music.getOwners()) {
+      ownersIPs.add(owner.getIp());
+    }
+    
+    this.dc.net.requestDownload(ownersIPs.stream(), musicHash);
   }
 
   @Override
