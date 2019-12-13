@@ -137,11 +137,11 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public void exportLocalUser(LocalUser localUser, String path) throws IOException {
-    path += "/" + localUser.getUuid() + "/";
-    File baseDirectory = new File(path);
+    String basePath = path + "/" + localUser.getUuid() + "/";
+    File baseDirectory = new File(basePath);
 
     //Wiping the previous backup if it exists.
-    if (Files.exists(Paths.get(path))) {
+    if (Files.exists(Paths.get(basePath))) {
       Arrays.stream(baseDirectory.listFiles()).forEach(File::delete);
       baseDirectory.delete();
     }
@@ -159,9 +159,16 @@ public class LocalUsersFileHandler {
         m.setMp3Path(baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName());
       });
 
+      //Backing up user properties.
+      Path propertiesPath = Paths.get(
+              localUser.getSavePath() + "/" + localUser.getUsername() + "-config.properties");
+      Files.copy(propertiesPath,
+              Paths.get(basePath + localUser.getUsername() + "-config.properties"));
+      localUser.setSavePath(Paths.get(basePath));
+
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
-              path + "user.ser");
+              basePath + "user.ser");
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
       objectOutputStream.writeObject(localUser);
       objectOutputStream.flush();
@@ -169,7 +176,7 @@ public class LocalUsersFileHandler {
       fileOutputStream.close();
 
       //Backing up user avatar.
-      ImageIO.write(localUser.getAvatar(), "jpg", new File(path + "avatar.jpg"));
+      ImageIO.write(localUser.getAvatar(), "jpg", new File(basePath + "avatar.jpg"));
     } else {
       throw new IOException("Unable to create the directory.");
     }
