@@ -137,8 +137,8 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public void exportLocalUser(LocalUser localUser, String path) throws IOException {
-    localUser = new LocalUser(localUser);
-    String basePath = path + "/" + localUser.getUuid() + "/";
+    LocalUser localUserToExport = new LocalUser(localUser);
+    String basePath = path + "/" + localUserToExport.getUuid() + "/";
     File baseDirectory = new File(basePath);
 
     //Wiping the previous backup if it exists.
@@ -150,34 +150,34 @@ public class LocalUsersFileHandler {
     boolean successfullyCreated = baseDirectory.mkdir();
     if (successfullyCreated) {
       //Moving all the songs.
-      for (LocalMusic m : localUser.getLocalMusics()) {
+      for (LocalMusic m : localUserToExport.getLocalMusics()) {
         Files.copy(Paths.get(m.getMp3Path()), Paths.get(
                 baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName()));
       }
 
       //Changing LocalMusics paths.
-      localUser.getLocalMusics().forEach(m -> {
+      localUserToExport.getLocalMusics().forEach(m -> {
         m.setMp3Path(baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName());
       });
 
       //Backing up user properties.
       Path propertiesPath = Paths.get(
-              localUser.getSavePath() + "/" + localUser.getUsername() + "-config.properties");
+              localUserToExport.getSavePath() + "/" + localUserToExport.getUsername() + "-config.properties");
       Files.copy(propertiesPath,
-              Paths.get(basePath + localUser.getUsername() + "-config.properties"));
-      localUser.setSavePath(Paths.get(basePath));
+              Paths.get(basePath + localUserToExport.getUsername() + "-config.properties"));
+      localUserToExport.setSavePath(Paths.get(basePath));
 
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
               basePath + "user.ser");
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-      objectOutputStream.writeObject(localUser);
+      objectOutputStream.writeObject(localUserToExport);
       objectOutputStream.flush();
       objectOutputStream.close();
       fileOutputStream.close();
 
       //Backing up user avatar.
-      ImageIO.write(localUser.getAvatar(), "jpg", new File(basePath + "avatar.jpg"));
+      ImageIO.write(localUserToExport.getAvatar(), "jpg", new File(basePath + "avatar.jpg"));
     } else {
       throw new IOException("Unable to create the directory.");
     }
