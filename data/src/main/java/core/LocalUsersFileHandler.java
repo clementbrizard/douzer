@@ -137,6 +137,7 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public void exportLocalUser(LocalUser localUser, String path) throws IOException {
+    localUser = new LocalUser(localUser);
     String basePath = path + "/" + localUser.getUuid() + "/";
     File baseDirectory = new File(basePath);
 
