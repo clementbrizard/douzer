@@ -106,10 +106,14 @@ public class NetworkProvider {
    * @return instance of the newly created thread
    */
   public SendToUserThread createSendToUserThread(Serializable p, InetAddress ip) {
-    SendToUserThread newThread = new SendToUserThread(p, ip);
-    threads.add(newThread);
-    newThread.start();
-    return newThread;
+    if (ip != null) {
+      SendToUserThread newThread = new SendToUserThread(p, ip);
+      threads.add(newThread);
+      newThread.start();
+      return newThread;
+    } else {
+      return null;
+    }
   }
 
   /**
