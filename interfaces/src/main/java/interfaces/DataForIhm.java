@@ -36,6 +36,10 @@ public interface DataForIhm {
    */
   void addComment(Music music, String comment);
 
+  void addFriend(User user);
+
+  void removeFriend(User user);
+
   /**
    * Check if there is a config.properties file in the user's save path. If there is no config file
    * yet, create a config.properties file by copy of default-config.properties

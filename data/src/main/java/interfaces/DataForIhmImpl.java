@@ -90,6 +90,16 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
+  public void addFriend(User user) {
+    dc.getCurrentUser().addFriend(user);
+  }
+
+  @Override
+  public void removeFriend(User user) {
+    dc.getCurrentUser().removeFriend(user);
+  }
+
+  @Override
   public void createUser(LocalUser user) throws IOException, LoginException {
     InputStream defaultPropInputStream = getClass().getClassLoader()
         .getResourceAsStream("default-config.properties");

@@ -70,6 +70,14 @@ public class LocalUser extends User {
     this.friends = friends;
   }
 
+  public void addFriend(User user) {
+    this.friends.add(user);
+  }
+
+  public void removeFriend(User user) {
+    this.friends.remove(user);
+  }
+
   public Set<LocalMusic> getLocalMusics() {
     return localMusics;
   }
