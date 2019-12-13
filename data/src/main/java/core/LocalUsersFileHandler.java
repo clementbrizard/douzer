@@ -1,14 +1,19 @@
 package core;
 
+import datamodel.LocalMusic;
 import datamodel.LocalUser;
+
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -124,19 +129,45 @@ public class LocalUsersFileHandler {
   }
 
   /**
-   * Export a LocalUser on the hard drive.
+   * Export a LocalUser and its mp3 files on the hard drive.
    * @param localUser the LocalUser to export.
-   * @param path the path where the LocalUser will be stored.
+   * @param path path to the directory that will contain the backup directory.
    * @throws IOException if the file is not accessible.
    */
   public void exportLocalUser(LocalUser localUser, String path) throws IOException {
-    FileOutputStream fileOutputStream = new FileOutputStream(path);
-    ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-    objectOutputStream.writeObject(localUser);
+    path += localUser.getUuid() + "/";
+    File baseDirectory = new File(path);
 
-    objectOutputStream.flush();
-    objectOutputStream.close();
-    fileOutputStream.close();
+    //Wiping the previous backup if it exists.
+    if (Files.exists(Paths.get(path))) {
+      Arrays.stream(baseDirectory.listFiles()).forEach(File::delete);
+      baseDirectory.delete();
+    }
+
+    boolean successfullyCreated = baseDirectory.mkdir();
+    if (successfullyCreated) {
+      //Moving all the songs.
+      for (LocalMusic m : localUser.getLocalMusics()) {
+        Files.copy(Paths.get(m.getMp3Path()), Paths.get(
+                baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName()));
+      }
+
+      //Changing LocalMusics paths.
+      localUser.getLocalMusics().forEach(m -> {
+        m.setMp3Path(baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName());
+      });
+
+      //User serialization.
+      FileOutputStream fileOutputStream = new FileOutputStream(
+              path + localUser.getUsername() + ".ser");
+      ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+      objectOutputStream.writeObject(localUser);
+      objectOutputStream.flush();
+      objectOutputStream.close();
+      fileOutputStream.close();
+    } else {
+      throw new IOException("Unable to create the directory.");
+    }
   }
 
   /**
