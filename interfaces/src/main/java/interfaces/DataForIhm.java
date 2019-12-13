@@ -59,8 +59,19 @@ public interface DataForIhm {
 
   void download(Music music);
 
+  /**
+   * Backup the current LocalUser, its musics and its avatar.
+   * @param path path to the directory that will contain the backup.
+   * @throws IOException if there is a problem creating or deleting any file.
+   */
   void exportProfile(String path) throws IOException;
 
+  /**
+   * Import a previously exported LocalUser.
+   * @param path the path to the backup directory.
+   * @throws IOException if it is not possible to read a file.
+   * @throws DataException if the username already exists.
+   */
   void importProfile(String path) throws IOException, ClassNotFoundException, DataException;
 
   void login(String username, String password) throws IOException, LoginException;

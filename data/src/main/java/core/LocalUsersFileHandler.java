@@ -16,6 +16,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
+
 
 /**
  * This class allows to access a LocalUsersFile.
@@ -135,7 +137,7 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public void exportLocalUser(LocalUser localUser, String path) throws IOException {
-    path += localUser.getUuid() + "/";
+    path += "/" + localUser.getUuid() + "/";
     File baseDirectory = new File(path);
 
     //Wiping the previous backup if it exists.
@@ -159,12 +161,15 @@ public class LocalUsersFileHandler {
 
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
-              path + localUser.getUsername() + ".ser");
+              path + "user.ser");
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
       objectOutputStream.writeObject(localUser);
       objectOutputStream.flush();
       objectOutputStream.close();
       fileOutputStream.close();
+
+      //Backing up user avatar.
+      ImageIO.write(localUser.getAvatar(), "jpg", new File(path + "avatar.jpg"));
     } else {
       throw new IOException("Unable to create the directory.");
     }
@@ -177,12 +182,14 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public LocalUser importLocalUser(String path) throws IOException, ClassNotFoundException {
-    FileInputStream fileInputStream = new FileInputStream(path);
+    FileInputStream fileInputStream = new FileInputStream(path + "/user.ser");
     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
     LocalUser localUser = (LocalUser)objectInputStream.readObject();
 
     objectInputStream.close();
     fileInputStream.close();
+
+    localUser.setAvatar(ImageIO.read(new File(path + "/avatar.jpg")));
 
     return localUser;
   }
