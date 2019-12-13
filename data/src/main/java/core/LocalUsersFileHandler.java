@@ -161,8 +161,8 @@ public class LocalUsersFileHandler {
       });
 
       //Backing up user properties.
-      Path propertiesPath = Paths.get(
-              localUserToExport.getSavePath() + "/" + localUserToExport.getUsername() + "-config.properties");
+      Path propertiesPath = Paths.get(localUserToExport.getSavePath()
+              + "/" + localUserToExport.getUsername() + "-config.properties");
       Files.copy(propertiesPath,
               Paths.get(basePath + localUserToExport.getUsername() + "-config.properties"));
       localUserToExport.setSavePath(Paths.get(basePath));
