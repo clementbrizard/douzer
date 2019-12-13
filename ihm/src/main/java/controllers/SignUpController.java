@@ -1,6 +1,8 @@
 package controllers;
 
 import core.Application;
+
+import core.IhmAlert;
 import datamodel.LocalUser;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,7 +28,6 @@ import org.controlsfx.control.Notifications;
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
-  private static final Logger signUpLogger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldFirstName;
@@ -38,13 +39,7 @@ public class SignUpController implements Controller {
   private TextField textFieldLastName;
 
   @FXML
-  private TextField textFieldSecretAnswer;
-
-  @FXML
   private PasswordField textFieldPassword;
-
-  @FXML
-  private TextField textFieldSecretQuestion;
 
   @FXML
   private DatePicker datePickerBirth;
@@ -88,9 +83,8 @@ public class SignUpController implements Controller {
    * them and forwards it to data for further process
    */
   @FXML
-  public void actionSignup() {
+  public void actionSignup() throws InterruptedException {
 
-    //TODO: sanity checks
     final String userName = textFieldUsername.getText();
     final String password = textFieldPassword.getText();
     final String firstName = textFieldFirstName.getText();
@@ -98,52 +92,80 @@ public class SignUpController implements Controller {
 
     final LocalDate dateOfBirth = datePickerBirth.getValue();
 
-    BufferedImage avatarImg = null;
-
-    try {
-      final Path avatarPath = avatarFile.toPath();
-      // Get the image from the avatar path
-
-      avatarImg = ImageIO.read(avatarFile);
-    } catch (java.io.IOException | java.lang.NullPointerException e) {
-      signUpLogger.warn(e + ": aucun fichier avatar sélectioné.");
+    if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
+      IhmAlert.showAlert("userName","userName field is empty","critical");
     }
 
-    final String secretQuestion = textFieldSecretQuestion.getText();
-    final String secretAnswer = textFieldSecretAnswer.getText();
+    if (textFieldPassword.getText().isEmpty()) {
+      IhmAlert.showAlert("password","password field is empty","critical");
+    }
 
-    signUpLogger.info("Signing up as user {}.", userName);
+    if (textFieldFirstName.getText() == null || textFieldFirstName.getText().trim().isEmpty()) {
+      IhmAlert.showAlert("firstName","firstName field is empty","critical");
+    }
 
-    final Path profileSavePath = directoryChosenForSavingProfile.toPath();
+    if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
+      IhmAlert.showAlert("lastName","lastName field is empty","critical");
+    }
 
-    LocalUser user = new LocalUser();
+    if (datePickerBirth.getValue() == null) {
+      IhmAlert.showAlert("dateOfBirth","dateOfBirth field is empty","critical");
+    }
 
-    user.setPassword(password);
+    if (avatarFile == null) {
+      IhmAlert.showAlert("avatarFile","Avatar field is empty","critical");
+    }
 
-    user.setUsername(userName);
-    user.setFirstName(firstName);
-    user.setLastName(lastName);
-    user.setDateOfBirth(dateOfBirth);
-    user.setSavePath(profileSavePath);
-    user.setAvatar(avatarImg);
+    if (directoryChosenForSavingProfile == null) {
+      IhmAlert.showAlert("profileSavePath","profileSavePath field is empty","critical");
+    }
 
-    try {
-      application.getIhmCore().getDataForIhm().createUser(user);
-      application.showMainScene();
-      application.getMainController().init();
+    if (textFieldUsername.getText() != null
+        && !textFieldPassword.getText().isEmpty()
+        && textFieldFirstName.getText() != null
+        && textFieldLastName.getText() != null
+        && datePickerBirth.getValue() != null
+        && avatarFile != null
+    ) {
+      BufferedImage avatarImg = null;
 
+      final Path avatarPath = avatarFile.toPath();
+      try {
+        avatarImg = ImageIO.read(avatarFile);
+      } catch (IOException e) {
+        IhmAlert.showAlert("avatarFile","Avatar bug","critical");
+      }
 
-    } catch (IOException | LoginException se) {
+      final Path profileSavePath = directoryChosenForSavingProfile.toPath();
 
-      se.printStackTrace();
+      LocalUser user = new LocalUser();
 
+      user.setPassword(password);
+
+      user.setUsername(userName);
+      user.setFirstName(firstName);
+      user.setLastName(lastName);
+      user.setDateOfBirth(dateOfBirth);
+      user.setSavePath(profileSavePath);
+      user.setAvatar(avatarImg);
+
+      try {
+        application.getIhmCore().getDataForIhm().createUser(user);
+        application.showMainScene();
+        application.getMainController().init();
+
+      } catch (IOException | LoginException se) {
+
+        se.printStackTrace();
+      }
+
+    } else {
       Notifications.create()
           .title("Signup failed")
           .text("It seems you entered something wrong. Try again.")
           .darkStyle()
           .showWarning();
     }
-
   }
 
   /**
@@ -167,17 +189,22 @@ public class SignUpController implements Controller {
     try {
       avatarFilePath.setText(avatarFile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      signUpLogger.warn(e + " : aucun fichier avatar sélectioné.");
+      IhmAlert.showAlert("Avatar","aucun fichier avatar sélectioné","critical");
     }
   }
 
+  /**
+   * Called upon clicking the button to choose user's pathDirectory.
+   *
+   * @param event The event inducing the button click
+   */
   public void actionSaveProfileDirChoose(ActionEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     directoryChosenForSavingProfile = saveProfileDirectoryChooser.showDialog(primaryStage);
     try {
       profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      signUpLogger.warn(e + " : aucun emplacement de stockage sélectioné.");
+      IhmAlert.showAlert("Dir","aucun emplacement de stockage sélectioné","critical");
     }
   }
 
