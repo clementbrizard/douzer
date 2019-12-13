@@ -160,18 +160,11 @@ public class DataForIhmImpl implements DataForIhm {
       throws IOException, ClassNotFoundException, DataException {
     LocalUser localUser = dc.getLocalUsersFileHandler().importLocalUser(path);
 
-    //Check if the username already exists on the local computer.
+    //Check if the localUser already exists on the local computer.
     //If it doesn't we add the LocalUser.
-    boolean userNameAlreadyExists = false;
-    try {
-      dc.getLocalUsersFileHandler().getUser(localUser.getUsername());
-      userNameAlreadyExists = true;
-    } catch (NullPointerException e) {
-      //If we have a NullPointerException, the user doesn't exists.
+    if (!dc.getLocalUsersFileHandler().contains(localUser)) {
       dc.getLocalUsersFileHandler().add(localUser);
-    }
-
-    if (userNameAlreadyExists) {
+    } else {
       throw new DataException("The user already exists.");
     }
   }
