@@ -123,6 +123,39 @@ public class LocalUsersFileHandler {
     return getUser(localUser.getUsername());
   }
 
+  /**
+   * Export a LocalUser on the hard drive.
+   * @param localUser the LocalUser to export.
+   * @param path the path where the LocalUser will be stored.
+   * @throws IOException if the file is not accessible.
+   */
+  public void exportLocalUser(LocalUser localUser, String path) throws IOException {
+    FileOutputStream fileOutputStream = new FileOutputStream(path);
+    ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+    objectOutputStream.writeObject(localUser);
+
+    objectOutputStream.flush();
+    objectOutputStream.close();
+    fileOutputStream.close();
+  }
+
+  /**
+   * Import a previously exported LocalUser.
+   * @param path the path to the previously exported LocalUser.
+   * @return the imported LocalUSer.
+   * @throws IOException if the file is not accessible.
+   */
+  public LocalUser importLocalUser(String path) throws IOException, ClassNotFoundException {
+    FileInputStream fileInputStream = new FileInputStream(path);
+    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+    LocalUser localUser = (LocalUser)objectInputStream.readObject();
+
+    objectInputStream.close();
+    fileInputStream.close();
+
+    return localUser;
+  }
+
   @SuppressWarnings("unchecked")
   private Map<String, LocalUser> getAll() throws IOException {
     try (FileInputStream file = new FileInputStream(this.filePath.toFile());

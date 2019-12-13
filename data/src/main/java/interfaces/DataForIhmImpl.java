@@ -159,25 +159,13 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void exportProfile(String path) throws IOException {
-    LocalUser localUser = dc.getCurrentUser();
-
-    FileOutputStream fileOutputStream = new FileOutputStream(path);
-    ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-    objectOutputStream.writeObject(localUser);
-
-    objectOutputStream.flush();
-    objectOutputStream.close();
-    fileOutputStream.close();
+    dc.getLocalUsersFileHandler().exportLocalUser(dc.getCurrentUser(), path);
   }
 
   @Override
   public void importProfile(String path)
       throws IOException, ClassNotFoundException, DataException {
-    FileInputStream fileInputStream = new FileInputStream(path);
-    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-    LocalUser localUser = (LocalUser)objectInputStream.readObject();
-    objectInputStream.close();
-    fileInputStream.close();
+    LocalUser localUser = dc.getLocalUsersFileHandler().importLocalUser(path);
 
     //Check if the username already exists on the local computer.
     //If it doesn't we add the LocalUser.

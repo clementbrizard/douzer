@@ -76,8 +76,6 @@ public interface DataForIhm {
   MusicMetadata parseMusicMetadata(String path)
       throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException;
 
-  void rateMusic(Music music, int rating);
-  
   void shareMusic(LocalMusic music);
 
   void shareMusics(Collection<LocalMusic> musics);
