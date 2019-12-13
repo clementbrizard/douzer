@@ -42,6 +42,19 @@ public class LocalUser extends User {
   }
 
   /**
+   * Copy constructor.
+   * @param that the localUser to copy.
+   */
+  public LocalUser(LocalUser that){
+    super(that);
+    this.pwdHash = that.pwdHash;
+    this.friends = new HashSet<>(that.friends);
+    this.savePath = that.savePath;
+    this.localMusics = new HashSet<>(that.localMusics);
+    this.playlist = new ArrayList<>(that.playlist);
+  }
+
+  /**
    * Set a new password.
    *
    * @param pass New password
