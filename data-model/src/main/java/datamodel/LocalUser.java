@@ -52,7 +52,10 @@ public class LocalUser extends User {
     that.localMusics.forEach(m -> {
       LocalMusic newLocalMusic = new LocalMusic(m);
       this.localMusics.add(newLocalMusic);
-      this.playlist.add(that.playlist.indexOf(m), newLocalMusic);
+      int index = that.playlist.indexOf(m);
+      if (index >= 0) {
+        this.playlist.add(index, newLocalMusic);
+      }
     });
   }
 
