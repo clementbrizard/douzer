@@ -36,7 +36,7 @@ public class DataForNetImpl implements DataForNet {
   }
 
   @Override
-  public void saveMp3(InputStream stream, String musicHash) {
+  public void saveMp3(InputStream stream, String musicHash, int musicSize) {
     Music formerMusic = this.dc.getMusic(musicHash);
     
     //Default name for mp3
@@ -70,17 +70,31 @@ public class DataForNetImpl implements DataForNet {
       
       
     //Save file
-    //TODO progress bar
-    byte[] contents = new byte[20000];
+    byte[] contents = new byte[musicSize];
     try {
       FileOutputStream fos = new FileOutputStream(mp3File.getAbsolutePath());
       BufferedOutputStream bos = new BufferedOutputStream(fos);
       
       //No of bytes read in one read() call
-      int bytesRead = 0; 
+      int bytesRead = 0;
+      //Total bytes read
+      int totalBytes = 0;
+      int progress = 0;
       
       while ((bytesRead = stream.read(contents)) != -1) {
+        totalBytes += bytesRead;
         bos.write(contents, 0, bytesRead);
+        
+        //Progress only if progress > 1%
+        if (((totalBytes * 100)/musicSize) > progress) {
+          progress = (totalBytes * 100)/musicSize;
+          this.dc.ihm.notifyDownloadProgress(formerMusic, progress);
+          
+          //Do not pollute log
+          if (progress % 25 == 0) {
+            Datacore.getLogger().info("Download of " + mp3FileName + " : " + progress + "% complete.");
+          }
+        }
       }
       
       bos.flush(); 
