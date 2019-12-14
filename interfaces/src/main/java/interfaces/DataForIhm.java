@@ -12,6 +12,7 @@ import datamodel.User;
 import exceptions.data.DataException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.List;
@@ -64,7 +65,7 @@ public interface DataForIhm {
    * @param path path to the directory that will contain the backup.
    * @throws IOException if there is a problem creating or deleting any file.
    */
-  void exportProfile(String path) throws IOException;
+  void exportProfile(Path path) throws IOException;
 
   /**
    * Import a previously exported LocalUser.
@@ -72,7 +73,7 @@ public interface DataForIhm {
    * @throws IOException if it is not possible to read a file.
    * @throws DataException if the username already exists.
    */
-  void importProfile(String path) throws IOException, ClassNotFoundException, DataException;
+  void importProfile(Path path) throws IOException, ClassNotFoundException, DataException;
 
   void login(String username, String password) throws IOException, LoginException;
 

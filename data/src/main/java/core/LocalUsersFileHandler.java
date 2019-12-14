@@ -136,13 +136,13 @@ public class LocalUsersFileHandler {
    * @param path path to the directory that will contain the backup directory.
    * @throws IOException if the file is not accessible.
    */
-  public void exportLocalUser(LocalUser localUser, String path) throws IOException {
+  public void exportLocalUser(LocalUser localUser, Path path) throws IOException {
     LocalUser localUserToExport = new LocalUser(localUser);
-    String basePath = path + "/" + localUserToExport.getUuid() + "/";
-    File baseDirectory = new File(basePath);
+    Path basePath = path.resolve(Paths.get(localUserToExport.getUuid().toString()));
+    File baseDirectory = new File(basePath.toUri());
 
     //Wiping the previous backup if it exists.
-    if (Files.exists(Paths.get(basePath))) {
+    if (Files.exists(basePath)) {
       Arrays.stream(baseDirectory.listFiles()).forEach(File::delete);
       baseDirectory.delete();
     }
@@ -152,24 +152,25 @@ public class LocalUsersFileHandler {
       //Moving all the songs.
       for (LocalMusic m : localUserToExport.getLocalMusics()) {
         Files.copy(Paths.get(m.getMp3Path()), Paths.get(
-                baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName()));
+                baseDirectory.getAbsolutePath())
+                .resolve(Paths.get(new File(m.getMp3Path()).getName())));
       }
 
       //Changing LocalMusics paths.
       localUserToExport.getLocalMusics().forEach(m -> {
-        m.setMp3Path(baseDirectory.getAbsolutePath() + "/" + new File(m.getMp3Path()).getName());
+        m.setMp3Path(basePath.resolve(Paths.get(new File(m.getMp3Path()).getName())).toString());
       });
 
       //Backing up user properties.
-      Path propertiesPath = Paths.get(localUserToExport.getSavePath()
-              + "/" + localUserToExport.getUsername() + "-config.properties");
+      Path propertiesPath = localUserToExport.getSavePath()
+              .resolve(Paths.get(localUserToExport.getUsername() + "-config.properties"));
       Files.copy(propertiesPath,
-              Paths.get(basePath + localUserToExport.getUsername() + "-config.properties"));
-      localUserToExport.setSavePath(Paths.get(basePath));
+              basePath.resolve(Paths.get(localUserToExport.getUsername() + "-config.properties")));
+      localUserToExport.setSavePath(basePath);
 
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
-              basePath + "user.ser");
+              basePath.resolve(Paths.get( "user.ser")).toString());
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
       objectOutputStream.writeObject(localUserToExport);
       objectOutputStream.flush();
@@ -177,7 +178,8 @@ public class LocalUsersFileHandler {
       fileOutputStream.close();
 
       //Backing up user avatar.
-      ImageIO.write(localUserToExport.getAvatar(), "jpg", new File(basePath + "avatar.jpg"));
+      ImageIO.write(localUserToExport.getAvatar(), "jpg",
+              new File(basePath.resolve(Paths.get("avatar.jpg")).toUri()));
     } else {
       throw new IOException("Unable to create the directory.");
     }
@@ -189,15 +191,15 @@ public class LocalUsersFileHandler {
    * @return the imported LocalUSer.
    * @throws IOException if the file is not accessible.
    */
-  public LocalUser importLocalUser(String path) throws IOException, ClassNotFoundException {
-    FileInputStream fileInputStream = new FileInputStream(path + "/user.ser");
+  public LocalUser importLocalUser(Path path) throws IOException, ClassNotFoundException {
+    FileInputStream fileInputStream = new FileInputStream(path.resolve(Paths.get("user.ser")).toString());
     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
     LocalUser localUser = (LocalUser)objectInputStream.readObject();
 
     objectInputStream.close();
     fileInputStream.close();
 
-    localUser.setAvatar(ImageIO.read(new File(path + "/avatar.jpg")));
+    localUser.setAvatar(ImageIO.read(new File(path.resolve(Paths.get("avatar.jpg")).toUri())));
 
     return localUser;
   }

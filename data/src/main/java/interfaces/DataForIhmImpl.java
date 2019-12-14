@@ -151,12 +151,12 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void exportProfile(String path) throws IOException {
+  public void exportProfile(Path path) throws IOException {
     dc.getLocalUsersFileHandler().exportLocalUser(dc.getCurrentUser(), path);
   }
 
   @Override
-  public void importProfile(String path)
+  public void importProfile(Path path)
       throws IOException, ClassNotFoundException, DataException {
     LocalUser localUser = dc.getLocalUsersFileHandler().importLocalUser(path);
 
