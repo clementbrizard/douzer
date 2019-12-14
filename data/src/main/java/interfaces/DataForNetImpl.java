@@ -86,13 +86,13 @@ public class DataForNetImpl implements DataForNet {
         bos.write(contents, 0, bytesRead);
         
         //Progress only if progress > 1%
-        if (((totalBytes * 100)/musicSize) > progress) {
-          progress = (totalBytes * 100)/musicSize;
+        if (((totalBytes * 100) / musicSize) > progress) {
+          progress = (totalBytes * 100) / musicSize;
           this.dc.ihm.notifyDownloadProgress(formerMusic, progress);
           
           //Do not pollute log
           if (progress % 25 == 0) {
-            Datacore.getLogger().info("Download of " + mp3FileName + " : " + progress + "% complete.");
+            Datacore.getLogger().info("Download " + mp3FileName + " : " + progress + "% complete.");
           }
         }
       }
