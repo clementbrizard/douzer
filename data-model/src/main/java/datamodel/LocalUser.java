@@ -7,11 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class LocalUser extends User {
   private static final long serialVersionUID = 1L;
@@ -50,9 +46,14 @@ public class LocalUser extends User {
     this.pwdHash = that.pwdHash;
     this.savePath = that.savePath;
     this.friends = new HashSet<>();
-    this.playlist = new ArrayList<>(that.playlist);
+    friends.forEach(f -> this.friends.add(new User(f)));
+    this.playlist = new ArrayList<>(that.playlist.size());
     this.localMusics = new HashSet<>(that.localMusics.size());
-    that.localMusics.forEach(m -> this.localMusics.add(new LocalMusic(m)));
+    that.localMusics.forEach(m -> {
+      LocalMusic newLocalMusic = new LocalMusic(m);
+      this.localMusics.add(newLocalMusic);
+      this.playlist.add(that.playlist.indexOf(m), newLocalMusic);
+    });
   }
 
   /**
