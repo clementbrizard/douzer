@@ -138,7 +138,7 @@ public class LocalUsersFileHandler {
    */
   public void exportLocalUser(LocalUser localUser, Path path) throws IOException {
     LocalUser localUserToExport = new LocalUser(localUser);
-    Path basePath = path.resolve(Paths.get(localUserToExport.getUuid().toString()));
+    Path basePath = path.resolve(localUserToExport.getUuid().toString());
     File baseDirectory = new File(basePath.toUri());
 
     //Wiping the previous backup if it exists.
@@ -152,25 +152,24 @@ public class LocalUsersFileHandler {
       //Moving all the songs.
       for (LocalMusic m : localUserToExport.getLocalMusics()) {
         Files.copy(Paths.get(m.getMp3Path()), Paths.get(
-                baseDirectory.getAbsolutePath())
-                .resolve(Paths.get(new File(m.getMp3Path()).getName())));
+                baseDirectory.getAbsolutePath()).resolve(new File(m.getMp3Path()).getName()));
       }
 
       //Changing LocalMusics paths.
       localUserToExport.getLocalMusics().forEach(m -> {
-        m.setMp3Path(basePath.resolve(Paths.get(new File(m.getMp3Path()).getName())).toString());
+        m.setMp3Path(basePath.resolve(new File(m.getMp3Path()).getName()).toString());
       });
 
       //Backing up user properties.
       Path propertiesPath = localUserToExport.getSavePath()
-              .resolve(Paths.get(localUserToExport.getUsername() + "-config.properties"));
+              .resolve(localUserToExport.getUsername() + "-config.properties");
       Files.copy(propertiesPath,
-              basePath.resolve(Paths.get(localUserToExport.getUsername() + "-config.properties")));
+              basePath.resolve(localUserToExport.getUsername() + "-config.properties"));
       localUserToExport.setSavePath(basePath);
 
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
-              basePath.resolve(Paths.get("user.ser")).toString());
+              basePath.resolve("user.ser").toString());
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
       objectOutputStream.writeObject(localUserToExport);
       objectOutputStream.flush();
@@ -179,7 +178,7 @@ public class LocalUsersFileHandler {
 
       //Backing up user avatar.
       ImageIO.write(localUserToExport.getAvatar(), "jpg",
-              new File(basePath.resolve(Paths.get("avatar.jpg")).toUri()));
+              new File(basePath.resolve("avatar.jpg").toUri()));
     } else {
       throw new IOException("Unable to create the directory.");
     }
@@ -193,14 +192,14 @@ public class LocalUsersFileHandler {
    */
   public LocalUser importLocalUser(Path path) throws IOException, ClassNotFoundException {
     FileInputStream fileInputStream = new FileInputStream(
-            path.resolve(Paths.get("user.ser")).toString());
+            path.resolve("user.ser").toString());
     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
     LocalUser localUser = (LocalUser)objectInputStream.readObject();
 
     objectInputStream.close();
     fileInputStream.close();
 
-    localUser.setAvatar(ImageIO.read(new File(path.resolve(Paths.get("avatar.jpg")).toUri())));
+    localUser.setAvatar(ImageIO.read(new File(path.resolve("avatar.jpg").toUri())));
 
     return localUser;
   }
