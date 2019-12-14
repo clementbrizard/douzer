@@ -170,7 +170,7 @@ public class LocalUsersFileHandler {
 
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
-              basePath.resolve(Paths.get( "user.ser")).toString());
+              basePath.resolve(Paths.get("user.ser")).toString());
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
       objectOutputStream.writeObject(localUserToExport);
       objectOutputStream.flush();
@@ -192,7 +192,8 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public LocalUser importLocalUser(Path path) throws IOException, ClassNotFoundException {
-    FileInputStream fileInputStream = new FileInputStream(path.resolve(Paths.get("user.ser")).toString());
+    FileInputStream fileInputStream = new FileInputStream(
+            path.resolve(Paths.get("user.ser")).toString());
     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
     LocalUser localUser = (LocalUser)objectInputStream.readObject();
 
