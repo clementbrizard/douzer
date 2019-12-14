@@ -176,9 +176,6 @@ public class LocalUsersFileHandler {
       objectOutputStream.close();
       fileOutputStream.close();
 
-      //Backing up user avatar.
-      ImageIO.write(localUserToExport.getAvatar(), "jpg",
-              new File(basePath.resolve("avatar.jpg").toUri()));
     } else {
       throw new IOException("Unable to create the directory.");
     }
@@ -198,8 +195,6 @@ public class LocalUsersFileHandler {
 
     objectInputStream.close();
     fileInputStream.close();
-
-    localUser.setAvatar(ImageIO.read(new File(path.resolve("avatar.jpg").toUri())));
 
     return localUser;
   }
