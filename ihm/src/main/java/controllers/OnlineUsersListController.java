@@ -11,11 +11,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The left middle view containing all connected users.
  */
 public class OnlineUsersListController implements Controller {
+  private static final Logger onlineUsersListLogger = LogManager.getLogger();
+
   @FXML
   private ListView<String> lvwOnlineUsers;
 
@@ -49,6 +52,12 @@ public class OnlineUsersListController implements Controller {
     }
   }
 
+  /**
+   * Add new online user in online users list
+   * which will update the list view.
+   * @param user the user to add
+   *
+   */
   public void addNewOnlineUser(User user) {
     if (!onlineUsersList.contains(user.getUsername())) {
 
@@ -64,6 +73,12 @@ public class OnlineUsersListController implements Controller {
     }
   }
 
+  /**
+   * Remove online user in online users list
+   * which will update the list view.
+   * @param user the user to add
+   *
+   */
   public void removeOnlineUser(User user) {
     Platform.runLater(new Runnable() {
       @Override
@@ -74,7 +89,7 @@ public class OnlineUsersListController implements Controller {
   }
 
   /**
-   * Fills the view with the ips of users.
+   * Fills the view with the username of already connected users.
    **/
 
   public void displayOnlineUsers() {
@@ -86,6 +101,7 @@ public class OnlineUsersListController implements Controller {
         .map(user -> user.getUsername())
         .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
+    onlineUsersListLogger.info("Retrieved {} online users from Data", onlineUsers.size());
     onlineUsersList.setAll(onlineUsers);
   }
 
