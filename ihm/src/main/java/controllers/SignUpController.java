@@ -20,8 +20,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 
 /**
@@ -89,35 +87,40 @@ public class SignUpController implements Controller {
     final String password = textFieldPassword.getText();
     final String firstName = textFieldFirstName.getText();
     final String lastName = textFieldLastName.getText();
-
     final LocalDate dateOfBirth = datePickerBirth.getValue();
 
-    if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("userName","userName field is empty","critical");
-    }
+    BufferedImage avatarImg = null;
 
-    if (textFieldPassword.getText().isEmpty()) {
-      IhmAlert.showAlert("password","password field is empty","critical");
+    if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
+      IhmAlert.showAlert("Nom","Le champ nom ne doit pas être vide","warning");
     }
 
     if (textFieldFirstName.getText() == null || textFieldFirstName.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("firstName","firstName field is empty","critical");
+      IhmAlert.showAlert("Prenom","Le champ prenom ne doit pas être vide","warning");
     }
 
-    if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("lastName","lastName field is empty","critical");
+    if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
+      IhmAlert.showAlert("Pseudo","Le champ pseudo ne doit pas être vide","warning");
+    }
+
+    if (textFieldPassword.getText().isEmpty()) {
+      IhmAlert.showAlert("Mot de passe","Le champ mot de passe ne doit pas être vide","warning");
     }
 
     if (datePickerBirth.getValue() == null) {
-      IhmAlert.showAlert("dateOfBirth","dateOfBirth field is empty","critical");
+      IhmAlert.showAlert("Date de naissance",
+          "Le champ date de naissance ne doit pas être vide",
+          "warning");
     }
 
     if (avatarFile == null) {
-      IhmAlert.showAlert("avatarFile","Avatar field is empty","critical");
+      IhmAlert.showAlert("Avatar","Vous devez chosir un avatar","warning");
     }
 
     if (directoryChosenForSavingProfile == null) {
-      IhmAlert.showAlert("profileSavePath","profileSavePath field is empty","critical");
+      IhmAlert.showAlert("Répertoire de sauvegarde du profil",
+          "Vous devez choisir un répertoire pour sauvegarder votre profil",
+          "warning");
     }
 
     if (textFieldUsername.getText() != null
@@ -127,9 +130,9 @@ public class SignUpController implements Controller {
         && datePickerBirth.getValue() != null
         && avatarFile != null
     ) {
-      BufferedImage avatarImg = null;
 
       final Path avatarPath = avatarFile.toPath();
+
       try {
         avatarImg = ImageIO.read(avatarFile);
       } catch (IOException e) {
