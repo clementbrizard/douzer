@@ -13,6 +13,12 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 public abstract class Logout {
+
+  /**
+   *  Logout the current user and send LogoutPayload to everyone.
+   * @param dc The Datacore
+   * @throws IOException if the properties file can't be accessed
+   */
   public static void run(Datacore dc) throws IOException {
     LocalUser currentUser = dc.getCurrentUser();
     currentUser.setConnected(false);
