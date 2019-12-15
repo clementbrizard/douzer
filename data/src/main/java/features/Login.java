@@ -84,12 +84,18 @@ public abstract class Login {
     user.getLocalMusics().forEach(dc::addMusic);
     user.getFriends().forEach(dc::addUser);
 
-    LoginPayload payload = new LoginPayload(user, dc.getOnlineIps()
-        .collect(Collectors.toCollection(HashSet::new)));
     // TODO: template for filename
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
     Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
     dc.setAllIps((HashSet<InetAddress>) ips);
-    dc.net.sendToUsers(payload, ips.stream());
+
+    HashSet<InetAddress> ipsToShare;
+    for (InetAddress ip : ips) {
+      // iterate and don't send ip of user A to A
+      ipsToShare = (HashSet<InetAddress>) ips;
+      ipsToShare.remove(ip);
+      LoginPayload payload = new LoginPayload(user, ipsToShare);
+      dc.net.sendToUser(payload, ip);
+    }
   }
 }
