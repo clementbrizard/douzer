@@ -23,4 +23,11 @@ public class UpdateUserPayload extends Payload {
   public void run(Datacore dc) {
     dc.ihm.updateUser(this.user);
   }
+
+  @Override
+  public String toString() {
+    return "UpdateUserPayload{"
+        + "user=" + user.getUsername() + " | " + user.getUuid()
+        + '}';
+  }
 }

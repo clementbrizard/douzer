@@ -14,4 +14,11 @@ public class ShareMusicsPayload extends UpdateMusicsPayload {
   public ShareMusicsPayload(LocalUser user, Collection<LocalMusic> musics) {
     super(user, musics.stream().map(Music::new).collect(Collectors.toList()));
   }
+
+  @Override
+  public String toString() {
+    return "ShareMusicsPayload{"
+        + super.toString()
+        + '}';
+  }
 }

@@ -29,4 +29,11 @@ public class UpdateMusicsPayload extends Payload {
       dc.ihm.updateMusic(music);
     });
   }
+
+  @Override
+  public String toString() {
+    return "UpdateMusicsPayload{"
+        + "musics=" + musics
+        + '}';
+  }
 }
