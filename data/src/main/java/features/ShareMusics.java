@@ -5,7 +5,7 @@ import datamodel.LocalMusic;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ShareMusics {
+public abstract class ShareMusics {
   /**
    * Shares the musics according to their settings.
    */
