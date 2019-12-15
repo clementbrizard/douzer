@@ -78,4 +78,13 @@ public class LoginPayload extends ShareMusicsPayload {
     );
     super.run(dc); // update musics
   }
+
+  @Override
+  public String toString() {
+    return "LoginPayload{"
+        + "user=" + user
+        + ", ips=" + ips
+        + ", isResponse=" + isResponse
+        + '}';
+  }
 }
