@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
  * integration for Ihm interface.
  */
 public class IhmForData implements Ihm {
+  private static final Logger ihmForDataLogger = LogManager.getLogger();
 
   private IhmCore ihmCore;
 
@@ -39,6 +40,11 @@ public class IhmForData implements Ihm {
   public void notifyUserConnection(User user) {
     OnlineUsersListController controller;
     try {
+      ihmForDataLogger.info("{} was notified of {} connection",
+          this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
+          user.getUsername()
+      );
+
       controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
@@ -65,6 +71,9 @@ public class IhmForData implements Ihm {
       return;
     }
     controller.removeOnlineUser(user);
+    ihmForDataLogger.info("{} was notified of {} disconnection",
+        this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
+        user.getUsername());
   }
 
   /**
@@ -97,7 +106,11 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    controllerAllMusic.searchMusics();
+
+    ihmForDataLogger.info("{} was notified of music \"{}\" update",
+        this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
+        music.getMetadata().getTitle());
+    controllerAllMusic.displayAvailableMusics();
 
     CurrentMusicInfoController controllerCurrentMusic;
     try {
@@ -105,7 +118,7 @@ public class IhmForData implements Ihm {
           .getMainController()
           .getCurrentMusicInfoController();
     } catch (NullPointerException e) {
-      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
@@ -129,11 +142,17 @@ public class IhmForData implements Ihm {
           .getCentralFrameController()
           .getAllMusicsController();
     } catch (NullPointerException e) {
-      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    controllerAllMusic.searchMusics();
+
+    ihmForDataLogger.info("{} was notified of music \"{}\" deletion",
+        this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
+        music.getMetadata().getTitle()
+    );
+
+    controllerAllMusic.displayAvailableMusics();
 
     CurrentMusicInfoController controllerCurrentMusic;
     try {
@@ -141,7 +160,7 @@ public class IhmForData implements Ihm {
           .getMainController()
           .getCurrentMusicInfoController();
     } catch (NullPointerException e) {
-      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
@@ -165,12 +184,11 @@ public class IhmForData implements Ihm {
           .getCentralFrameController()
           .getDistantUserController();
     } catch (NullPointerException e) {
-      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    LogManager.getLogger()
-        .warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    ihmForDataLogger.warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 
   /**
@@ -187,11 +205,10 @@ public class IhmForData implements Ihm {
           .getCentralFrameController()
           .getDistantUserController();
     } catch (NullPointerException e) {
-      LogManager.getLogger().error("Controller chain not fully initialized : " + e);
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    LogManager.getLogger()
-        .warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    ihmForDataLogger.warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
   }
 }

@@ -378,10 +378,8 @@ public class DetailsMusicController implements Controller {
     }
 
     this.getMyMusicsController().displayAvailableMusics();
-
-    LogManager.getLogger().info("Change Field TODO with Data function if exist");
-
-    //TODO change field with Data function if exists
+    this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
+        .displayAvailableMusics();
 
     ((Stage) this.textFieldTitle.getScene().getWindow()).close();
   }
