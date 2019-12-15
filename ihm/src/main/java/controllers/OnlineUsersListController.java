@@ -2,8 +2,10 @@ package controllers;
 
 import datamodel.User;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +19,9 @@ public class OnlineUsersListController implements Controller {
   @FXML
   private ListView<String> lvwOnlineUsers;
 
+  // The list view updates itself when this observable list changes
+  private ObservableList<String> onlineUsersList;
+
   private MainController mainController;
 
   // Setters
@@ -28,7 +33,13 @@ public class OnlineUsersListController implements Controller {
   // Other methods
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // Initialize the observable list
+    onlineUsersList = FXCollections.observableArrayList();
+
+    // Set it as the data model of the ListView
+    lvwOnlineUsers.setItems(onlineUsersList);
+  }
 
   public void init() {
     try {
@@ -39,13 +50,27 @@ public class OnlineUsersListController implements Controller {
   }
 
   public void addNewOnlineUser(User user) {
-    if (!lvwOnlineUsers.getItems().contains(user.getUsername())) {
-      lvwOnlineUsers.getItems().add(user.getUsername());
+    if (!onlineUsersList.contains(user.getUsername())) {
+
+      // This is done to avoid a "Not on FX application thread" error
+      // Solution found here : https://stackoverflow.com/a/23007018
+      Platform.runLater(new Runnable() {
+        @Override
+        public void run() {
+          onlineUsersList.add(user.getUsername());
+        }
+      });
+
     }
   }
 
   public void removeOnlineUser(User user) {
-    lvwOnlineUsers.getItems().removeAll(user.getUsername());
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        onlineUsersList.remove(user.getUsername());
+      }
+    });
   }
 
   /**
@@ -53,18 +78,15 @@ public class OnlineUsersListController implements Controller {
    **/
 
   public void displayOnlineUsers() {
-    LogManager.getLogger().info("Refresh online users");
-    Stream<User> users = this.mainController
+    ObservableList<String> onlineUsers = this.mainController
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getOnlineUsers();
+        .getOnlineUsers()
+        .map(user -> user.getUsername())
+        .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-    ObservableList<String> items =
-        users.map(user -> user.getUsername())
-             .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
-    lvwOnlineUsers.setItems(items);
+    onlineUsersList.setAll(onlineUsers);
   }
 
 }
