@@ -414,7 +414,10 @@ public class NewMusicController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .addMusic(meta, file.getAbsolutePath(), shareStatus);
+
         this.getMyMusicsController().displayAvailableMusics();
+        this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
+            .displayAvailableMusics();
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
       } catch (java.io.FileNotFoundException e) {
