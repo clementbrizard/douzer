@@ -53,7 +53,10 @@ public class AllMusicsController implements Controller {
   private TextField tfSearchTags;
 
   private SearchMusicController searchMusicController;
+
   private CentralFrameController centralFrameController;
+
+  private DownloadController downloadController;
 
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
@@ -80,6 +83,24 @@ public class AllMusicsController implements Controller {
     return centralFrameController;
   }
 
+  /**
+   * getter of downloadController.
+   *
+   * @return a downloadController
+   */
+  public DownloadController getDownloadController() {
+    return downloadController;
+  }
+
+  /**
+   * getter of all musics tableView.
+   *
+   * @return all musics tableView
+   */
+  public TableView<MusicMetadata> getTvMusics() {
+    return tvMusics;
+  }
+
   // Setters
 
   /**
@@ -102,6 +123,15 @@ public class AllMusicsController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
+  /**
+   * setter of downloadController.
+   *
+   * @param downloadController the now downloadController
+   */
+  public void setDownloadController(DownloadController downloadController) {
+    this.downloadController = downloadController;
+  }
+
   // Other methods
 
   /**
@@ -110,6 +140,9 @@ public class AllMusicsController implements Controller {
   @Override
   public void initialize() {
     availableMusics = new HashMap<String, Music>();
+    // Link the allMusicController with the downloadController
+    this.downloadController = new DownloadController();
+    downloadController.setAllMusicsController(this);
   }
 
   /**
@@ -218,6 +251,21 @@ public class AllMusicsController implements Controller {
   @FXML
   public void changeFrameToMyMusics(ActionEvent event) {
     AllMusicsController.this.centralFrameController.setCentralContentMyMusics();
+  }
+
+  /**
+   * Downwload the selected musics.
+   *
+   * @param event not used
+   */
+  @FXML
+  public void download(ActionEvent event) {
+    // Creation of the music metadata from the tableView
+    MusicMetadata selectedMusicMetadata = this.tvMusics
+        .getSelectionModel()
+        .getSelectedItem();
+    Music selectedMusic = new Music(selectedMusicMetadata);
+    this.downloadController.download(selectedMusic);
   }
 
   /**

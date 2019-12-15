@@ -34,7 +34,9 @@ public class CurrentMusicInfoController implements Controller {
   private CommentsController commentCurrentMusicController;
 
   private ShareController shareController;
+
   private NewCommentController newCommentController;
+
   private MainController mainController;
 
   private Scene shareScene;
@@ -66,34 +68,6 @@ public class CurrentMusicInfoController implements Controller {
 
   public Application getApplication() {
     return application;
-  }
-
-  /**
-   * Initialize the controller.
-   */
-  @Override
-  public void initialize() {
-    //The share button is invisible unless the selected music is a localMusic (see in Init method)
-    btnShare.setVisible(false);
-
-  }
-
-  /**
-   * Initialize the current music info view with a selected music.
-   *
-   * @param music selected music
-   */
-  public void init(Music music) {
-    this.currentMusic = music;
-
-    // The user can only see his/her own musics (that are localMusics)
-    if (music instanceof LocalMusic) {
-      btnShare.setVisible(true);
-    }
-
-    commentCurrentMusicController.setCurrentMusicController(this);
-    commentCurrentMusicController.init(music);
-
   }
 
   public Music getCurrentMusic() {
@@ -132,6 +106,33 @@ public class CurrentMusicInfoController implements Controller {
   // Other methods
 
   /**
+   * Initialize the controller.
+   */
+  @Override
+  public void initialize() {
+    //The share button is invisible unless the selected music is a localMusic (see in Init method)
+    btnShare.setVisible(false);
+  }
+
+  /**
+   * Initialize the current music info view with a selected music.
+   *
+   * @param music selected music
+   */
+  public void init(Music music) {
+    this.currentMusic = music;
+
+    // The user can only see his/her own musics (that are localMusics)
+    if (music instanceof LocalMusic) {
+      btnShare.setVisible(true);
+    }
+
+    commentCurrentMusicController.setCurrentMusicController(this);
+    commentCurrentMusicController.init(music);
+
+  }
+
+  /**
    * Share the current music. Open the music sharing pop-up.
    *
    * @param event nut used
@@ -167,37 +168,6 @@ public class CurrentMusicInfoController implements Controller {
     // Show sharing popup.
     musicSharingPopup.show();
   }
-
-  /**
-   * Update the download progress bar value.
-   *
-   * @param progress dowload progress, between 0 and 100
-   * @param music    The music that is downloaded
-   */
-  public void updateDownloadProgressBar(Music music, int progress) {
-    downloadProgress.setProgress(progress / 100);
-    // We update central views when download is done
-    if (progress == 100) {
-      Notifications.create()
-          .title("Download done")
-          .text(music.getMetadata().getTitle() + " - " + music.getMetadata().getArtist())
-          .darkStyle()
-          .showWarning();
-      this.application
-          .getMainController()
-          .getCentralFrameController()
-          .getMyMusicsController()
-          .init();
-      this.application
-          .getMainController()
-          .getCentralFrameController()
-          .getAllMusicsController()
-          .init();
-      // Reinitialize progress bar with 0
-      downloadProgress.setProgress(0);
-    }
-  }
-
 }
 
 
