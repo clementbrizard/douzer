@@ -42,6 +42,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
+import sun.jvm.hotspot.oops.Metadata;
 import utils.FormatDuration;
 
 /**
@@ -87,10 +88,21 @@ public class MyMusicsController implements Controller {
   // Local musics hashmap to access them instantly
   private HashMap<String, LocalMusic> localMusics;
 
+  // Local music with or without filter
+  private HashMap<String, MusicMetadata> playerMusics;
+
   /* Getters */
 
   public NewMusicController getNewMusicController() {
     return newMusicController;
+  }
+
+  public HashMap<String, MusicMetadata> getPlayerMusics() {
+    return playerMusics;
+  }
+
+  public HashMap<String, LocalMusic>  getLocalMusics() {
+    return localMusics;
   }
 
   public SearchMusicController getSearchMusicController() {
@@ -136,6 +148,7 @@ public class MyMusicsController implements Controller {
   @Override
   public void initialize() {
     localMusics = new HashMap<String, LocalMusic>();
+    playerMusics = new HashMap<String, MusicMetadata>();
   }
 
   /**
@@ -230,15 +243,12 @@ public class MyMusicsController implements Controller {
             listMusicClicked.add(currentLocalMusic);
           }
         }
-        getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .setArrayMusic(listMusicClicked);
 
         getCentralFrameController()
             .getMainController()
             .getPlayerController()
-            .playerOnMusic();
+            .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
+
       }
     });
 
@@ -394,6 +404,37 @@ public class MyMusicsController implements Controller {
         .getDataForIhm().searchMusics(query);
 
     updateMusicsOnSearch(searchResults);
+    createPlayerList(query);
+  }
+
+  /**
+   * Function to play filter music.
+   *
+   * @param query query to generate stream
+   */
+  private void createPlayerList(SearchQuery query) {
+
+    playerMusics.clear();
+
+    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().searchMusics(query);
+
+    ArrayList<Music> viewMusic =  searchResults.collect(Collectors.toCollection(ArrayList::new));
+
+    if (viewMusic.size() != 0) {
+      for (Music tmp : viewMusic) {
+        playerMusics.put(localMusics
+            .get(tmp
+                .getMetadata()
+                .getHash())
+            .getMp3Path(),
+            tmp.getMetadata());
+      }
+    }
+
   }
 
   /**
@@ -500,7 +541,7 @@ public class MyMusicsController implements Controller {
    *
    * @return list of metadata of user's local musics
    */
-  private List<MusicMetadata> retrieveLocalMusics() {
+  public List<MusicMetadata> retrieveLocalMusics() {
     localMusics.clear();
     Set<LocalMusic> localMusicsStream = this
         .getCentralFrameController()

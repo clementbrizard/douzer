@@ -2,11 +2,15 @@ package controllers;
 
 import core.IhmAlert;
 import datamodel.LocalMusic;
+import datamodel.Music;
+import datamodel.MusicMetadata;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.application.Platform;
@@ -56,27 +60,26 @@ public class PlayerController implements Controller {
 
   private MediaPlayer player;
   private ArrayList<MediaPlayer> medias;
-  private ArrayList<LocalMusic> arrayMusic;
-
-  public void setArrayMusic(ArrayList<LocalMusic> arrayMusic) {
-    this.arrayMusic = arrayMusic;
-  }
+  private ArrayList<MusicMetadata> arrayMusic;
 
   @Override
   public void initialize() {
 
     initPictures();
-    medias = new ArrayList<MediaPlayer>();
+    medias = new ArrayList<>();
+    arrayMusic = new ArrayList<>();
     isPlaying = false;
 
     // Click on progressBar
     pgMusicProgress.setOnMouseClicked(e -> {
+      player.stop();
       double dx = e.getX();
       double dwidth = pgMusicProgress.getWidth();
       double progression = (dx / dwidth);
       double milliseconds = (progression * player.getTotalDuration().toMillis());
       Duration duration = new Duration(milliseconds);
       player.seek(duration);
+      player.play();
     });
   }
 
@@ -103,36 +106,22 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function playerOnMusic without path.
-   *
+   * Function playerOneMusic with index item row.
+   * @param currentIndexRow : music index
+   * @return
    */
-  public void playerOnMusic() {
-    if (this.arrayMusic.isEmpty()) {
-      player.stop();
-    } else {
-      playerOnMusic(arrayMusic.get(0).getMp3Path());
-    }
+  public void playOneMusic(int currentIndexRow) {
+    updateArrayMusic();
+    currentIndex = currentIndexRow;
+    playerOnMusic();
   }
 
   /**
    * Function Play only one song.
-   * @param url : MusicPath
-   * @return
    */
-  private void playerOnMusic(String url) {
+  private void playerOnMusic() {
 
-    if (isPlaying) {
-      player.stop();
-      isPlaying = false;
-    }
-
-    updateArrayMusic(1);
-
-    for (int i = 0; i < arrayMusic.size(); i++) {
-      if (url.equals(arrayMusic.get(i).getMp3Path())) {
-        currentIndex = i;
-      }
-    }
+    stopPlayer();
 
     player = medias.get(currentIndex);
     player.setCycleCount(MediaPlayer.INDEFINITE);
@@ -148,9 +137,7 @@ public class PlayerController implements Controller {
 
     player.play();
     isPlaying = true;
-
     play.setGraphic(new ImageView(pauseIcon));
-
   }
 
   /**
@@ -167,22 +154,40 @@ public class PlayerController implements Controller {
    * Function Refresh ArrayMusic.
    * @return
    */
-  private void updateArrayMusic(int status) {
+  /* TODO CLEAN FILTRE BUG */
+  private void updateArrayMusic() {
     medias.clear();
-    Stream<LocalMusic> streamMusic = null;
+    arrayMusic.clear();
 
-    if (status == 1) {
-      streamMusic = this.arrayMusic.stream();
-    } else {
-      streamMusic = mainController
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
+    HashMap<String, MusicMetadata> arrayMusicFiltred = null;
+
+    arrayMusicFiltred =
+        mainController
+            .getCentralFrameController()
+            .getMyMusicsController()
+            .getPlayerMusics();
+
+    if (arrayMusicFiltred == null || arrayMusicFiltred.size() == 0) {
+
+      HashMap<String, LocalMusic> arrayMusicAll = null;
+
+      arrayMusicAll =
+      mainController
+          .getCentralFrameController()
+          .getMyMusicsController()
           .getLocalMusics();
+
+      arrayMusicAll.forEach((musicPath,musicMetadata) ->
+          medias.add(createPlayer(musicMetadata.getMp3Path())));
+      arrayMusicAll.forEach((musicPath,musicMetadata) ->
+          arrayMusic.add(musicMetadata.getMetadata()));
+    } else {
+      arrayMusicFiltred.forEach((musicPath,musicMetadata) ->
+          medias.add(createPlayer(musicPath)));
+      arrayMusicFiltred.forEach((musicPath,musicMetadata) ->
+          arrayMusic.add(musicMetadata));
     }
 
-    arrayMusic = streamMusic.collect(Collectors.toCollection(ArrayList::new));
-    arrayMusic.forEach(musicPath -> medias.add(createPlayer(musicPath.getMp3Path())));
   }
 
   /**
@@ -194,17 +199,13 @@ public class PlayerController implements Controller {
 
     if (arrayMusic != null && !arrayMusic.isEmpty() && currentIndex != -1) {
 
-      if (arrayMusic.size() ==  1) {
-        updateArrayMusic(2);
-      }
-
       if (currentIndex - 1 >= 0) {
         currentIndex--;
       } else {
         currentIndex = medias.size() - 1;
       }
 
-      playerOnMusic(arrayMusic.get(currentIndex).getMp3Path());
+      playerOnMusic();
     }
   }
 
@@ -216,16 +217,13 @@ public class PlayerController implements Controller {
   private void playNext(ActionEvent e) {
     if (arrayMusic != null && !arrayMusic.isEmpty() && currentIndex != -1) {
 
-      if (arrayMusic.size() == 1) {
-        updateArrayMusic(2);
-      }
-
       if (currentIndex + 1 < medias.size()) {
         currentIndex++;
       } else {
         currentIndex = 0;
       }
-      playerOnMusic(arrayMusic.get(currentIndex).getMp3Path());
+
+      playerOnMusic();
     }
   }
 
@@ -269,7 +267,6 @@ public class PlayerController implements Controller {
         Duration currentTime = player.getCurrentTime();
 
         double totalDuration = arrayMusic.get(this.currentIndex)
-            .getMetadata()
             .getDuration()
             .toMillis();
 
@@ -294,11 +291,11 @@ public class PlayerController implements Controller {
    *  Function to show musicInfo.
    * @param song : LocalMusic object
    */
-  private void showSongInfo(LocalMusic song) {
+  private void showSongInfo(MusicMetadata song) {
     if (song != null) {
-      songInfo.setText(song.getMetadata().getArtist() + " - " + song.getMetadata().getTitle());
+      songInfo.setText(song.getArtist() + " - " + song.getTitle());
       lblTime.setText("0:00");
-      fullTime.setText(FormatDuration.run(song.getMetadata().getDuration()));
+      fullTime.setText(FormatDuration.run(song.getDuration()));
     } else {
       songInfo.setText("-");
       lblTime.setText("0:00");
