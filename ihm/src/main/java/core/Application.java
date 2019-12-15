@@ -3,6 +3,7 @@ package core;
 import controllers.ForgottenPasswordController;
 import controllers.LoginController;
 import controllers.MainController;
+import controllers.PlayerController;
 import controllers.SignUpController;
 
 import java.awt.Toolkit;
@@ -297,6 +298,7 @@ public class Application extends javafx.application.Application {
             && this.ihmCore.getDataForIhm().getCurrentUser() != null) {
       try {
         this.ihmCore.getDataForIhm().logout();
+        this.ihmCore.getApplication().getMainController().getPlayerController().stopPlayer();
       } catch (UnsupportedOperationException | IOException ex) {
         ex.printStackTrace();
       }

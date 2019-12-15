@@ -249,6 +249,16 @@ public class PlayerController implements Controller {
   }
 
   /**
+   * Function stopPlayer: Stop player.
+   * @return
+   */
+  public void stopPlayer() {
+    if (isPlaying) {
+      player.stop();
+    }
+  }
+
+  /**
    * Function updateValues: Update GUI (progressBar and timer).
    * @return
    */
