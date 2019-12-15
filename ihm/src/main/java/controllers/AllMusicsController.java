@@ -1,11 +1,16 @@
 package controllers;
 
+import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
+import datamodel.ShareStatus;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -55,6 +60,9 @@ public class AllMusicsController implements Controller {
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
+
+  // All musics hashmap to access them instantly
+  private HashMap<String, Music> availableMusics;
 
   // Getters
 
@@ -107,6 +115,7 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
+    availableMusics = new HashMap<String, Music>();
   }
 
   /**
@@ -163,14 +172,32 @@ public class AllMusicsController implements Controller {
   }
 
   public void displayAvailableMusics() {
-    tvMusics.getItems().setAll(this.parseMusic());
+    tvMusics.getItems().setAll(this.retrieveAvailableMusics());
   }
 
-  private List<MusicMetadata> parseMusic() {
-    return this.getCentralFrameController().getMainController().getApplication().getIhmCore()
-        .getDataForIhm().getLocalMusics()
-        .map(x -> x.getMetadata())
+  private List<MusicMetadata> retrieveAvailableMusics() {
+    availableMusics.clear();
+    // Retrieve all musics from current user (no matter the shared status)
+    // and musics from other connected users that are public or shared to him
+    // and apply a filter to get only public musics
+    List<Music> availableMusicsStream = this
+        .getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getMusics()
+        .filter(m -> (m instanceof LocalMusic)
+            || ((LocalMusic) m).getShareStatus() != ShareStatus.PRIVATE)
         .collect(Collectors.toList());
+
+    List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
+    for (Music music : (Iterable<Music>) availableMusicsStream::iterator) {
+      availableMusics.put(music.getMetadata().getHash(), music);
+      availableMusicsMetaData.add(music.getMetadata());
+    }
+
+    return availableMusicsMetaData;
   }
 
   /**
