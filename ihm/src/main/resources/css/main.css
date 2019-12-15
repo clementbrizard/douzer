@@ -33,6 +33,10 @@ Button:hover {
     -fx-border-width: 0;
 }
 
+.header-btn-box {
+    -fx-spacing: 0.6em;
+}
+
 .header-section Label {
     -fx-text-fill: white;
     -fx-font-family: "Open Sans Semibold";

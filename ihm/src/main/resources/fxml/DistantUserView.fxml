@@ -3,72 +3,85 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DistantUserController">
-    <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
-        <children>
-            <TableView fx:id="tvMusics" layoutX="68.0" layoutY="189.0" prefHeight="367.0" prefWidth="505.0">
-                <columns>
-                    <TableColumn prefWidth="129.0" text="Artiste" />
-                    <TableColumn prefWidth="152.0" text="Titre" />
-                    <TableColumn prefWidth="131.0" text="Album" />
-                    <TableColumn minWidth="4.0" prefWidth="92.0" text="Durée" />
-                </columns>
-            </TableView>
-            <TextField fx:id="tfSearch" layoutX="83.0" layoutY="52.0" prefHeight="31.0" prefWidth="473.0" promptText="Rechercher" />
-            <ImageView fx:id="ivSearch" fitHeight="35.0" fitWidth="38.0" layoutX="564.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/searchSymbol.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivPlay" fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/DownloadSymbol.png" />
-                </image>
-            </ImageView>
-            <ImageView fx:id="ivShare" fitHeight="31.0" fitWidth="31.0" layoutX="611.0" layoutY="223.0" pickOnBounds="true" preserveRatio="true">
-                <image>
-                    <Image url="@../images/InformationsSymbol.png" />
-                </image>
-            </ImageView>
-            <Label fx:id="lblTitle" alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Profil de Pseudo" textFill="WHITE">
-                <font>
-                    <Font size="24.0" />
-                </font>
-            </Label>
-         <Label layoutX="66.0" layoutY="94.0" prefHeight="85.0" prefWidth="505.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" />
-         <ImageView fx:id="ivUserImage" fitHeight="74.0" fitWidth="77.0" layoutX="75.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../images/ProfileImageSymbol.png" />
-            </image>
-         </ImageView>
-         <Label fx:id="lblUserName" layoutX="166.0" layoutY="128.0" text="Prénom Nom" />
-         <Label fx:id="lblUserBirthDate" layoutX="166.0" layoutY="150.0" text="Né le XX/XX/XXXX" />
-         <Label fx:id="lblUserPseudo" layoutX="166.0" layoutY="99.0" text="Pseudo">
-            <font>
-               <Font name="System Bold" size="20.0" />
-            </font>
-         </Label>
-         <ImageView fx:id="ivAddUser" fitHeight="30.0" fitWidth="31.0" layoutX="533.0" layoutY="103.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@../images/AddUserSymbol.png" />
-            </image>
-         </ImageView>
-        </children>
-    </Pane>
-    <columnConstraints>
-        <ColumnConstraints />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-    </rowConstraints>
-</GridPane>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DistantUserController">
+   <children>
+      <BorderPane>
+         <center>
+             <VBox styleClass="central-center-section">
+                <children>
+                    <HBox>
+                        <BorderPane fx:id="userProfileInfo">
+                            <left>
+                                <HBox>
+                                    <children>
+                                        <Pane fx:id="paneImgAvatar">
+                                            <ImageView fx:id="imgAvatar" preserveRatio="true">
+                                                <image>
+                                                    <Image preserveRatio="true" smooth="true"  url="@../images/defaultAvatar.png" />
+                                                </image>
+                                            </ImageView>
+                                        </Pane>
+                                        <VBox>
+                                            <Label styleClass="center-sub-title" text="Pseudo"/>
+                                            <Label text="Prénom Nom" />
+                                            <Label text="Né.e le XX/XX/XXXX" />
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </left>
+                            <right>
+                                <HBox styleClass="form-btn-hbox">
+                                    <Button fx:id="btnManageFriendship" onAction="#manageFriendship" styleClass="form-btn" text="ajouter aux contacts">
+                                        <graphic>
+                                            <ImageView fx:id="ivAddUser">
+                                                <image>
+                                                    <Image url="@../images/AddUserSymbol.png" />
+                                                </image>
+                                            </ImageView>
+                                        </graphic>
+                                    </Button>
+                                </HBox>
+                            </right>
+                        </BorderPane>
+                    </HBox>
+
+                    <HBox>
+                        <TableView fx:id="tvMusics">
+                            <columns>
+                                <TableColumn prefWidth="129.0" text="Artiste" />
+                                <TableColumn prefWidth="152.0" text="Titre" />
+                                <TableColumn prefWidth="131.0" text="Album" />
+                                <TableColumn minWidth="4.0" prefWidth="92.0" text="Durée" />
+                            </columns>
+                        </TableView>
+                    </HBox>
+                </children>
+             </VBox>
+         </center>
+         <top>
+             <BorderPane styleClass="header-section">
+                 <left>
+                     <Label fx:id="lblTitle" text="Profil de pseudo"/>
+                 </left>
+                 <right>
+                     <HBox styleClass="header-btn-box">
+                         <Button fx:id="btnMyMusicsCenter" onAction="#changeFrameToMyMusics"
+                                 text="Mes musiques"/>
+                         <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToAllMusics"
+                                 text="Toutes les musiques"/>
+                     </HBox>
+                 </right>
+             </BorderPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
