@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -166,7 +167,8 @@ public class CurrentMusicInfoController implements Controller {
     musicSharingPopup.setY(application.getPrimaryStage().getY() + 100);
 
     // Show sharing popup.
-    musicSharingPopup.show();
+    musicSharingPopup.initModality(Modality.APPLICATION_MODAL);
+    musicSharingPopup.showAndWait();
   }
 
 }

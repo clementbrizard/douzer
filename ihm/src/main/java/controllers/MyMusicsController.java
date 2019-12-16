@@ -39,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
@@ -317,7 +318,8 @@ public class MyMusicsController implements Controller {
     musicSharingPopup.setScene(this.addMusicScene);
 
     // Show add music popup.
-    musicSharingPopup.show();
+    musicSharingPopup.initModality(Modality.APPLICATION_MODAL);
+    musicSharingPopup.showAndWait();
   }
 
   /**
@@ -434,7 +436,8 @@ public class MyMusicsController implements Controller {
     musicDetailsPopup.setScene(this.infoMusicScene);
 
     // Show music info popup.
-    musicDetailsPopup.show();
+    musicDetailsPopup.initModality(Modality.APPLICATION_MODAL);
+    musicDetailsPopup.showAndWait();
   }
 
   /**
@@ -476,7 +479,7 @@ public class MyMusicsController implements Controller {
     deleteMusicChoiceDialog.setHeaderText("Choisissez votre mode de suppression :");
     deleteMusicChoiceDialog.setTitle("Suppression musique");
     deleteMusicChoiceDialog.setContentText("Supprimer :");
-
+    deleteMusicChoiceDialog.initModality(Modality.APPLICATION_MODAL);
     Optional<String> deleteChoice = deleteMusicChoiceDialog.showAndWait();
 
     deleteChoice.ifPresent(choice -> {
