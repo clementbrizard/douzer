@@ -258,7 +258,7 @@ public class ProfileEditController implements Controller {
     FileChooser.ExtensionFilter avatarExtensionFilter =
             new FileChooser.ExtensionFilter(
                     "fichier image",
-                    "*.jpg", "*.png", "*.gif");
+                    "*.jpg", "*.png", "*.gif", "*.jpeg", "*.bmp");
     avatarFileChooser.getExtensionFilters().add(avatarExtensionFilter);
 
     avatarFile = avatarFileChooser.showOpenDialog(primaryStage);
