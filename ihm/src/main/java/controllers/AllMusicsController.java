@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
@@ -41,6 +42,9 @@ public class AllMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
   private TableColumn<MusicMetadata, String> durationCol;
+  @FXML
+  private TableColumn<MusicMetadata, Set<String>> tagsCol;
+  
   @FXML
   private TextField tfSearch;
   @FXML
@@ -122,6 +126,7 @@ public class AllMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
+    this.tagsCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, Set<String>>("tags"));
 
     // Duration MusicMetaData attribute has type Duration
     // so we need to convert it to a string
@@ -165,8 +170,25 @@ public class AllMusicsController implements Controller {
     tfSearch.textProperty().addListener(textListener);
   }
 
+  /**
+   * display All Music Available in the center table.
+   */
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.retrieveAvailableMusics());
+    
+    //change the size of Tags column
+    ArrayList<Double> d = new ArrayList<Double>();
+    d.add(0.0);
+    tvMusics.getItems().forEach(metadata -> {
+      double numberOfChar = 0;      
+      for (String tag : metadata.getTags()) {
+        numberOfChar += tag.length();
+      }
+      if (numberOfChar > d.get(0)) {
+        d.set(0,numberOfChar);
+      }
+    });
+    this.tagsCol.setPrefWidth(d.get(0) * 9);
   }
 
   private List<MusicMetadata> retrieveAvailableMusics() {

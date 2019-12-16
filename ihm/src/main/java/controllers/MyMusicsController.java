@@ -96,8 +96,6 @@ public class MyMusicsController implements Controller {
   // Local musics hashmap to access them instantly
   private HashMap<String, LocalMusic> localMusics;
   
-  private double sizeListTags = 0;
-  
   /* Getters */
 
   public NewMusicController getNewMusicController() {
@@ -456,6 +454,7 @@ public class MyMusicsController implements Controller {
   public void displayAvailableMusics() {
     List<MusicMetadata> listMusic = this.retrieveLocalMusics();
     tvMusics.getItems().setAll(listMusic);
+    
     //change the size of Tags column
     ArrayList<Double> d = new ArrayList<Double>();
     d.add(0.0);
