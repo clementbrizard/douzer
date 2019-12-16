@@ -1,10 +1,19 @@
 package controllers;
 
 import core.Application;
+import core.IhmAlert;
+
+import java.io.File;
 import java.io.IOException;
+
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+
 import javax.security.auth.login.LoginException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,6 +33,10 @@ public class LoginController implements Controller {
   private PasswordField textFieldPassword;
 
   private Application application;
+  
+  private DirectoryChooser importProfilDirectory = new DirectoryChooser();
+  
+  private File importDirectory;
 
   // Other methods
 
@@ -69,5 +82,21 @@ public class LoginController implements Controller {
   public void setApplication(Application application) {
     this.application = application;
   }
-
+  
+  @FXML
+  public void importClicked(ActionEvent evt) {
+    Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+    importDirectory = importProfilDirectory.showDialog(primaryStage);
+    try {
+      this.application
+        .getIhmCore()
+        .getDataForIhm()
+        .importProfile(importDirectory.getAbsolutePath());
+    } catch (UnsupportedOperationException e) {
+      LogManager.getLogger().error(e.getMessage());
+      IhmAlert.showAlert("implementation","pas encore implémenté","critical");
+    } catch (java.lang.RuntimeException e) {
+      IhmAlert.showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
+    }
+  }
 }

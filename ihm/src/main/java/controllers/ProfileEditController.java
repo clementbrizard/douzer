@@ -25,6 +25,7 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -32,6 +33,8 @@ import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
+
+import core.IhmAlert;
 
 /**
  *  Central view that permit the user to edit his profile.
@@ -60,7 +63,11 @@ public class ProfileEditController implements Controller {
   @FXML
   private FileChooser avatarFileChooser = new FileChooser();
 
-  private File avatarFile = null;
+  private File avatarFile;
+  
+  private DirectoryChooser exportProfilDirectory = new DirectoryChooser();
+  
+  private File exportDirectory;
 
   private CentralFrameController centralFrameController;
   private ExportProfileController exportProfileController;
@@ -324,5 +331,25 @@ public class ProfileEditController implements Controller {
             .text("Vos informations de profil ont bien été mises à jour.")
             .darkStyle()
             .showInformation();
+  }
+  
+  @FXML
+  public void exportclicked(ActionEvent evt) {
+    Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+    exportDirectory = exportProfilDirectory.showDialog(primaryStage);
+    try {
+      getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .exportProfile(exportDirectory.getAbsolutePath());
+    } catch (UnsupportedOperationException e) {
+      LogManager.getLogger().error(e.getMessage());
+      IhmAlert.showAlert("implementation","pas encore implémenté","critical");
+    } catch (java.lang.RuntimeException e) {
+      IhmAlert.showAlert("Directory","aucun dossier pour exporter le profile selectionné","critical");
+    }
+    
   }
 }

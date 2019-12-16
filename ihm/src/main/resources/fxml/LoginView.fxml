@@ -35,7 +35,7 @@
             <Button fx:id="buttonForgottenPassword" layoutX="202.0" layoutY="263.0" mnemonicParsing="false" onAction="#actionForgottenPassword" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Mot de passe oublié" />
          <Button fx:id="buttonLogin" layoutX="463.0" layoutY="263.0" mnemonicParsing="false" onAction="#actionLogin" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Login" />
          <Line endX="216.3333740234375" layoutX="400.0" layoutY="325.0" startX="-279.6666564941406" />
-         <Button fx:id="buttonImport" layoutX="200.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Importer information" />
+         <Button fx:id="buttonImport" layoutX="200.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Importer information" onAction="#importClicked" />
          <Button fx:id="buttonSignUp" layoutX="450.0" layoutY="360.0" mnemonicParsing="false" onAction="#actionSignup" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Inscription" />
         </children>
     </Pane>
