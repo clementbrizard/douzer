@@ -2,6 +2,7 @@ package controllers;
 
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
+import datamodel.Music;
 import datamodel.ShareStatus;
 import datamodel.User;
 import java.io.File;
@@ -60,7 +61,7 @@ public class DetailsMusicController implements Controller {
 
   private ObservableList<String> tags;
 
-  private LocalMusic localMusic;
+  private Music localMusic;
 
   @FXML
   private Button validateButton;
@@ -109,7 +110,7 @@ public class DetailsMusicController implements Controller {
     this.myMusicsController = myMusicsController;
   }
 
-  public LocalMusic getLocalMusic() {
+  public Music getMusic() {
     return this.localMusic;
   }
 
@@ -166,53 +167,68 @@ public class DetailsMusicController implements Controller {
    * After the initialisation with initialize() of the controller execute this function with
    * the localMusic where the user has click .
    *
-   * @param localMusic the music clicked
+   * @param musicSelected the music clicked
    *                   After the initialisation of the controller, call this method with
    *                   the localMusic on which the user clicked.
    */
-  public void initMusic(LocalMusic localMusic) {
-    this.localMusic = localMusic;
+  public void initMusic(Music musicSelected) {
+    this.localMusic = musicSelected;
+    
+    if (musicSelected instanceof LocalMusic) {
+      LocalMusic localMusic = (LocalMusic) musicSelected;
+      
+      switch (localMusic.getShareStatus()) {
+        case PUBLIC:
+          this.radioPublic.setSelected(true);
+          break;
+        case FRIENDS:
+          this.radioFriends.setSelected(true);
+          break;
+        default:
+          this.radioPrivate.setSelected(true);
+          break;
+      }
+    } else {
+      radioPublic.setDisable(true);
+      radioFriends.setDisable(true);
+      radioPrivate.setDisable(true);
 
-    switch (localMusic.getShareStatus()) {
-      case PUBLIC:
-        this.radioPublic.setSelected(true);
-        break;
-      case FRIENDS:
-        this.radioFriends.setSelected(true);
-        break;
-      default:
-        this.radioPrivate.setSelected(true);
-        break;
+      validateButton.setDisable(true);
+      
+      this.textFieldAlbum.setEditable(false);
+      this.textFieldArtist.setEditable(false);
+      this.textFieldTitle.setEditable(false);
+      this.dateYear.setEditable(false);
     }
 
-    if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getTitle() != null) {
-        textFieldTitle.setText(localMusic.getMetadata().getTitle());
+    if (musicSelected.getMetadata() != null) {
+      if (musicSelected.getMetadata().getTitle() != null) {
+        textFieldTitle.setText(musicSelected.getMetadata().getTitle());
       }
     }
 
-    if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getArtist() != null) {
-        textFieldArtist.setText(localMusic.getMetadata().getArtist());
+    if (musicSelected.getMetadata() != null) {
+      if (musicSelected.getMetadata().getArtist() != null) {
+        textFieldArtist.setText(musicSelected.getMetadata().getArtist());
       }
     }
 
-    if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getAlbum() != null) {
-        textFieldAlbum.setText(localMusic.getMetadata().getAlbum());
+    if (musicSelected.getMetadata() != null) {
+      if (musicSelected.getMetadata().getAlbum() != null) {
+        textFieldAlbum.setText(musicSelected.getMetadata().getAlbum());
       }
     }
 
-    if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getReleaseYear() != null) {
+    if (musicSelected.getMetadata() != null) {
+      if (musicSelected.getMetadata().getReleaseYear() != null) {
         dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-            1000, LocalDate.now().getYear(), localMusic.getMetadata()
+            1000, LocalDate.now().getYear(), musicSelected.getMetadata()
             .getReleaseYear().getValue(), 1));
       }
     }
 
-    if (localMusic.getOwners() != null) {
-      Iterator<User> itOwners = localMusic.getOwners().iterator();
+    if (musicSelected.getOwners() != null) {
+      Iterator<User> itOwners = musicSelected.getOwners().iterator();
       if (itOwners.hasNext()) {
         textFieldLastUploader.setText(itOwners.next().getUsername());
       }
@@ -220,15 +236,15 @@ public class DetailsMusicController implements Controller {
 
     tags = FXCollections.observableArrayList();
 
-    if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getTags() != null) {
-        tags.addAll(localMusic.getMetadata().getTags());
+    if (musicSelected.getMetadata() != null) {
+      if (musicSelected.getMetadata().getTags() != null) {
+        tags.addAll(musicSelected.getMetadata().getTags());
         listViewTagsList.setItems(tags);
       }
     }
 
-    if (localMusic.getMetadata() != null) {
-      if (localMusic.getMetadata().getRatings() != null) {
+    if (musicSelected.getMetadata() != null) {
+      if (musicSelected.getMetadata().getRatings() != null) {
         LocalUser localUser = getMyMusicsController()
             .getCentralFrameController()
             .getMainController()
@@ -238,7 +254,7 @@ public class DetailsMusicController implements Controller {
             .getCurrentUser();
 
         Integer rating;
-        if ((rating = localMusic.getMetadata().getRatings().get(localUser)) != null) {
+        if ((rating = musicSelected.getMetadata().getRatings().get(localUser)) != null) {
           setStars(rating);
         }
       }
@@ -325,63 +341,65 @@ public class DetailsMusicController implements Controller {
     }
     localMusic.getMetadata().setTitle(textFieldTitle.getText());
 
-    if (this.radioPublic.isSelected()) {
-      localMusic.setShareStatus(ShareStatus.PUBLIC);
-    } else if (this.radioFriends.isSelected()) {
-      localMusic.setShareStatus(ShareStatus.FRIENDS);
-    } else {
-      localMusic.setShareStatus(ShareStatus.PRIVATE);
-    }
-
-    localMusic.getMetadata().setTitle(textFieldTitle.getText());
-    localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-    localMusic.getMetadata().setArtist(textFieldArtist.getText());
-
-    this.getMyMusicsController().displayAvailableMusics();
-
-    if (rating > 0) {
+    if (localMusic instanceof LocalMusic) {
+      LocalMusic localMusic = (LocalMusic) this.localMusic;
+      if (this.radioPublic.isSelected()) {
+        localMusic.setShareStatus(ShareStatus.PUBLIC);
+      } else if (this.radioFriends.isSelected()) {
+        localMusic.setShareStatus(ShareStatus.FRIENDS);
+      } else {
+        localMusic.setShareStatus(ShareStatus.PRIVATE);
+      }
+  
+      localMusic.getMetadata().setTitle(textFieldTitle.getText());
+      localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
       localMusic.getMetadata().setArtist(textFieldArtist.getText());
-
-      LocalUser localUser = getMyMusicsController()
-          .getCentralFrameController()
-          .getMainController()
+  
+      this.getMyMusicsController().displayAvailableMusics();
+  
+      if (rating > 0) {
+        localMusic.getMetadata().setArtist(textFieldArtist.getText());
+  
+        LocalUser localUser = getMyMusicsController()
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
+  
+        localMusic.getMetadata().addRating(localUser, rating);
+      }
+  
+      localMusic.getMetadata().getTags().addAll(tags);
+  
+      this.getMyMusicsController()
           .getApplication()
           .getIhmCore()
           .getDataForIhm()
-          .getCurrentUser();
-
-      localMusic.getMetadata().addRating(localUser, rating);
-    }
-
-    localMusic.getMetadata().getTags().addAll(tags);
-
-    this.getMyMusicsController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .notifyMusicUpdate(localMusic);
-
-    // If the same music is shown in the comment view,
-    // update the comment view in order to have the same stars.
-    if (localMusic.equals(getMyMusicsController()
-        .getCentralFrameController()
-        .getMainController()
-        .getCurrentMusicInfoController()
-        .getCommentCurrentMusicController()
-        .getMusic())) {
-
-      getMyMusicsController()
+          .notifyMusicUpdate(localMusic);
+  
+      // If the same music is shown in the comment view,
+      // update the comment view in order to have the same stars.
+      if (localMusic.equals(getMyMusicsController()
           .getCentralFrameController()
           .getMainController()
           .getCurrentMusicInfoController()
-          .getCommentCurrentMusicController().init(localMusic);
+          .getCommentCurrentMusicController()
+          .getMusic())) {
+  
+        getMyMusicsController()
+            .getCentralFrameController()
+            .getMainController()
+            .getCurrentMusicInfoController()
+            .getCommentCurrentMusicController().init(localMusic);
+      }
+  
+      this.getMyMusicsController().displayAvailableMusics();
+      this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
+          .displayAvailableMusics();
+  
+      ((Stage) this.textFieldTitle.getScene().getWindow()).close();
     }
-
-    this.getMyMusicsController().displayAvailableMusics();
-    this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
-        .displayAvailableMusics();
-
-    ((Stage) this.textFieldTitle.getScene().getWindow()).close();
   }
-
 }

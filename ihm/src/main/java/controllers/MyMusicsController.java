@@ -411,9 +411,9 @@ public class MyMusicsController implements Controller {
   /**
    * Handle click on information item in context menu.
    *
-   * @param music the music on which the user right clicked
+   * @param musicSelected the music on which the user right clicked
    */
-  private void showMusicInformation(LocalMusic music) {
+  public void showMusicInformation(Music musicSelected) {
     try {
       // Initialize scene and controller.
       FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
@@ -423,7 +423,7 @@ public class MyMusicsController implements Controller {
       DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
       this.setDetailsMusicController(detailsMusicController);
       detailsMusicController.setMyMusicsController(this);
-      detailsMusicController.initMusic(music);
+      detailsMusicController.initMusic(musicSelected);
 
     } catch (Exception e) {
       myMusicsLogger.error(e);

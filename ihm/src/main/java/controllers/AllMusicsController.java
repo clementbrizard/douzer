@@ -19,12 +19,18 @@ import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,6 +69,12 @@ public class AllMusicsController implements Controller {
 
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
+  
+  private ContextMenu contextMenu;
+  
+  private Music musicSelected;
+  
+  private boolean isOnlyLocalMusicSelected = true;
 
   // Getters
 
@@ -170,7 +182,131 @@ public class AllMusicsController implements Controller {
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
   }
+  
+  /**
+   * construct the contextMenu (the windows who appear when user right click on a music)
+   * depend on which music the user selected.
+   */
+  private void constructContextMenu() {
+    // Create ContextMenu for getting information
+    // about music on right click.
+    contextMenu = new ContextMenu();
 
+    // Create information item for context menu
+    MenuItem itemInformation = new MenuItem("Informations");
+    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        getCentralFrameController()
+          .getMyMusicsController()
+          .showMusicInformation(musicSelected);
+      }
+    });
+    
+    //check the selected item
+    tvMusics
+        .getSelectionModel()
+        .getSelectedItems()
+        .forEach(item -> {
+          if (!(availableMusics.get(item.getHash()) instanceof LocalMusic)) {
+            isOnlyLocalMusicSelected = false;
+          }
+        });
+    
+    if (musicSelected instanceof LocalMusic && isOnlyLocalMusicSelected) {
+      MenuItem playMusic = new MenuItem("Play");
+      playMusic.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          if (musicSelected instanceof LocalMusic) {
+            ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
+    
+            ObservableList<MusicMetadata> selectedItems = tvMusics
+                .getSelectionModel()
+                .getSelectedItems();
+    
+            selectedItems.forEach(item -> {
+              listMusicClicked.add((LocalMusic) availableMusics.get(item.getHash()));
+            });
+    
+            //add to the list with right click play to the list
+            if (listMusicClicked.isEmpty()) {
+              listMusicClicked.add((LocalMusic) musicSelected);
+            } else {
+              if (!listMusicClicked.contains(musicSelected)) {
+                listMusicClicked.add((LocalMusic) musicSelected);
+              }
+            }
+            getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .setArrayMusic(listMusicClicked);
+    
+            getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .playerOnMusic();
+          } else {
+            
+            return;
+          }
+        }
+      });
+  
+      // Add delete item in context menu
+      MenuItem itemDelete = new MenuItem("Supprimer");
+      itemDelete.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          ArrayList<LocalMusic> musicsDelete = new ArrayList<LocalMusic>();
+          ObservableList<MusicMetadata> selectedItems = tvMusics
+              .getSelectionModel()
+              .getSelectedItems();
+  
+          selectedItems.forEach(item -> {
+            musicsDelete.add((LocalMusic) availableMusics.get(item.getHash()));
+          });
+          getCentralFrameController()
+            .getMyMusicsController()
+            .deleteMusics(musicsDelete);
+        }
+      });
+
+      // Add MenuItem to ContextMenu
+      contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+    } else {
+      contextMenu.getItems().add(itemInformation);
+    }
+  }
+  
+  /**
+   * handle the click on the TableView.
+   * @param click the MouseEvent
+   */
+  @FXML
+  public void handleClickTableView(MouseEvent click) {
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
+
+    // If left click, show current music info at right of the screen
+    if (click.getButton().equals(MouseButton.PRIMARY)) {
+      if (music != null) {
+        musicSelected = availableMusics.get(music.getHash());
+
+        this.getCentralFrameController().getMainController()
+            .getCurrentMusicInfoController().init(musicSelected);
+      }
+    }
+
+    // If right click, show context menu
+    if (click.getButton().equals(MouseButton.SECONDARY)) {
+      if (music != null) {
+        musicSelected = availableMusics.get(music.getHash());
+        constructContextMenu();
+        contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
+      }
+    }
+  }
+  
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.retrieveAvailableMusics());
   }
