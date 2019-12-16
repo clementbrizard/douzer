@@ -171,6 +171,21 @@ public class NewMusicController implements Controller {
     this.hasChosenFile = false;
   }
 
+  
+  /**
+   * clear all field in the view.
+   */
+  private void clear() {
+
+    this.file = null;
+    this.hasChosenFile = false;
+    this.tags.clear();
+    this.textAlbum.setText("");
+    this.textArtist.setText("");
+    this.textFile.setText("");
+    this.textNewTag.setText("");
+    this.textTitle.setText("");
+  }
 
   /**
    * Open a window to choose the music file.
@@ -257,6 +272,8 @@ public class NewMusicController implements Controller {
         return;
       }
 
+    } else {
+      clear();
     }
   }
 
