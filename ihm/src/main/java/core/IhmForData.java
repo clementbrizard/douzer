@@ -3,14 +3,10 @@ package core;
 import controllers.AllMusicsController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
-import controllers.MyMusicsController;
 import controllers.OnlineUsersListController;
-import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
-
-import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

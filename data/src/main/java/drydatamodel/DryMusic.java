@@ -13,7 +13,7 @@ public class DryMusic implements java.io.Serializable {
   private Set<UUID> owners;
 
   public DryMusic(Music music) {
-    this.music = music;
+    this.music = new Music(music);
     this.metadata = new DryMusicMetadata(music.getMetadata());
     this.owners = music.getOwners().stream().map(User::getUuid).collect(Collectors.toSet());
   }

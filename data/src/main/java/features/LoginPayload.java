@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Payload for "Hey, I connected ! Here is my profile and my shared musics"
  * The "my shared music" part is handled with the ShareMusicsPayload
  */
-public class LoginPayload extends ShareMusicsPayload {
+public class LoginPayload extends UpdateMusicsPayload {
   private User user;
   private Set<InetAddress> ips;
   private boolean isResponse;
