@@ -464,7 +464,7 @@ public class MyMusicsController implements Controller {
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
-      if(numberOfChar > d.get(0)) {
+      if (numberOfChar > d.get(0)) {
         d.set(0,numberOfChar);
       }
     });
