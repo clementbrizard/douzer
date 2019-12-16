@@ -156,7 +156,7 @@ public class MyMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
-    this.tagsCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, Set<String>>("tags"));
+    this.tagsCol.setCellValueFactory(new PropertyValueFactory<>("tags"));
 
 
     // Duration MusicMetaData attribute has type Duration
