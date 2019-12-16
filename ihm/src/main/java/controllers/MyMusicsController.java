@@ -513,8 +513,10 @@ public class MyMusicsController implements Controller {
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : (Iterable<LocalMusic>) localMusicsStream::iterator) {
-      localMusics.put(localMusic.getMetadata().getHash(), localMusic);
-      localMusicsMetadata.add(localMusic.getMetadata());
+      if (localMusics.get(localMusic.getMetadata().getHash()) == null) {
+        localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+        localMusicsMetadata.add(localMusic.getMetadata());
+      }
     }
 
     return localMusicsMetadata;
