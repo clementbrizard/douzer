@@ -36,7 +36,7 @@ public class CommentsController implements Controller {
   private Label titleMusic;
 
   @FXML
-  private ListView<Comment> listCommentaire;
+  private ListView<Comment> listComment;
 
   private Scene newCommentLoader;
 
@@ -71,7 +71,7 @@ public class CommentsController implements Controller {
    * @param music Object Music.
    */
   public void init(Music music) {
-
+    listComment.setVisible(true);
     this.music = music;
     if (music == null) {
       return;
@@ -84,9 +84,9 @@ public class CommentsController implements Controller {
     }
 
     commentObservableList.addAll(music.getMetadata().getComments());
-    listCommentaire.setItems(commentObservableList);
+    listComment.setItems(commentObservableList);
     
-    listCommentaire.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
+    listComment.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
       @Override
       public ListCell<Comment> call(ListView<Comment> param) {
         CommentListViewCell c = new CommentListViewCell();
@@ -132,6 +132,10 @@ public class CommentsController implements Controller {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (this.music == null) {
+      listComment.setVisible(false);
+    }
+  }
 
 }
