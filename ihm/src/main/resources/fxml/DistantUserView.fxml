@@ -16,9 +16,9 @@
    <children>
       <BorderPane>
          <center>
-             <VBox styleClass="central-center-section">
+             <VBox styleClass="central-center-section, to-center">
                 <children>
-                    <HBox>
+                    <HBox fx:id="distantUserHBox" styleClass="to-center">
                         <BorderPane fx:id="userProfileInfo">
                             <left>
                                 <HBox>
@@ -30,7 +30,7 @@
                                                 </image>
                                             </ImageView>
                                         </Pane>
-                                        <VBox>
+                                        <VBox fx:id="distantUserInfos">
                                             <Label styleClass="center-sub-title" text="Pseudo"/>
                                             <Label text="Prénom Nom" />
                                             <Label text="Né.e le XX/XX/XXXX" />
@@ -39,22 +39,19 @@
                                 </HBox>
                             </left>
                             <right>
-                                <HBox styleClass="form-btn-hbox">
-                                    <Button fx:id="btnManageFriendship" onAction="#manageFriendship" styleClass="form-btn" text="ajouter aux contacts">
-                                        <graphic>
-                                            <ImageView fx:id="ivAddUser">
-                                                <image>
-                                                    <Image url="@../images/AddUserSymbol.png" />
-                                                </image>
-                                            </ImageView>
-                                        </graphic>
-                                    </Button>
-                                </HBox>
+                                <Button fx:id="btnManageFriendship" onAction="#manageFriendship" styleClass="form-btn" text="ajouter aux contacts">
+                                    <!--<graphic>
+                                        <ImageView fx:id="ivAddUser">
+                                            <image>
+                                                <Image url="@../images/AddUserSymbol.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>-->
+                                </Button>
                             </right>
                         </BorderPane>
                     </HBox>
-
-                    <HBox>
+                    <HBox styleClass="to-center">
                         <TableView fx:id="tvMusics">
                             <columns>
                                 <TableColumn prefWidth="129.0" text="Artiste" />

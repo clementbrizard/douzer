@@ -71,6 +71,10 @@ Button:hover {
     -fx-border-width: 0;
 }
 
+.to-center {
+    -fx-alignment: center;
+}
+
 .central-center-section > HBox {
     -fx-padding: 0.8em 0;
     -fx-border-width: 0 0 0.6 0;
@@ -117,3 +121,21 @@ Button:hover {
 .avatar-hbox {
     -fx-padding: 0;
 }
+
+#distantUserHBox {
+    -fx-padding: 1.6em 0;
+    -fx-border-width: 0;
+}
+
+#userProfileInfo {
+    -fx-min-width: 600px;
+    -fx-background-color: rgba(225, 225, 225, 0.8);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+    -fx-padding: 1.4em;
+}
+
+#distantUserInfos {
+    -fx-padding: 0 0 0 1.4em;
+    -fx-spacing: 0.8em;
+}
+

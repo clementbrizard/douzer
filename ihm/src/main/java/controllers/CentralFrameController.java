@@ -198,6 +198,7 @@ public class CentralFrameController implements Controller {
       this.distantUserParent = distantUserLoader.load();
       this.distantUserController = distantUserLoader.getController();
       this.distantUserController.setCentralFrameController(this);
+      this.distantUserController.init();
 
       this.setCentralContentMyMusics();
 
