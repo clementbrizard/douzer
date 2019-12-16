@@ -286,7 +286,6 @@ public class AllMusicsController implements Controller {
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
 
-
     // If left click, show current music info at right of the screen
     if (click.getButton().equals(MouseButton.PRIMARY)) {
       if (seletedMusicMetadata != null) {
