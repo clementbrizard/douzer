@@ -21,7 +21,7 @@ public class DownloadController implements Controller {
   private Label lblDownload;
 
   @FXML
-  private ProgressBar downloadProgress;
+  private ProgressBar progressDownload;
 
   // Getters
 
@@ -39,6 +39,9 @@ public class DownloadController implements Controller {
 
   @Override
   public void initialize() {
+    this.lblDownload.setText("Ceci est un test");
+    this.progressDownload.setProgress(0);
+    this.progressDownload.setVisible(false);
   }
 
   /**
@@ -86,11 +89,11 @@ public class DownloadController implements Controller {
       // Clear download information label
       this.lblDownload.setText("");
       // Make download progress bar invisible
-      this.downloadProgress.setVisible(false);
+      this.progressDownload.setVisible(false);
     } else {
       // Make download progress bar visible
-      this.downloadProgress.setVisible(true);
-      this.downloadProgress.setProgress(downloadProgress / 100);
+      this.progressDownload.setVisible(true);
+      this.progressDownload.setProgress(downloadProgress / 100);
       this.lblDownload
           .setText("Downloading : " + downloadedMusicTitle + " - " + downloadedMusicArtist);
       // We update central views when download is done
@@ -109,11 +112,11 @@ public class DownloadController implements Controller {
             .getAllMusicsController()
             .init();
         // Reinitialize progress bar with 0
-        this.downloadProgress.setProgress(0);
+        this.progressDownload.setProgress(0);
         // Clear download information label
         this.lblDownload.setText("");
         // Make download progress bar invisible
-        this.downloadProgress.setVisible(false);
+        this.progressDownload.setVisible(false);
       }
     }
   }
