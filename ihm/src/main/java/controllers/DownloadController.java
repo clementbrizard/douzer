@@ -1,6 +1,9 @@
 package controllers;
 
 import datamodel.Music;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
@@ -14,22 +17,16 @@ public class DownloadController implements Controller {
 
   private MainController mainController;
 
-  private AllMusicsController allMusicsController;
+  @FXML
+  private Label lblDownload;
 
-  private CurrentMusicInfoController currentMusicInfoController;
+  @FXML
+  private ProgressBar downloadProgress;
 
   // Getters
 
   public MainController getMainController() {
     return mainController;
-  }
-
-  public AllMusicsController getAllMusicsController() {
-    return allMusicsController;
-  }
-
-  public CurrentMusicInfoController getCurrentMusicInfoController() {
-    return currentMusicInfoController;
   }
 
   // Setters
@@ -38,20 +35,10 @@ public class DownloadController implements Controller {
     this.mainController = mainController;
   }
 
-  public void setAllMusicsController(AllMusicsController allMusicsController) {
-    this.allMusicsController = allMusicsController;
-  }
-
-  public void setCurrentMusicInfoController(CurrentMusicInfoController currentMusicInfoController) {
-    this.currentMusicInfoController = currentMusicInfoController;
-  }
-
   // Other Methods
 
   @Override
   public void initialize() {
-    this.allMusicsController = mainController.getCentralFrameController().getAllMusicsController();
-    this.currentMusicInfoController = mainController.getCurrentMusicInfoController();
   }
 
   /**
@@ -61,9 +48,7 @@ public class DownloadController implements Controller {
    */
   public void download(Music musicToBeDownloaded) {
     try {
-      this.allMusicsController
-          .getCentralFrameController()
-          .getMainController()
+      this.mainController
           .getApplication()
           .getIhmCore()
           .getDataForIhm()
@@ -84,33 +69,35 @@ public class DownloadController implements Controller {
   }
 
   /**
-   * Update download promvn gressBar progress into CurrenMusicIndoController.
+   * Update download progressBar progress
    * @param downloadedMusic The downloaded music
    * @param downloadProgress The downloaded music download progress
    */
   public void updateDownloadProgressBar(Music downloadedMusic, int downloadProgress) {
+    String downloadedMusicArtist = downloadedMusic.getMetadata().getArtist();
+    String downloadedMusicTitle = downloadedMusic.getMetadata().getTitle();
     //A negative progress send by data means a download failure
     if (downloadProgress < 0) {
       Notifications.create()
           .title("Download failed")
-          .text(downloadedMusic
-              .getMetadata()
-              .getTitle() + " - " + downloadedMusic
-              .getMetadata()
-              .getArtist())
+          .text(downloadedMusicTitle + " - " + downloadedMusicArtist)
           .darkStyle()
           .showWarning();
+      // Clear download information label
+      this.lblDownload.setText("");
+      // Make download progress bar invisible
+      this.downloadProgress.setVisible(false);
     } else {
-      this.currentMusicInfoController.getDownloadProgress().setProgress(downloadProgress / 100);
+      // Make download progress bar visible
+      this.downloadProgress.setVisible(true);
+      this.downloadProgress.setProgress(downloadProgress / 100);
+      this.lblDownload
+          .setText("Downloading : " + downloadedMusicTitle + " - " + downloadedMusicArtist);
       // We update central views when download is done
       if (downloadProgress == 100) {
         Notifications.create()
             .title("Download done")
-            .text(downloadedMusic
-                .getMetadata()
-                .getTitle() + " - " + downloadedMusic
-                .getMetadata()
-                .getArtist())
+            .text(downloadedMusicTitle + " - " + downloadedMusicArtist)
             .darkStyle()
             .showInformation();
         this.mainController
@@ -122,7 +109,11 @@ public class DownloadController implements Controller {
             .getAllMusicsController()
             .init();
         // Reinitialize progress bar with 0
-        this.currentMusicInfoController.getDownloadProgress().setProgress(0);
+        this.downloadProgress.setProgress(0);
+        // Clear download information label
+        this.lblDownload.setText("");
+        // Make download progress bar invisible
+        this.downloadProgress.setVisible(false);
       }
     }
   }

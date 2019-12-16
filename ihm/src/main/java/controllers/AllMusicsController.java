@@ -15,10 +15,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,6 +63,9 @@ public class AllMusicsController implements Controller {
 
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
+
+  @FXML
+  private Button btnDownload;
 
   // Getters
 
@@ -140,9 +146,6 @@ public class AllMusicsController implements Controller {
   @Override
   public void initialize() {
     availableMusics = new HashMap<String, Music>();
-    // Link the allMusicController with the downloadController
-    this.downloadController = new DownloadController();
-    downloadController.setAllMusicsController(this);
   }
 
   /**
@@ -150,6 +153,8 @@ public class AllMusicsController implements Controller {
    * this method has to be called right after the creation of the view.
    */
   public void init() {
+    // Download button is availabe only a music that is not local is selected
+    btnDownload.setDisable(true);
 
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
@@ -203,6 +208,15 @@ public class AllMusicsController implements Controller {
 
   private List<MusicMetadata> retrieveAvailableMusics() {
     availableMusics.clear();
+    this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getMusics()
+        .forEach(m -> {
+          allMusicsLogger.debug(m.getMetadata().getTitle());
+        });
     // Retrieve all musics from current user (no matter the shared status)
     // and musics from other connected users that are public or shared to him
     // and apply a filter to get only public musics
@@ -264,8 +278,26 @@ public class AllMusicsController implements Controller {
     MusicMetadata selectedMusicMetadata = this.tvMusics
         .getSelectionModel()
         .getSelectedItem();
-    Music selectedMusic = new Music(selectedMusicMetadata);
+    Music selectedMusic = availableMusics.get(selectedMusicMetadata.getHash());
     this.downloadController.download(selectedMusic);
+  }
+
+  @FXML
+  public void handleClickTableView(MouseEvent click) {
+    MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
+
+
+    // If left click, show current music info at right of the screen
+    if (click.getButton().equals(MouseButton.PRIMARY)) {
+      if (seletedMusicMetadata != null) {
+        Music selectedMusic = availableMusics.get(seletedMusicMetadata.getHash());
+        if (selectedMusic instanceof LocalMusic) {
+          btnDownload.setDisable(true);
+        } else {
+          btnDownload.setDisable(false);
+        }
+      }
+    }
   }
 
   /**

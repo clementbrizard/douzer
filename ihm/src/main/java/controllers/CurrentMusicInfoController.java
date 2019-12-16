@@ -130,6 +130,8 @@ public class CurrentMusicInfoController implements Controller {
     commentCurrentMusicController.setCurrentMusicController(this);
     commentCurrentMusicController.init(music);
 
+
+
   }
 
   /**
