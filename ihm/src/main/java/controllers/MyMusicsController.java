@@ -18,6 +18,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,12 +29,16 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -61,6 +67,9 @@ public class MyMusicsController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, String> durationCol;
   @FXML
+  private TableColumn<MusicMetadata, Set<String>> tagsCol;
+  
+  @FXML
   private TextField tfSearch;
   @FXML
   private TextField tfSearchTitle;
@@ -86,7 +95,9 @@ public class MyMusicsController implements Controller {
 
   // Local musics hashmap to access them instantly
   private HashMap<String, LocalMusic> localMusics;
-
+  
+  private double sizeListTags = 0;
+  
   /* Getters */
 
   public NewMusicController getNewMusicController() {
@@ -147,6 +158,8 @@ public class MyMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
+    this.tagsCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, Set<String>>("tags"));
+
 
     // Duration MusicMetaData attribute has type Duration
     // so we need to convert it to a string
@@ -443,6 +456,19 @@ public class MyMusicsController implements Controller {
   public void displayAvailableMusics() {
     List<MusicMetadata> listMusic = this.retrieveLocalMusics();
     tvMusics.getItems().setAll(listMusic);
+    //change the size of Tags column
+    ArrayList<Double> d = new ArrayList<Double>();
+    d.add(0.0);
+    listMusic.forEach(metadata -> {
+      double numberOfChar = 0;      
+      for (String tag : metadata.getTags()) {
+        numberOfChar += tag.length();
+      }
+      if(numberOfChar > d.get(0)) {
+        d.set(0,numberOfChar);
+      }
+    });
+    this.tagsCol.setPrefWidth(d.get(0) * 9);
   }
 
   /**
@@ -519,5 +545,4 @@ public class MyMusicsController implements Controller {
 
     return localMusicsMetadata;
   }
-
 }
