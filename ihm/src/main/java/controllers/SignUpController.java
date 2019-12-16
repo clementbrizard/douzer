@@ -58,7 +58,7 @@ public class SignUpController implements Controller {
   private FileChooser.ExtensionFilter avatarExtensionFilter =
       new FileChooser.ExtensionFilter(
           "fichier image",
-          "*.jpg", "*.png", "*.gif");
+          "*.jpg", "*.png", "*.gif","*.jpeg");
   private File avatarFile = null;
   private File directoryChosenForSavingProfile = null;
   private Application application;
