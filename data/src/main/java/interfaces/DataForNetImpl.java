@@ -103,9 +103,6 @@ public class DataForNetImpl implements DataForNet {
       Datacore.getLogger().info("File" + mp3FileName + " saved successfully.");
       
       LocalMusic newMusic = this.dc.upgradeMusicToLocal(formerMusic, mp3File.getAbsolutePath());
-      
-      newMusic.getOwners().add(dc.getCurrentUser());
-      dc.getCurrentUser().getLocalMusics().add(newMusic);
     } catch (Exception e) {
       //TODO manage errors
       this.dc.ihm.notifyDownloadProgress(formerMusic, -1);

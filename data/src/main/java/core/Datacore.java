@@ -212,6 +212,10 @@ public class Datacore {
     LocalMusic newMusic = new LocalMusic(toUpgrade.getMetadata(), mp3Path);
     this.musics.remove(toUpgrade.getMetadata().getHash());
     this.addMusic(newMusic);
+    
+    newMusic.getOwners().add(this.getCurrentUser());
+    this.getCurrentUser().getLocalMusics().add(newMusic);
+    
     return newMusic;
   }
 
