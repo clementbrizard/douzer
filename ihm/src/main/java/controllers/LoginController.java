@@ -83,6 +83,10 @@ public class LoginController implements Controller {
     this.application = application;
   }
   
+  /**
+   * The function who call the windows to choose a export directory. 
+   * @param evt the clicked event
+   */
   @FXML
   public void importClicked(ActionEvent evt) {
     Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
@@ -96,7 +100,8 @@ public class LoginController implements Controller {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert.showAlert("implementation","pas encore implémenté","critical");
     } catch (java.lang.RuntimeException e) {
-      IhmAlert.showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
+      IhmAlert
+        .showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
     }
   }
 }

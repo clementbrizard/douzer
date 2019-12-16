@@ -2,6 +2,8 @@ package controllers;
 
 import static impl.org.controlsfx.tools.MathTools.min;
 
+import core.IhmAlert;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
@@ -32,9 +34,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.controlsfx.control.Notifications;
 
-import core.IhmAlert;
+import org.controlsfx.control.Notifications;
 
 /**
  *  Central view that permit the user to edit his profile.
@@ -333,8 +334,12 @@ public class ProfileEditController implements Controller {
             .showInformation();
   }
   
+  /**
+   * The function who call the windows to choose an import directory.
+   * @param evt the event clicked
+   */
   @FXML
-  public void exportclicked(ActionEvent evt) {
+  public void exportClicked(ActionEvent evt) {
     Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
     exportDirectory = exportProfilDirectory.showDialog(primaryStage);
     try {
@@ -348,7 +353,8 @@ public class ProfileEditController implements Controller {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert.showAlert("implementation","pas encore implémenté","critical");
     } catch (java.lang.RuntimeException e) {
-      IhmAlert.showAlert("Directory","aucun dossier pour exporter le profile selectionné","critical");
+      IhmAlert
+        .showAlert("Directory","aucun dossier pour exporter le profile selectionné","critical");
     }
     
   }
