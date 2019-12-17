@@ -65,7 +65,7 @@
             </image>
          </ImageView>
          <Button fx:id="buttonChangePassword" layoutX="29.0" layoutY="56.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="188.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Modifier le mot de passe" />
-         <Button fx:id="buttonDeleteAccount" layoutX="275.0" layoutY="56.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="163.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Supprimer le compte" />
+         <Button fx:id="buttonDeleteAccount" layoutX="275.0" layoutY="56.0" mnemonicParsing="false" prefHeight="33.0" onAction="#deleteAccount" prefWidth="163.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Supprimer le compte" />
          <Button fx:id="buttonExportAccount" layoutX="508.0" layoutY="56.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="150.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Exporter le compte" />
          <ImageView fx:id="imageViewReturn" fitHeight="27.0" fitWidth="25.0" layoutX="6.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
             <image>

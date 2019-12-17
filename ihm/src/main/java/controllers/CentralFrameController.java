@@ -184,6 +184,7 @@ public class CentralFrameController implements Controller {
       this.profileEditController = profileEditLoader.getController();
       this.profileEditController.setCentralFrameController(this);
 
+
       FXMLLoader myMusicsLoader = new FXMLLoader(
           getClass().getResource(CentralFrameController.myMusicsView));
       this.myMusicsParent = myMusicsLoader.load();

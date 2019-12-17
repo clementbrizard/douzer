@@ -66,7 +66,7 @@ public class UserInfoController implements Controller {
   }
 
   @FXML
-  private void logout(ActionEvent event) {
+  public void logout(ActionEvent event) {
     try {
       this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
       this.mainController.getApplication().showLoginScene();
