@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 
 /**
- * Controller for righdown view with progress bar about current music download.
+ * Controller for right down view with progress bar about current music download.
  */
 public class DownloadController implements Controller {
 

@@ -60,8 +60,6 @@ public class AllMusicsController implements Controller {
 
   private CentralFrameController centralFrameController;
 
-  private DownloadController downloadController;
-
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
 
@@ -90,24 +88,6 @@ public class AllMusicsController implements Controller {
     return centralFrameController;
   }
 
-  /**
-   * getter of downloadController.
-   *
-   * @return a downloadController
-   */
-  public DownloadController getDownloadController() {
-    return downloadController;
-  }
-
-  /**
-   * getter of all musics tableView.
-   *
-   * @return all musics tableView
-   */
-  public TableView<MusicMetadata> getTvMusics() {
-    return tvMusics;
-  }
-
   // Setters
 
   /**
@@ -128,15 +108,6 @@ public class AllMusicsController implements Controller {
    */
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
-  }
-
-  /**
-   * setter of downloadController.
-   *
-   * @param downloadController the now downloadController
-   */
-  public void setDownloadController(DownloadController downloadController) {
-    this.downloadController = downloadController;
   }
 
   // Other methods
@@ -284,7 +255,7 @@ public class AllMusicsController implements Controller {
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
 
-    // If left click, show current music info at right of the screen
+    // If left click, able or disable download button
     if (click.getButton().equals(MouseButton.PRIMARY)) {
       if (seletedMusicMetadata != null) {
         Music selectedMusic = availableMusics.get(seletedMusicMetadata.getHash());
