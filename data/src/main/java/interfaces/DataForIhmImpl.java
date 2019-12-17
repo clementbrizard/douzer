@@ -26,7 +26,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +86,7 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void createUser(LocalUser user) throws IOException, LoginException {
+  public void createUser(LocalUser user) throws IOException {
     InputStream defaultPropInputStream = getClass().getClassLoader()
         .getResourceAsStream("default-config.properties");
     CreateUser.run(user, this.dc, defaultPropInputStream);
@@ -107,7 +109,14 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void download(Music music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayList<InetAddress> ownersIPs = new ArrayList<>();
+    String musicHash = music.getMetadata().getHash();
+    
+    for (User owner : music.getOwners()) {
+      ownersIPs.add(owner.getIp());
+    }
+    
+    this.dc.net.requestDownload(ownersIPs.stream(), musicHash);
   }
 
   @Override
