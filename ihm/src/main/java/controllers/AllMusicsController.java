@@ -271,7 +271,10 @@ public class AllMusicsController implements Controller {
         .getSelectionModel()
         .getSelectedItem();
     Music selectedMusic = availableMusics.get(selectedMusicMetadata.getHash());
-    this.downloadController.download(selectedMusic);
+    this.centralFrameController
+        .getMainController()
+        .getDownloadController()
+        .download(selectedMusic);
   }
 
   /**
