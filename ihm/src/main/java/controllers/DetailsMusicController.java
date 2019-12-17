@@ -200,6 +200,8 @@ public class DetailsMusicController implements Controller {
       this.textFieldArtist.setEditable(false);
       this.textFieldTitle.setEditable(false);
       this.dateYear.setEditable(false);
+      this.textFieldAddTag.setEditable(false);
+      this.buttonAddTag.setDisable(true);
     }
 
     if (musicSelected.getMetadata() != null) {

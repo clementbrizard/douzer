@@ -1,5 +1,6 @@
 package controllers;
 
+import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -240,9 +243,6 @@ public class AllMusicsController implements Controller {
                 .getMainController()
                 .getPlayerController()
                 .playerOnMusic();
-          } else {
-            
-            return;
           }
         }
       });
@@ -294,9 +294,10 @@ public class AllMusicsController implements Controller {
     // If right click, show context menu
     if (click.getButton().equals(MouseButton.SECONDARY)) {
       if (music != null) {
+        isOnlyLocalMusicSelected = true;
         musicSelected = availableMusics.get(music.getHash());
         constructContextMenu();
-        contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
+        contextMenu.show(tvMusics.getScene().getWindow(), click.getScreenX(), click.getScreenY());
       }
     }
   }
