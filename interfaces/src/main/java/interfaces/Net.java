@@ -43,4 +43,10 @@ public interface Net {
    * @param knownIPs known ips in the network
    */
   void disconnect(Serializable payload, Collection<InetAddress> knownIPs);
+
+
+  /**
+   * Create the server.
+    */
+  void createServer();
 }
