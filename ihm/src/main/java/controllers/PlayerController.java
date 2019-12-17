@@ -2,17 +2,12 @@ package controllers;
 
 import core.IhmAlert;
 import datamodel.LocalMusic;
-import datamodel.Music;
 import datamodel.MusicMetadata;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -154,40 +149,22 @@ public class PlayerController implements Controller {
    * Function Refresh ArrayMusic.
    * @return
    */
-  /* TODO CLEAN FILTRE BUG */
   private void updateArrayMusic() {
     medias.clear();
     arrayMusic.clear();
 
-    HashMap<String, MusicMetadata> arrayMusicFiltred = null;
-
-    arrayMusicFiltred =
-        mainController
-            .getCentralFrameController()
-            .getMyMusicsController()
-            .getPlayerMusics();
-
-    if (arrayMusicFiltred == null || arrayMusicFiltred.size() == 0) {
-
-      HashMap<String, LocalMusic> arrayMusicAll = null;
+      ArrayList<LocalMusic> arrayMusicAll;
 
       arrayMusicAll =
       mainController
           .getCentralFrameController()
           .getMyMusicsController()
-          .getLocalMusics();
+          .getLocalMusicInView();
 
-      arrayMusicAll.forEach((musicPath,musicMetadata) ->
+      arrayMusicAll.forEach(musicMetadata ->
           medias.add(createPlayer(musicMetadata.getMp3Path())));
-      arrayMusicAll.forEach((musicPath,musicMetadata) ->
+      arrayMusicAll.forEach(musicMetadata ->
           arrayMusic.add(musicMetadata.getMetadata()));
-    } else {
-      arrayMusicFiltred.forEach((musicPath,musicMetadata) ->
-          medias.add(createPlayer(musicPath)));
-      arrayMusicFiltred.forEach((musicPath,musicMetadata) ->
-          arrayMusic.add(musicMetadata));
-    }
-
   }
 
   /**

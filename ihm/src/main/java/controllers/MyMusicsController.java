@@ -86,6 +86,7 @@ public class MyMusicsController implements Controller {
   // Local music with or without filter
   private HashMap<String, MusicMetadata> playerMusics;
 
+
   /* Getters */
 
   public NewMusicController getNewMusicController() {
@@ -96,11 +97,10 @@ public class MyMusicsController implements Controller {
     return playerMusics;
   }
   
-  public HashMap<String,LocalMusic> getLocalMusicInView() {
-    HashMap<String,LocalMusic> h = new HashMap<String,LocalMusic>();
+  public ArrayList<LocalMusic> getLocalMusicInView() {
+    ArrayList<LocalMusic> h = new ArrayList<>();
     this.tvMusics.getItems().forEach(item -> {
-      h.put(localMusics.get(item.getHash()).getMetadata().getHash(),
-          localMusics.get(item.getHash()));
+      h.add(localMusics.get(item.getHash()));
     });
     
     return h;
