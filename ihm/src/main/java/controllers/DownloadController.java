@@ -1,16 +1,17 @@
 package controllers;
 
 import datamodel.Music;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 
-//replace by javadocs
-//righdown view with progress bar about current music download
+/**
+ * Controller for righdown view with progress bar about current music download.
+ */
 public class DownloadController implements Controller {
 
 
@@ -74,12 +75,13 @@ public class DownloadController implements Controller {
 
   /**
    * Update download progressBar progress.
-   * @param downloadedMusic The downloaded music
+   *
+   * @param downloadedMusic  The downloaded music
    * @param downloadProgress The downloaded music download progress
    */
   public void updateDownloadProgressBar(Music downloadedMusic, int downloadProgress) {
     Platform.runLater(new Runnable() {
-      
+
       @Override
       public void run() {
         String downloadedMusicArtist = downloadedMusic.getMetadata().getArtist();
@@ -98,7 +100,7 @@ public class DownloadController implements Controller {
         } else {
           // Make download progress bar visible
           progressDownload.setVisible(true);
-          progressDownload.setProgress((float)downloadProgress / 100);
+          progressDownload.setProgress((float) downloadProgress / 100);
           lblDownload
               .setText("Downloading : " + downloadedMusicTitle + " - " + downloadedMusicArtist);
           // We update central views when download is done
@@ -118,7 +120,10 @@ public class DownloadController implements Controller {
             lblDownload.setText("");
             // Make download progress bar invisible
             progressDownload.setVisible(false);
-            getMainController().getCentralFrameController().getMyMusicsController().displayAvailableMusics();
+            getMainController()
+                .getCentralFrameController()
+                .getMyMusicsController()
+                .displayAvailableMusics();
           }
         }
       }
