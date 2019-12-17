@@ -99,7 +99,6 @@ public class DownloadController implements Controller {
           // Make download progress bar visible
           progressDownload.setVisible(true);
           progressDownload.setProgress((float)downloadProgress / 100);
-          System.out.println((float)downloadProgress / 100);
           lblDownload
               .setText("Downloading : " + downloadedMusicTitle + " - " + downloadedMusicArtist);
           // We update central views when download is done
