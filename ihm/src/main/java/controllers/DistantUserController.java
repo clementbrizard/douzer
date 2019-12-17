@@ -104,7 +104,7 @@ public class DistantUserController implements Controller {
 
   @FXML
   public  void manageFriendship(ActionEvent event) {
-    logger.debug("click sur le bouton");
+    // TODO
   }
 
   @FXML
