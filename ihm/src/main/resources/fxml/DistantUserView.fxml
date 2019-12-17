@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DistantUserController">
+   <children>
+      <BorderPane>
+         <center>
+             <VBox styleClass="central-center-section, to-center">
+                <children>
+                    <HBox fx:id="distantUserHBox" styleClass="to-center">
+                        <BorderPane fx:id="userProfileInfo">
+                            <left>
+                                <HBox>
+                                    <children>
+                                        <Pane fx:id="paneImgAvatar">
+                                            <ImageView fx:id="imgAvatar" preserveRatio="true">
+                                                <image>
+                                                    <Image preserveRatio="true" smooth="true"  url="@../images/defaultAvatar.png" />
+                                                </image>
+                                            </ImageView>
+                                        </Pane>
+                                        <VBox fx:id="distantUserInfos">
+                                            <Label fx:id="pseudo" styleClass="center-sub-title" text="Pseudo"/>
+                                            <Label fx:id="nameAndSurname" text="" />
+                                            <Label fx:id="dateOfBirth" text="" />
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                            </left>
+                            <right>
+                                <!--<Button fx:id="btnManageFriendship" onAction="#manageFriendship" styleClass="form-btn" text="ajouter aux contacts">
+                                    <graphic>
+                                        <ImageView fx:id="ivAddUser">
+                                            <image>
+                                                <Image url="@../images/AddUserSymbol.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </Button>-->
+                            </right>
+                        </BorderPane>
+                    </HBox>
+                    <HBox styleClass="to-center">
+                        <TableView fx:id="tvMusics">
+                            <columns>
+                                <TableColumn prefWidth="129.0" text="Artiste" />
+                                <TableColumn prefWidth="152.0" text="Titre" />
+                                <TableColumn prefWidth="131.0" text="Album" />
+                                <TableColumn minWidth="4.0" prefWidth="92.0" text="Durée" />
+                            </columns>
+                        </TableView>
+                    </HBox>
+                </children>
+             </VBox>
+         </center>
+         <top>
+             <BorderPane styleClass="header-section">
+                 <left>
+                     <Label fx:id="lblTitle" text="Profil de "/>
+                 </left>
+                 <right>
+                     <HBox styleClass="header-btn-box">
+                         <Button fx:id="btnMyMusicsCenter" onAction="#changeFrameToMyMusics"
+                                 text="Mes musiques"/>
+                         <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToAllMusics"
+                                 text="Toutes les musiques"/>
+                     </HBox>
+                 </right>
+             </BorderPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>

@@ -23,6 +23,7 @@ public class SendFile extends Message {
   private static final Logger logger = LogManager.getLogger();
 
   private String hashMusic;
+  private int musicSize;
 
   public SendFile(Serializable p) {
     super(p);
@@ -32,7 +33,7 @@ public class SendFile extends Message {
   public void process(DataForNet data, Socket socket) {
     logger.info("Going to receive file");
     try {
-      data.saveMp3(socket.getInputStream(), hashMusic);
+      data.saveMp3(socket.getInputStream(), hashMusic, musicSize);
       socket.close();
     } catch (IOException e) {
       e.printStackTrace();
@@ -45,5 +46,13 @@ public class SendFile extends Message {
 
   public void setHashMusic(String hashMusic) {
     this.hashMusic = hashMusic;
+  }
+  
+  public void setMusicSize(int s) {
+    this.musicSize = s;
+  }
+  
+  public int getMusicSize() {
+    return this.musicSize;
   }
 }
