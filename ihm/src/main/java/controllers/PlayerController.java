@@ -67,14 +67,12 @@ public class PlayerController implements Controller {
 
     // Click on progressBar
     pgMusicProgress.setOnMouseClicked(e -> {
-      player.stop();
       double dx = e.getX();
       double dwidth = pgMusicProgress.getWidth();
       double progression = (dx / dwidth);
       double milliseconds = (progression * player.getTotalDuration().toMillis());
       Duration duration = new Duration(milliseconds);
       player.seek(duration);
-      player.play();
     });
   }
 
