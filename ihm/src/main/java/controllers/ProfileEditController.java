@@ -7,6 +7,7 @@ import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.Hashtable;
@@ -73,24 +74,13 @@ public class ProfileEditController implements Controller {
     return exportProfileController;
   }
   
-  public void setExportProfileController(ExportProfileController exportProfileController) {
-    this.exportProfileController = exportProfileController;
-  }
-  
+
   public PasswordEditController getPasswordEditController() {
     return passwordEditController;
-  }
-  
-  public void setPasswordEditController(PasswordEditController passwordEditController) {
-    this.passwordEditController = passwordEditController;
   }
 
   public ProfileDeletionController getProfileDeletionController() {
     return profileDeletionController;
-  }
-  
-  public void setProfileDeletionController(ProfileDeletionController profileDeletionController) {
-    this.profileDeletionController = profileDeletionController;
   }
   
   public CentralFrameController getCentralFrameController() {
@@ -102,43 +92,7 @@ public class ProfileEditController implements Controller {
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
   }
-
-  /**
-   * Delete of current user account.
-   * @param e the ActionEvent of delete button.
-   */
-  public void deleteAccount(ActionEvent e) {
-    //String password = textFieldPassword.getText();
-    try {
-      this.centralFrameController
-          .getMainController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .deleteAccount();
-      Notifications.create()
-          .title("good Deletion ")
-          .text("the deletion has been carried out")
-          .darkStyle()
-          .showWarning();
-      this.getCentralFrameController().getMainController().getUserInfoController().logout(null);
-
-    } catch (IOException ex) {
-      ex.printStackTrace();
-      System.out.println("IO problems");
-    } catch (Exception de) {
-      de.printStackTrace();
-
-      Notifications.create()
-          .title("Deletion failed")
-          .text("an error occurred while deleting")
-          .darkStyle()
-          .showWarning();
-
-    }
-
-  }
-
+  
   public void setExportProfileController(ExportProfileController exportProfileController) {
     this.exportProfileController = exportProfileController;
   }
@@ -204,6 +158,42 @@ public class ProfileEditController implements Controller {
 
     datePickerBirth.setPromptText(birthDate.toString());
     datePickerBirth.setValue(birthDate);
+  }
+  
+  /**
+   * Delete of current user account.
+   * @param e the ActionEvent of delete button.
+   */
+  public void deleteAccount(ActionEvent e) {
+    //String password = textFieldPassword.getText();
+    try {
+      this.centralFrameController
+          .getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .deleteAccount();
+      Notifications.create()
+          .title("good Deletion ")
+          .text("the deletion has been carried out")
+          .darkStyle()
+          .showWarning();
+      this.getCentralFrameController().getMainController().getUserInfoController().logout(null);
+
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      System.out.println("IO problems");
+    } catch (Exception de) {
+      de.printStackTrace();
+
+      Notifications.create()
+          .title("Deletion failed")
+          .text("an error occurred while deleting")
+          .darkStyle()
+          .showWarning();
+
+    }
+
   }
   
   /**
