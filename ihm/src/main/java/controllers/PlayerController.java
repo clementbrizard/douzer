@@ -73,11 +73,7 @@ public class PlayerController implements Controller {
       double milliseconds = (progression * player.getTotalDuration().toMillis());
       Duration duration = new Duration(milliseconds);
       player.seek(duration);
-
-      if(currentIndex == 0) {
-        updateValues();
-      }
-      
+      System.out.println("TEST"+duration);
     });
   }
 
@@ -245,6 +241,9 @@ public class PlayerController implements Controller {
       Platform.runLater(() -> {
 
         Duration currentTime = player.getCurrentTime();
+
+        System.out.println("TEST2"+currentTime);
+
 
         double totalDuration = arrayMusic.get(this.currentIndex)
             .getDuration()
