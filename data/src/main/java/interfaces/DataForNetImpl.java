@@ -90,6 +90,9 @@ public class DataForNetImpl implements DataForNet {
         //Progress only if progress > 1%
         if (((totalBytes * 100) / musicSize) > progress) {
           progress = (totalBytes * 100) / musicSize;
+          if (progress >= 100) {
+            this.dc.upgradeMusicToLocal(formerMusic, mp3File.getAbsolutePath());
+          }
           this.dc.ihm.notifyDownloadProgress(formerMusic, progress);
           
           //Do not pollute log
@@ -103,8 +106,6 @@ public class DataForNetImpl implements DataForNet {
       bos.close();
     
       Datacore.getLogger().info("File" + mp3FileName + " saved successfully.");
-      
-      this.dc.upgradeMusicToLocal(formerMusic, mp3File.getAbsolutePath());
     } catch (Exception e) {
       //TODO manage errors
       this.dc.ihm.notifyDownloadProgress(formerMusic, -1);
