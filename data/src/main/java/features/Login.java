@@ -89,6 +89,7 @@ public abstract class Login {
     Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
     dc.setAllIps((HashSet<InetAddress>) ips);
 
+    dc.net.createServer();
     HashSet<InetAddress> ipsToShare;
     for (InetAddress ip : ips) {
       // iterate and don't send ip of user A to A
