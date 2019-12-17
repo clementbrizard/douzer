@@ -86,14 +86,14 @@ public abstract class Login {
 
     // TODO: template for filename
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
-    Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
+    Set<InetAddress> ips = getInitialIpsFromConfig(configPath);
     dc.setAllIps((HashSet<InetAddress>) ips);
 
     dc.net.createServer();
     HashSet<InetAddress> ipsToShare;
     for (InetAddress ip : ips) {
       // iterate and don't send ip of user A to A
-      ipsToShare = (HashSet<InetAddress>) ips;
+      ipsToShare = (HashSet<InetAddress>) ((HashSet<InetAddress>) ips).clone();
       ipsToShare.remove(ip);
       LoginPayload payload = new LoginPayload(user, ipsToShare);
       dc.net.sendToUser(payload, ip);
