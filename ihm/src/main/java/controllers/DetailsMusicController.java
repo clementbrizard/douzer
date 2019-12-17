@@ -215,6 +215,7 @@ public class DetailsMusicController implements Controller {
       Iterator<User> itOwners = localMusic.getOwners().iterator();
       if (itOwners.hasNext()) {
         textFieldLastUploader.setText(itOwners.next().getUsername());
+        textFieldLastUploader.setEditable(false);
       }
     }
 
