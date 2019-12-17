@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="560.0" prefWidth="137.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CommentsController">
+<AnchorPane prefHeight="560.0" prefWidth="137.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CommentsController">
    <children>
       <GridPane layoutX="-101.0" prefHeight="560.0" prefWidth="137.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
@@ -20,8 +20,8 @@
             <RowConstraints maxHeight="543.2000144958496" minHeight="10.0" prefHeight="37.5999816894531" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="titleMusic" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="140.0" text="titre Current Musique" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ListView fx:id="listCommentaire" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
+            <Label fx:id="titleMusic" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="140.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+            <ListView fx:id="listComment" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
             <Button fx:id="commentButton" mnemonicParsing="false" onAction="#commentClick" text="Commentaire" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
          </children>
       </GridPane>

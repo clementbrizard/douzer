@@ -1,9 +1,6 @@
 package interfaces;
 
-import com.mpatric.mp3agic.ID3v1;
-import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.InvalidDataException;
-import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
 import core.LocalUsersFileHandler;
@@ -12,6 +9,7 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.Playlist;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
@@ -20,26 +18,22 @@ import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
 import features.Login;
-import features.LogoutPayload;
+import features.Logout;
+import features.ParseMusicMetadata;
 import features.Search;
 import features.ShareMusics;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
 import features.UpdateUserPayload;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -100,7 +94,7 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void createUser(LocalUser user) throws IOException, LoginException {
+  public void createUser(LocalUser user) throws IOException {
     InputStream defaultPropInputStream = getClass().getClassLoader()
         .getResourceAsStream("default-config.properties");
     CreateUser.run(user, this.dc, defaultPropInputStream);
@@ -118,38 +112,19 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void logout() throws IOException {
-    // TODO: create feature class
-    LocalUser currentUser = this.dc.getCurrentUser();
-    currentUser.setConnected(false);
-    // Updates the written currentUser in case it has been modified
-    this.dc.getLocalUsersFileHandler().update(currentUser);
-
-    LogoutPayload payload = new LogoutPayload(this.dc.getCurrentUser());
-    this.dc.net.disconnect(payload, this.dc.getOnlineIps().collect(Collectors.toList()));
-
-    Properties prop = new Properties();
-    // TODO: template for filename
-    Path userPropFilePath = currentUser.getSavePath()
-        .resolve(currentUser.getUsername() + "-config.properties");
-    File userConfigFile = userPropFilePath.toFile();
-
-    if (userConfigFile.exists()) {
-      prop.load(new FileInputStream(userPropFilePath.toString()));
-      String ipsStr = this.dc.getAllIps().stream()
-          .map(InetAddress::getHostAddress)
-          .collect(Collectors.joining(","));
-      prop.setProperty("ips", ipsStr);
-      prop.store(new FileOutputStream(userPropFilePath.toString()), null);
-    } else {
-      throw new FileNotFoundException("Warning: user property file not found in the save path");
-    }
-
-    this.dc.wipe();
+    Logout.run(this.dc);
   }
 
   @Override
   public void download(Music music) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayList<InetAddress> ownersIPs = new ArrayList<>();
+    String musicHash = music.getMetadata().getHash();
+    
+    for (User owner : music.getOwners()) {
+      ownersIPs.add(owner.getIp());
+    }
+    
+    this.dc.net.requestDownload(ownersIPs.stream(), musicHash);
   }
 
   @Override
@@ -237,37 +212,7 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public MusicMetadata parseMusicMetadata(String path)
       throws IOException, UnsupportedTagException, InvalidDataException, NoSuchAlgorithmException {
-
-    String hash = new String(
-        MessageDigest.getInstance("MD5").digest(Files.readAllBytes(Paths.get(path)))
-    );
-
-    MusicMetadata metadata = new MusicMetadata(hash);
-    Mp3File mp3File = new Mp3File(path);
-
-    metadata.setDuration(Duration.ofSeconds(mp3File.getLengthInSeconds()));
-
-    if (mp3File.hasId3v1Tag()) {
-      ID3v1 id3v1Tag = mp3File.getId3v1Tag();
-
-      metadata.setTitle(id3v1Tag.getTitle());
-      metadata.setArtist(id3v1Tag.getArtist());
-      metadata.setAlbum(id3v1Tag.getAlbum());
-      if (id3v1Tag.getYear().length() > 0) {
-        metadata.setReleaseYear(Year.parse(id3v1Tag.getYear()));
-      }
-    } else if (mp3File.hasId3v2Tag()) {
-      ID3v2 id3v2Tag = mp3File.getId3v2Tag();
-
-      metadata.setTitle(id3v2Tag.getTitle());
-      metadata.setArtist(id3v2Tag.getArtist());
-      metadata.setAlbum(id3v2Tag.getAlbum());
-      if (id3v2Tag.getYear() != null) {
-        metadata.setReleaseYear(Year.parse(id3v2Tag.getYear()));
-      }
-    }
-
-    return metadata;
+    return ParseMusicMetadata.run(this.dc, path);
   }
 
   @Override
@@ -329,8 +274,13 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public List<LocalMusic> getPlaylist() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public Collection<Playlist> getPlaylist() {
+    return this.getCurrentUser().getPlaylists();
+  }
+
+  @Override
+  public Playlist getPlaylistByName(String name) throws IllegalArgumentException {
+    return this.getCurrentUser().getPlaylistByName(name);
   }
 
   @Override
@@ -346,5 +296,35 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public Stream<Music> searchMusics(SearchQuery searchQuery) {
     return Search.run(this.dc, searchQuery);
+  }
+
+  @Override
+  public Playlist createPlaylist(String name) {
+    return this.getCurrentUser().addPlaylist(name);
+  }
+
+  @Override
+  public void addMusicToPlaylist(LocalMusic music, Playlist playlist, Integer order) {
+    playlist.addMusic(music, order);
+  }
+
+  @Override
+  public void setPlaylistMusicList(Playlist playlist, ArrayList<LocalMusic> musicList) {
+    playlist.setMusicList(musicList);
+  }
+
+  @Override
+  public void removeMusicFromPlaylist(LocalMusic music, Playlist playlist) {
+    playlist.removeMusic(music);
+  }
+
+  @Override
+  public void deletePlaylist(Playlist playlist) {
+    this.getCurrentUser().removePlaylist(playlist);
+  }
+
+  @Override
+  public void changeMusicOrder(Playlist playlist, LocalMusic music, Integer newOrder) {
+    playlist.changeOrder(music, newOrder);
   }
 }

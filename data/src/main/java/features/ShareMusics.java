@@ -5,7 +5,7 @@ import datamodel.LocalMusic;
 import java.util.Collection;
 import java.util.HashSet;
 
-public class ShareMusics {
+public abstract class ShareMusics {
   /**
    * Shares the musics according to their settings.
    */
@@ -26,13 +26,13 @@ public class ShareMusics {
         }
     );
 
-    ShareMusicsPayload payloadForAll = new ShareMusicsPayload(
+    UpdateMusicsPayload payloadForAll = new UpdateMusicsPayload(
         dc.getCurrentUser(),
         musicsForAll
     );
     dc.net.sendToUsers(payloadForAll, dc.getOnlineIps());
 
-    ShareMusicsPayload payloadForFriends = new ShareMusicsPayload(
+    UpdateMusicsPayload payloadForFriends = new UpdateMusicsPayload(
         dc.getCurrentUser(),
         musicsForFriends
     );

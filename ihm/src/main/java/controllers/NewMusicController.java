@@ -180,11 +180,9 @@ public class NewMusicController implements Controller {
    */
   @FXML
   private void chooseFile(ActionEvent event) {
-    newMusicLogger.info("Choose file");
     Stage stage = new Stage();
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Ouvrir un fichier de musique");
-    /** TODO Fix extension filter not working (on linux at least) */
     fileChooser.setSelectedExtensionFilter(
         new FileChooser.ExtensionFilter("Fichier musique", "*.mp3")
     );
@@ -196,7 +194,6 @@ public class NewMusicController implements Controller {
       this.textFile.setStyle(null);
 
       try {
-        newMusicLogger.info("remplissage des champs par defaut");
         meta = myMusicsController.getCentralFrameController()
             .getMainController()
             .getApplication()
@@ -220,7 +217,6 @@ public class NewMusicController implements Controller {
           this.textTitle.setText("");
         }
         if (meta.getReleaseYear() != null) {
-          newMusicLogger.info("remplissage de l'année par : " + meta.getReleaseYear().getValue());
           this.dateYear.setValueFactory(new SpinnerValueFactory
               .IntegerSpinnerValueFactory(1000,
               LocalDate.now().getYear(),
@@ -345,31 +341,6 @@ public class NewMusicController implements Controller {
    */
   @FXML
   private void add(ActionEvent event) {
-    // Print the information
-    newMusicLogger.info("Add new music :");
-    newMusicLogger.info("File : {} ", hasChosenFile ? file.getAbsolutePath() : "Not set");
-    newMusicLogger.info("Title : {}", textTitle.getText());
-    newMusicLogger.info("Artist : {}", textArtist.getText());
-    newMusicLogger.info("Album : {}", textAlbum.getText());
-    newMusicLogger.info("Uploader : {}", this.getMyMusicsController().getCentralFrameController()
-        .getMainController().getApplication().getIhmCore().getDataForIhm()
-        .getCurrentUser().getUsername());
-    newMusicLogger.info("Share status : {} ",
-        shareStatusGroup.getSelectedToggle().getUserData());
-    newMusicLogger.info("Date : {}", dateYear.getValue());
-    newMusicLogger.info("Tags :");
-    Boolean first = true;
-    for (Object tag : this.tags) {
-      if (!first) {
-        newMusicLogger.info(", ");
-      } else {
-        first = false;
-      }
-      newMusicLogger.info((String) tag);
-    }
-
-    newMusicLogger.info("\n");
-
     // Check the validity of the fields
     // Put in red the background of non valid fields
     Boolean valid = true;
@@ -392,7 +363,6 @@ public class NewMusicController implements Controller {
 
     // Add music if valid
     if (valid) {
-      newMusicLogger.info("Entry valid");
 
       meta.setTitle(textTitle.getText());
       meta.setArtist(textArtist.getText());
@@ -414,7 +384,10 @@ public class NewMusicController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .addMusic(meta, file.getAbsolutePath(), shareStatus);
+
         this.getMyMusicsController().displayAvailableMusics();
+        this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
+            .displayAvailableMusics();
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
       } catch (java.io.FileNotFoundException e) {

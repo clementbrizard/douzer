@@ -3,14 +3,13 @@ package controllers;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -23,7 +22,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import utils.FormatDigit;
+import utils.FormatDuration;
 
 
 /**
@@ -55,6 +54,9 @@ public class AllMusicsController implements Controller {
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
+
+  // All musics hashmap to access them instantly
+  private HashMap<String, Music> availableMusics;
 
   // Getters
 
@@ -107,6 +109,7 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
+    availableMusics = new HashMap<String, Music>();
   }
 
   /**
@@ -128,47 +131,9 @@ public class AllMusicsController implements Controller {
                 ObservableValue<String>>() {
               public ObservableValue<String> call(
                   TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
-
-                // Duration toString() returns ISO 8601 duration. We get it and
-                // extract hour, minute and second using a Regex
-
-                // Need to do it because regex is too long
-                String regex = String.join(
-                    "",
-                    "PT((?<hour>\\d{0,2})H)?",
-                    "((?<minute>\\d{0,2})M)?",
-                    "((?<second>\\d{0,2})S?)"
+                return new SimpleStringProperty(
+                    FormatDuration.run(metadata.getValue().getDuration())
                 );
-
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(metadata.getValue().getDuration().toString());
-                String duration = "";
-
-                while (matcher.find()) {
-                  try {
-                    if (matcher.group("hour") != null) {
-                      duration += FormatDigit.run(matcher.group("hour"));
-                      duration += ":";
-                    }
-
-                    if (matcher.group("minute") != null) {
-                      // We format the minutes only if there are
-                      // hours in the duration
-                      duration += (duration != "")
-                          ? FormatDigit.run(matcher.group("minute"))
-                          : matcher.group("minute");
-                      duration += ":";
-                    }
-
-                    if (matcher.group("second") != null) {
-                      duration += FormatDigit.run(matcher.group("second"));
-                    }
-                  } catch (IllegalStateException e) {
-                    allMusicsLogger.error("Error while getting music {} duration", e);
-                  }
-                }
-
-                return new SimpleStringProperty(duration);
               }
             });
 
@@ -201,14 +166,30 @@ public class AllMusicsController implements Controller {
   }
 
   public void displayAvailableMusics() {
-    tvMusics.getItems().setAll(this.parseMusic());
+    tvMusics.getItems().setAll(this.retrieveAvailableMusics());
   }
 
-  private List<MusicMetadata> parseMusic() {
-    return this.getCentralFrameController().getMainController().getApplication().getIhmCore()
-        .getDataForIhm().getLocalMusics()
-        .map(x -> x.getMetadata())
+  private List<MusicMetadata> retrieveAvailableMusics() {
+    availableMusics.clear();
+    // Retrieve all musics from current user (no matter the shared status)
+    // and musics from other connected users that are public or shared to him
+    // and apply a filter to get only public musics
+    List<Music> availableMusicsStream = this
+        .getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getMusics()
         .collect(Collectors.toList());
+
+    List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
+    for (Music music : availableMusicsStream) {
+      availableMusics.put(music.getMetadata().getHash(), music);
+      availableMusicsMetaData.add(music.getMetadata());
+    }
+
+    return availableMusicsMetaData;
   }
 
   /**
@@ -292,6 +273,6 @@ public class AllMusicsController implements Controller {
   }
 
   private void updateMusics(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+    tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
   }
 }

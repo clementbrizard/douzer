@@ -42,11 +42,11 @@ public class PlayerController implements Controller {
   private MainController mainController;
 
   private final Image pauseIcon = new Image(
-      getClass().getResourceAsStream("../images/pauseSymbol.png")
+      getClass().getResourceAsStream("/images/pauseSymbol.png")
   );
 
   private final Image playIcon = new Image(
-      getClass().getResourceAsStream("../images/playSymbol.png")
+      getClass().getResourceAsStream("/images/playSymbol.png")
   );
 
   private int currentIndex = -1;

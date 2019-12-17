@@ -8,10 +8,12 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class LocalUser extends User {
   private static final long serialVersionUID = 1L;
@@ -30,7 +32,7 @@ public class LocalUser extends User {
   // Path is not serializable, handle serialization with readObject writeObject below.
   private transient Path savePath;
   private Set<LocalMusic> localMusics;
-  private List<LocalMusic> playlist;
+  private Collection<Playlist> playlists;
 
   /**
    * Default constructor.
@@ -38,7 +40,7 @@ public class LocalUser extends User {
   public LocalUser() {
     this.friends = new HashSet<>();
     this.localMusics = new HashSet<>();
-    this.playlist = new ArrayList<>();
+    this.playlists = new ArrayList<>();
   }
 
   /**
@@ -86,12 +88,35 @@ public class LocalUser extends User {
     this.localMusics = localMusics;
   }
 
-  public List<LocalMusic> getPlaylist() {
-    return playlist;
+  public Collection<Playlist> getPlaylists() {
+    return playlists;
   }
 
-  public void setPlaylist(List<LocalMusic> playlist) {
-    this.playlist = playlist;
+  public void setPlaylists(List<Playlist> playlists) {
+    this.playlists = playlists;
+  }
+
+  public Playlist addPlaylist(String name) throws IllegalArgumentException {
+    this.playlists.forEach(p -> {
+      if (p.getName().equals(name)) {
+        throw new IllegalArgumentException("Playlist name already exists");
+      }
+    }
+    );
+    Playlist newPlaylist = new Playlist(name);
+    this.playlists.add(newPlaylist);
+    return newPlaylist;
+  }
+
+  public Playlist getPlaylistByName(String name) throws IllegalArgumentException {
+    return this.playlists.stream()
+            .filter(playlist -> playlist.getName().equals(name))
+            .findAny()
+            .orElse(null);
+  }
+
+  public void removePlaylist(Playlist playlist) {
+    this.playlists.remove(playlist);
   }
 
   public Path getSavePath() {
@@ -137,7 +162,7 @@ public class LocalUser extends User {
         && Objects.equals(friends, localUser.friends)
         && Objects.equals(savePath, localUser.savePath)
         && Objects.equals(localMusics, localUser.localMusics)
-        && Objects.equals(playlist, localUser.playlist);
+        && Objects.equals(playlists, localUser.playlists);
   }
 
   @Override

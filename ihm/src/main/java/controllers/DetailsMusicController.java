@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -336,6 +337,7 @@ public class DetailsMusicController implements Controller {
     localMusic.getMetadata().setTitle(textFieldTitle.getText());
     localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
     localMusic.getMetadata().setArtist(textFieldArtist.getText());
+    localMusic.getMetadata().setReleaseYear(Year.parse("" + dateYear.getValue()));
 
     this.getMyMusicsController().displayAvailableMusics();
 
@@ -378,10 +380,8 @@ public class DetailsMusicController implements Controller {
     }
 
     this.getMyMusicsController().displayAvailableMusics();
-
-    LogManager.getLogger().info("Change Field TODO with Data function if exist");
-
-    //TODO change field with Data function if exists
+    this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
+        .displayAvailableMusics();
 
     ((Stage) this.textFieldTitle.getScene().getWindow()).close();
   }

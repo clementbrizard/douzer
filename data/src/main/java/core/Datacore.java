@@ -152,13 +152,10 @@ public class Datacore {
    */
   public void removeOwner(User user) {
     this.musics.values().forEach(m -> {
-      m.getOwners().remove(user);
-      if (m.getOwners().isEmpty()) {
-        this.musics.remove(m.getMetadata().getHash());
-      }
+      this.removeOwner(m, user);
     });
   }
-
+  
   /**
    * Remove the user from the music's owner set
    * and remove the music if it has no more owners.
@@ -167,6 +164,7 @@ public class Datacore {
     music.getOwners().remove(user);
     if (music.getOwners().isEmpty()) {
       this.musics.remove(music.getMetadata().getHash());
+      this.ihm.notifyMusicDeletion(music);
     }
   }
 
@@ -206,6 +204,17 @@ public class Datacore {
       user1.updateUser(user2);
     }
     // No else, the user1 is the template
+  }
+  
+  public LocalMusic upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
+    LocalMusic newMusic = new LocalMusic(toUpgrade.getMetadata(), mp3Path);
+    this.musics.remove(toUpgrade.getMetadata().getHash());
+    this.addMusic(newMusic);
+    
+    newMusic.getOwners().add(this.getCurrentUser());
+    this.getCurrentUser().getLocalMusics().add(newMusic);
+    
+    return newMusic;
   }
 
   /**
