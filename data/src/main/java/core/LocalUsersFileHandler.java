@@ -137,8 +137,7 @@ public class LocalUsersFileHandler {
    * @throws IOException if the file is not accessible.
    */
   public void exportLocalUser(LocalUser localUser, Path path) throws IOException {
-    LocalUser localUserToExport = new LocalUser(localUser);
-    Path basePath = path.resolve(localUserToExport.getUuid().toString());
+    Path basePath = path.resolve(localUser.getUuid().toString());
     File baseDirectory = new File(basePath.toUri());
 
     //Wiping the previous backup if it exists.
@@ -150,28 +149,22 @@ public class LocalUsersFileHandler {
     boolean successfullyCreated = baseDirectory.mkdir();
     if (successfullyCreated) {
       //Moving all the songs.
-      for (LocalMusic m : localUserToExport.getLocalMusics()) {
+      for (LocalMusic m : localUser.getLocalMusics()) {
         Files.copy(Paths.get(m.getMp3Path()), Paths.get(
                 baseDirectory.getAbsolutePath()).resolve(new File(m.getMp3Path()).getName()));
       }
 
-      //Changing LocalMusics paths.
-      localUserToExport.getLocalMusics().forEach(m -> {
-        m.setMp3Path(basePath.resolve(new File(m.getMp3Path()).getName()).toString());
-      });
-
       //Backing up user properties.
-      Path propertiesPath = localUserToExport.getSavePath()
-              .resolve(localUserToExport.getUsername() + "-config.properties");
+      Path propertiesPath = localUser.getSavePath()
+              .resolve(localUser.getUsername() + "-config.properties");
       Files.copy(propertiesPath,
-              basePath.resolve(localUserToExport.getUsername() + "-config.properties"));
-      localUserToExport.setSavePath(basePath);
+              basePath.resolve(localUser.getUsername() + "-config.properties"));
 
       //User serialization.
       FileOutputStream fileOutputStream = new FileOutputStream(
               basePath.resolve("user.ser").toString());
       ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-      objectOutputStream.writeObject(localUserToExport);
+      objectOutputStream.writeObject(localUser);
       objectOutputStream.flush();
       objectOutputStream.close();
       fileOutputStream.close();
@@ -192,9 +185,14 @@ public class LocalUsersFileHandler {
             path.resolve("user.ser").toString());
     ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
     LocalUser localUser = (LocalUser)objectInputStream.readObject();
-
+    localUser.setSavePath(path);
     objectInputStream.close();
     fileInputStream.close();
+
+    //Changing LocalMusics paths.
+    localUser.getLocalMusics().forEach(m -> {
+      m.setMp3Path(path.resolve(new File(m.getMp3Path()).getName()).toString());
+    });
 
     return localUser;
   }
