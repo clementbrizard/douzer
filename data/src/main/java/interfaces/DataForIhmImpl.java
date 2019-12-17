@@ -8,6 +8,7 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.Playlist;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
@@ -29,9 +30,9 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -206,8 +207,13 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public List<LocalMusic> getPlaylist() {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public Collection<Playlist> getPlaylist() {
+    return this.getCurrentUser().getPlaylists();
+  }
+
+  @Override
+  public Playlist getPlaylistByName(String name) throws IllegalArgumentException {
+    return this.getCurrentUser().getPlaylistByName(name);
   }
 
   @Override
@@ -223,5 +229,35 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public Stream<Music> searchMusics(SearchQuery searchQuery) {
     return Search.run(this.dc, searchQuery);
+  }
+
+  @Override
+  public Playlist createPlaylist(String name) {
+    return this.getCurrentUser().addPlaylist(name);
+  }
+
+  @Override
+  public void addMusicToPlaylist(LocalMusic music, Playlist playlist, Integer order) {
+    playlist.addMusic(music, order);
+  }
+
+  @Override
+  public void setPlaylistMusicList(Playlist playlist, ArrayList<LocalMusic> musicList) {
+    playlist.setMusicList(musicList);
+  }
+
+  @Override
+  public void removeMusicFromPlaylist(LocalMusic music, Playlist playlist) {
+    playlist.removeMusic(music);
+  }
+
+  @Override
+  public void deletePlaylist(Playlist playlist) {
+    this.getCurrentUser().removePlaylist(playlist);
+  }
+
+  @Override
+  public void changeMusicOrder(Playlist playlist, LocalMusic music, Integer newOrder) {
+    playlist.changeOrder(music, newOrder);
   }
 }
