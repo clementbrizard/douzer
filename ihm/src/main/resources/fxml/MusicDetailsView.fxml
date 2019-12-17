@@ -28,12 +28,11 @@
    <Spinner fx:id="dateYear" layoutX="133.0" layoutY="281.0" prefHeight="31.0" prefWidth="161.0" />
    <ListView fx:id="listViewTagsList" layoutX="428.0" layoutY="115.0" prefHeight="146.0" prefWidth="161.0" />
    <Label layoutX="428.0" layoutY="96.0" prefHeight="21.0" prefWidth="161.0" style="-fx-background-color: #a9a9a9;" text="Tags" />
-   <Label layoutX="386.0" layoutY="400.0" text="Propriétaire" />
    <Label layoutX="425.0" layoutY="304.0" mnemonicParsing="false" text="Visibilité:" />
    <RadioButton fx:id="radioPrivate" layoutX="425.0" layoutY="327.0" mnemonicParsing="false" text="Privée" />
    <RadioButton fx:id="radioFriends" layoutX="425.0" layoutY="350.0" mnemonicParsing="false" text="Aux amis seulement" />
    <RadioButton fx:id="radioPublic" layoutX="425.0" layoutY="373.0" mnemonicParsing="false" text="Publique" />
-   <Button fx:id="validateButton" layoutX="592.0" layoutY="538.0" mnemonicParsing="false" onAction="#validation" text="Valider" />
+   <Button fx:id="validateButton" layoutX="590.0" layoutY="548.0" mnemonicParsing="false" onAction="#validation" text="Valider" />
    <ImageView fx:id="starOne" fitHeight="21.0" fitWidth="21.0" layoutX="106.0" layoutY="359.0" pickOnBounds="true" preserveRatio="true">
       <Image url="@../images/EmptyStarSymbol.png" />
    </ImageView>
@@ -51,5 +50,6 @@
    </ImageView>
    <TextField fx:id="textFieldAddTag" layoutX="428.0" layoutY="271.0" prefHeight="31.0" prefWidth="129.0" />
    <Button fx:id="buttonAddTag" layoutX="557.0" layoutY="271.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="33.0" text="+" />
-   <TextField fx:id="textFieldLastUploader" disable="true" editable="false" layoutX="470.0" layoutY="395.0" prefHeight="31.0" prefWidth="161.0" />
+   <ListView layoutX="425.0" layoutY="416.0" prefHeight="122.0" prefWidth="191.0" />
+   <Label layoutX="425.0" layoutY="395.0" prefHeight="21.0" prefWidth="191.0" style="-fx-background-color: #a9a9a9;" text="Propriétaires" />
 </Pane>

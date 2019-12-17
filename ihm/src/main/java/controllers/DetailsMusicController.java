@@ -50,7 +50,9 @@ public class DetailsMusicController implements Controller {
   private Spinner<Integer> dateYear;
 
   @FXML
-  private TextField textFieldLastUploader;
+  private ListView<String> listOwnersView;
+  
+  private ObservableList<String> owners;
 
   @FXML
   private TextField textFieldAddTag;
@@ -212,11 +214,7 @@ public class DetailsMusicController implements Controller {
     }
 
     if (localMusic.getOwners() != null) {
-      Iterator<User> itOwners = localMusic.getOwners().iterator();
-      if (itOwners.hasNext()) {
-        textFieldLastUploader.setText(itOwners.next().getUsername());
-        textFieldLastUploader.setEditable(false);
-      }
+      localMusic.getOwners().forEach(owner -> listOwnersView.getItems().add(owner.getUsername()));
     }
 
     tags = FXCollections.observableArrayList();
@@ -302,15 +300,7 @@ public class DetailsMusicController implements Controller {
     } else {
       textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
-
-    if (textFieldLastUploader.getText() == null
-        || textFieldLastUploader.getText().trim().equals("")) {
-      bool = false;
-      textFieldLastUploader.setStyle(" -fx-background-color:red;");
-    } else {
-      textFieldLastUploader.setStyle(" -fx-background-color:white;");
-    }
-
+    
     return bool;
   }
 
