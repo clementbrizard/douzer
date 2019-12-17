@@ -73,7 +73,6 @@ public class PlayerController implements Controller {
       double milliseconds = (progression * player.getTotalDuration().toMillis());
       Duration duration = new Duration(milliseconds);
       player.seek(duration);
-      System.out.println("TEST"+duration);
     });
   }
 
@@ -118,7 +117,10 @@ public class PlayerController implements Controller {
     stopPlayer();
 
     player = medias.get(currentIndex);
-    player.setCycleCount(MediaPlayer.INDEFINITE);
+
+    if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+      player.setCycleCount(MediaPlayer.INDEFINITE);
+    }
 
     showSongInfo(arrayMusic.get(currentIndex));
 
@@ -152,17 +154,17 @@ public class PlayerController implements Controller {
     medias.clear();
     arrayMusic.clear();
 
-      ArrayList<LocalMusic> arrayMusicAll;
+    ArrayList<LocalMusic> arrayMusicAll;
 
-      arrayMusicAll =
+    arrayMusicAll =
       mainController
           .getCentralFrameController()
           .getMyMusicsController()
           .getLocalMusicInView();
 
-      arrayMusicAll.forEach(musicMetadata ->
+    arrayMusicAll.forEach(musicMetadata ->
           medias.add(createPlayer(musicMetadata.getMp3Path())));
-      arrayMusicAll.forEach(musicMetadata ->
+    arrayMusicAll.forEach(musicMetadata ->
           arrayMusic.add(musicMetadata.getMetadata()));
   }
 
@@ -241,9 +243,6 @@ public class PlayerController implements Controller {
       Platform.runLater(() -> {
 
         Duration currentTime = player.getCurrentTime();
-
-        System.out.println("TEST2"+currentTime);
-
 
         double totalDuration = arrayMusic.get(this.currentIndex)
             .getDuration()
