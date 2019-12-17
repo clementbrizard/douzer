@@ -356,7 +356,7 @@ public class DetailsMusicController implements Controller {
   
       localMusic.getMetadata().setTitle(textFieldTitle.getText());
       localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-    localMusic.getMetadata().setReleaseYear(Year.parse("" + dateYear.getValue()));
+      localMusic.getMetadata().setReleaseYear(Year.parse("" + dateYear.getValue()));
       localMusic.getMetadata().setArtist(textFieldArtist.getText());
   
       this.getMyMusicsController().displayAvailableMusics();
