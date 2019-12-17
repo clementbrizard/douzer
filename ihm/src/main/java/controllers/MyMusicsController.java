@@ -42,7 +42,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
-import utils.FormatDigit;
+import utils.FormatDuration;
 
 /**
  * Central view show up my musics.
@@ -156,47 +156,9 @@ public class MyMusicsController implements Controller {
                 ObservableValue<String>>() {
               public ObservableValue<String> call(
                   TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
-
-                // Duration toString() returns ISO 8601 duration. We get it and
-                // extract hour, minute and second using a Regex
-
-                // Need to do it because regex is too long
-                String regex = String.join(
-                    "",
-                    "PT((?<hour>\\d{0,2})H)?",
-                    "((?<minute>\\d{0,2})M)?",
-                    "((?<second>\\d{0,2})S?)"
+                return new SimpleStringProperty(
+                    FormatDuration.run(metadata.getValue().getDuration())
                 );
-
-                Pattern pattern = Pattern.compile(regex);
-                Matcher matcher = pattern.matcher(metadata.getValue().getDuration().toString());
-                String duration = "";
-
-                while (matcher.find()) {
-                  try {
-                    if (matcher.group("hour") != null) {
-                      duration += FormatDigit.run(matcher.group("hour"));
-                      duration += ":";
-                    }
-
-                    if (matcher.group("minute") != null) {
-                      // We format the minutes only if there are
-                      // hours in the duration
-                      duration += (duration != "")
-                          ? FormatDigit.run(matcher.group("minute"))
-                          : matcher.group("minute");
-                      duration += ":";
-                    }
-
-                    if (matcher.group("second") != null) {
-                      duration += FormatDigit.run(matcher.group("second"));
-                    }
-                  } catch (IllegalStateException e) {
-                    myMusicsLogger.error("Error while getting music {} duration", e);
-                  }
-                }
-
-                return new SimpleStringProperty(duration);
               }
             });
 

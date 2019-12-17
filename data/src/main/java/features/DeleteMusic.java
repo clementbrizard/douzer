@@ -5,10 +5,11 @@ import static core.Datacore.getLogger;
 import core.Datacore;
 
 import datamodel.LocalMusic;
+import datamodel.ShareStatus;
 import java.io.File;
 import java.util.Set;
 
-public class DeleteMusic {
+public abstract class DeleteMusic {
 
   /**
    * to delete a music in the library, eventually delete locally, and unshare the music.
@@ -19,7 +20,9 @@ public class DeleteMusic {
   public static void run(LocalMusic music, boolean deleteLocal, Datacore dc) {
     Set musics = dc.getCurrentUser().getLocalMusics();
     if (musics.contains(music)) {
+      music.setShareStatus(ShareStatus.PRIVATE);
       UnshareMusics.unshareMusic(music, dc);
+      dc.removeOwner(music, dc.getCurrentUser());
       musics.remove(music);
       if (deleteLocal) {
         File file = new File(music.getMp3Path());

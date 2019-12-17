@@ -23,4 +23,9 @@ public class LogoutPayload extends Payload {
     dc.removeOwner(disconnectedUser);
     dc.removeUser(disconnectedUser);
   }
+
+  @Override
+  public String toString() {
+    return "LogoutPayload{}";
+  }
 }

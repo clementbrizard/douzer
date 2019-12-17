@@ -32,7 +32,7 @@ public class IhmAlert {
     }
     
     if (alert != null) {
-      alert.setTitle(kind + ":" + title);
+      alert.setTitle(kind + ": " + title);
       alert.setHeaderText(null);
       alert.setContentText(text);
       alert.showAndWait();  

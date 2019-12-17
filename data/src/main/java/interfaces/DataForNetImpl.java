@@ -27,6 +27,8 @@ public class DataForNetImpl implements DataForNet {
   public void process(Serializable payload, InetAddress sourceIp) {
     try {
       Payload receivedPayload = (Payload) payload;
+      Datacore.getLogger().debug("Received and processing payload " + payload.getClass()
+          + " from " + sourceIp + "\n\t\t" + receivedPayload);
       receivedPayload.process(this.dc, sourceIp);
     } catch (ClassCastException e) {
       Datacore.getLogger().error("Received object is not a payload.");
