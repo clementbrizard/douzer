@@ -27,12 +27,6 @@ public class LocalMusic extends Music {
     this.shareStatus = shareStatus;
   }
 
-  public LocalMusic(LocalMusic that) {
-    super(that);
-    this.mp3Path = that.mp3Path;
-    this.shareStatus = that.shareStatus;
-  }
-
   public ShareStatus getShareStatus() {
     return shareStatus;
   }
