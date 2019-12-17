@@ -108,7 +108,7 @@ public class CurrentMusicInfoController implements Controller {
   @Override
   public void initialize() {
     //The share button is invisible unless the selected music is a localMusic (see in Init method)
-    btnShare.setVisible(false);
+    btnShare.setDisable(true);
   }
 
   /**
@@ -121,7 +121,9 @@ public class CurrentMusicInfoController implements Controller {
 
     // The user can only see his/her own musics (that are localMusics)
     if (music instanceof LocalMusic) {
-      btnShare.setVisible(true);
+      btnShare.setDisable(false);
+    } else {
+      btnShare.setDisable(true);
     }
 
     commentCurrentMusicController.setCurrentMusicController(this);
