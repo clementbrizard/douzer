@@ -41,7 +41,6 @@ public class LocalUser extends User {
     this.playlist = new ArrayList<>();
   }
 
-
   /**
    * Set a new password.
    *
