@@ -46,8 +46,8 @@ public class LoginController implements Controller {
       loginLogger.error(e);
 
       Notifications.create()
-        .title("CConnection refusé")
-        .text("il semblerait que vous ayez fait une erreur dans le login ou mot de passe.")
+        .title("Connection refusée")
+        .text("Il semblerait que vous ayez fait une erreur dans le login ou mot de passe.")
         .darkStyle()
         .showWarning();
 
@@ -55,8 +55,8 @@ public class LoginController implements Controller {
       loginLogger.error(e);
       
       Notifications.create()
-        .title("connexion refusé")
-        .text("La sauvegarde de l'application est corrompu")
+        .title("Connexion refusée")
+        .text("La sauvegarde de l'application est corrompue. Supprimez votre fichier de sauvegarde. Créez un nouveau compte si le problème persiste.")
         .darkStyle()
         .showWarning();
     }
