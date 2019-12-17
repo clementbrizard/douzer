@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * Payload for "Hey, I connected ! Here is my profile and my shared musics"
  * The "my shared music" part is handled with the ShareMusicsPayload
  */
-public class LoginPayload extends ShareMusicsPayload {
+public class LoginPayload extends UpdateMusicsPayload {
   private User user;
   private Set<InetAddress> ips;
   private boolean isResponse;
@@ -56,26 +56,25 @@ public class LoginPayload extends ShareMusicsPayload {
       LoginPayload responsePayload = new LoginPayload(
           dc.getCurrentUser(),
           dc.getAllIps().stream()
-              .filter(ip -> ip != senderIp)
+              .filter(ip -> !ip.equals(senderIp))
               .collect(Collectors.toSet()),
           true
       );
       dc.net.sendToUser(responsePayload, senderIp);
     }
 
-    // Preparing login payload for unknown IPs
-    LoginPayload payload = new LoginPayload(
-        dc.getCurrentUser(),
-        dc.getAllIps()
-    );
-
     // Connecting to unknown IPs
-    dc.net.sendToUsers(
-        payload,
-        this.ips.stream()
-            .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
-            .peek(ip -> dc.getAllIps().add(ip))
-    );
+    for (InetAddress ip : this.ips) {
+      // iterate and don't send ip of user A to A
+      if (!dc.getAllIps().contains(ip)) {
+        HashSet<InetAddress> ipsToShare =
+            (HashSet<InetAddress>) ((HashSet<InetAddress>) dc.getAllIps()).clone();
+        ipsToShare.remove(ip);
+        LoginPayload payload = new LoginPayload(dc.getCurrentUser(), ipsToShare);
+        dc.net.sendToUser(payload, ip);
+      }
+    }
+
     super.run(dc); // update musics
   }
 

@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.Year;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -353,6 +354,7 @@ public class DetailsMusicController implements Controller {
   
       localMusic.getMetadata().setTitle(textFieldTitle.getText());
       localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
+    localMusic.getMetadata().setReleaseYear(Year.parse("" + dateYear.getValue()));
       localMusic.getMetadata().setArtist(textFieldArtist.getText());
   
       this.getMyMusicsController().displayAvailableMusics();

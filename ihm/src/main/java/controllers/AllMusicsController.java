@@ -1,21 +1,15 @@
 package controllers;
 
-import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-import datamodel.ShareStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -323,12 +317,10 @@ public class AllMusicsController implements Controller {
         .getIhmCore()
         .getDataForIhm()
         .getMusics()
-        .filter(m -> (m instanceof LocalMusic)
-            || ((LocalMusic) m).getShareStatus() != ShareStatus.PRIVATE)
         .collect(Collectors.toList());
 
     List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
-    for (Music music : (Iterable<Music>) availableMusicsStream::iterator) {
+    for (Music music : availableMusicsStream) {
       availableMusics.put(music.getMetadata().getHash(), music);
       availableMusicsMetaData.add(music.getMetadata());
     }
@@ -417,6 +409,6 @@ public class AllMusicsController implements Controller {
   }
 
   private void updateMusics(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+    tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
   }
 }

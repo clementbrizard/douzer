@@ -3,14 +3,10 @@ package core;
 import controllers.AllMusicsController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
-import controllers.MyMusicsController;
 import controllers.OnlineUsersListController;
-import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
-
-import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -165,7 +161,8 @@ public class IhmForData implements Ihm {
       return;
     }
     if (controllerCurrentMusic.getCurrentMusic() != null
-        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
+        && controllerCurrentMusic.getCurrentMusic().getMetadata().getHash()
+        .equals(music.getMetadata().getHash())) {
       controllerCurrentMusic.init(null);
     }
   }
