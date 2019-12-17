@@ -95,7 +95,17 @@ public class MyMusicsController implements Controller {
   public HashMap<String, MusicMetadata> getPlayerMusics() {
     return playerMusics;
   }
-
+  
+  public HashMap<String,LocalMusic> getLocalMusicInView() {
+    HashMap<String,LocalMusic> h = new HashMap<String,LocalMusic>();
+    this.tvMusics.getItems().forEach(item -> {
+      h.put(localMusics.get(item.getHash()).getMetadata().getHash(),
+          localMusics.get(item.getHash()));
+    });
+    
+    return h;
+  }
+  
   public HashMap<String, LocalMusic>  getLocalMusics() {
     return localMusics;
   }
