@@ -274,8 +274,9 @@ public class NewMusicController implements Controller {
       }
 
     } else {
-      if (this.file == null)
+      if (this.file == null) {
         clear();
+      }
     }
   }
 
