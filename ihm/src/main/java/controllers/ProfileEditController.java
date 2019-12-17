@@ -54,10 +54,19 @@ public class ProfileEditController implements Controller {
     this.centralFrameController = centralFrameController;
   }
 
+  /**
+   * Delete of current user account.
+   * @param e the ActionEvent of delete button.
+   */
   public void deleteAccount(ActionEvent e) {
     //String password = textFieldPassword.getText();
     try {
-      this.centralFrameController.getMainController().getApplication().getIhmCore().getDataForIhm().deleteAccount();
+      this.centralFrameController
+          .getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .deleteAccount();
       Notifications.create()
           .title("good Deletion ")
           .text("the deletion has been carried out")
