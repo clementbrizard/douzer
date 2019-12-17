@@ -46,13 +46,19 @@ public class LoginController implements Controller {
       loginLogger.error(e);
 
       Notifications.create()
-          .title("Connection failed")
-          .text("It seems you entered a wrong username/password. Try again.")
-          .darkStyle()
-          .showWarning();
+        .title("CConnection refusé")
+        .text("il semblerait que vous ayez fait une erreur dans le login ou mot de passe.")
+        .darkStyle()
+        .showWarning();
 
     } catch (IOException e) {
       loginLogger.error(e);
+      
+      Notifications.create()
+        .title("connexion refusé")
+        .text("La sauvegarde de l'application est corrompu")
+        .darkStyle()
+        .showWarning();
     }
   }
 
