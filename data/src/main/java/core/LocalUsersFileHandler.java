@@ -25,7 +25,7 @@ import javax.imageio.ImageIO;
 public class LocalUsersFileHandler {
   private Path filePath;
 
-  LocalUsersFileHandler(String filePath) throws IOException {
+  public LocalUsersFileHandler(String filePath) throws IOException {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
 
@@ -128,73 +128,6 @@ public class LocalUsersFileHandler {
    */
   public LocalUser getUser(LocalUser localUser) throws IOException {
     return getUser(localUser.getUsername());
-  }
-
-  /**
-   * Export a LocalUser and its mp3 files on the hard drive.
-   * @param localUser the LocalUser to export.
-   * @param path path to the directory that will contain the backup directory.
-   * @throws IOException if the file is not accessible.
-   */
-  public void exportLocalUser(LocalUser localUser, Path path) throws IOException {
-    Path basePath = path.resolve(localUser.getUuid().toString());
-    File baseDirectory = new File(basePath.toUri());
-
-    //Wiping the previous backup if it exists.
-    if (Files.exists(basePath)) {
-      Arrays.stream(baseDirectory.listFiles()).forEach(File::delete);
-      baseDirectory.delete();
-    }
-
-    boolean successfullyCreated = baseDirectory.mkdir();
-    if (successfullyCreated) {
-      //Moving all the songs.
-      for (LocalMusic m : localUser.getLocalMusics()) {
-        Files.copy(Paths.get(m.getMp3Path()), Paths.get(
-                baseDirectory.getAbsolutePath()).resolve(new File(m.getMp3Path()).getName()));
-      }
-
-      //Backing up user properties.
-      Path propertiesPath = localUser.getSavePath()
-              .resolve(localUser.getUsername() + "-config.properties");
-      Files.copy(propertiesPath,
-              basePath.resolve(localUser.getUsername() + "-config.properties"));
-
-      //User serialization.
-      FileOutputStream fileOutputStream = new FileOutputStream(
-              basePath.resolve("user.ser").toString());
-      ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-      objectOutputStream.writeObject(localUser);
-      objectOutputStream.flush();
-      objectOutputStream.close();
-      fileOutputStream.close();
-
-    } else {
-      throw new IOException("Unable to create the directory.");
-    }
-  }
-
-  /**
-   * Import a previously exported LocalUser.
-   * @param path the path to the previously exported LocalUser.
-   * @return the imported LocalUSer.
-   * @throws IOException if the file is not accessible.
-   */
-  public LocalUser importLocalUser(Path path) throws IOException, ClassNotFoundException {
-    FileInputStream fileInputStream = new FileInputStream(
-            path.resolve("user.ser").toString());
-    ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-    LocalUser localUser = (LocalUser)objectInputStream.readObject();
-    localUser.setSavePath(path);
-    objectInputStream.close();
-    fileInputStream.close();
-
-    //Changing LocalMusics paths.
-    localUser.getLocalMusics().forEach(m -> {
-      m.setMp3Path(path.resolve(new File(m.getMp3Path()).getName()).toString());
-    });
-
-    return localUser;
   }
 
   @SuppressWarnings("unchecked")

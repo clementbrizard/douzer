@@ -6,6 +6,7 @@ import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.Mp3File;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
+import core.LocalUsersFileHandler;
 import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
@@ -39,6 +40,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.Year;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -152,20 +154,71 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void exportProfile(Path path) throws IOException {
-    dc.getLocalUsersFileHandler().exportLocalUser(dc.getCurrentUser(), path);
+    LocalUser localUser = dc.getCurrentUser();
+    Path basePath = path.resolve(localUser.getUuid().toString());
+    File baseDirectory = new File(basePath.toUri());
+
+    //Wiping the previous backup if it exists.
+    if (Files.exists(basePath)) {
+      Arrays.stream(baseDirectory.listFiles()).forEach(File::delete);
+      baseDirectory.delete();
+    }
+
+    boolean successfullyCreated = baseDirectory.mkdir();
+    if (successfullyCreated) {
+      //Moving all the songs.
+      for (LocalMusic m : localUser.getLocalMusics()) {
+        Files.copy(Paths.get(m.getMp3Path()), Paths.get(
+            baseDirectory.getAbsolutePath()).resolve(new File(m.getMp3Path()).getName()));
+      }
+
+      //Backing up user properties.
+      Path propertiesPath = localUser.getSavePath()
+          .resolve(localUser.getUsername() + "-config.properties");
+      Files.copy(propertiesPath,
+          basePath.resolve(localUser.getUsername() + "-config.properties"));
+
+      //User serialization.
+      LocalUsersFileHandler fileHandler = new LocalUsersFileHandler(
+          basePath.resolve(localUser.getUsername() + ".ser").toString());
+      fileHandler.add(localUser);
+    } else {
+      throw new IOException("Unable to create the directory.");
+    }
+
   }
 
   @Override
-  public void importProfile(Path path)
-      throws IOException, ClassNotFoundException, DataException {
-    LocalUser localUser = dc.getLocalUsersFileHandler().importLocalUser(path);
+  public void importProfile(Path path) throws IOException, DataException {
+    //Searching for the .ser file.
+    List list = Arrays.stream(new File(path.toUri()).listFiles())
+        .filter(f -> f.getName().matches(".*\\.ser"))
+        .map(File::getName)
+        .collect(Collectors.toList());
 
-    //Check if the localUser already exists on the local computer.
-    //If it doesn't we add the LocalUser.
-    if (!dc.getLocalUsersFileHandler().contains(localUser)) {
-      dc.getLocalUsersFileHandler().add(localUser);
+    if (list.isEmpty()) {
+      throw new DataException("Unable to find the user backup file.");
     } else {
-      throw new DataException("The user already exists.");
+      String username = list.get(0).toString().split("\\.")[0];
+
+      LocalUsersFileHandler fileHandler = new LocalUsersFileHandler(
+          path.resolve(username + ".ser").toString());
+      LocalUser localUser = fileHandler.getUser(username);
+
+      //Check if the localUser already exists on the local computer.
+      //If it doesn't we add the LocalUser.
+      if (!dc.getLocalUsersFileHandler().contains(localUser)) {
+        localUser.setSavePath(path);
+
+        //Changing LocalMusics paths.
+        localUser.getLocalMusics().forEach(m -> {
+          m.setMp3Path(path.resolve(new File(m.getMp3Path()).getName()).toString());
+        });
+
+        dc.getLocalUsersFileHandler().add(localUser);
+      } else {
+        throw new DataException("The user already exists.");
+      }
     }
   }
 
