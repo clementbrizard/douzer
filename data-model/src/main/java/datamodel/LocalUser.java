@@ -41,27 +41,6 @@ public class LocalUser extends User {
     this.playlist = new ArrayList<>();
   }
 
-  /**l
-   * Copy constructor.
-   * @param that the localUser to copy.
-   */
-  public LocalUser(LocalUser that) {
-    super(that);
-    this.pwdHash = that.pwdHash;
-    this.savePath = that.savePath;
-    this.friends = new HashSet<>();
-    friends.forEach(f -> this.friends.add(new User(f)));
-    this.playlist = new ArrayList<>(that.playlist.size());
-    this.localMusics = new HashSet<>(that.localMusics.size());
-    that.localMusics.forEach(m -> {
-      LocalMusic newLocalMusic = new LocalMusic(m);
-      this.localMusics.add(newLocalMusic);
-      int index = that.playlist.indexOf(m);
-      if (index >= 0) {
-        this.playlist.add(index, newLocalMusic);
-      }
-    });
-  }
 
   /**
    * Set a new password.
