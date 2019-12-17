@@ -90,10 +90,9 @@ public abstract class Login {
     dc.setAllIps((HashSet<InetAddress>) ips);
 
     dc.net.createServer();
-    HashSet<InetAddress> ipsToShare;
     for (InetAddress ip : ips) {
       // iterate and don't send ip of user A to A
-      ipsToShare = (HashSet<InetAddress>) ((HashSet<InetAddress>) ips).clone();
+      HashSet<InetAddress> ipsToShare = (HashSet<InetAddress>) ((HashSet<InetAddress>) ips).clone();
       ipsToShare.remove(ip);
       LoginPayload payload = new LoginPayload(user, ipsToShare);
       dc.net.sendToUser(payload, ip);
