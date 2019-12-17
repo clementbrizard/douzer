@@ -73,6 +73,11 @@ public class PlayerController implements Controller {
       double milliseconds = (progression * player.getTotalDuration().toMillis());
       Duration duration = new Duration(milliseconds);
       player.seek(duration);
+
+      if(currentIndex == 0) {
+        updateValues();
+      }
+      
     });
   }
 
