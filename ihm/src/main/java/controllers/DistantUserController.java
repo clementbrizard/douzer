@@ -15,6 +15,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
+import utils.FormatImage;
 
 public class DistantUserController implements Controller {
   /* Logger */
@@ -83,8 +84,7 @@ public class DistantUserController implements Controller {
    */
   public void init() {
 
-    // Show avatar
-    // TODO Get the real avatar instead of showing the default avatar image
+    // Show avatar by default
     double circleRadius = 45;
     paneImgAvatar.setMinWidth(circleRadius * 2);
     paneImgAvatar.setMinHeight(circleRadius * 2);
@@ -93,7 +93,7 @@ public class DistantUserController implements Controller {
 
     WritableImage croppedImage = imgAvatar.snapshot(null, null);
 
-    // the clip to have a circled image
+    // Add a clip to have a circled avatar image
     Circle clip = new Circle(imgAvatar.getFitHeight() / 2,
         imgAvatar.getFitWidth() / 2,
         circleRadius);
