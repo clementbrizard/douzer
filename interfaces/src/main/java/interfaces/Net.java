@@ -36,17 +36,6 @@ public interface Net {
   void requestDownload(Stream<InetAddress> ownerIps, String musicHash);
 
   /**
-   * Deprecated : sendToUser(s) now connects the user if it is not connected.
-   * Connect the user to the network. Create a server thread to listen network and
-   * sends a payload to the known network.
-   * 
-   * @param payload data to transmit to the network
-   * @param knownIPs known nodes of the network
-   */
-  @Deprecated
-  void connect(Serializable payload, Collection<InetAddress> knownIPs);
-
-  /**
    * Stop all interactions between user and network and notifies the network that
    * the user has been disconnected.
    * 

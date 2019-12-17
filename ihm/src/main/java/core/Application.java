@@ -227,6 +227,7 @@ public class Application extends javafx.application.Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     this.ihmCore = IhmCore.init();
+    this.ihmCore.setApplication(this);
 
     //  Get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));

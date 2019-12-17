@@ -3,19 +3,26 @@ package controllers;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.FormatDuration;
 
 
 /**
@@ -33,7 +40,7 @@ public class AllMusicsController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
-  private TableColumn<MusicMetadata, Duration> durationCol;
+  private TableColumn<MusicMetadata, String> durationCol;
   @FXML
   private TextField tfSearch;
   @FXML
@@ -43,10 +50,13 @@ public class AllMusicsController implements Controller {
   @FXML
   private TextField tfSearchAlbum;
   @FXML
-  private TextField tfSearchDuration;
+  private TextField tfSearchTags;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
+
+  // All musics hashmap to access them instantly
+  private HashMap<String, Music> availableMusics;
 
   // Getters
 
@@ -99,6 +109,7 @@ public class AllMusicsController implements Controller {
    */
   @Override
   public void initialize() {
+    availableMusics = new HashMap<String, Music>();
   }
 
   /**
@@ -111,9 +122,20 @@ public class AllMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
-    this.durationCol.setCellValueFactory(
-        new PropertyValueFactory<MusicMetadata, Duration>("duration")
-    );
+
+    // Duration MusicMetaData attribute has type Duration
+    // so we need to convert it to a string
+    this.durationCol
+        .setCellValueFactory(
+            new Callback<TableColumn.CellDataFeatures<MusicMetadata, String>,
+                ObservableValue<String>>() {
+              public ObservableValue<String> call(
+                  TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
+                return new SimpleStringProperty(
+                    FormatDuration.run(metadata.getValue().getDuration())
+                );
+              }
+            });
 
     try {
       this.displayAvailableMusics();
@@ -124,22 +146,55 @@ public class AllMusicsController implements Controller {
     tfSearchTitle.setVisible(false);
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
-    tfSearchDuration.setVisible(false);
+    tfSearchTags.setVisible(false);
+
+    ChangeListener<String> textListener = new ChangeListener<String>() {
+      @Override
+      public void changed(ObservableValue<? extends String> observable,
+                          String oldValue, String newValue) {
+        searchMusics();
+      }
+    };
+
+    tfSearchTitle.textProperty().addListener(textListener);
+    tfSearchArtist.textProperty().addListener(textListener);
+    tfSearchAlbum.textProperty().addListener(textListener);
+    tfSearchTags.textProperty().addListener(textListener);
+
+    //event when the user edit the textField
+    tfSearch.textProperty().addListener(textListener);
   }
 
   public void displayAvailableMusics() {
-    tvMusics.getItems().setAll(this.parseMusic());
+    tvMusics.getItems().setAll(this.retrieveAvailableMusics());
   }
 
-  private List<MusicMetadata> parseMusic() {
-    return this.getCentralFrameController().getMainController().getApplication().getIhmCore()
-        .getDataForIhm().getLocalMusics()
-        .map(x -> x.getMetadata())
+  private List<MusicMetadata> retrieveAvailableMusics() {
+    availableMusics.clear();
+    // Retrieve all musics from current user (no matter the shared status)
+    // and musics from other connected users that are public or shared to him
+    // and apply a filter to get only public musics
+    List<Music> availableMusicsStream = this
+        .getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getMusics()
         .collect(Collectors.toList());
+
+    List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
+    for (Music music : availableMusicsStream) {
+      availableMusics.put(music.getMetadata().getHash(), music);
+      availableMusicsMetaData.add(music.getMetadata());
+    }
+
+    return availableMusicsMetaData;
   }
 
   /**
    * Show labels for advanced search for All musics view.
+   *
    * @param event the clic ont the button "Recherche avancée".
    */
   @FXML
@@ -149,14 +204,14 @@ public class AllMusicsController implements Controller {
       tfSearchTitle.setVisible(false);
       tfSearchArtist.setVisible(false);
       tfSearchAlbum.setVisible(false);
-      tfSearchDuration.setVisible(false);
+      tfSearchTags.setVisible(false);
 
     } else {
       tfSearch.setDisable(true);
       tfSearchTitle.setVisible(true);
       tfSearchArtist.setVisible(true);
       tfSearchAlbum.setVisible(true);
-      tfSearchDuration.setVisible(true);
+      tfSearchTags.setVisible(true);
 
     }
   }
@@ -168,30 +223,43 @@ public class AllMusicsController implements Controller {
 
   /**
    * Search all musics that correspond to the labels content.
-   * @param event The click on the search button.
    */
   @FXML
-  public void searchMusics(MouseEvent event) {
+  public void searchMusics() {
 
     SearchQuery query = new SearchQuery();
-    allMusicsLogger.debug(tfSearch.isDisabled());
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
-      if (tfSearchTitle.getText() != null) {
+      // TextField default constructor sets the initial text to "" (empty string)
+      // so instead of checking if text is not null (which will be false), we must
+      // check if trimmed text (with leading and trailing whitespaces removed) is not empty.
+      if (!tfSearchTitle.getText().trim().isEmpty()) {
         query.withTitle(tfSearchTitle.getText());
       }
 
-      if (tfSearchArtist != null) {
+      if (!tfSearchArtist.getText().trim().isEmpty()) {
         query.withArtist(tfSearchArtist.getText());
       }
 
-      if (tfSearchAlbum != null) {
-        query.withArtist(tfSearchAlbum.getText());
+      if (!tfSearchAlbum.getText().trim().isEmpty()) {
+        query.withAlbum(tfSearchAlbum.getText());
       }
 
-      if (tfSearchDuration != null) {
-        query.withArtist(tfSearchDuration.getText());
+      if (!tfSearchTags.getText().trim().isEmpty()) {
+        //on supprime les espaces avant et après la virgule,
+        // mais pas ceux contenus dans les tags
+        // trim() supprime les espaces après chaque tag
+        //ce qui permet de supprimer les espaces après le dernier tags et
+        // de ne faire la recherche qu'avec les caractères utiles
+        Collection<String> tags = Arrays.asList(tfSearchTags
+            .getText()
+            .trim()
+            .replaceAll("\\s*,\\s*", ",")
+            .split(",")
+        );
+
+        query.withTags(tags);
       }
     }
 
@@ -199,12 +267,12 @@ public class AllMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query); //TODO rename
+        .getDataForIhm().searchMusics(query);
 
     updateMusics(searchResults);
   }
 
   private void updateMusics(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+    tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
   }
 }

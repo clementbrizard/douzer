@@ -2,6 +2,7 @@ package features;
 
 import core.Datacore;
 import core.Payload;
+import datamodel.LocalUser;
 import datamodel.Music;
 import java.util.Collection;
 import java.util.UUID;
@@ -11,11 +12,10 @@ import java.util.UUID;
  */
 public class UnshareMusicsPayload extends Payload {
   private Collection<String> musicHashs;
-  private UUID ownerToRemove;
 
-  public UnshareMusicsPayload(Collection<String> musicHashs, UUID ownerToRemove) {
+  public UnshareMusicsPayload(LocalUser user, Collection<String> musicHashs) {
+    super(user);
     this.musicHashs = musicHashs;
-    this.ownerToRemove = ownerToRemove;
   }
 
   /**.
@@ -25,8 +25,15 @@ public class UnshareMusicsPayload extends Payload {
   public void run(Datacore dc) {
     this.musicHashs.forEach(hash -> {
       Music musicToUnshare = dc.getMusic(hash);
-      dc.removeOwner(musicToUnshare, dc.getUser(this.ownerToRemove));
+      dc.removeOwner(musicToUnshare, dc.getUser(this.senderUuid));
       dc.ihm.updateMusic(musicToUnshare);
     });
+  }
+
+  @Override
+  public String toString() {
+    return "UnshareMusicsPayload{"
+        + "musicHashs=" + musicHashs
+        + '}';
   }
 }

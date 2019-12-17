@@ -120,7 +120,6 @@ public class MainController implements Controller {
     }
     try {
       this.playerController.setMainController(this);
-      this.playerController.setPlayerText("Test artist", "Test music");
     } catch (UnsupportedOperationException e) {
       logger.warn("Player Controller calls : " + e.getMessage());
     }
@@ -147,11 +146,11 @@ public class MainController implements Controller {
 
     try {
       this.currentMusicInfoController.setMainController(this);
-      //this.currentMusicInfoController.init();
+      this.currentMusicInfoController.init(null);
       this.currentMusicInfoController.setApplication(this.application);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
     }
   }
-
 }
+

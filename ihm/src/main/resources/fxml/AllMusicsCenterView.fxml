@@ -29,11 +29,6 @@
                          </columns>
                      </TableView>
                      <TextField fx:id="tfSearch" layoutX="110.0" layoutY="24.0" prefHeight="31.0" prefWidth="473.0" promptText="Rechercher" />
-                     <ImageView fx:id="ivSearchAll" fitHeight="26.0" fitWidth="26.0" layoutX="586.0" layoutY="27.0" onMouseClicked="#searchMusics" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/searchSymbol.png" />
-                         </image>
-                     </ImageView>
                      <ImageView fx:id="ivPlay" fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
                          <image>
                              <Image url="@../images/DownloadSymbol.png" />
@@ -54,9 +49,9 @@
                         <Insets />
                      </opaqueInsets></Button>
                   <TextField fx:id="tfSearchTitle" layoutX="68.0" layoutY="97.0" prefHeight="31.0" prefWidth="250.0" promptText="Titre" />
-                  <TextField fx:id="tfSearchArtist" layoutX="68.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Artist" />
+                  <TextField fx:id="tfSearchArtist" layoutX="68.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Artiste" />
                   <TextField fx:id="tfSearchAlbum" layoutX="323.0" layoutY="96.0" prefHeight="31.0" prefWidth="250.0" promptText="Album" />
-                  <TextField fx:id="tfSearchDuration" layoutX="323.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Durée" />
+                  <TextField fx:id="tfSearchTags" layoutX="323.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Tags" />
                  </children>
              </Pane>
          </center>

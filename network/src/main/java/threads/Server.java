@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 import message.Message;
 
@@ -65,6 +66,12 @@ public class Server extends Thread {
         
         Message receivedMessage = (Message) receivedObject.readObject();
         this.netProvider.createMessageProcess(receivedMessage, socket);
+      }
+    } catch (SocketException e) {
+      if (serverRunning == false) {
+        logger.info("Server socket closed");
+      } else {
+        e.printStackTrace();
       }
     } catch (Exception e) {
       e.printStackTrace();

@@ -11,8 +11,9 @@ import datamodel.User;
 public class UpdateUserPayload extends Payload {
   private User user;
 
-  public UpdateUserPayload(LocalUser u) {
-    this.user = new User(u);
+  public UpdateUserPayload(LocalUser user) {
+    super(user);
+    this.user = new User(user);
   }
 
   /**
@@ -21,5 +22,12 @@ public class UpdateUserPayload extends Payload {
   @Override
   public void run(Datacore dc) {
     dc.ihm.updateUser(this.user);
+  }
+
+  @Override
+  public String toString() {
+    return "UpdateUserPayload{"
+        + "user=" + user.getUsername() + " | " + user.getUuid()
+        + '}';
   }
 }
