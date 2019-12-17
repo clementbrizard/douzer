@@ -208,15 +208,6 @@ public class AllMusicsController implements Controller {
 
   private List<MusicMetadata> retrieveAvailableMusics() {
     availableMusics.clear();
-    this.getCentralFrameController()
-        .getMainController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .getMusics()
-        .forEach(m -> {
-          allMusicsLogger.debug(m.getMetadata().getTitle());
-        });
     // Retrieve all musics from current user (no matter the shared status)
     // and musics from other connected users that are public or shared to him
     // and apply a filter to get only public musics
@@ -310,7 +301,6 @@ public class AllMusicsController implements Controller {
   public void searchMusics() {
 
     SearchQuery query = new SearchQuery();
-    allMusicsLogger.debug(tfSearch.isDisabled());
     if (!tfSearch.isDisabled()) {
       query.withText(tfSearch.getText());
     } else {
