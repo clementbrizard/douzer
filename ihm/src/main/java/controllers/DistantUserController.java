@@ -8,12 +8,12 @@ import java.time.format.FormatStyle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
-import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
 import utils.FormatImage;
 
@@ -59,7 +59,7 @@ public class DistantUserController implements Controller {
     this.nameAndSurname.setText(String.format("%s %s", name, surname));
   }
 
-  private void setDateOfBirth(LocalDate dateOfBirth) {
+  private void setDateOfBirth(LocalDate dateOfBirth) {  
     DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
     this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
   }

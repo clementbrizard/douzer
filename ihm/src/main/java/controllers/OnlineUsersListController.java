@@ -8,12 +8,12 @@ import java.util.stream.Stream;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.util.Callback;
-import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,7 +46,7 @@ public class OnlineUsersListController implements Controller {
 
     // Set it as the data model of the ListView
     lvwOnlineUsers.setItems(onlineUsersList);
-    lvwOnlineUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>(){
+    lvwOnlineUsers.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
       @Override
       public ListCell<User> call(ListView<User> listView) {
         return new ListCell<User>() {
@@ -69,8 +69,10 @@ public class OnlineUsersListController implements Controller {
         if (click.getClickCount() == 2) {
           User clickedOnlineUser = lvwOnlineUsers.getSelectionModel().getSelectedItem();
           onlineUsersListLogger.debug(clickedOnlineUser.getUsername());
-          OnlineUsersListController.this.mainController.getCentralFrameController().setCentralContentDistantUser();
-          OnlineUsersListController.this.mainController.getCentralFrameController().getDistantUserController().setDistantUser(clickedOnlineUser);
+          OnlineUsersListController.this.mainController.getCentralFrameController()
+            .setCentralContentDistantUser();
+          OnlineUsersListController.this.mainController.getCentralFrameController()
+            .getDistantUserController().setDistantUser(clickedOnlineUser);
         }
       }
     });
