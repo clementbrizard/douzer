@@ -1,5 +1,11 @@
 package controllers;
 
+import datamodel.User;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -7,17 +13,27 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
+import javafx.scene.control.Label;
 import org.apache.logging.log4j.LogManager;
 
 public class DistantUserController implements Controller {
   /* Logger */
   private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
-
+  
   @FXML
   private ImageView imgAvatar;
 
   @FXML
   private Pane paneImgAvatar;
+
+  @FXML
+  private Label pseudo;
+
+  @FXML
+  private Label nameAndSurname;
+
+  @FXML
+  private Label dateOfBirth;
 
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
@@ -33,6 +49,19 @@ public class DistantUserController implements Controller {
   }
 
   /* Setters */
+
+  private void setPseudo(String pseudo) {
+    this.pseudo.setText(pseudo);
+  }
+
+  private void setNameAndSurname(String name, String surname) {
+    this.nameAndSurname.setText(String.format("%s %s", name, surname));
+  }
+
+  private void setDateOfBirth(LocalDate dateOfBirth) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
+    this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+  }
 
   public void setSearchMusicController(SearchMusicController searchMusicController) {
     this.searchMusicController = searchMusicController;
@@ -90,4 +119,10 @@ public class DistantUserController implements Controller {
 
   /* Logic methods */
 
+  public void setDistantUser(User user) {
+    FormatImage.cropAvatar(user.getAvatar(), imgAvatar);
+    this.setPseudo(user.getUsername());
+    this.setNameAndSurname(user.getFirstName(), user.getLastName());
+    this.setDateOfBirth(user.getDateOfBirth());
+  }
 }

@@ -12,6 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.util.Callback;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,6 +60,18 @@ public class OnlineUsersListController implements Controller {
             }
           }
         };
+      }
+    });
+
+    lvwOnlineUsers.setOnMouseClicked(new EventHandler<MouseEvent>() {
+      @Override
+      public void handle(MouseEvent click) {
+        if (click.getClickCount() == 2) {
+          User clickedOnlineUser = lvwOnlineUsers.getSelectionModel().getSelectedItem();
+          onlineUsersListLogger.debug(clickedOnlineUser.getUsername());
+          OnlineUsersListController.this.mainController.getCentralFrameController().setCentralContentDistantUser();
+          OnlineUsersListController.this.mainController.getCentralFrameController().getDistantUserController().setDistantUser(clickedOnlineUser);
+        }
       }
     });
   }

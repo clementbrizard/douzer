@@ -31,9 +31,9 @@
                                             </ImageView>
                                         </Pane>
                                         <VBox fx:id="distantUserInfos">
-                                            <Label styleClass="center-sub-title" text="Pseudo"/>
-                                            <Label text="Prénom Nom" />
-                                            <Label text="Né.e le XX/XX/XXXX" />
+                                            <Label fx:id="pseudo" styleClass="center-sub-title" text="Pseudo"/>
+                                            <Label fx:id="nameAndSurname" text="" />
+                                            <Label fx:id="dateOfBirth" text="" />
                                         </VBox>
                                     </children>
                                 </HBox>
@@ -67,7 +67,7 @@
          <top>
              <BorderPane styleClass="header-section">
                  <left>
-                     <Label fx:id="lblTitle" text="Profil de pseudo"/>
+                     <Label fx:id="lblTitle" text="Profil de "/>
                  </left>
                  <right>
                      <HBox styleClass="header-btn-box">
