@@ -148,10 +148,16 @@ public class MainController implements Controller {
     try {
       this.currentMusicInfoController.setMainController(this);
       this.currentMusicInfoController.setApplication(this.application);
-      this.currentMusicInfoController.getDownloadController().setMainController(this);;
       this.currentMusicInfoController.init(null);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
+    }
+
+    try {
+      this.downloadController.setMainController(this);
+      this.downloadController.initialize();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Download Controller calls : " + e.getMessage());
     }
   }
 }

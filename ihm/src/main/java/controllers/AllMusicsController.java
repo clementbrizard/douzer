@@ -282,6 +282,9 @@ public class AllMusicsController implements Controller {
     this.downloadController.download(selectedMusic);
   }
 
+  /**
+   * Handle click on tableView in order to able or disable download button.
+   */
   @FXML
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();

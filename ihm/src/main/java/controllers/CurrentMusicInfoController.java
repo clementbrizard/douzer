@@ -28,9 +28,6 @@ public class CurrentMusicInfoController implements Controller {
   private Button btnShare;
 
   @FXML
-  private ProgressBar downloadProgress;
-
-  @FXML
   private CommentsController commentCurrentMusicController;
 
   private ShareController shareController;
@@ -129,9 +126,6 @@ public class CurrentMusicInfoController implements Controller {
 
     commentCurrentMusicController.setCurrentMusicController(this);
     commentCurrentMusicController.init(music);
-
-
-
   }
 
   /**

@@ -39,7 +39,7 @@ public class DownloadController implements Controller {
 
   @Override
   public void initialize() {
-    this.lblDownload.setText("Ceci est un test");
+    this.lblDownload.setText("");
     this.progressDownload.setProgress(0);
     this.progressDownload.setVisible(false);
   }
@@ -72,7 +72,7 @@ public class DownloadController implements Controller {
   }
 
   /**
-   * Update download progressBar progress
+   * Update download progressBar progress.
    * @param downloadedMusic The downloaded music
    * @param downloadProgress The downloaded music download progress
    */
@@ -103,10 +103,6 @@ public class DownloadController implements Controller {
             .text(downloadedMusicTitle + " - " + downloadedMusicArtist)
             .darkStyle()
             .showInformation();
-        this.mainController
-            .getCentralFrameController()
-            .getMyMusicsController()
-            .init();
         this.mainController
             .getCentralFrameController()
             .getAllMusicsController()
