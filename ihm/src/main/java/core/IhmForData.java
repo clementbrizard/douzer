@@ -85,8 +85,6 @@ public class IhmForData implements Ihm {
     try {
       downloadController = this.ihmCore.getApplication()
           .getMainController()
-          .getCentralFrameController()
-          .getAllMusicsController()
           .getDownloadController();
     } catch (NullPointerException e) {
       ihmForDataLogger.error("Controller chain not fully initialized : " + e);
