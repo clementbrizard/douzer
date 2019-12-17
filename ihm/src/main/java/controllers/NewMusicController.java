@@ -201,9 +201,10 @@ public class NewMusicController implements Controller {
     fileChooser.setSelectedExtensionFilter(
         new FileChooser.ExtensionFilter("Fichier musique", "*.mp3")
     );
-
-    this.file = fileChooser.showOpenDialog(stage);
-    if (this.file != null) {
+    File newMusic = fileChooser.showOpenDialog(stage);
+    
+    if (newMusic != null) {
+      this.file = newMusic;
       this.hasChosenFile = true;
       this.textFile.setText(this.file.getAbsolutePath());
       this.textFile.setStyle(null);
@@ -273,7 +274,8 @@ public class NewMusicController implements Controller {
       }
 
     } else {
-      clear();
+      if (this.file == null)
+        clear();
     }
   }
 
