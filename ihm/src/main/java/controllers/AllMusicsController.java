@@ -279,35 +279,6 @@ public class AllMusicsController implements Controller {
     }
   }
   
-  /**
-   * handle the click on the TableView.
-   * @param click the MouseEvent
-   */
-  @FXML
-  public void handleClickTableView(MouseEvent click) {
-    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
-
-    // If left click, show current music info at right of the screen
-    if (click.getButton().equals(MouseButton.PRIMARY)) {
-      if (music != null) {
-        musicSelected = availableMusics.get(music.getHash());
-
-        this.getCentralFrameController().getMainController()
-            .getCurrentMusicInfoController().init(musicSelected);
-      }
-    }
-
-    // If right click, show context menu
-    if (click.getButton().equals(MouseButton.SECONDARY)) {
-      if (music != null) {
-        isOnlyLocalMusicSelected = true;
-        musicSelected = availableMusics.get(music.getHash());
-        constructContextMenu();
-        contextMenu.show(tvMusics.getScene().getWindow(), click.getScreenX(), click.getScreenY());
-      }
-    }
-  }
-  
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.retrieveAvailableMusics());
   }
@@ -383,21 +354,35 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Handle click on tableView in order to able or disable download button.
+   * handle the click on the TableView.
+   * @param click the MouseEvent
    */
   @FXML
   public void handleClickTableView(MouseEvent click) {
-    MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
 
-    // If left click, able or disable download button
+    // If left click, show current music info at right of the screen
     if (click.getButton().equals(MouseButton.PRIMARY)) {
-      if (seletedMusicMetadata != null) {
-        Music selectedMusic = availableMusics.get(seletedMusicMetadata.getHash());
-        if (selectedMusic instanceof LocalMusic) {
+      if (music != null) {
+        musicSelected = availableMusics.get(music.getHash());
+
+        this.getCentralFrameController().getMainController()
+            .getCurrentMusicInfoController().init(musicSelected);
+        if (musicSelected instanceof LocalMusic) {
           btnDownload.setDisable(true);
         } else {
           btnDownload.setDisable(false);
         }
+      }
+    }
+
+    // If right click, show context menu
+    if (click.getButton().equals(MouseButton.SECONDARY)) {
+      if (music != null) {
+        isOnlyLocalMusicSelected = true;
+        musicSelected = availableMusics.get(music.getHash());
+        constructContextMenu();
+        contextMenu.show(tvMusics.getScene().getWindow(), click.getScreenX(), click.getScreenY());
       }
     }
   }
