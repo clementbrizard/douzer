@@ -193,7 +193,7 @@ public class AllMusicsController implements Controller {
     // Create ContextMenu for getting information
     // about music on right click.
     contextMenu = new ContextMenu();
-
+    System.out.println("construction du contexte menu");
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
     itemInformation.setOnAction(new EventHandler<ActionEvent>() {
@@ -216,6 +216,7 @@ public class AllMusicsController implements Controller {
         });
     
     if (musicSelected instanceof LocalMusic && isOnlyLocalMusicSelected) {
+      System.out.println("construction du play");
       MenuItem playMusic = new MenuItem("Play");
       playMusic.setOnAction(new EventHandler<ActionEvent>() {
         @Override
