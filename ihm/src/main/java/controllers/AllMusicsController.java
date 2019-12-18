@@ -378,7 +378,9 @@ public class AllMusicsController implements Controller {
 
     // If right click, show context menu
     if (click.getButton().equals(MouseButton.SECONDARY)) {
+      System.out.println("right button");
       if (music != null) {
+        System.out.println("right and music");
         isOnlyLocalMusicSelected = true;
         musicSelected = availableMusics.get(music.getHash());
         constructContextMenu();
