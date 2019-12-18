@@ -114,6 +114,7 @@ public class MainController implements Controller {
     Logger logger = LogManager.getLogger();
     try {
       userInfoController.setMainController(this);
+      this.setUserInfoController(userInfoController);
       userInfoController.init();
     } catch (UnsupportedOperationException e) {
       logger.warn("User Info Controller calls : %s", e.toString());
@@ -146,10 +147,17 @@ public class MainController implements Controller {
 
     try {
       this.currentMusicInfoController.setMainController(this);
-      this.currentMusicInfoController.init(null);
       this.currentMusicInfoController.setApplication(this.application);
+      this.currentMusicInfoController.init(null);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
+    }
+
+    try {
+      this.downloadController.setMainController(this);
+      this.downloadController.initialize();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Download Controller calls : " + e.getMessage());
     }
   }
 }

@@ -3,7 +3,6 @@ package controllers;
 import core.Application;
 import datamodel.LocalMusic;
 import datamodel.Music;
-import datamodel.MusicMetadata;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -29,13 +28,12 @@ public class CurrentMusicInfoController implements Controller {
   private Button btnShare;
 
   @FXML
-  private ProgressBar downloadProgress;
-
-  @FXML
   private CommentsController commentCurrentMusicController;
 
   private ShareController shareController;
+
   private NewCommentController newCommentController;
+
   private MainController mainController;
 
   private Scene shareScene;
@@ -67,34 +65,6 @@ public class CurrentMusicInfoController implements Controller {
 
   public Application getApplication() {
     return application;
-  }
-
-  /**
-   * Initialize the controller.
-   */
-  @Override
-  public void initialize() {
-    //The share button is invisible unless the selected music is a localMusic (see in Init method)
-    btnShare.setVisible(false);
-
-  }
-
-  /**
-   * Initialize the current music info view with a selected music.
-   *
-   * @param music selected music
-   */
-  public void init(Music music) {
-    this.currentMusic = music;
-
-    // The user can only see his/her own musics (that are localMusics)
-    if (music instanceof LocalMusic) {
-      btnShare.setVisible(true);
-    }
-
-    commentCurrentMusicController.setCurrentMusicController(this);
-    commentCurrentMusicController.init(music);
-
   }
 
   public Music getCurrentMusic() {
@@ -133,6 +103,34 @@ public class CurrentMusicInfoController implements Controller {
   // Other methods
 
   /**
+   * Initialize the controller.
+   */
+  @Override
+  public void initialize() {
+    //The share button is invisible unless the selected music is a localMusic (see in Init method)
+    btnShare.setDisable(true);
+  }
+
+  /**
+   * Initialize the current music info view with a selected music.
+   *
+   * @param music selected music
+   */
+  public void init(Music music) {
+    this.currentMusic = music;
+
+    // The user can only see his/her own musics (that are localMusics)
+    if (music instanceof LocalMusic) {
+      btnShare.setDisable(false);
+    } else {
+      btnShare.setDisable(true);
+    }
+
+    commentCurrentMusicController.setCurrentMusicController(this);
+    commentCurrentMusicController.init(music);
+  }
+
+  /**
    * Share the current music. Open the music sharing pop-up.
    *
    * @param event nut used
@@ -168,7 +166,6 @@ public class CurrentMusicInfoController implements Controller {
     // Show sharing popup.
     musicSharingPopup.show();
   }
-
 }
 
 

@@ -52,6 +52,7 @@
                   <TextField fx:id="tfSearchArtist" layoutX="68.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Artiste" />
                   <TextField fx:id="tfSearchAlbum" layoutX="323.0" layoutY="96.0" prefHeight="31.0" prefWidth="250.0" promptText="Album" />
                   <TextField fx:id="tfSearchTags" layoutX="323.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Tags" />
+                  <Button fx:id="btnDownload" layoutX="551.0" layoutY="58.0" mnemonicParsing="false" onAction="#download" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Télécharger" />
                  </children>
              </Pane>
          </center>

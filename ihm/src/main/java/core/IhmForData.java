@@ -3,6 +3,7 @@ package core;
 import controllers.AllMusicsController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
+import controllers.DownloadController;
 import controllers.OnlineUsersListController;
 import datamodel.Music;
 import datamodel.User;
@@ -75,11 +76,22 @@ public class IhmForData implements Ihm {
   /**
    * Update the IHM progress bar by giving the percentage of the download progression.
    *
-   * @param music   Music considered.
-   * @param integer Percentage progression, between 0 and 100.
+   * @param downloadedMusic  Music considered.
+   * @param downloadProgress Percentage progression, between 0 and 100.
    */
   @Override
-  public void notifyDownloadProgress(Music music, int integer) {
+  public void notifyDownloadProgress(Music downloadedMusic, int downloadProgress) {
+    DownloadController downloadController = null;
+    try {
+      downloadController = this.ihmCore.getApplication()
+          .getMainController()
+          .getDownloadController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+    }
+    downloadController.updateDownloadProgressBar(downloadedMusic, downloadProgress);
+
     LogManager.getLogger()
         .warn("La fonction d'affichage du téléchargement n'est pas encore liée");
   }
