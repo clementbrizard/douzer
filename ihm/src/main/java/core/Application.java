@@ -39,9 +39,9 @@ public class Application extends javafx.application.Application {
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
 
-  // Window size properties
-  private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
-  private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
+  // Screen size properties
+  private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+  private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
   // Reference to ihmCore
   private IhmCore ihmCore;
@@ -179,11 +179,6 @@ public class Application extends javafx.application.Application {
    */
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
-
-    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-
     primaryStage.setTitle("Connexion");
   }
 
@@ -232,7 +227,7 @@ public class Application extends javafx.application.Application {
     //  Get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
-    loginScene = new Scene(loginParent);
+    loginScene = new Scene(loginParent, screenWidth, screenHeight);
 
     //  Get the loader for SignUpView
     FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
@@ -278,12 +273,10 @@ public class Application extends javafx.application.Application {
 
     // Initialize the first view
     this.primaryStage = primaryStage;
-
-    //primaryStage.initStyle(StageStyle.UNDECORATED);
+    primaryStage.setResizable(true);
 
     // Add the root scene (login)
-    primaryStage.setScene(loginScene);
-    primaryStage.setResizable(false);
+    this.showLoginScene();
 
     primaryStage.show();
   }
