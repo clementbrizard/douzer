@@ -13,6 +13,8 @@ Button:hover {
     -fx-text-fill: rgb(43, 120, 228);
     -fx-border-color: rgb(43, 120, 228);
     -fx-background-color: rgba(255, 255, 255, 0.55);
+    /* To avoid login fields to fill whole screen width */
+    -fx-max-width: 200px;
 
 }
 .form-field:focused {
@@ -139,3 +141,21 @@ Button:hover {
     -fx-spacing: 0.8em;
 }
 
+/*
+ * LOGIN
+ */
+
+#loginForm {
+    -fx-min-height: 605px;
+    -fx-min-width: 720px;
+    -fx-padding: 1em;
+ }
+
+ #loginForm > Label {
+    -fx-font-size: 20px;
+    -fx-padding: 2em;
+ }
+
+#loginForm > HBox {
+     -fx-padding: 0.8em 0;
+ }
