@@ -17,6 +17,8 @@ import exceptions.data.DataException;
 import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
+import features.ExportUser;
+import features.ImportUser;
 import features.Login;
 import features.Logout;
 import features.ParseMusicMetadata;
@@ -129,72 +131,12 @@ public class DataForIhmImpl implements DataForIhm {
 
   @Override
   public void exportProfile(Path path) throws IOException {
-    LocalUser localUser = dc.getCurrentUser();
-    Path basePath = path.resolve(localUser.getUuid().toString());
-    File baseDirectory = new File(basePath.toUri());
-
-    //Wiping the previous backup if it exists.
-    if (Files.exists(basePath)) {
-      Arrays.stream(baseDirectory.listFiles()).forEach(File::delete);
-      baseDirectory.delete();
-    }
-
-    boolean successfullyCreated = baseDirectory.mkdir();
-    if (successfullyCreated) {
-      //Moving all the songs.
-      for (LocalMusic m : localUser.getLocalMusics()) {
-        Files.copy(Paths.get(m.getMp3Path()), Paths.get(
-            baseDirectory.getAbsolutePath()).resolve(new File(m.getMp3Path()).getName()));
-      }
-
-      //Backing up user properties.
-      Path propertiesPath = localUser.getSavePath()
-          .resolve(localUser.getUsername() + "-config.properties");
-      Files.copy(propertiesPath,
-          basePath.resolve(localUser.getUsername() + "-config.properties"));
-
-      //User serialization.
-      LocalUsersFileHandler fileHandler = new LocalUsersFileHandler(
-          basePath.resolve(localUser.getUsername() + ".ser").toString());
-      fileHandler.add(localUser);
-    } else {
-      throw new IOException("Unable to create the directory.");
-    }
-
+    ExportUser.run(dc.getCurrentUser(), path);
   }
 
   @Override
   public void importProfile(Path path) throws IOException, DataException {
-    //Searching for the .ser file.
-    List list = Arrays.stream(new File(path.toUri()).listFiles())
-        .filter(f -> f.getName().matches(".*\\.ser"))
-        .map(File::getName)
-        .collect(Collectors.toList());
-
-    if (list.isEmpty()) {
-      throw new DataException("Unable to find the user backup file.");
-    } else {
-      String username = list.get(0).toString().split("\\.")[0];
-
-      LocalUsersFileHandler fileHandler = new LocalUsersFileHandler(
-          path.resolve(username + ".ser").toString());
-      LocalUser localUser = fileHandler.getUser(username);
-
-      //Check if the localUser already exists on the local computer.
-      //If it doesn't we add the LocalUser.
-      if (!dc.getLocalUsersFileHandler().contains(localUser)) {
-        localUser.setSavePath(path);
-
-        //Changing LocalMusics paths.
-        localUser.getLocalMusics().forEach(m -> {
-          m.setMp3Path(path.resolve(new File(m.getMp3Path()).getName()).toString());
-        });
-
-        dc.getLocalUsersFileHandler().add(localUser);
-      } else {
-        throw new DataException("The user already exists.");
-      }
-    }
+    ImportUser.run(path, this.dc);
   }
 
   @Override
