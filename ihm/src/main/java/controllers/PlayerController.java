@@ -142,11 +142,11 @@ public class PlayerController implements Controller {
    * @return
    */
   private MediaPlayer createPlayer(String url) {
-    try{
+    try {
       final Media media2 = new Media(new File(url).toURI().toString());
       return new MediaPlayer(media2);
-    }catch (Exception e){
-      IhmAlert.showAlert("msg","bug"+e,"warning");
+    } catch (Exception e) {
+      IhmAlert.showAlert("msg","bug" + e,"warning");
     }
     return null;
   }

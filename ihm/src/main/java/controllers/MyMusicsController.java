@@ -97,6 +97,9 @@ public class MyMusicsController implements Controller {
     return this.detailsMusicController;
   }
 
+  /**
+   * getLocalMusicInView.
+   */
   public ArrayList<LocalMusic> getLocalMusicInView() {
     ArrayList<LocalMusic> h = new ArrayList<>();
     this.tvMusics.getItems().forEach(item -> {
@@ -212,10 +215,6 @@ public class MyMusicsController implements Controller {
           listMusicClicked.add(currentLocalMusic);
         }
       }
-     /* getCentralFrameController()
-          .getMainController()
-          .getPlayerController()
-          .setArrayMusic(listMusicClicked);*/
 
       getCentralFrameController()
           .getMainController()
