@@ -3,12 +3,7 @@ package controllers;
 import core.IhmAlert;
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Platform;
@@ -24,7 +19,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-import javax.imageio.ImageIO;
 import utils.FormatDuration;
 
 /**
@@ -107,7 +101,8 @@ public class PlayerController implements Controller {
   public void playOneMusic(int currentIndexRow) {
     updateArrayMusic();
     currentIndex = currentIndexRow;
-    playerOnMusic();
+    System.out.println("test" + medias.size() + " inde" + currentIndex);
+    // playerOnMusic();
   }
 
   /**
