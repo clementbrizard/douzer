@@ -3,10 +3,13 @@ package controllers;
 import core.IhmAlert;
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -21,6 +24,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import javax.imageio.ImageIO;
 import utils.FormatDuration;
 
 /**
@@ -82,17 +86,14 @@ public class PlayerController implements Controller {
    */
   public void initPictures() {
 
-    File pauseIconFile = new File(getClass().getResource("/images/pauseSymbol.png").getFile());
-    File playIconFile = new File(getClass().getResource("/images/playSymbol.png").getFile());
+    URL pauseIconFile = getClass().getResource("/images/pauseSymbol.png");
+    URL playIconFile = getClass().getResource("/images/playSymbol.png");
 
     try {
-      InputStream pauseIconInputStream = new FileInputStream(pauseIconFile.getAbsolutePath());
-      InputStream playIconInputStream = new FileInputStream(playIconFile.getAbsolutePath());
+      playIcon =  new Image(pauseIconFile.openStream());
+      pauseIcon = new Image(playIconFile.openStream());
 
-      playIcon = new Image(playIconInputStream);
-      pauseIcon = new Image(pauseIconInputStream);
-
-    } catch (FileNotFoundException e) {
+    } catch (Exception e) {
       IhmAlert.showAlert("Pictures Load","Fail : picture load PLAYER","critical");
     }
 
@@ -142,11 +143,11 @@ public class PlayerController implements Controller {
    * @return
    */
   private MediaPlayer createPlayer(String url) {
-    try{
+    try {
       final Media media2 = new Media(new File(url).toURI().toString());
       return new MediaPlayer(media2);
-    }catch (Exception e){
-      IhmAlert.showAlert("msg","bug"+e,"warning");
+    } catch (Exception e) {
+      IhmAlert.showAlert("msg","bug" + e,"warning");
     }
     return null;
   }
