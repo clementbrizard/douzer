@@ -148,11 +148,11 @@ public class PlayerController implements Controller {
    * @return
    */
   private MediaPlayer createPlayer(String url) {
-    try{
+    try {
       final Media media = new Media(new File(url).toURI().toString());
       return new MediaPlayer(media);
-    }catch (Exception e) {
-      System.out.println("filePath" + new File(url).toURI().toString() + " vhvjh : "+ e);
+    } catch (Exception e) {
+      System.out.println("filePath" + new File(url).toURI().toString() + " vhvjh : " + e);
     }
     return null;
   }
