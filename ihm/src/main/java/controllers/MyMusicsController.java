@@ -97,6 +97,15 @@ public class MyMusicsController implements Controller {
     return this.detailsMusicController;
   }
 
+  public ArrayList<LocalMusic> getLocalMusicInView() {
+    ArrayList<LocalMusic> h = new ArrayList<>();
+    this.tvMusics.getItems().forEach(item -> {
+      h.add(localMusics.get(item.getHash()));
+    });
+
+    return h;
+  }
+
   public Application getApplication() {
     return application;
   }
@@ -203,15 +212,15 @@ public class MyMusicsController implements Controller {
           listMusicClicked.add(currentLocalMusic);
         }
       }
-      getCentralFrameController()
+     /* getCentralFrameController()
           .getMainController()
           .getPlayerController()
-          .setArrayMusic(listMusicClicked);
+          .setArrayMusic(listMusicClicked);*/
 
       getCentralFrameController()
           .getMainController()
           .getPlayerController()
-          .playerOnMusic();
+          .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
     });
 
     // Add delete item in context menu
