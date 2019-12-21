@@ -101,8 +101,7 @@ public class PlayerController implements Controller {
   public void playOneMusic(int currentIndexRow) {
     updateArrayMusic();
     currentIndex = currentIndexRow;
-    System.out.println("test" + medias.size() + " inde" + currentIndex);
-    // playerOnMusic();
+    playerOnMusic();
   }
 
   /**
@@ -114,8 +113,13 @@ public class PlayerController implements Controller {
 
     player = medias.get(currentIndex);
 
-    if (!System.getProperty("os.name").toLowerCase().contains("win")) {
+    /*if (!System.getProperty("os.name").toLowerCase().contains("win")) {
       player.setCycleCount(MediaPlayer.INDEFINITE);
+    }*/
+
+    if (player == null) {
+      System.out.println("OUPS NULL");
+      return;
     }
 
     showSongInfo(arrayMusic.get(currentIndex));
