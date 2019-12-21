@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 import utils.FormatDuration;
 
@@ -76,7 +77,6 @@ public class PlayerController implements Controller {
 
   /**
    * Function to init Pictures Path.
-   *
    */
   public void initPictures() {
 
@@ -84,17 +84,18 @@ public class PlayerController implements Controller {
     URL playIconFile = getClass().getResource("/images/playSymbol.png");
 
     try {
-      playIcon =  new Image(pauseIconFile.openStream());
-      pauseIcon = new Image(playIconFile.openStream());
+      playIcon = new Image(playIconFile.openStream());
+      pauseIcon = new Image(pauseIconFile.openStream());
 
     } catch (Exception e) {
-      IhmAlert.showAlert("Pictures Load","Fail : picture load PLAYER","critical");
+      IhmAlert.showAlert("Pictures Load", "Fail : picture load PLAYER", "critical");
     }
 
   }
 
   /**
    * Function playerOneMusic with index item row.
+   *
    * @param currentIndexRow : music index
    * @return
    */
@@ -110,6 +111,10 @@ public class PlayerController implements Controller {
   private void playerOnMusic() {
 
     stopPlayer();
+
+    System.out.println("medioas size" + medias.size());
+    System.out.println("currentIndex" + currentIndex);
+    System.out.println("medias" + medias.get(currentIndex).toString());
 
     player = medias.get(currentIndex);
 
@@ -138,21 +143,18 @@ public class PlayerController implements Controller {
 
   /**
    * Function creating PlayerList using musicPath.
+   *
    * @param url : MusicPath
    * @return
    */
   private MediaPlayer createPlayer(String url) {
-    try {
-      final Media media2 = new Media(new File(url).toURI().toString());
-      return new MediaPlayer(media2);
-    } catch (Exception e) {
-      IhmAlert.showAlert("msg","bug" + e,"warning");
-    }
-    return null;
+    final Media media = new Media(new File(url).toURI().toString());
+    return new MediaPlayer(media);
   }
 
   /**
    * Function Refresh ArrayMusic.
+   *
    * @return
    */
   private void updateArrayMusic() {
@@ -175,6 +177,7 @@ public class PlayerController implements Controller {
 
   /**
    * Function playBack : play the music before.
+   *
    * @return
    */
   @FXML
@@ -194,6 +197,7 @@ public class PlayerController implements Controller {
 
   /**
    * Function playNext: play the next music.
+   *
    * @return
    */
   @FXML
@@ -212,6 +216,7 @@ public class PlayerController implements Controller {
 
   /**
    * Function playPause: Play and Pause button interactions.
+   *
    * @return
    */
   @FXML
@@ -231,6 +236,7 @@ public class PlayerController implements Controller {
 
   /**
    * Function stopPlayer: Stop player.
+   *
    * @return
    */
   public void stopPlayer() {
@@ -241,6 +247,7 @@ public class PlayerController implements Controller {
 
   /**
    * Function updateValues: Update GUI (progressBar and timer).
+   *
    * @return
    */
   protected void updateValues() {
@@ -271,7 +278,8 @@ public class PlayerController implements Controller {
   }
 
   /**
-   *  Function to show musicInfo.
+   * Function to show musicInfo.
+   *
    * @param song : LocalMusic object
    */
   private void showSongInfo(MusicMetadata song) {
@@ -288,6 +296,7 @@ public class PlayerController implements Controller {
 
   /**
    * Converting time.
+   *
    * @param sec : time
    * @return string format
    */
