@@ -278,6 +278,9 @@ public class Application extends javafx.application.Application {
     // Add the root scene (login)
     this.showLoginScene();
 
+    // Bind Login Button to the Enter key
+    this.loginController.getButtonLogin().setDefaultButton(true);
+
     primaryStage.show();
   }
 
