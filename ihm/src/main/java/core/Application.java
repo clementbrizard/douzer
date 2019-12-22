@@ -64,7 +64,6 @@ public class Application extends javafx.application.Application {
     return forgottenPasswordScene;
   }
 
-
   public Scene getMainScene() {
     return mainScene;
   }
@@ -179,7 +178,12 @@ public class Application extends javafx.application.Application {
    */
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
-    primaryStage.setTitle("Connexion");
+
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+
+    primaryStage.setTitle("Douzer - Connexion");
   }
 
   /**
@@ -192,7 +196,7 @@ public class Application extends javafx.application.Application {
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
 
-    primaryStage.setTitle("Inscription");
+    primaryStage.setTitle("Douzer - Inscription");
   }
 
   /**
@@ -205,7 +209,7 @@ public class Application extends javafx.application.Application {
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
 
-    primaryStage.setTitle("Mot de passe oublié");
+    primaryStage.setTitle("Douzer - Mot de passe oublié");
   }
 
   /**
@@ -213,7 +217,12 @@ public class Application extends javafx.application.Application {
    */
   public void showMainScene() {
     primaryStage.setScene(mainScene);
-    primaryStage.setTitle("Vue principale");
+
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+
+    primaryStage.setTitle("Douzer - Accueil");
   }
 
   /**
@@ -227,7 +236,7 @@ public class Application extends javafx.application.Application {
     //  Get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
     Parent loginParent = loginLoader.load();
-    loginScene = new Scene(loginParent, screenWidth, screenHeight);
+    loginScene = new Scene(loginParent);
 
     //  Get the loader for SignUpView
     FXMLLoader signupLoader = new FXMLLoader(getClass().getResource("/fxml/SignUpView.fxml"));
