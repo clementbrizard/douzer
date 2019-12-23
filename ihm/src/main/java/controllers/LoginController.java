@@ -31,8 +31,8 @@ public class LoginController implements Controller {
 
   /* Getters */
 
-  public Button getButtonLogin() {
-    return buttonLogin;
+  public Button getLoginButton() {
+    return this.buttonLogin;
   }
 
   /* Other methods */

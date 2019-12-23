@@ -15,7 +15,7 @@
     <VBox fx:id="loginForm">
         <children>
             <HBox styleClass="to-center">
-                <Label fx:id="ubTitleLbl" text="Renseignez vos identifiants" />
+                <Label styleClass="subTitle-lbl" text="Renseignez vos identifiants" />
             </HBox>
             <HBox styleClass="to-center">
                 <VBox>
@@ -50,7 +50,7 @@
           </left>
           <right>
               <HBox styleClass="header-btn-box">
-                  <Button fx:id="buttonSignIn" disable="true" text="S'identifier" />
+                  <Button disable="true" text="Connexion" />
                   <Button fx:id="buttonSignUp" onAction="#actionSignup" text="Inscription" />
               </HBox>
           </right>
