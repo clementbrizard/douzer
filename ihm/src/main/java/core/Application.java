@@ -182,7 +182,6 @@ public class Application extends javafx.application.Application {
     Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
-
     primaryStage.setTitle("Douzer - Connexion");
   }
 
@@ -282,10 +281,19 @@ public class Application extends javafx.application.Application {
 
     // Initialize the first view
     this.primaryStage = primaryStage;
+
+    // Set min window size for the whole application
     primaryStage.setResizable(true);
+    primaryStage.setMinWidth(500);
+    primaryStage.setMinHeight(500);
 
     // Add the root scene (login)
     this.showLoginScene();
+
+    // Set window position at launch
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - 500) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - 500) / 2);
 
     // Bind Login Button to the Enter key
     this.loginController.getButtonLogin().setDefaultButton(true);

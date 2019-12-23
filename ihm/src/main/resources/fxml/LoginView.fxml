@@ -4,59 +4,56 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController" stylesheets="@../css/main.css" styleClass="pre-login-windows">
-   <children>
-      <BorderPane styleClass="pre-login-scene">
-          <center>
-            <VBox fx:id="loginForm" styleClass="to-center">
-                <children>
-                    <Label text="Renseignez vos identifiants" />
-                    <HBox styleClass="to-center">
-                        <VBox>
-                            <Label styleClass="form-lbl" text="Pseudo" />
-                            <TextField fx:id="textFieldPseudo" styleClass="form-field" />
-                        </VBox>
-                    </HBox>
-                    <HBox styleClass="to-center">
-                        <VBox>
-                            <Label styleClass="form-lbl" text="Mot de passe" />
-                            <PasswordField fx:id="textFieldPassword" styleClass="form-field" />
-                        </VBox>
-                    </HBox>
-                    <HBox styleClass="form-btn-hbox, to-center">
-                        <Button fx:id="buttonLogin" onAction="#actionLogin" styleClass="important-btn, form-btn" text="Connexion" />
-                    </HBox>
-                    <HBox styleClass="form-btn-hbox, to-center">
-                        <Label text="Vous possédez déjà un compte ?" />
-                        <Label fx:id="lblImport" styleClass="form-lbl" text="Importer un compte" />
-                    </HBox>
-                </children>
-            </VBox>
-          </center>
-          <top>
-              <BorderPane styleClass="pre-login-header-section, header-section">
-                  <left>
-                      <ImageView fx:id="imgDouzer" preserveRatio="true">
-                          <image>
-                              <Image preserveRatio="true" smooth="true" url="@../images/douzer.png" />
-                          </image>
-                      </ImageView>
-                  </left>
-                  <right>
-                      <HBox styleClass="header-btn-box">
-                          <Button fx:id="buttonSignIn" disable="true" text="S'identifier" />
-                          <Button fx:id="buttonSignUp" onAction="#actionSignup" text="Inscription" />
-                      </HBox>
-                  </right>
-              </BorderPane>
-          </top>
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController" stylesheets="@../css/main.css">
+  <center>
+    <VBox fx:id="loginForm">
+        <children>
+            <HBox styleClass="to-center">
+                <Label fx:id="ubTitleLbl" text="Renseignez vos identifiants" />
+            </HBox>
+            <HBox styleClass="to-center">
+                <VBox>
+                    <Label styleClass="form-lbl" text="Pseudo" />
+                    <TextField fx:id="textFieldPseudo" styleClass="form-field" />
+                </VBox>
+            </HBox>
+            <HBox styleClass="to-center">
+                <VBox>
+                    <Label styleClass="form-lbl" text="Mot de passe" />
+                    <PasswordField fx:id="textFieldPassword" styleClass="form-field" />
+                </VBox>
+            </HBox>
+            <HBox styleClass="form-btn-hbox, to-center">
+                <Button fx:id="buttonLogin" onAction="#actionLogin" styleClass="important-btn, form-btn" text="Connexion" />
+            </HBox>
+            <HBox styleClass="form-btn-hbox, to-center">
+                <Label text="Vous possédez déjà un compte ?" />
+                <Label fx:id="lblImport" styleClass="lbl-btn, form-lbl" text="Importer un compte" />
+            </HBox>
+        </children>
+    </VBox>
+  </center>
+  <top>
+      <BorderPane styleClass="at-launch-header-section, header-section">
+          <left>
+              <ImageView fx:id="imgDouzer" preserveRatio="true">
+                  <image>
+                      <Image preserveRatio="true" smooth="true" url="@../images/douzer.png" />
+                  </image>
+              </ImageView>
+          </left>
+          <right>
+              <HBox styleClass="header-btn-box">
+                  <Button fx:id="buttonSignIn" disable="true" text="S'identifier" />
+                  <Button fx:id="buttonSignUp" onAction="#actionSignup" text="Inscription" />
+              </HBox>
+          </right>
       </BorderPane>
-   </children>
-</AnchorPane>
+  </top>
+</BorderPane>

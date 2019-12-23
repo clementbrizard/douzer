@@ -11,6 +11,11 @@ Button:hover {
     -fx-cursor: hand;
 }
 
+.lbl-btn:hover {
+    -fx-cursor: hand;
+    -fx-text-fill: #ff6812;
+}
+
 .form-field {
     -fx-padding: 4px 8px;
     -fx-text-fill: rgb(43, 120, 228);
@@ -152,14 +157,7 @@ Button:hover {
  * LOGIN
  */
 
-.pre-login-window {
-    -fx-alignment: center;
-}
-.pre-login-scene {
-    -fx-min-width: 500px;
-}
-
-.pre-login-header-section {
+.at-launch-header-section {
     -fx-min-width: 500px;
 }
 
@@ -168,9 +166,9 @@ Button:hover {
     -fx-padding: 1em;
  }
 
- #loginForm > Label {
+ #ubTitleLbl {
     -fx-font-size: 18px;
-    -fx-padding: 1.4em;
+    -fx-padding: 0.4em;
  }
 
 #loginForm > HBox {
