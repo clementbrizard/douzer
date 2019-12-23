@@ -135,8 +135,8 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void importProfile(Path path) throws IOException, DataException {
-    ImportUser.run(path, this.dc);
+  public void importProfile(Path pathToBackup, Path newSavePath) throws IOException, DataException {
+    ImportUser.run(pathToBackup, newSavePath, this.dc);
   }
 
   @Override

@@ -71,11 +71,13 @@ public interface DataForIhm {
 
   /**
    * Import a previously exported LocalUser.
-   * @param path the path to the backup directory.
+   * @param pathToBackup the path to the backup directory.
+   * @param newSavePath the new savePath for the imported LocalUser.
    * @throws IOException if it is not possible to read a file.
    * @throws DataException if the username already exists.
    */
-  void importProfile(Path path) throws IOException, ClassNotFoundException, DataException;
+  void importProfile(Path pathToBackup, Path newSavePath)
+      throws IOException, ClassNotFoundException, DataException;
 
   void login(String username, String password) throws IOException, LoginException;
 
