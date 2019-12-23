@@ -104,6 +104,7 @@ public class SignUpController implements Controller {
   @Override
   public void initialize() {
     this.restrictDatePicker(datePickerBirth, LocalDate.of(1900, 1, 1), LocalDate.now());
+    datePickerBirth.setValue(LocalDate.now());
   }
 
   // Other methods
