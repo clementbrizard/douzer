@@ -10,9 +10,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="anchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="anchorPane" prefHeight="161.0" prefWidth="205.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="labelOwner" layoutX="13.0" layoutY="5.0" prefHeight="18.0" prefWidth="73.0" text="PseudoUtilisateur" onMouseClicked="#userClicked" />
+      <Label fx:id="labelOwner" layoutX="13.0" layoutY="5.0" onMouseClicked="#userClicked" prefHeight="18.0" prefWidth="73.0" text="PseudoUtilisateur" />
       <ImageView fx:id="starOne" fitHeight="25.0" fitWidth="16.0" layoutX="94.0" layoutY="6.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/EmptyStarSymbol.png" />
@@ -38,6 +38,6 @@
             <Image url="@../images/EmptyStarSymbol.png" />
          </image>
       </ImageView>
-      <TextArea fx:id="comment" layoutY="40.0" prefHeight="121.0" prefWidth="580.0" />
+      <TextArea fx:id="comment" layoutY="30.0" prefHeight="131.0" prefWidth="212.0" />
    </children>
 </AnchorPane>
