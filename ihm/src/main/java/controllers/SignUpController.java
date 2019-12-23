@@ -12,12 +12,15 @@ import java.time.LocalDate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
 import org.controlsfx.control.Notifications;
@@ -69,8 +72,38 @@ public class SignUpController implements Controller {
     this.application = application;
   }
 
+  /**
+   * Called in initialization,
+   * restricts the date picker.
+   * @param datePicker date picker object
+   * @param minDate local date object
+   * @param maxDate local date object
+   */
+  public void restrictDatePicker(DatePicker datePicker, LocalDate minDate, LocalDate maxDate) {
+    final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+        @Override
+        public DateCell call(final DatePicker datePicker) {
+            return new DateCell() {
+                @Override
+                public void updateItem(LocalDate item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item.isBefore(minDate)) {
+                      setDisable(true);
+                      setStyle("-fx-background-color: #ffc0cb;");
+                    } else if (item.isAfter(maxDate)) {
+                      setDisable(true);
+                      setStyle("-fx-background-color: #ffc0cb;");
+                    }
+                }
+            };
+        }
+    };
+    datePicker.setDayCellFactory(dayCellFactory);
+  }
+
   @Override
   public void initialize() {
+    this.restrictDatePicker(datePickerBirth, LocalDate.of(1900, 1, 1), LocalDate.now());
   }
 
   // Other methods
