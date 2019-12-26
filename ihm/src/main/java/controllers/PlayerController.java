@@ -1,15 +1,23 @@
 package controllers;
 
+import static utils.Converter.convertFrom;
+
 import core.IhmAlert;
+
 import datamodel.LocalMusic;
 import datamodel.MusicMetadata;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,8 +26,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.util.Duration;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javazoom.spi.mpeg.sampled.file.MpegAudioFileReader;
 import utils.FormatDuration;
 
 /**
@@ -94,6 +105,45 @@ public class PlayerController implements Controller {
   }
 
   /**
+   * Function to convertMp3ToWav.
+   */
+  private void convertMp3ToWav(String url) throws Exception {
+    File file = new File(url);
+    String filename = file.getName().substring(0, file.getName().indexOf('.'));
+    File newFile = new File("/tmp/" + filename + ".wav");
+
+    if (!newFile.exists()) {
+      Runnable runnable = () -> {
+        try {
+          try (
+              InputStream inputStream = new FileInputStream(file);
+              final ByteArrayOutputStream output = new ByteArrayOutputStream();
+          ) {
+
+            AudioInputStream in = (new MpegAudioFileReader()).getAudioInputStream(inputStream);
+            AudioFormat baseFormat = in.getFormat();
+            AudioFormat newFormat =
+                new AudioFormat(
+                    baseFormat.getSampleRate(),
+                    16,
+                    2,
+                    true,
+                    baseFormat.isBigEndian());
+
+            convertFrom(inputStream).withTargetFormat(newFormat).to(output);
+
+            Files.write(Paths.get(newFile.getPath()), output.toByteArray());
+          }
+        } catch (IOException | UnsupportedAudioFileException e) {
+          throw new IllegalStateException(e);
+        }
+      };
+      Thread thread = new Thread(runnable);
+      thread.start();
+    }
+  }
+
+  /**
    * Function playerOneMusic with index item row.
    *
    * @param currentIndexRow : music index
@@ -112,20 +162,7 @@ public class PlayerController implements Controller {
 
     stopPlayer();
 
-    System.out.println("medioas size" + medias.size());
-    System.out.println("currentIndex" + currentIndex);
-    System.out.println("medias" + medias.get(currentIndex).toString());
-
     player = medias.get(currentIndex);
-
-    /*if (!System.getProperty("os.name").toLowerCase().contains("win")) {
-      player.setCycleCount(MediaPlayer.INDEFINITE);
-    }*/
-
-    if (player == null) {
-      System.out.println("OUPS NULL");
-      return;
-    }
 
     showSongInfo(arrayMusic.get(currentIndex));
 
@@ -148,13 +185,27 @@ public class PlayerController implements Controller {
    * @return
    */
   private MediaPlayer createPlayer(String url) {
-    try {
-      final Media media = new Media(new File(url).toURI().toString());
-      return new MediaPlayer(media);
-    } catch (Exception e) {
-      System.out.println("filePath" + new File(url).toURI().toString() + " vhvjh : " + e);
+    Media media = null;
+    File file = new File(url);
+    String filename = file.getName().substring(0, file.getName().indexOf('.'));
+
+    if (System.getProperty("os.name").toLowerCase().contains("nux")
+        || System.getProperty("os.name").toLowerCase().contains("nix")
+        || System.getProperty("os.name").toLowerCase().contains("mac")) {
+
+      try {
+        convertMp3ToWav(file.getPath());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      File newFile = new File("/tmp/" + filename + ".wav");
+      media = new Media(newFile.toURI().toString());
+
+    } else {
+      media = new Media(file.toURI().toString());
     }
-    return null;
+
+    return new MediaPlayer(media);
   }
 
   /**
