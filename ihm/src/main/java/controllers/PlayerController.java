@@ -67,6 +67,8 @@ public class PlayerController implements Controller {
   private ArrayList<MediaPlayer> medias;
   private ArrayList<MusicMetadata> arrayMusic;
 
+  static final double TIMER = 0.99;
+
   @Override
   public void initialize() {
 
@@ -338,7 +340,7 @@ public class PlayerController implements Controller {
 
         double timer = (currentTime.toMillis() / totalDuration);
 
-        if (timer < 0.99) {
+        if (timer < TIMER) {
           lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
           pgMusicProgress.setProgress(timer);
         } else {
