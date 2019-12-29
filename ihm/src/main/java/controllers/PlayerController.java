@@ -146,7 +146,7 @@ public class PlayerController implements Controller {
    * @return
    */
   public void selectOneMusic(int currentIndexRow) {
-    if( !isPlaying ){
+    if (!isPlaying) {
       currentIndex = currentIndexRow;
       updateArrayMusic();
 
