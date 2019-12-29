@@ -107,39 +107,61 @@ public class PlayerController implements Controller {
   /**
    * Function to convertMp3ToWav.
    */
-  private void convertMp3ToWav(String url) throws Exception {
+  public static void convertMp3ToWav(String url) throws Exception {
     File file = new File(url);
     String filename = file.getName().substring(0, file.getName().indexOf('.'));
     File newFile = new File("/tmp/" + filename + ".wav");
 
     if (!newFile.exists()) {
-      Runnable runnable = () -> {
-        try {
-          try (
-              InputStream inputStream = new FileInputStream(file);
-              final ByteArrayOutputStream output = new ByteArrayOutputStream();
-          ) {
+      try {
+        try (
+            InputStream inputStream = new FileInputStream(file);
+            final ByteArrayOutputStream output = new ByteArrayOutputStream();
+        ) {
 
-            AudioInputStream in = (new MpegAudioFileReader()).getAudioInputStream(inputStream);
-            AudioFormat baseFormat = in.getFormat();
-            AudioFormat newFormat =
-                new AudioFormat(
-                    baseFormat.getSampleRate(),
-                    16,
-                    2,
-                    true,
-                    baseFormat.isBigEndian());
+          AudioInputStream in = (new MpegAudioFileReader()).getAudioInputStream(inputStream);
+          AudioFormat baseFormat = in.getFormat();
+          AudioFormat newFormat =
+              new AudioFormat(
+                  baseFormat.getSampleRate(),
+                  16,
+                  2,
+                  true,
+                  baseFormat.isBigEndian());
 
-            convertFrom(inputStream).withTargetFormat(newFormat).to(output);
+          convertFrom(inputStream).withTargetFormat(newFormat).to(output);
 
-            Files.write(Paths.get(newFile.getPath()), output.toByteArray());
-          }
-        } catch (IOException | UnsupportedAudioFileException e) {
-          throw new IllegalStateException(e);
+          Files.write(Paths.get(newFile.getPath()), output.toByteArray());
         }
-      };
-      Thread thread = new Thread(runnable);
-      thread.start();
+      } catch (IOException | UnsupportedAudioFileException e) {
+        throw new IllegalStateException(e);
+      }
+    }
+  }
+
+  /**
+   * Function selectOneMusic with index item row.
+   *
+   * @param currentIndexRow : music index
+   * @return
+   */
+  public void selectOneMusic(int currentIndexRow) {
+    if( !isPlaying ){
+      currentIndex = currentIndexRow;
+      updateArrayMusic();
+
+      showSongInfo(arrayMusic.get(currentIndex));
+
+      player = medias.get(currentIndex);
+
+      showSongInfo(arrayMusic.get(currentIndex));
+
+      player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
+                                                Duration oldValue,
+                                                Duration newValue) -> {
+        duration = player.getMedia().getDuration();
+        updateValues();
+      });
     }
   }
 
@@ -150,8 +172,8 @@ public class PlayerController implements Controller {
    * @return
    */
   public void playOneMusic(int currentIndexRow) {
-    updateArrayMusic();
     currentIndex = currentIndexRow;
+    updateArrayMusic();
     playerOnMusic();
   }
 
@@ -217,18 +239,16 @@ public class PlayerController implements Controller {
     medias.clear();
     arrayMusic.clear();
 
-    ArrayList<LocalMusic> arrayMusicAll;
-
-    arrayMusicAll =
+    ArrayList<LocalMusic> arrayMusicAll =
         mainController
             .getCentralFrameController()
             .getMyMusicsController()
             .getLocalMusicInView();
 
-    arrayMusicAll.forEach(musicMetadata ->
-        medias.add(createPlayer(musicMetadata.getMp3Path())));
-    arrayMusicAll.forEach(musicMetadata ->
-        arrayMusic.add(musicMetadata.getMetadata()));
+    for (LocalMusic musicMetadata : arrayMusicAll) {
+      medias.add(createPlayer(musicMetadata.getMp3Path()));
+      arrayMusic.add(musicMetadata.getMetadata());
+    }
   }
 
   /**

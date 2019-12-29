@@ -259,7 +259,16 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
+
+        this.getCentralFrameController().getMainController().getPlayerController().selectOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
       }
+    }
+
+    // If double left click, play music
+
+    if (click.getClickCount() == 2 && !click.isConsumed()) {
+      click.consume();
+      this.getCentralFrameController().getMainController().getPlayerController().playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
     }
 
     // If right click, show context menu
