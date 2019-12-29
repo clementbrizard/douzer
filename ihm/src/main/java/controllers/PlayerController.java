@@ -38,6 +38,8 @@ import utils.FormatDuration;
  */
 public class PlayerController implements Controller {
 
+  static final double TIMER = 0.99;
+
   @FXML
   private ProgressBar pgMusicProgress;
 
@@ -66,8 +68,6 @@ public class PlayerController implements Controller {
   private MediaPlayer player;
   private ArrayList<MediaPlayer> medias;
   private ArrayList<MusicMetadata> arrayMusic;
-
-  static final double TIMER = 0.99;
 
   @Override
   public void initialize() {
