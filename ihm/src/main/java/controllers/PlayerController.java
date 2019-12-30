@@ -320,6 +320,7 @@ public class PlayerController implements Controller {
   public void stopPlayer() {
     if (isPlaying) {
       player.stop();
+      player.dispose();
     }
   }
 
