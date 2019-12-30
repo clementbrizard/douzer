@@ -444,6 +444,7 @@ public class MyMusicsController implements Controller {
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
     tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
+    this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
 
   /**
