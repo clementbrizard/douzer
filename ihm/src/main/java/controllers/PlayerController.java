@@ -237,7 +237,7 @@ public class PlayerController implements Controller {
    *
    * @return
    */
-  private void updateArrayMusic() {
+  public void updateArrayMusic() {
     medias.clear();
     arrayMusic.clear();
 
@@ -320,7 +320,8 @@ public class PlayerController implements Controller {
   public void stopPlayer() {
     if (isPlaying) {
       player.stop();
-      player.dispose();
+      play.setGraphic(new ImageView(playIcon));
+      isPlaying = false;
     }
   }
 
