@@ -182,6 +182,13 @@ public class NewMusicController implements Controller {
   private void chooseFile(ActionEvent event) {
     Stage stage = new Stage();
     FileChooser fileChooser = new FileChooser();
+
+    FileChooser.ExtensionFilter audioExtensionFilter =
+            new FileChooser.ExtensionFilter(
+                    "Fichier audio",
+                    "*.mp3", "*.aac", "*.flac", "*.mid", "*.midi", "*.oga", "*.ogg", "*.wav", "*.weba");
+    fileChooser.getExtensionFilters().add(audioExtensionFilter);
+
     fileChooser.setTitle("Ouvrir un fichier de musique");
     fileChooser.setSelectedExtensionFilter(
         new FileChooser.ExtensionFilter("Fichier musique", "*.mp3")
