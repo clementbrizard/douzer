@@ -1,5 +1,6 @@
 package controllers;
 
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import core.Application;
 import datamodel.LocalMusic;
 import datamodel.Music;
@@ -18,8 +19,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceDialog;
@@ -239,6 +242,19 @@ public class MyMusicsController implements Controller {
 
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+
+    // Header click event
+    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+      if (event.getTarget() instanceof TableColumnHeader) {
+        event.consume();
+        this.getCentralFrameController()
+            .getMainController()
+            .getPlayerController()
+            .updateArrayMusic();
+      }
+
+    });
+
   }
 
   /* FXML methods (to handle events from user) */

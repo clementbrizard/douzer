@@ -238,6 +238,13 @@ public class PlayerController implements Controller {
    * @return
    */
   public void updateArrayMusic() {
+
+    String saveTitle = "NOTHING";
+
+    if (!arrayMusic.isEmpty()) {
+      saveTitle = arrayMusic.get(currentIndex).getTitle();
+    }
+
     medias.clear();
     arrayMusic.clear();
 
@@ -247,10 +254,22 @@ public class PlayerController implements Controller {
             .getMyMusicsController()
             .getLocalMusicInView();
 
+    int localCurrentMusic = 0;
+
     for (LocalMusic musicMetadata : arrayMusicAll) {
       medias.add(createPlayer(musicMetadata.getMp3Path()));
       arrayMusic.add(musicMetadata.getMetadata());
+      if (!arrayMusic.get(localCurrentMusic).getTitle()
+              .equals(saveTitle)) {
+        localCurrentMusic++;
+      }
     }
+
+    // change currentINDEX (header tableView click event)
+    if (! saveTitle.equals("NOTHING")) {
+      currentIndex = localCurrentMusic;
+    }
+
   }
 
   /**

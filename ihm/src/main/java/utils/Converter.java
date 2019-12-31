@@ -123,7 +123,7 @@ public final class Converter {
    */
   private AudioFormat getTargetFormat() {
     return this.audioFormat == null
-        ? new AudioFormat(44100, 8, 1, true, false)
+        ? new AudioFormat(44100, 16, 2, true, false)
         : audioFormat;
   }
 
