@@ -414,6 +414,26 @@ public class MyMusicsController implements Controller {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
+  /**
+   * Handle click on loopPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void loopPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().loopPlayer();
+  }
+
+  /**
+   * Handle click on randomPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void randomPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().randomPlayer();
+  }
+
   /* Logic methods */
 
   /**

@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Random;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -62,8 +63,11 @@ public class PlayerController implements Controller {
 
   private int currentIndex = -1;
   private boolean isPlaying = false;
+  private boolean isLoop = true;
+  private boolean isRandom = false;
 
   private Duration duration;
+  private Random rand = new Random();
 
   private MediaPlayer player;
   private ArrayList<MediaPlayer> medias;
@@ -345,6 +349,22 @@ public class PlayerController implements Controller {
   }
 
   /**
+   * Function loopPlayer: Play all playlist.
+   *
+   */
+  public void loopPlayer() {
+    isLoop = !isLoop;
+  }
+
+  /**
+   * Function randomPlayer : play random music.
+   *
+   */
+  public void randomPlayer() {
+    isRandom = !isRandom;
+  }
+
+  /**
    * Function updateValues: Update GUI (progressBar and timer).
    *
    * @return
@@ -369,9 +389,16 @@ public class PlayerController implements Controller {
           isPlaying = false;
           player.stop();
           pgMusicProgress.setProgress(0.0);
-          playNext(null);
-        }
 
+          if(isLoop && isRandom){
+            playOneMusic(rand.nextInt(arrayMusic.size()));
+          } else {
+            if (isLoop && !isRandom) {
+              playNext(null);
+            }
+          }
+
+        }
       });
     }
   }
