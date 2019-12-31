@@ -390,7 +390,7 @@ public class PlayerController implements Controller {
           player.stop();
           pgMusicProgress.setProgress(0.0);
 
-          if(isLoop && isRandom){
+          if (isLoop && isRandom) {
             playOneMusic(rand.nextInt(arrayMusic.size()));
           } else {
             if (isLoop && !isRandom) {
