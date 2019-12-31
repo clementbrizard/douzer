@@ -67,6 +67,7 @@ public class PlayerController implements Controller {
   private boolean isRandom = false;
 
   private Duration duration;
+  private double totalDuration;
   private Random rand = new Random();
 
   private MediaPlayer player;
@@ -194,6 +195,10 @@ public class PlayerController implements Controller {
 
     showSongInfo(arrayMusic.get(currentIndex));
 
+    totalDuration = arrayMusic.get(this.currentIndex)
+        .getDuration()
+        .toMillis();
+
     player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
                                               Duration oldValue,
                                               Duration newValue) -> {
@@ -245,7 +250,7 @@ public class PlayerController implements Controller {
 
     String saveTitle = "NOTHING";
 
-    if (!arrayMusic.isEmpty()) {
+    if (!arrayMusic.isEmpty() && currentIndex <= arrayMusic.size()) {
       saveTitle = arrayMusic.get(currentIndex).getTitle();
     }
 
@@ -374,10 +379,6 @@ public class PlayerController implements Controller {
       Platform.runLater(() -> {
 
         Duration currentTime = player.getCurrentTime();
-
-        double totalDuration = arrayMusic.get(this.currentIndex)
-            .getDuration()
-            .toMillis();
 
         double timer = (currentTime.toMillis() / totalDuration);
 
