@@ -29,7 +29,7 @@
                          </columns>
                      </TableView>
                      <TextField fx:id="tfSearch" layoutX="147.0" layoutY="16.0" prefHeight="31.0" prefWidth="347.0" promptText="Rechercher" />
-                     <ImageView fx:id="ivRandom" fitHeight="33.0" fitWidth="36.0" layoutX="68.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="ivRandom" fitHeight="33.0" fitWidth="36.0" layoutX="68.0" layoutY="15.0" pickOnBounds="true"  onMouseClicked="#randomPlayer" preserveRatio="true">
                          <image>
                              <Image url="@../images/randomArrow.png" />
                          </image>
@@ -40,7 +40,7 @@
                          </image>
                      </ImageView>
                      <Button fx:id="btnAddMusic" layoutX="540.0" layoutY="57.0" mnemonicParsing="false" onAction="#addMusic" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" />
-                     <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="20.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                     <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="20.0" layoutY="14.0" onMouseClicked="#loopPlayer" pickOnBounds="true" preserveRatio="true">
                          <image>
                              <Image url="@../images/returnArrow.png" />
                          </image>
