@@ -4,7 +4,6 @@ import core.Application;
 
 import core.IhmAlert;
 import datamodel.LocalUser;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,15 +21,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
+import javax.swing.filechooser.FileSystemView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
-import utils.FormatImage;
 
 /**
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
+  /* logger */
   private static final Logger logger = LogManager.getLogger();
 
   @FXML
@@ -72,6 +72,11 @@ public class SignUpController implements Controller {
   private File directoryChosenForSavingProfile = null;
   private Application application;
 
+  private Path defaultProfileFilePath = FileSystemView
+      .getFileSystemView()
+      .getHomeDirectory()
+      .toPath();
+
   /* Getters */
 
   public Button getSignUpButton() {
@@ -105,6 +110,7 @@ public class SignUpController implements Controller {
     final LocalDate dateOfBirth = datePickerBirth.getValue();
 
     BufferedImage avatarImg = null;
+    Path profileSavePath = null;
 
     if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
       IhmAlert.showAlert("Nom","Le champ nom ne doit pas être vide","warning");
@@ -125,12 +131,6 @@ public class SignUpController implements Controller {
     if (datePickerBirth.getValue() == null) {
       IhmAlert.showAlert("Date de naissance",
           "Le champ date de naissance ne doit pas être vide",
-          "warning");
-    }
-
-    if (directoryChosenForSavingProfile == null) {
-      IhmAlert.showAlert("Répertoire de sauvegarde du profil",
-          "Vous devez choisir un répertoire pour sauvegarder votre profil",
           "warning");
     }
 
@@ -159,9 +159,15 @@ public class SignUpController implements Controller {
         }
       }
 
-
-
-      final Path profileSavePath = directoryChosenForSavingProfile.toPath();
+      // Gestion de l'emplacement de profil par défaut
+      if (directoryChosenForSavingProfile == null) {
+        profileSavePath = defaultProfileFilePath;
+        logger.warn(
+            "Utilisation de l'emplacement de profil par défaut : {}",
+            profileSavePath.toAbsolutePath().toString());
+      } else {
+        profileSavePath = directoryChosenForSavingProfile.toPath();
+      }
 
       LocalUser user = new LocalUser();
 
@@ -228,7 +234,8 @@ public class SignUpController implements Controller {
     try {
       profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      IhmAlert.showAlert("Dir","aucun emplacement de stockage sélectioné","critical");
+      logger.warn(e + ": aucun emplacement de sauvegarde sélectioné.");
+      profileFilePath.setText(defaultProfileFilePath.toAbsolutePath().toString());
     }
   }
 
