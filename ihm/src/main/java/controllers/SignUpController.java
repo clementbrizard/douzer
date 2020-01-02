@@ -4,6 +4,7 @@ import core.Application;
 
 import core.IhmAlert;
 import datamodel.LocalUser;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,12 +22,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
+import utils.FormatImage;
 
 /**
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
+  private static final Logger logger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldFirstName;
@@ -123,10 +128,6 @@ public class SignUpController implements Controller {
           "warning");
     }
 
-    if (avatarFile == null) {
-      IhmAlert.showAlert("Avatar","Vous devez chosir un avatar","warning");
-    }
-
     if (directoryChosenForSavingProfile == null) {
       IhmAlert.showAlert("Répertoire de sauvegarde du profil",
           "Vous devez choisir un répertoire pour sauvegarder votre profil",
@@ -138,16 +139,27 @@ public class SignUpController implements Controller {
         && textFieldFirstName.getText() != null
         && textFieldLastName.getText() != null
         && datePickerBirth.getValue() != null
-        && avatarFile != null
     ) {
 
-      final Path avatarPath = avatarFile.toPath();
+      // Gestion de l'avatar par défaut
+      if (avatarFile == null) {
+        try {
+          avatarImg = ImageIO.read(this.getClass().getResource("/images/defaultAvatar.png"));
+        } catch (IOException se) {
+          logger.fatal("Avatar par défaut compromis.");
+        }
+      } else {
+        final Path avatarPath = avatarFile.toPath();
 
-      try {
-        avatarImg = ImageIO.read(avatarFile);
-      } catch (IOException e) {
-        IhmAlert.showAlert("avatarFile","Avatar bug","critical");
+        try {
+          avatarImg = ImageIO.read(avatarFile);
+        } catch (IOException e) {
+          logger.warn(e + ": erreur de lecture du fichier avatar sélectioné.");
+          logger.warn("Utilisation de l'avatar par défaut.");
+        }
       }
+
+
 
       final Path profileSavePath = directoryChosenForSavingProfile.toPath();
 
@@ -168,7 +180,6 @@ public class SignUpController implements Controller {
         application.getMainController().init();
 
       } catch (IOException | LoginException se) {
-
         se.printStackTrace();
       }
 
@@ -202,7 +213,7 @@ public class SignUpController implements Controller {
     try {
       avatarFilePath.setText(avatarFile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      IhmAlert.showAlert("Avatar","aucun fichier avatar sélectioné","critical");
+      logger.warn(e + ": aucun fichier avatar sélectioné.");
     }
   }
 
