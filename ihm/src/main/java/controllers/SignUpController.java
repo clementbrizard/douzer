@@ -2,7 +2,6 @@ package controllers;
 
 import core.Application;
 
-import core.IhmAlert;
 import datamodel.LocalUser;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +24,7 @@ import javax.swing.filechooser.FileSystemView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
+import utils.FormatJavaFxObjects;
 
 /**
  * Controller used for the sign up form.
@@ -91,6 +91,7 @@ public class SignUpController implements Controller {
 
   @Override
   public void initialize() {
+    FormatJavaFxObjects.restrictDatePicker(datePickerBirth, LocalDate.of(1900, 1, 1), LocalDate.now());
   }
 
   /* Other methods */
@@ -227,5 +228,6 @@ public class SignUpController implements Controller {
       profileFilePath.setText(defaultProfileFilePath.toAbsolutePath().toString());
     }
   }
+
 
 }

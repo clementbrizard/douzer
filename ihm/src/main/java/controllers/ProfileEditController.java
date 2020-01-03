@@ -1,24 +1,18 @@
 package controllers;
 
-import static impl.org.controlsfx.tools.MathTools.min;
-
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.nio.file.Path;
 import java.time.LocalDate;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -30,6 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
 import utils.FormatImage;
+import utils.FormatJavaFxObjects;
 
 /**
  *  Central view that permit the user to edit his profile.
@@ -152,6 +147,7 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getDateOfBirth();
 
+    FormatJavaFxObjects.restrictDatePicker(datePickerBirth, LocalDate.of(1900, 1, 1), LocalDate.now());
     if (!birthDate.isEqual(LocalDate.MIN)) {
       datePickerBirth.setValue(birthDate);
     }
