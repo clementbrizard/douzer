@@ -111,15 +111,7 @@ public class SignUpController implements Controller {
     LocalDate dateOfBirth = datePickerBirth.getValue();
     BufferedImage avatarImg = null;
     Path profileSavePath;
-
-    if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("Nom","Le champ nom ne doit pas être vide","warning");
-    }
-
-    if (textFieldFirstName.getText() == null || textFieldFirstName.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("Prenom","Le champ prenom ne doit pas être vide","warning");
-    }
-
+    
     if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
       IhmAlert.showAlert("Pseudo","Le champ pseudo ne doit pas être vide","warning");
     }
