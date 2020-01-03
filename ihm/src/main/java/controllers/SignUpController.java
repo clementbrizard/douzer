@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -54,6 +55,9 @@ public class SignUpController implements Controller {
   @FXML
   private TextField profileFilePath;
 
+  @FXML
+  private Button signUpBtn;
+
   // Extension filters for the FileChooser
   private FileChooser.ExtensionFilter avatarExtensionFilter =
       new FileChooser.ExtensionFilter(
@@ -63,7 +67,13 @@ public class SignUpController implements Controller {
   private File directoryChosenForSavingProfile = null;
   private Application application;
 
-  // Setters
+  /* Getters */
+
+  public Button getSignUpButton() {
+    return this.signUpBtn;
+  }
+
+  /* Setters */
 
   public void setApplication(Application application) {
     this.application = application;
@@ -73,7 +83,7 @@ public class SignUpController implements Controller {
   public void initialize() {
   }
 
-  // Other methods
+  /* Other methods */
 
   /**
    * Called upon clicking the button to confirm sign up.
@@ -175,7 +185,7 @@ public class SignUpController implements Controller {
    * Called upon clicking the cancel button from the sign up form.
    * Switches back to the login window.
    */
-  public void actionCancel() {
+  public void actionSignIn() {
     application.showLoginScene();
   }
 
