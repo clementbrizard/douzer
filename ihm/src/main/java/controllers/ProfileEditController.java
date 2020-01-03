@@ -272,10 +272,30 @@ public class ProfileEditController implements Controller {
             .title("Date de naissance non sauvegardée")
             .text("La date que vous avez saisie est erronée.")
             .darkStyle()
-            .showInformation();
+            .showError();
         datePickerBirth.setValue(null);
       }
+    } else {
+      ProfileEditController.this.centralFrameController.getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser()
+          .setDateOfBirth(LocalDate.MIN);
     }
+
+    this.centralFrameController.getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .notifyUserUpdate(
+            this.centralFrameController
+                .getMainController()
+                .getApplication()
+                .getIhmCore()
+                .getDataForIhm()
+                .getCurrentUser()
+      );
 
     Notifications.create()
             .title("Sauvegarde effectuée")

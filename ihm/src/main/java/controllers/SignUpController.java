@@ -126,7 +126,7 @@ public class SignUpController implements Controller {
           .title("Date de naissance non sauvegardée")
           .text("La date que vous avez saisie est erronée.")
           .darkStyle()
-          .showInformation();
+          .showError();
       datePickerBirth.setValue(null);
       dateOfBirth = LocalDate.MIN;
     }

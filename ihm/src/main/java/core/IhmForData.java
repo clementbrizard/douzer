@@ -7,6 +7,7 @@ import controllers.OnlineUsersListController;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
+import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -185,7 +186,18 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    ihmForDataLogger.warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    // This is done to avoid a "Not on FX application thread" error
+    // Solution found here : https://stackoverflow.com/a/23007018
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        // Refresh online user list
+        ihmCore.getApplication()
+            .getMainController()
+            .getOnlineUsersListController()
+            .updateOnlineUser(user);
+      }
+    });
   }
 
   /**
