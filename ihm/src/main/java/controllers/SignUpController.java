@@ -91,7 +91,8 @@ public class SignUpController implements Controller {
 
   @Override
   public void initialize() {
-    FormatJavaFxObjects.restrictDatePicker(datePickerBirth, LocalDate.of(1900, 1, 1), LocalDate.now());
+    FormatJavaFxObjects.restrictDatePicker(datePickerBirth,
+        LocalDate.of(1900, 1, 1), LocalDate.now());
   }
 
   /* Other methods */
@@ -113,9 +114,20 @@ public class SignUpController implements Controller {
     BufferedImage avatarImg = null;
     Path profileSavePath;
 
-    // Gestion de la date par défaut
+    // Gestion de la date par défaut et des erreurs de dates
     if (datePickerBirth.getValue() == null) {
       logger.warn("Date de naissance non renseignée.");
+      dateOfBirth = LocalDate.MIN;
+    } else if (datePickerBirth.getValue()
+                              .isAfter(LocalDate.now())
+              || datePickerBirth.getValue()
+                                .isBefore(LocalDate.of(1900, 1, 1))) {
+      Notifications.create()
+          .title("Date de naissance non sauvegardée")
+          .text("La date que vous avez saisie est erronée.")
+          .darkStyle()
+          .showInformation();
+      datePickerBirth.setValue(null);
       dateOfBirth = LocalDate.MIN;
     }
 

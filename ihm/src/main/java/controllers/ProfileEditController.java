@@ -147,7 +147,8 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getDateOfBirth();
 
-    FormatJavaFxObjects.restrictDatePicker(datePickerBirth, LocalDate.of(1900, 1, 1), LocalDate.now());
+    FormatJavaFxObjects.restrictDatePicker(datePickerBirth,
+        LocalDate.of(1900, 1, 1), LocalDate.now());
     if (!birthDate.isEqual(LocalDate.MIN)) {
       datePickerBirth.setValue(birthDate);
     }
@@ -257,12 +258,23 @@ public class ProfileEditController implements Controller {
             .setLastName(textFieldLastName.getText());
 
     if (datePickerBirth.getValue() != null) {
-      ProfileEditController.this.centralFrameController.getMainController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .getCurrentUser()
-          .setDateOfBirth(datePickerBirth.getValue());
+      if (datePickerBirth.getValue().isBefore(LocalDate.now())
+          && datePickerBirth.getValue()
+                            .isAfter(LocalDate.of(1899, 12, 31))) {
+        ProfileEditController.this.centralFrameController.getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .setDateOfBirth(datePickerBirth.getValue());
+      } else {
+        Notifications.create()
+            .title("Date de naissance non sauvegardée")
+            .text("La date que vous avez saisie est erronée.")
+            .darkStyle()
+            .showInformation();
+        datePickerBirth.setValue(null);
+      }
     }
 
     Notifications.create()

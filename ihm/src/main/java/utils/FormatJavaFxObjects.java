@@ -13,7 +13,10 @@ public abstract class FormatJavaFxObjects {
    * @param minDate local date object
    * @param maxDate local date object
    */
-  public static void restrictDatePicker(DatePicker datePicker, LocalDate minDate, LocalDate maxDate) {
+  public static void restrictDatePicker(
+      DatePicker datePicker,
+      LocalDate minDate,
+      LocalDate maxDate) {
     final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
       @Override
       public DateCell call(final DatePicker datePicker) {
