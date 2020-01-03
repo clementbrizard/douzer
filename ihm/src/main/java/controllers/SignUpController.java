@@ -2,7 +2,6 @@ package controllers;
 
 import core.Application;
 
-import core.IhmAlert;
 import datamodel.LocalUser;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,12 +20,18 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import javax.security.auth.login.LoginException;
+import javax.swing.filechooser.FileSystemView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.controlsfx.control.Notifications;
+import utils.FormatJavaFxObjects;
 
 /**
  * Controller used for the sign up form.
  */
 public class SignUpController implements Controller {
+  /* logger */
+  private static final Logger logger = LogManager.getLogger();
 
   @FXML
   private TextField textFieldFirstName;
@@ -67,6 +72,11 @@ public class SignUpController implements Controller {
   private File directoryChosenForSavingProfile = null;
   private Application application;
 
+  private Path defaultProfileFilePath = FileSystemView
+      .getFileSystemView()
+      .getHomeDirectory()
+      .toPath();
+
   /* Getters */
 
   public Button getSignUpButton() {
@@ -81,6 +91,8 @@ public class SignUpController implements Controller {
 
   @Override
   public void initialize() {
+    FormatJavaFxObjects.restrictDatePicker(datePickerBirth,
+        LocalDate.of(1900, 1, 1), LocalDate.now());
   }
 
   /* Other methods */
@@ -97,64 +109,62 @@ public class SignUpController implements Controller {
     final String password = textFieldPassword.getText();
     final String firstName = textFieldFirstName.getText();
     final String lastName = textFieldLastName.getText();
-    final LocalDate dateOfBirth = datePickerBirth.getValue();
 
+    LocalDate dateOfBirth = datePickerBirth.getValue();
     BufferedImage avatarImg = null;
+    Path profileSavePath;
 
-    if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("Nom","Le champ nom ne doit pas être vide","warning");
-    }
-
-    if (textFieldFirstName.getText() == null || textFieldFirstName.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("Prenom","Le champ prenom ne doit pas être vide","warning");
-    }
-
-    if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("Pseudo","Le champ pseudo ne doit pas être vide","warning");
-    }
-
-    if (textFieldPassword.getText().isEmpty()) {
-      IhmAlert.showAlert("Mot de passe","Le champ mot de passe ne doit pas être vide","warning");
-    }
-
+    // Gestion de la date par défaut et des erreurs de dates
     if (datePickerBirth.getValue() == null) {
-      IhmAlert.showAlert("Date de naissance",
-          "Le champ date de naissance ne doit pas être vide",
-          "warning");
+      logger.warn("Date de naissance non renseignée.");
+      dateOfBirth = LocalDate.MIN;
+    } else if (datePickerBirth.getValue()
+                              .isAfter(LocalDate.now())
+              || datePickerBirth.getValue()
+                                .isBefore(LocalDate.of(1900, 1, 1))) {
+      Notifications.create()
+          .title("Date de naissance non sauvegardée")
+          .text("La date que vous avez saisie est erronée.")
+          .darkStyle()
+          .showError();
+      datePickerBirth.setValue(null);
+      dateOfBirth = LocalDate.MIN;
     }
 
+    // Gestion de l'avatar par défaut
     if (avatarFile == null) {
-      IhmAlert.showAlert("Avatar","Vous devez chosir un avatar","warning");
-    }
-
-    if (directoryChosenForSavingProfile == null) {
-      IhmAlert.showAlert("Répertoire de sauvegarde du profil",
-          "Vous devez choisir un répertoire pour sauvegarder votre profil",
-          "warning");
-    }
-
-    if (textFieldUsername.getText() != null
-        && !textFieldPassword.getText().isEmpty()
-        && textFieldFirstName.getText() != null
-        && textFieldLastName.getText() != null
-        && datePickerBirth.getValue() != null
-        && avatarFile != null
-    ) {
-
+      try {
+        avatarImg = ImageIO.read(this.getClass().getResource("/images/defaultAvatar.png"));
+        logger.warn("Utilisation de l'avatar par défaut.");
+      } catch (IOException se) {
+        logger.fatal("Avatar par défaut compromis.");
+      }
+    } else {
       final Path avatarPath = avatarFile.toPath();
 
       try {
         avatarImg = ImageIO.read(avatarFile);
       } catch (IOException e) {
-        IhmAlert.showAlert("avatarFile","Avatar bug","critical");
+        logger.warn(e + ": erreur de lecture du fichier avatar sélectioné.");
+        logger.warn("Utilisation de l'avatar par défaut.");
       }
+    }
 
-      final Path profileSavePath = directoryChosenForSavingProfile.toPath();
+    // Gestion de l'emplacement de profil par défaut
+    if (directoryChosenForSavingProfile == null) {
+      profileSavePath = defaultProfileFilePath;
+      logger.warn(
+          "Utilisation de l'emplacement de profil par défaut : {}",
+          profileSavePath.toAbsolutePath().toString());
+    } else {
+      profileSavePath = directoryChosenForSavingProfile.toPath();
+    }
+
+    if (textFieldUsername.getText() != null && !textFieldPassword.getText().isEmpty()) {
 
       LocalUser user = new LocalUser();
 
       user.setPassword(password);
-
       user.setUsername(userName);
       user.setFirstName(firstName);
       user.setLastName(lastName);
@@ -168,16 +178,25 @@ public class SignUpController implements Controller {
         application.getMainController().init();
 
       } catch (IOException | LoginException se) {
-
         se.printStackTrace();
       }
 
     } else {
-      Notifications.create()
-          .title("Signup failed")
-          .text("It seems you entered something wrong. Try again.")
-          .darkStyle()
-          .showWarning();
+      if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
+        Notifications.create()
+            .title("Inscription échouée")
+            .text("Aucun pseudo n'a été renseigné.")
+            .darkStyle()
+            .showWarning();
+      }
+
+      if (textFieldPassword.getText().isEmpty()) {
+        Notifications.create()
+            .title("Inscription échouée")
+            .text("Aucun mot de passe n'a été renseigné.")
+            .darkStyle()
+            .showWarning();
+      }
     }
   }
 
@@ -202,7 +221,7 @@ public class SignUpController implements Controller {
     try {
       avatarFilePath.setText(avatarFile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      IhmAlert.showAlert("Avatar","aucun fichier avatar sélectioné","critical");
+      logger.warn(e + ": aucun fichier avatar sélectioné.");
     }
   }
 
@@ -217,8 +236,10 @@ public class SignUpController implements Controller {
     try {
       profileFilePath.setText(directoryChosenForSavingProfile.getAbsolutePath());
     } catch (java.lang.RuntimeException e) {
-      IhmAlert.showAlert("Dir","aucun emplacement de stockage sélectioné","critical");
+      logger.warn(e + ": aucun emplacement de sauvegarde sélectioné.");
+      profileFilePath.setText(defaultProfileFilePath.toAbsolutePath().toString());
     }
   }
+
 
 }

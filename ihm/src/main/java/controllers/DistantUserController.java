@@ -9,7 +9,6 @@ import java.time.format.FormatStyle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
@@ -39,6 +38,8 @@ public class DistantUserController implements Controller {
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
 
+  private User distantUser;
+
   /* Getters */
 
   public SearchMusicController getSearchMusicController() {
@@ -47,6 +48,10 @@ public class DistantUserController implements Controller {
 
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
+  }
+
+  public User getDistantUser() {
+    return distantUser;
   }
 
   /* Setters */
@@ -61,7 +66,12 @@ public class DistantUserController implements Controller {
 
   private void setDateOfBirth(LocalDate dateOfBirth) {  
     DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-    this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+    if (dateOfBirth.isEqual(LocalDate.MIN)) {
+      this.dateOfBirth.setVisible(false);
+    } else {
+      this.dateOfBirth.setVisible(true);
+      this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+    }
   }
 
   public void setSearchMusicController(SearchMusicController searchMusicController) {
@@ -70,6 +80,14 @@ public class DistantUserController implements Controller {
 
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  public void setDistantUser(User user) {
+    this.distantUser = user;
+    FormatImage.cropAvatar(distantUser.getAvatar(), imgAvatar);
+    this.setPseudo(distantUser.getUsername());
+    this.setNameAndSurname(distantUser.getFirstName(), distantUser.getLastName());
+    this.setDateOfBirth(distantUser.getDateOfBirth());
   }
 
   /* Initialisation methods */
@@ -118,11 +136,4 @@ public class DistantUserController implements Controller {
   }
 
   /* Logic methods */
-
-  public void setDistantUser(User user) {
-    FormatImage.cropAvatar(user.getAvatar(), imgAvatar);
-    this.setPseudo(user.getUsername());
-    this.setNameAndSurname(user.getFirstName(), user.getLastName());
-    this.setDateOfBirth(user.getDateOfBirth());
-  }
 }
