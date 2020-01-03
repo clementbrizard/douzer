@@ -1,5 +1,6 @@
 package controllers;
 
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import core.Application;
 import datamodel.LocalMusic;
 import datamodel.Music;
@@ -18,8 +19,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceDialog;
@@ -95,6 +98,18 @@ public class MyMusicsController implements Controller {
 
   public DetailsMusicController getDetailsMusicController(DetailsMusicController controller) {
     return this.detailsMusicController;
+  }
+
+  /**
+   * getLocalMusicInView.
+   */
+  public ArrayList<LocalMusic> getLocalMusicInView() {
+    ArrayList<LocalMusic> h = new ArrayList<>();
+    this.tvMusics.getItems().forEach(item -> {
+      h.add(localMusics.get(item.getHash()));
+    });
+
+    return h;
   }
 
   public Application getApplication() {
@@ -203,15 +218,11 @@ public class MyMusicsController implements Controller {
           listMusicClicked.add(currentLocalMusic);
         }
       }
-      getCentralFrameController()
-          .getMainController()
-          .getPlayerController()
-          .setArrayMusic(listMusicClicked);
 
       getCentralFrameController()
           .getMainController()
           .getPlayerController()
-          .playerOnMusic();
+          .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
     });
 
     // Add delete item in context menu
@@ -231,6 +242,19 @@ public class MyMusicsController implements Controller {
 
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+
+    // Header click event
+    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+      if (event.getTarget() instanceof TableColumnHeader) {
+        event.consume();
+        this.getCentralFrameController()
+            .getMainController()
+            .getPlayerController()
+            .updateArrayMusic();
+      }
+
+    });
+
   }
 
   /* FXML methods (to handle events from user) */
@@ -251,7 +275,22 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
+
+        this.getCentralFrameController().getMainController()
+            .getPlayerController()
+            .selectOneMusic(tvMusics.getSelectionModel()
+                .getFocusedIndex());
       }
+    }
+
+    // If double left click, play music
+
+    if (click.getClickCount() == 2 && !click.isConsumed()) {
+      click.consume();
+      this.getCentralFrameController().getMainController()
+          .getPlayerController()
+          .playOneMusic(tvMusics.getSelectionModel()
+              .getFocusedIndex());
     }
 
     // If right click, show context menu
@@ -375,6 +414,26 @@ public class MyMusicsController implements Controller {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
+  /**
+   * Handle click on loopPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void loopPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().loopPlayer();
+  }
+
+  /**
+   * Handle click on randomPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void randomPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().randomPlayer();
+  }
+
   /* Logic methods */
 
   /**
@@ -421,6 +480,7 @@ public class MyMusicsController implements Controller {
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
     tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
+    this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
 
   /**

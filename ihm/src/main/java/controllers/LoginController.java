@@ -3,6 +3,7 @@ package controllers;
 import core.Application;
 import java.io.IOException;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javax.security.auth.login.LoginException;
@@ -23,9 +24,18 @@ public class LoginController implements Controller {
   @FXML
   private PasswordField textFieldPassword;
 
+  @FXML
+  private Button buttonLogin;
+
   private Application application;
 
-  // Other methods
+  /* Getters */
+
+  public Button getLoginButton() {
+    return this.buttonLogin;
+  }
+
+  /* Other methods */
 
   @Override
   public void initialize() {

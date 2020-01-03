@@ -79,10 +79,6 @@ public class DistantUserController implements Controller {
 
   /* Setters */
 
-  public void setDistantUser(User user) {
-    this.distantUser = user;
-  }
-
   private void setPseudo(String pseudo) {
     this.pseudo.setText(pseudo);
   }
@@ -93,7 +89,12 @@ public class DistantUserController implements Controller {
 
   private void setDateOfBirth(LocalDate dateOfBirth) {  
     DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-    this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+    if (dateOfBirth.isEqual(LocalDate.MIN)) {
+      this.dateOfBirth.setVisible(false);
+    } else {
+      this.dateOfBirth.setVisible(true);
+      this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+    }
   }
 
   public void setSearchMusicController(SearchMusicController searchMusicController) {
@@ -102,6 +103,15 @@ public class DistantUserController implements Controller {
 
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
+  }
+
+  public void setDistantUser(User user) {
+    this.distantUser = user;
+    FormatImage.cropAvatar(distantUser.getAvatar(), imgAvatar);
+    this.setPseudo(distantUser.getUsername());
+    this.setNameAndSurname(distantUser.getFirstName(), distantUser.getLastName());
+    this.setDateOfBirth(distantUser.getDateOfBirth());
+    this.displayDistantUserMusics();
   }
 
   /* Initialisation methods */
@@ -174,17 +184,6 @@ public class DistantUserController implements Controller {
   }
 
   /* Logic methods */
-
-  public void feedDistantUserProfile(User user) {
-    this.setDistantUser(user);
-
-    FormatImage.cropAvatar(distantUser.getAvatar(), imgAvatar);
-    this.setPseudo(distantUser.getUsername());
-    this.setNameAndSurname(distantUser.getFirstName(), distantUser.getLastName());
-    this.setDateOfBirth(distantUser.getDateOfBirth());
-
-    this.displayDistantUserMusics();
-  }
 
   /**
    * Refresh the table by retrieving local musics from Data.

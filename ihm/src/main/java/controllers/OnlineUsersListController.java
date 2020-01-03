@@ -108,6 +108,37 @@ public class OnlineUsersListController implements Controller {
   }
 
   /**
+   * Update the online user in online users list and distant user controller.
+   * which will update its infos
+   * @param user the user to update
+   *
+   */
+  public void updateOnlineUser(User user) {
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        User userToUpdate = onlineUsersList.stream()
+            .filter(currentUser -> currentUser.getUuid().equals(user.getUuid()))
+            .findAny()
+            .orElse(null);
+        onlineUsersList.set(onlineUsersList.indexOf(userToUpdate), user);
+
+        if (OnlineUsersListController.this.mainController
+            .getCentralFrameController()
+            .getDistantUserController()
+            .getDistantUser()
+            .equals(userToUpdate)
+        ) {
+          OnlineUsersListController.this.mainController
+              .getCentralFrameController()
+              .getDistantUserController()
+              .setDistantUser(user);
+        }
+      }
+    });
+  }
+
+  /**
    * Remove online user in online users list
    * which will update the list view.
    * @param user the user to add

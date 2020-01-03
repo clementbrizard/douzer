@@ -70,6 +70,7 @@ public class UserInfoController implements Controller {
     try {
       this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
       this.mainController.getApplication().showLoginScene();
+      this.mainController.getPlayerController().stopPlayer();
     } catch (IOException e) {
       logger.error(e);
     }

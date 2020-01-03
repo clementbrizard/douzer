@@ -3,10 +3,12 @@ package core;
 import controllers.AllMusicsController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
+import controllers.DownloadController;
 import controllers.OnlineUsersListController;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
+import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,11 +77,22 @@ public class IhmForData implements Ihm {
   /**
    * Update the IHM progress bar by giving the percentage of the download progression.
    *
-   * @param music   Music considered.
-   * @param integer Percentage progression, between 0 and 100.
+   * @param downloadedMusic  Music considered.
+   * @param downloadProgress Percentage progression, between 0 and 100.
    */
   @Override
-  public void notifyDownloadProgress(Music music, int integer) {
+  public void notifyDownloadProgress(Music downloadedMusic, int downloadProgress) {
+    DownloadController downloadController = null;
+    try {
+      downloadController = this.ihmCore.getApplication()
+          .getMainController()
+          .getDownloadController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+    }
+    downloadController.updateDownloadProgressBar(downloadedMusic, downloadProgress);
+
     LogManager.getLogger()
         .warn("La fonction d'affichage du téléchargement n'est pas encore liée");
   }
@@ -185,7 +198,18 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    ihmForDataLogger.warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    // This is done to avoid a "Not on FX application thread" error
+    // Solution found here : https://stackoverflow.com/a/23007018
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        // Refresh online user list
+        ihmCore.getApplication()
+            .getMainController()
+            .getOnlineUsersListController()
+            .updateOnlineUser(user);
+      }
+    });
   }
 
   /**
