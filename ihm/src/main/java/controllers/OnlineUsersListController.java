@@ -72,7 +72,7 @@ public class OnlineUsersListController implements Controller {
           OnlineUsersListController.this.mainController.getCentralFrameController()
             .setCentralContentDistantUser();
           OnlineUsersListController.this.mainController.getCentralFrameController()
-            .getDistantUserController().feedDistantUserProfile(clickedOnlineUser);
+            .getDistantUserController().setDistantUser(clickedOnlineUser);
         }
       }
     });
