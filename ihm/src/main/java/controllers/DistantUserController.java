@@ -43,6 +43,8 @@ public class DistantUserController implements Controller {
   private Label nameAndSurname;
   @FXML
   private Label dateOfBirth;
+  @FXML
+  private Label title;
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -97,6 +99,10 @@ public class DistantUserController implements Controller {
     }
   }
 
+  private void setLabelTitle(String pseudo) {
+    this.title.setText(String.format("Profil de %s", pseudo));
+  }
+
   public void setSearchMusicController(SearchMusicController searchMusicController) {
     this.searchMusicController = searchMusicController;
   }
@@ -107,6 +113,7 @@ public class DistantUserController implements Controller {
 
   public void setDistantUser(User user) {
     this.distantUser = user;
+    this.setLabelTitle(distantUser.getUsername());
     FormatImage.cropAvatar(distantUser.getAvatar(), imgAvatar);
     this.setPseudo(distantUser.getUsername());
     this.setNameAndSurname(distantUser.getFirstName(), distantUser.getLastName());

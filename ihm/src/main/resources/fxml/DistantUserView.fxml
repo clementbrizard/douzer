@@ -67,7 +67,7 @@
          <top>
              <BorderPane styleClass="header-section">
                  <left>
-                     <Label fx:id="lblTitle" text="Profil de "/>
+                     <Label fx:id="title" text=""/>
                  </left>
                  <right>
                      <HBox styleClass="header-btn-box">
