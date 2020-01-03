@@ -111,18 +111,10 @@ public class SignUpController implements Controller {
     LocalDate dateOfBirth = datePickerBirth.getValue();
     BufferedImage avatarImg = null;
     Path profileSavePath;
-    
-    if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
-      IhmAlert.showAlert("Pseudo","Le champ pseudo ne doit pas être vide","warning");
-    }
-
-    if (textFieldPassword.getText().isEmpty()) {
-      IhmAlert.showAlert("Mot de passe","Le champ mot de passe ne doit pas être vide","warning");
-    }
 
     // Gestion de la date par défaut
     if (datePickerBirth.getValue() == null) {
-      logger.fatal("Date de naissance non renseignée.");
+      logger.warn("Date de naissance non renseignée.");
       dateOfBirth = LocalDate.MIN;
     }
 
@@ -155,16 +147,11 @@ public class SignUpController implements Controller {
       profileSavePath = directoryChosenForSavingProfile.toPath();
     }
 
-    if (textFieldUsername.getText() != null
-        && !textFieldPassword.getText().isEmpty()
-        && textFieldFirstName.getText() != null
-        && textFieldLastName.getText() != null
-    ) {
+    if (textFieldUsername.getText() != null && !textFieldPassword.getText().isEmpty()) {
 
       LocalUser user = new LocalUser();
 
       user.setPassword(password);
-
       user.setUsername(userName);
       user.setFirstName(firstName);
       user.setLastName(lastName);
@@ -182,11 +169,21 @@ public class SignUpController implements Controller {
       }
 
     } else {
-      Notifications.create()
-          .title("Signup failed")
-          .text("It seems you entered something wrong. Try again.")
-          .darkStyle()
-          .showWarning();
+      if (textFieldUsername.getText() == null || textFieldUsername.getText().trim().isEmpty()) {
+        Notifications.create()
+            .title("Inscription échouée")
+            .text("Aucun pseudo n'a été renseigné.")
+            .darkStyle()
+            .showWarning();
+      }
+
+      if (textFieldPassword.getText().isEmpty()) {
+        Notifications.create()
+            .title("Inscription échouée")
+            .text("Aucun mot de passe n'a été renseigné.")
+            .darkStyle()
+            .showWarning();
+      }
     }
   }
 
