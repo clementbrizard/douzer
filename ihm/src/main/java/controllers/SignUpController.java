@@ -107,10 +107,10 @@ public class SignUpController implements Controller {
     final String password = textFieldPassword.getText();
     final String firstName = textFieldFirstName.getText();
     final String lastName = textFieldLastName.getText();
-    final LocalDate dateOfBirth = datePickerBirth.getValue();
 
+    LocalDate dateOfBirth = datePickerBirth.getValue();
     BufferedImage avatarImg = null;
-    Path profileSavePath = null;
+    Path profileSavePath;
 
     if (textFieldLastName.getText() == null || textFieldLastName.getText().trim().isEmpty()) {
       IhmAlert.showAlert("Nom","Le champ nom ne doit pas être vide","warning");
@@ -128,46 +128,46 @@ public class SignUpController implements Controller {
       IhmAlert.showAlert("Mot de passe","Le champ mot de passe ne doit pas être vide","warning");
     }
 
+    // Gestion de la date par défaut
     if (datePickerBirth.getValue() == null) {
-      IhmAlert.showAlert("Date de naissance",
-          "Le champ date de naissance ne doit pas être vide",
-          "warning");
+      logger.fatal("Date de naissance non renseignée.");
+      dateOfBirth = LocalDate.MIN;
+    }
+
+    // Gestion de l'avatar par défaut
+    if (avatarFile == null) {
+      try {
+        avatarImg = ImageIO.read(this.getClass().getResource("/images/defaultAvatar.png"));
+        logger.warn("Utilisation de l'avatar par défaut.");
+      } catch (IOException se) {
+        logger.fatal("Avatar par défaut compromis.");
+      }
+    } else {
+      final Path avatarPath = avatarFile.toPath();
+
+      try {
+        avatarImg = ImageIO.read(avatarFile);
+      } catch (IOException e) {
+        logger.warn(e + ": erreur de lecture du fichier avatar sélectioné.");
+        logger.warn("Utilisation de l'avatar par défaut.");
+      }
+    }
+
+    // Gestion de l'emplacement de profil par défaut
+    if (directoryChosenForSavingProfile == null) {
+      profileSavePath = defaultProfileFilePath;
+      logger.warn(
+          "Utilisation de l'emplacement de profil par défaut : {}",
+          profileSavePath.toAbsolutePath().toString());
+    } else {
+      profileSavePath = directoryChosenForSavingProfile.toPath();
     }
 
     if (textFieldUsername.getText() != null
         && !textFieldPassword.getText().isEmpty()
         && textFieldFirstName.getText() != null
         && textFieldLastName.getText() != null
-        && datePickerBirth.getValue() != null
     ) {
-
-      // Gestion de l'avatar par défaut
-      if (avatarFile == null) {
-        try {
-          avatarImg = ImageIO.read(this.getClass().getResource("/images/defaultAvatar.png"));
-        } catch (IOException se) {
-          logger.fatal("Avatar par défaut compromis.");
-        }
-      } else {
-        final Path avatarPath = avatarFile.toPath();
-
-        try {
-          avatarImg = ImageIO.read(avatarFile);
-        } catch (IOException e) {
-          logger.warn(e + ": erreur de lecture du fichier avatar sélectioné.");
-          logger.warn("Utilisation de l'avatar par défaut.");
-        }
-      }
-
-      // Gestion de l'emplacement de profil par défaut
-      if (directoryChosenForSavingProfile == null) {
-        profileSavePath = defaultProfileFilePath;
-        logger.warn(
-            "Utilisation de l'emplacement de profil par défaut : {}",
-            profileSavePath.toAbsolutePath().toString());
-      } else {
-        profileSavePath = directoryChosenForSavingProfile.toPath();
-      }
 
       LocalUser user = new LocalUser();
 

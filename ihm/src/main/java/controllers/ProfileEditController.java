@@ -152,8 +152,9 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .getDateOfBirth();
 
-    datePickerBirth.setPromptText(birthDate.toString());
-    datePickerBirth.setValue(birthDate);
+    if (!birthDate.isEqual(LocalDate.MIN)) {
+      datePickerBirth.setValue(birthDate);
+    }
   }
 
   /**
@@ -259,12 +260,14 @@ public class ProfileEditController implements Controller {
             .getCurrentUser()
             .setLastName(textFieldLastName.getText());
 
-    ProfileEditController.this.centralFrameController.getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser()
-            .setDateOfBirth(datePickerBirth.getValue());
+    if (datePickerBirth.getValue() != null) {
+      ProfileEditController.this.centralFrameController.getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser()
+          .setDateOfBirth(datePickerBirth.getValue());
+    }
 
     Notifications.create()
             .title("Sauvegarde effectuée")

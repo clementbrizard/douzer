@@ -61,7 +61,11 @@ public class DistantUserController implements Controller {
 
   private void setDateOfBirth(LocalDate dateOfBirth) {  
     DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
-    this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+    if (dateOfBirth.isEqual(LocalDate.MIN)) {
+      this.dateOfBirth.setVisible(false);
+    } else {
+      this.dateOfBirth.setText(String.format("Né(e) le %s", dateOfBirth.format(formatter)));
+    }
   }
 
   public void setSearchMusicController(SearchMusicController searchMusicController) {
