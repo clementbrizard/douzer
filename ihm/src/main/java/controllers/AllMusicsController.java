@@ -238,15 +238,15 @@ public class AllMusicsController implements Controller {
                 listMusicClicked.add((LocalMusic) musicSelected);
               }
             }
-            getCentralFrameController()
+            /*getCentralFrameController()
                 .getMainController()
                 .getPlayerController()
-                .setArrayMusic(listMusicClicked);
+                .setArrayMusic(listMusicClicked);*/
     
             getCentralFrameController()
                 .getMainController()
                 .getPlayerController()
-                .playerOnMusic();
+                .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
           }
         }
       });
