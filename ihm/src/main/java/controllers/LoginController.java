@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.security.auth.login.LoginException;
@@ -35,9 +34,9 @@ public class LoginController implements Controller {
 
   private Application application;
   
-  private FileChooser importProfilFile = new FileChooser();
+  private DirectoryChooser importProfilDirectory = new DirectoryChooser();
   
-  private File importFile;
+  private File importDirectory;
 
   // Other methods
 
@@ -91,12 +90,12 @@ public class LoginController implements Controller {
   @FXML
   public void importClicked(ActionEvent evt) {
     Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
-    importFile = importProfilFile.showOpenDialog(primaryStage);
+    importDirectory = importProfilDirectory.showDialog(primaryStage);
     try {
       this.application
         .getIhmCore()
         .getDataForIhm()
-        .importProfile(importFile.getAbsolutePath());
+        .importProfile(importDirectory.getAbsolutePath());
     } catch (UnsupportedOperationException e) {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert.showAlert("implementation","pas encore implémenté","critical");
