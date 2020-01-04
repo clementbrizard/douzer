@@ -61,6 +61,7 @@
                                  </Pane>
                                  <VBox styleClass="form-btn-hbox">
                                      <Button fx:id="buttonEditAvatar" onAction="#avatarEdition" styleClass="form-btn" text="éditer" />
+                                     <Button fx:id="buttonDeleteAvatar" onAction="#avatarDeletion" styleClass="form-btn" text="supprimer" />
                                  </VBox>
                              </HBox>
                          </VBox>

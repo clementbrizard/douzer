@@ -5,6 +5,7 @@ import core.IhmAlert;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 
@@ -166,16 +167,7 @@ public class ProfileEditController implements Controller {
   /**
    * this function show the avatar image.
    */
-  private void showAvatar() {
-    // get the image
-    RenderedImage imgRend = this.centralFrameController
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser()
-            .getAvatar();
-
+  private void showAvatar(RenderedImage imgRend) {
     // Convert and crop the avatar image
     FormatImage.cropAvatar(imgRend, imgAvatar);
 
@@ -193,6 +185,23 @@ public class ProfileEditController implements Controller {
             circleRadius);
     paneImgAvatar.setClip(clip);
   }
+
+  /**
+   * Overloading of the previous showAvatar() method.
+   */
+  private void showAvatar() {
+    // get the image
+    RenderedImage imgRend = this.centralFrameController
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser()
+        .getAvatar();
+
+    showAvatar(imgRend);
+  }
+
 
   @FXML
   public void changeFrameToMyMusics(ActionEvent event) {
@@ -248,6 +257,39 @@ public class ProfileEditController implements Controller {
     } catch (java.io.IOException | java.lang.NullPointerException e) {
       logger.warn(e + ": aucun fichier avatar sélectioné.");
     }
+  }
+
+  /**
+   * Called upon clicking the button to delete user's avatar.
+   * Change current avatar by the default avatar.
+   *
+   * @param event The event inducing the button click
+   */
+  public void avatarDeletion(ActionEvent event) {
+    try {
+      BufferedImage avatarImg = ImageIO.read(
+          this.getClass().getResource("/images/defaultAvatar.png")
+      );
+
+      ProfileEditController.this.centralFrameController.getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .getCurrentUser()
+          .setAvatar(avatarImg);
+
+      showAvatar();
+
+      logger.warn("Utilisation de l'avatar par défaut.");
+    } catch (IOException se) {
+      logger.fatal("Avatar par défaut compromis.");
+    }
+
+    Notifications.create()
+        .title("Avatar supprimé")
+        .text("Votre avatar a bien été supprimé.")
+        .darkStyle()
+        .showInformation();
   }
 
   /**
