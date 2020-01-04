@@ -8,8 +8,10 @@ import controllers.OnlineUsersListController;
 import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
+import javafx.application.Platform;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 /**
  * integration for Ihm interface.
@@ -71,6 +73,34 @@ public class IhmForData implements Ihm {
     ihmForDataLogger.info("{} was notified of {} disconnection",
         this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
         user.getUsername());
+
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+
+    if (controllerDistantUser.getDistantUser() != null) {
+      if (controllerDistantUser.getDistantUser().equals(user)) {
+        Platform.runLater(new Runnable() {
+          @Override
+          public void run() {
+            controllerDistantUser.getCentralFrameController().setCentralContentMyMusics();
+            Notifications.create()
+                .title(user.getUsername() + " vient de se déconnecter")
+                .text("Son profil n'est plus accessible. Redirection sur Mes Musiques.")
+                .darkStyle()
+                .showInformation();
+          }
+        });
+      }
+    }
   }
 
   /**
@@ -130,10 +160,26 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
+
     if (controllerCurrentMusic.getCurrentMusic() != null
         && controllerCurrentMusic.getCurrentMusic().equals(music)) {
       controllerCurrentMusic.init(music);
     }
+
+    // Update musics in the distantUserController if necessary
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+
+    controllerDistantUser.displayDistantUserMusics();
   }
 
   /**
@@ -172,11 +218,27 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
+
     if (controllerCurrentMusic.getCurrentMusic() != null
         && controllerCurrentMusic.getCurrentMusic().getMetadata().getHash()
         .equals(music.getMetadata().getHash())) {
       controllerCurrentMusic.init(null);
     }
+
+    // Update musics in the distantUserController if necessary
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+
+    controllerDistantUser.displayDistantUserMusics();
   }
 
   /**
@@ -197,7 +259,18 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
-    ihmForDataLogger.warn("L'affichage des utilisateurs distants n'est pas encore implémenté");
+    // This is done to avoid a "Not on FX application thread" error
+    // Solution found here : https://stackoverflow.com/a/23007018
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        // Refresh online user list
+        ihmCore.getApplication()
+            .getMainController()
+            .getOnlineUsersListController()
+            .updateOnlineUser(user);
+      }
+    });
   }
 
   /**

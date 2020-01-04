@@ -24,7 +24,7 @@
                      </HBox>
                      <HBox styleClass="form-btn-hbox">
                          <Button fx:id="buttonDeleteAccount" styleClass="form-btn" text="Supprimer" />
-                         <Button fx:id="buttonExportAccount" styleClass="form-btn" text="Exporter" />
+                         <Button fx:id="buttonExportAccount" styleClass="form-btn" text="Exporter" onAction="#exportClicked"/>
                      </HBox>
 
                      <HBox>
@@ -55,7 +55,7 @@
                                  <Pane fx:id="paneImgAvatar">
                                      <ImageView fx:id="imgAvatar" preserveRatio="true">
                                          <image>
-                                             <Image preserveRatio="true" smooth="true"  url="@../images/EmptyStarSymbol.png" />
+                                             <Image preserveRatio="true" smooth="true"  url="@../images/defaultAvatar.png" />
                                          </image>
                                      </ImageView>
                                  </Pane>
