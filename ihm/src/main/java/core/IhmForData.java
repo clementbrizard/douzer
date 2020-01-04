@@ -86,18 +86,20 @@ public class IhmForData implements Ihm {
       return;
     }
 
-    if (controllerDistantUser.getDistantUser().equals(user)) {
-      Platform.runLater(new Runnable() {
-        @Override
-        public void run() {
-          controllerDistantUser.getCentralFrameController().setCentralContentMyMusics();
-          Notifications.create()
-              .title(user.getUsername() + " vient de se déconnecter")
-              .text("Son profil n'est plus accessible. Redirection sur Mes Musiques.")
-              .darkStyle()
-              .showInformation();
-        }
-      });
+    if (controllerDistantUser.getDistantUser() != null) {
+      if (controllerDistantUser.getDistantUser().equals(user)) {
+        Platform.runLater(new Runnable() {
+          @Override
+          public void run() {
+            controllerDistantUser.getCentralFrameController().setCentralContentMyMusics();
+            Notifications.create()
+                .title(user.getUsername() + " vient de se déconnecter")
+                .text("Son profil n'est plus accessible. Redirection sur Mes Musiques.")
+                .darkStyle()
+                .showInformation();
+          }
+        });
+      }
     }
   }
 
