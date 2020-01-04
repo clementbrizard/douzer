@@ -1,14 +1,26 @@
 package controllers;
 
 import core.Application;
+import core.IhmAlert;
+
+import java.io.File;
 import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.Stage;
+
 import javax.security.auth.login.LoginException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.controlsfx.control.Notifications;
 
 /**
@@ -26,8 +38,15 @@ public class LoginController implements Controller {
 
   @FXML
   private Button buttonLogin;
+  
+  @FXML
+  private Label lblImport;
 
   private Application application;
+  
+  private DirectoryChooser importProfilDirectory = new DirectoryChooser();
+  
+  private File importDirectory;
 
   /* Getters */
 
@@ -39,6 +58,7 @@ public class LoginController implements Controller {
 
   @Override
   public void initialize() {
+    lblImport.setOnMouseClicked(event -> importClicked(event));
   }
 
   @FXML
@@ -91,5 +111,26 @@ public class LoginController implements Controller {
   public void setApplication(Application application) {
     this.application = application;
   }
-
+  
+  /**
+   * The function who call the windows to choose a export directory. 
+   * @param event the clicked event
+   */
+  public void importClicked(MouseEvent event) {
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    importDirectory = importProfilDirectory.showDialog(primaryStage);
+    try {
+      this.application
+        .getIhmCore()
+        .getDataForIhm()
+        .importProfile(importDirectory.getAbsolutePath());
+    } catch (UnsupportedOperationException e) {
+      LogManager.getLogger().error(e.getMessage());
+      IhmAlert.showAlert("implementation","pas encore implémenté","critical");
+    } catch (java.lang.RuntimeException e) {
+      LogManager.getLogger().error(e.getMessage());
+      IhmAlert
+        .showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
+    }
+  }
 }

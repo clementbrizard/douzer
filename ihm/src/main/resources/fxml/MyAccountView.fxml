@@ -24,7 +24,7 @@
                      </HBox>
                      <HBox styleClass="form-btn-hbox">
                          <Button fx:id="buttonDeleteAccount" styleClass="form-btn" text="Supprimer" />
-                         <Button fx:id="buttonExportAccount" styleClass="form-btn" text="Exporter" />
+                         <Button fx:id="buttonExportAccount" styleClass="form-btn" text="Exporter" onAction="#exportClicked"/>
                      </HBox>
 
                      <HBox>
