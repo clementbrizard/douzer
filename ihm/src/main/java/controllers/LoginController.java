@@ -100,6 +100,7 @@ public class LoginController implements Controller {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert.showAlert("implementation","pas encore implémenté","critical");
     } catch (java.lang.RuntimeException e) {
+      LogManager.getLogger().error(e.getMessage());
       IhmAlert
         .showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
     }
