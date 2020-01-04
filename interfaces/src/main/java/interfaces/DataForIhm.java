@@ -6,12 +6,14 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.Playlist;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -85,13 +87,27 @@ public interface DataForIhm {
 
   void unshareMusics(Collection<LocalMusic> musics);
 
+  Playlist createPlaylist(String name);
+
+  void addMusicToPlaylist(LocalMusic music, Playlist playlist, Integer order);
+
+  void removeMusicFromPlaylist(LocalMusic music, Playlist playlist);
+
+  void deletePlaylist(Playlist playlist);
+
+  void changeMusicOrder(Playlist playlist, LocalMusic music, Integer order);
+
   Stream<User> getOnlineUsers();
 
   Stream<Music> getAvailableMusics();
 
   Stream<LocalMusic> getLocalMusics();
 
-  List<LocalMusic> getPlaylist();
+  Collection<Playlist> getPlaylist();
+
+  Playlist getPlaylistByName(String name) throws IllegalArgumentException;
+
+  void setPlaylistMusicList(Playlist playlist, ArrayList<LocalMusic> musicList);
 
   LocalUser getCurrentUser();
 

@@ -7,11 +7,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public class LocalUser extends User {
   private static final long serialVersionUID = 1L;
@@ -30,7 +35,7 @@ public class LocalUser extends User {
   // Path is not serializable, handle serialization with readObject writeObject below.
   private transient Path savePath;
   private Set<LocalMusic> localMusics;
-  private List<LocalMusic> playlist;
+  private Collection<Playlist> playlists;
 
   /**
    * Default constructor.
@@ -38,7 +43,7 @@ public class LocalUser extends User {
   public LocalUser() {
     this.friends = new HashSet<>();
     this.localMusics = new HashSet<>();
-    this.playlist = new ArrayList<>();
+    this.playlists = new ArrayList<>();
   }
 
   /**
@@ -86,12 +91,35 @@ public class LocalUser extends User {
     this.localMusics = localMusics;
   }
 
-  public List<LocalMusic> getPlaylist() {
-    return playlist;
+  public Collection<Playlist> getPlaylists() {
+    return playlists;
   }
 
-  public void setPlaylist(List<LocalMusic> playlist) {
-    this.playlist = playlist;
+  public void setPlaylists(List<Playlist> playlists) {
+    this.playlists = playlists;
+  }
+
+  public Playlist addPlaylist(String name) throws IllegalArgumentException {
+    this.playlists.forEach(p -> {
+      if (p.getName().equals(name)) {
+        throw new IllegalArgumentException("Playlist name already exists");
+      }
+    }
+    );
+    Playlist newPlaylist = new Playlist(name);
+    this.playlists.add(newPlaylist);
+    return newPlaylist;
+  }
+
+  public Playlist getPlaylistByName(String name) throws IllegalArgumentException {
+    return this.playlists.stream()
+            .filter(playlist -> playlist.getName().equals(name))
+            .findAny()
+            .orElse(null);
+  }
+
+  public void removePlaylist(Playlist playlist) {
+    this.playlists.remove(playlist);
   }
 
   public Path getSavePath() {
@@ -105,6 +133,30 @@ public class LocalUser extends User {
   private void writeObject(ObjectOutputStream stream) throws IOException {
     stream.defaultWriteObject();
     stream.writeUTF(this.savePath.toString());
+
+    //Same behaviour as DryComment
+    Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>> commentsMap = new HashMap<>();
+    Map<LocalMusic, Map<UUID, Integer>> ratingsMap = new HashMap<>();
+    //Save comments and ratings for localMusics
+    this.getLocalMusics().forEach(music -> {
+      List<AbstractMap.SimpleEntry<UUID, String>> comments = new ArrayList<>();
+      music.getMetadata().getComments().forEach(c -> {
+        if (c.getOwner() == this || this.getFriends().contains(c.getOwner())) {
+          comments.add(new AbstractMap.SimpleEntry<>(this.getUuid(), c.getComment()));
+        }
+      });
+      commentsMap.put(music, comments);
+
+      Map<UUID, Integer> ratings = new HashMap<>();
+      music.getMetadata().getRatings().forEach((u, r) -> {
+        if (u == this || this.getFriends().contains(u)) {
+          ratings.put(u.getUuid(), r);
+        }
+      });
+      ratingsMap.put(music, ratings);
+    });
+    stream.writeObject(commentsMap);
+    stream.writeObject(ratingsMap);
   }
 
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
@@ -119,6 +171,46 @@ public class LocalUser extends User {
     Set<User> owners = new HashSet<>();
     owners.add(this);
     localMusics.forEach(localMusic -> localMusic.setOwners(owners));
+
+    //Bind the comments to the existing user reference corresponding to their serialized uuid
+    Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>> commentsMap =
+        (Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>>) stream.readObject();
+    commentsMap.forEach((music, mapList) -> {
+      List<Comment> comments = new ArrayList<>();
+      mapList.forEach(entry -> {
+        if (entry.getKey() == this.getUuid()) { //UUID is from localUser
+          comments.add(new Comment(entry.getValue(), this));
+        } else { //UUID is from a friend
+          User user = this.getFriends().stream().filter(u -> entry.getKey() == u.getUuid())
+              .findFirst().orElse(null);
+          if (user != null) {
+            comments.add(new Comment(entry.getValue(), user));
+          }
+        }
+      });
+      music.getMetadata().setComments(comments);
+    });
+
+    //Bind the ratings to the existing user reference corresponding to their serialized uuid
+    Map<LocalMusic, Map<UUID, Integer>> ratingsMap =
+        (Map<LocalMusic, Map<UUID, Integer>>) stream.readObject();
+    ratingsMap.forEach((music, mapRate) -> {
+      Map<User, Integer> ratings = new HashMap<>();
+      mapRate.forEach((uuid, rate) -> {
+        if (rate != null) {
+          if (uuid == this.getUuid()) { //UUID is from localUser
+            ratings.put(this, rate);
+          } else { //UUID is from a friend
+            User user = this.getFriends().stream().filter(u -> uuid == u.getUuid())
+                .findFirst().orElse(null);
+            if (user != null) {
+              ratings.put(user, rate);
+            }
+          }
+        }
+      });
+      music.getMetadata().setRatings(ratings);
+    });
   }
 
   @Override
@@ -137,7 +229,7 @@ public class LocalUser extends User {
         && Objects.equals(friends, localUser.friends)
         && Objects.equals(savePath, localUser.savePath)
         && Objects.equals(localMusics, localUser.localMusics)
-        && Objects.equals(playlist, localUser.playlist);
+        && Objects.equals(playlists, localUser.playlists);
   }
 
   @Override

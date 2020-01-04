@@ -1,12 +1,11 @@
 package controllers;
 
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import core.Application;
 import datamodel.LocalMusic;
-
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,19 +13,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceDialog;
@@ -41,7 +37,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import utils.FormatDuration;
 
@@ -106,6 +101,18 @@ public class MyMusicsController implements Controller {
     return this.detailsMusicController;
   }
 
+  /**
+   * getLocalMusicInView.
+   */
+  public ArrayList<LocalMusic> getLocalMusicInView() {
+    ArrayList<LocalMusic> h = new ArrayList<>();
+    this.tvMusics.getItems().forEach(item -> {
+      h.add(localMusics.get(item.getHash()));
+    });
+
+    return h;
+  }
+
   public Application getApplication() {
     return application;
   }
@@ -136,7 +143,7 @@ public class MyMusicsController implements Controller {
 
   @Override
   public void initialize() {
-    localMusics = new HashMap<String, LocalMusic>();
+    localMusics = new HashMap<>();
   }
 
   /**
@@ -145,23 +152,17 @@ public class MyMusicsController implements Controller {
    */
   public void init() {
     // Bind columns to corresponding attributes in MusicMetaData
-    this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
-    this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
-    this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
+    this.artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
+    this.titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+    this.albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
 
     // Duration MusicMetaData attribute has type Duration
     // so we need to convert it to a string
     this.durationCol
         .setCellValueFactory(
-            new Callback<TableColumn.CellDataFeatures<MusicMetadata, String>,
-                ObservableValue<String>>() {
-              public ObservableValue<String> call(
-                  TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
-                return new SimpleStringProperty(
-                    FormatDuration.run(metadata.getValue().getDuration())
-                );
-              }
-            });
+            metadata -> new SimpleStringProperty(
+                FormatDuration.run(metadata.getValue().getDuration())
+            ));
 
     // Hide advanced search fields
     tfSearchTitle.setVisible(false);
@@ -169,13 +170,7 @@ public class MyMusicsController implements Controller {
     tfSearchAlbum.setVisible(false);
     tfSearchTags.setVisible(false);
 
-    ChangeListener<String> textListener = new ChangeListener<String>() {
-      @Override
-      public void changed(ObservableValue<? extends String> observable,
-                          String oldValue, String newValue) {
-        searchMusics();
-      }
-    };
+    ChangeListener<String> textListener = (observable, oldValue, newValue) -> searchMusics();
 
     // Bind listener to simple and advanced search fields for instant search
     tfSearch.textProperty().addListener(textListener);
@@ -202,67 +197,65 @@ public class MyMusicsController implements Controller {
 
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
-    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        showMusicInformation(currentLocalMusic);
-      }
-    });
+    itemInformation.setOnAction(event -> showMusicInformation(currentLocalMusic));
 
     MenuItem playMusic = new MenuItem("Play");
-    playMusic.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
+    playMusic.setOnAction(event -> {
+      ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
 
-        ObservableList<MusicMetadata> selectedItems = tvMusics
-            .getSelectionModel()
-            .getSelectedItems();
+      ObservableList<MusicMetadata> selectedItems = tvMusics
+          .getSelectionModel()
+          .getSelectedItems();
 
-        selectedItems.forEach(item -> {
-          listMusicClicked.add(localMusics.get(item.getHash()));
-        });
+      selectedItems.forEach(item -> {
+        listMusicClicked.add(localMusics.get(item.getHash()));
+      });
 
-        //add to the list with right click play to the list
-        if (listMusicClicked.isEmpty()) {
+      //add to the list with right click play to the list
+      if (listMusicClicked.isEmpty()) {
+        listMusicClicked.add(currentLocalMusic);
+      } else {
+        if (!listMusicClicked.contains(currentLocalMusic)) {
           listMusicClicked.add(currentLocalMusic);
-        } else {
-          if (!listMusicClicked.contains(currentLocalMusic)) {
-            listMusicClicked.add(currentLocalMusic);
-          }
         }
-        getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .setArrayMusic(listMusicClicked);
-
-        getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .playerOnMusic();
       }
+
+      getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
     });
 
     // Add delete item in context menu
     MenuItem itemDelete = new MenuItem("Supprimer");
-    itemDelete.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        ArrayList<LocalMusic> musicsDelete = new ArrayList<LocalMusic>();
-        ObservableList<MusicMetadata> selectedItems = tvMusics
-            .getSelectionModel()
-            .getSelectedItems();
+    itemDelete.setOnAction(event -> {
+      ArrayList<LocalMusic> musicsDelete = new ArrayList<>();
+      ObservableList<MusicMetadata> selectedItems = tvMusics
+          .getSelectionModel()
+          .getSelectedItems();
 
-        selectedItems.forEach(item -> {
-          musicsDelete.add(localMusics.get(item.getHash()));
-        });
+      selectedItems.forEach(item -> {
+        musicsDelete.add(localMusics.get(item.getHash()));
+      });
 
-        deleteMusics(musicsDelete);
-      }
+      deleteMusics(musicsDelete);
     });
 
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+
+    // Header click event
+    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+      if (event.getTarget() instanceof TableColumnHeader) {
+        event.consume();
+        this.getCentralFrameController()
+            .getMainController()
+            .getPlayerController()
+            .updateArrayMusic();
+      }
+
+    });
+
   }
 
   /* FXML methods (to handle events from user) */
@@ -283,7 +276,22 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
+
+        this.getCentralFrameController().getMainController()
+            .getPlayerController()
+            .selectOneMusic(tvMusics.getSelectionModel()
+                .getFocusedIndex());
       }
+    }
+
+    // If double left click, play music
+
+    if (click.getClickCount() == 2 && !click.isConsumed()) {
+      click.consume();
+      this.getCentralFrameController().getMainController()
+          .getPlayerController()
+          .playOneMusic(tvMusics.getSelectionModel()
+              .getFocusedIndex());
     }
 
     // If right click, show context menu
@@ -408,6 +416,26 @@ public class MyMusicsController implements Controller {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
+  /**
+   * Handle click on loopPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void loopPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().loopPlayer();
+  }
+
+  /**
+   * Handle click on randomPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void randomPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().randomPlayer();
+  }
+
   /* Logic methods */
 
   /**
@@ -454,7 +482,8 @@ public class MyMusicsController implements Controller {
    * @param newMusics the search result
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+    tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
+    this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
 
   /**
@@ -515,9 +544,12 @@ public class MyMusicsController implements Controller {
         .getLocalMusics();
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
-    for (LocalMusic localMusic : (Iterable<LocalMusic>) localMusicsStream::iterator) {
-      localMusics.put(localMusic.getMetadata().getHash(), localMusic);
-      localMusicsMetadata.add(localMusic.getMetadata());
+    for (LocalMusic localMusic : localMusicsStream) {
+      //if the current localMusic isn't already in our localMusics we add it.
+      if (localMusics.get(localMusic.getMetadata().getHash()) == null) {
+        localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+        localMusicsMetadata.add(localMusic.getMetadata());
+      }
     }
 
     return localMusicsMetadata;
