@@ -54,10 +54,10 @@
                     <HBox styleClass="to-center">
                         <TableView fx:id="tvMusics">
                             <columns>
-                                <TableColumn prefWidth="129.0" text="Artiste" />
-                                <TableColumn prefWidth="152.0" text="Titre" />
-                                <TableColumn prefWidth="131.0" text="Album" />
-                                <TableColumn minWidth="4.0" prefWidth="92.0" text="Durée" />
+                                <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
+                                <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />
+                                <TableColumn fx:id="albumCol" prefWidth="131.0" text="Album" />
+                                <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="92.0" text="Durée" />
                             </columns>
                         </TableView>
                     </HBox>
@@ -67,7 +67,7 @@
          <top>
              <BorderPane styleClass="header-section">
                  <left>
-                     <Label fx:id="lblTitle" text="Profil de "/>
+                     <Label fx:id="title" text=""/>
                  </left>
                  <right>
                      <HBox styleClass="header-btn-box">

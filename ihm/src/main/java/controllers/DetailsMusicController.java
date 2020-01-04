@@ -4,7 +4,6 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.ShareStatus;
-import datamodel.User;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,7 +11,6 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -52,7 +50,7 @@ public class DetailsMusicController implements Controller {
   private Spinner<Integer> dateYear;
 
   @FXML
-  private TextField textFieldLastUploader;
+  private ListView<String> ownersListView;
 
   @FXML
   private TextField textFieldAddTag;
@@ -252,11 +250,8 @@ public class DetailsMusicController implements Controller {
       }
     }
 
-    if (musicSelected.getOwners() != null) {
-      Iterator<User> itOwners = musicSelected.getOwners().iterator();
-      if (itOwners.hasNext()) {
-        textFieldLastUploader.setText(itOwners.next().getUsername());
-      }
+    if (localMusic.getOwners() != null) {
+      localMusic.getOwners().forEach(owner -> ownersListView.getItems().add(owner.getUsername()));
     }
 
     tags = FXCollections.observableArrayList();
@@ -325,15 +320,7 @@ public class DetailsMusicController implements Controller {
     } else {
       textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
-
-    if (textFieldLastUploader.getText() == null
-        || textFieldLastUploader.getText().trim().equals("")) {
-      bool = false;
-      textFieldLastUploader.setStyle(" -fx-background-color:red;");
-    } else {
-      textFieldLastUploader.setStyle(" -fx-background-color:white;");
-    }
-
+    
     return bool;
   }
 
