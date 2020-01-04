@@ -3,14 +3,12 @@ package controllers;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.ShareStatus;
-import datamodel.User;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,9 +48,7 @@ public class DetailsMusicController implements Controller {
   private Spinner<Integer> dateYear;
 
   @FXML
-  private ListView<String> listOwnersView;
-  
-  private ObservableList<String> owners;
+  private ListView<String> ownersListView;
 
   @FXML
   private TextField textFieldAddTag;
@@ -214,7 +210,7 @@ public class DetailsMusicController implements Controller {
     }
 
     if (localMusic.getOwners() != null) {
-      localMusic.getOwners().forEach(owner -> listOwnersView.getItems().add(owner.getUsername()));
+      localMusic.getOwners().forEach(owner -> ownersListView.getItems().add(owner.getUsername()));
     }
 
     tags = FXCollections.observableArrayList();
