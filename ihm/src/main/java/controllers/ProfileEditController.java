@@ -254,6 +254,11 @@ public class ProfileEditController implements Controller {
               .darkStyle()
               .showInformation();
 
+      this.getCentralFrameController()
+          .getMainController()
+          .getUserInfoController()
+          .init();
+      
     } catch (java.io.IOException | java.lang.NullPointerException e) {
       logger.warn(e + ": aucun fichier avatar sélectioné.");
     }
@@ -290,6 +295,11 @@ public class ProfileEditController implements Controller {
         .text("Votre avatar a bien été supprimé.")
         .darkStyle()
         .showInformation();
+
+    this.getCentralFrameController()
+        .getMainController()
+        .getUserInfoController()
+        .init();
   }
 
   /**
