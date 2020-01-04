@@ -135,6 +135,21 @@ public class IhmForData implements Ihm {
         && controllerCurrentMusic.getCurrentMusic().equals(music)) {
       controllerCurrentMusic.init(music);
     }
+
+    // Update musics in the distantUserController if necessary
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+    
+    controllerDistantUser.displayDistantUserMusics();
   }
 
   /**
@@ -178,6 +193,21 @@ public class IhmForData implements Ihm {
         .equals(music.getMetadata().getHash())) {
       controllerCurrentMusic.init(null);
     }
+
+    // Update musics in the distantUserController if necessary
+    DistantUserController controllerDistantUser;
+    try {
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController()
+          .getCentralFrameController()
+          .getDistantUserController();
+    } catch (NullPointerException e) {
+      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
+      e.printStackTrace();
+      return;
+    }
+
+    controllerDistantUser.displayDistantUserMusics();
   }
 
   /**

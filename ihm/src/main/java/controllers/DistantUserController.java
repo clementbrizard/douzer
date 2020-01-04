@@ -218,16 +218,11 @@ public class DistantUserController implements Controller {
         .filter(music -> music.getOwners().contains(distantUser))
         .collect(Collectors.toList());
 
-    logger.debug("Nombre de musiques : {}", distantUserMusicsList.size());
-
     List<MusicMetadata> distantUserMusicsMetaData = new ArrayList<>();
     for (Music music : distantUserMusicsList) {
       distantUserMusics.put(music.getMetadata().getHash(), music);
       distantUserMusicsMetaData.add(music.getMetadata());
     }
-
-    logger.debug("Nombre de muétadata : {}", distantUserMusicsMetaData.size());
-
 
     return distantUserMusicsMetaData;
   }
