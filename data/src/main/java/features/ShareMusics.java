@@ -26,13 +26,13 @@ public abstract class ShareMusics {
         }
     );
 
-    ShareMusicsPayload payloadForAll = new ShareMusicsPayload(
+    UpdateMusicsPayload payloadForAll = new UpdateMusicsPayload(
         dc.getCurrentUser(),
         musicsForAll
     );
     dc.net.sendToUsers(payloadForAll, dc.getOnlineIps());
 
-    ShareMusicsPayload payloadForFriends = new ShareMusicsPayload(
+    UpdateMusicsPayload payloadForFriends = new UpdateMusicsPayload(
         dc.getCurrentUser(),
         musicsForFriends
     );

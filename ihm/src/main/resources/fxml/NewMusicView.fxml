@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane fx:id="anchorPaneNewMusic" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.NewMusicController">
    <children>
@@ -33,7 +41,7 @@
             <TextField fx:id="textAlbum" onKeyPressed="#albumEdited" GridPane.columnIndex="1" GridPane.rowIndex="3" />
             <Spinner fx:id="dateYear" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="labelYear" alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="181.0" text="Année" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <VBox fx:id="vboxRadioButton" style="-fx-padding: 5px;" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+            <VBox fx:id="vboxRadioButton" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" style="-fx-padding: 5px;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <children>
                    <Label fx:id="title" text="Visibilité:" />
                    <RadioButton fx:id="radioPrivate" mnemonicParsing="false" text="Privée" />
@@ -59,12 +67,11 @@
             <Button fx:id="buttonAdd" alignment="CENTER" mnemonicParsing="false" onAction="#add" text="Ajouter le nouveau morceau" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <VBox fx:id="vboxTags" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="4">
                <children>
-                  <Label fx:id="labelTags" text="Tags" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <ListView fx:id="listViewTags" onKeyPressed="#tagListKeyPressed" prefHeight="200.0" prefWidth="200.0" />
-                         <TextField fx:id="textNewTag" onAction="#addTag" prefHeight="200.0" prefWidth="200.0" />
-                        <Button fx:id="buttonAddTags" mnemonicParsing="false" onAction="#addTag">
+                         <TextField fx:id="textNewTag" onAction="#addTag" prefHeight="10.0" prefWidth="200.0" promptText="insérer tag" />
+                        <Button fx:id="buttonAddTags" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addTag" textAlignment="CENTER">
                            <graphic>
                               <ImageView fx:id="imageAddTags" fitHeight="204.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -77,6 +84,7 @@
                   </HBox>
                </children>
             </VBox>
+            <Label fx:id="labelTags" text="Tags" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
    </children>

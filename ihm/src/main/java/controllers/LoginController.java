@@ -9,6 +9,7 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -32,13 +33,22 @@ public class LoginController implements Controller {
   @FXML
   private PasswordField textFieldPassword;
 
+  @FXML
+  private Button buttonLogin;
+
   private Application application;
   
   private DirectoryChooser importProfilDirectory = new DirectoryChooser();
   
   private File importDirectory;
 
-  // Other methods
+  /* Getters */
+
+  public Button getLoginButton() {
+    return this.buttonLogin;
+  }
+
+  /* Other methods */
 
   @Override
   public void initialize() {
@@ -59,13 +69,25 @@ public class LoginController implements Controller {
       loginLogger.error(e);
 
       Notifications.create()
-          .title("Connection failed")
-          .text("It seems you entered a wrong username/password. Try again.")
-          .darkStyle()
-          .showWarning();
+        .title("Connection refusée")
+        .text("Il semblerait que vous ayez fait une erreur\ndans le login ou le mot de passe.")
+        .darkStyle()
+        .showWarning();
 
     } catch (IOException e) {
       loginLogger.error(e);
+
+      String errorText = String.join(
+          "La sauvegarde de l'application est corrompue.",
+          "Supprimez votre fichier de sauvegarde.\n",
+          "Créez un nouveau compte si le problème persiste."
+      );
+
+      Notifications.create()
+        .title("Connexion refusée")
+        .text(errorText)
+        .darkStyle()
+        .showWarning();
     }
   }
 

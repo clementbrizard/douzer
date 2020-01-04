@@ -55,7 +55,7 @@
                                  <Pane fx:id="paneImgAvatar">
                                      <ImageView fx:id="imgAvatar" preserveRatio="true">
                                          <image>
-                                             <Image preserveRatio="true" smooth="true"  url="@../images/EmptyStarSymbol.png" />
+                                             <Image preserveRatio="true" smooth="true"  url="@../images/defaultAvatar.png" />
                                          </image>
                                      </ImageView>
                                  </Pane>

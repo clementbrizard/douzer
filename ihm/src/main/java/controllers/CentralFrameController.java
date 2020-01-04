@@ -22,7 +22,7 @@ public class CentralFrameController implements Controller {
   public static final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
   public static final String profileEditView = "/fxml/MyAccountView.fxml";
   public static final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
-  public static final String distantUserView = "/fxml/UserProfileView.fxml";
+  public static final String distantUserView = "/fxml/DistantUserView.fxml";
 
   @FXML
   private AnchorPane content;
@@ -190,14 +190,15 @@ public class CentralFrameController implements Controller {
       this.myMusicsParent = myMusicsLoader.load();
       this.myMusicsController = myMusicsLoader.getController();
       this.myMusicsController.setCentralFrameController(this);
-      this.myMusicsController.init();
       this.myMusicsController.setApplication(this.mainController.getApplication());
+      this.myMusicsController.init();
 
       FXMLLoader distantUserLoader = new FXMLLoader(
           getClass().getResource(CentralFrameController.distantUserView));
       this.distantUserParent = distantUserLoader.load();
       this.distantUserController = distantUserLoader.getController();
       this.distantUserController.setCentralFrameController(this);
+      this.distantUserController.init();
 
       this.setCentralContentMyMusics();
 

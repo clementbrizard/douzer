@@ -4,27 +4,25 @@ import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-import datamodel.ShareStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,10 +57,14 @@ public class AllMusicsController implements Controller {
   private TextField tfSearchTags;
 
   private SearchMusicController searchMusicController;
+
   private CentralFrameController centralFrameController;
 
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
+
+  @FXML
+  private Button btnDownload;
 
   // Getters
 
@@ -123,6 +125,8 @@ public class AllMusicsController implements Controller {
    * this method has to be called right after the creation of the view.
    */
   public void init() {
+    // Download button is availabe only a music that is not local is selected
+    btnDownload.setDisable(true);
 
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
@@ -153,11 +157,10 @@ public class AllMusicsController implements Controller {
     tfSearchArtist.setVisible(false);
     tfSearchAlbum.setVisible(false);
     tfSearchTags.setVisible(false);
-
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-                          String oldValue, String newValue) {
+              String oldValue, String newValue) {
         searchMusics();
       }
     };
@@ -187,12 +190,10 @@ public class AllMusicsController implements Controller {
         .getIhmCore()
         .getDataForIhm()
         .getMusics()
-        .filter(m -> (m instanceof LocalMusic)
-            || ((LocalMusic) m).getShareStatus() != ShareStatus.PRIVATE)
         .collect(Collectors.toList());
 
     List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
-    for (Music music : (Iterable<Music>) availableMusicsStream::iterator) {
+    for (Music music : availableMusicsStream) {
       availableMusics.put(music.getMetadata().getHash(), music);
       availableMusicsMetaData.add(music.getMetadata());
     }
@@ -230,7 +231,46 @@ public class AllMusicsController implements Controller {
   }
 
   /**
+   * Downwload the selected musics.
+   *
+   * @param event not used
+   */
+  @FXML
+  public void download(ActionEvent event) {
+    // Creation of the music metadata from the tableView
+    MusicMetadata selectedMusicMetadata = this.tvMusics
+        .getSelectionModel()
+        .getSelectedItem();
+    Music selectedMusic = availableMusics.get(selectedMusicMetadata.getHash());
+    this.centralFrameController
+        .getMainController()
+        .getDownloadController()
+        .download(selectedMusic);
+  }
+
+  /**
+   * Handle click on tableView in order to able or disable download button.
+   */
+  @FXML
+  public void handleClickTableView(MouseEvent click) {
+    MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
+
+    // If left click, able or disable download button
+    if (click.getButton().equals(MouseButton.PRIMARY)) {
+      if (seletedMusicMetadata != null) {
+        Music selectedMusic = availableMusics.get(seletedMusicMetadata.getHash());
+        if (selectedMusic instanceof LocalMusic) {
+          btnDownload.setDisable(true);
+        } else {
+          btnDownload.setDisable(false);
+        }
+      }
+    }
+  }
+
+  /**
    * Search all musics that correspond to the labels content.
+   *
    */
   @FXML
   public void searchMusics() {
@@ -281,6 +321,6 @@ public class AllMusicsController implements Controller {
   }
 
   private void updateMusics(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+    tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
   }
 }

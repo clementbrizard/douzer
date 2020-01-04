@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class UpdateMusicsPayload extends Payload {
   private Collection<DryMusic> musics;
 
-  public UpdateMusicsPayload(LocalUser user, Collection<Music> musics) {
+  public UpdateMusicsPayload(LocalUser user, Collection<? extends Music> musics) {
     super(user);
     this.musics = musics.stream()
         .map(DryMusic::new)

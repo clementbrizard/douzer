@@ -5,44 +5,55 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
-<GridPane alignment="center" hgap="10" prefHeight="593.0" prefWidth="687.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController">
-    <Pane fx:id="pnCenterPage" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;" BorderPane.alignment="CENTER">
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LoginController" stylesheets="@../css/main.css">
+  <center>
+    <VBox fx:id="loginForm">
         <children>
-            <Label alignment="CENTER" prefHeight="39.0" prefWidth="687.0" style="-fx-background-color: #2b78e4; -fx-border-color: #000000; -fx-border-width: 2;" text="Connexion" textFill="WHITE">
-                <font>
-                    <Font size="24.0" />
-                </font>
-            </Label>
-         <Label layoutX="207.0" layoutY="133.0" text="Pseudo">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Label>
-            <TextField fx:id="textFieldPseudo" layoutX="331.0" layoutY="131.0" prefHeight="31.0" prefWidth="188.0" />
-         <Label layoutX="182.0" layoutY="169.0" text="Mot de passe">
-            <font>
-               <Font size="18.0" />
-            </font>
-         </Label>
-         <PasswordField fx:id="textFieldPassword" layoutX="331.0" layoutY="167.0" prefHeight="31.0" prefWidth="188.0" />
-            <Button fx:id="buttonForgottenPassword" layoutX="202.0" layoutY="263.0" mnemonicParsing="false" onAction="#actionForgottenPassword" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Mot de passe oublié" />
-         <Button fx:id="buttonLogin" layoutX="463.0" layoutY="263.0" mnemonicParsing="false" onAction="#actionLogin" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Login" />
-         <Line endX="216.3333740234375" layoutX="400.0" layoutY="325.0" startX="-279.6666564941406" />
-         <Button fx:id="buttonImport" layoutX="200.0" layoutY="360.0" mnemonicParsing="false" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Importer information" onAction="#importClicked" />
-         <Button fx:id="buttonSignUp" layoutX="450.0" layoutY="360.0" mnemonicParsing="false" onAction="#actionSignup" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Inscription" />
+            <HBox styleClass="to-center">
+                <Label styleClass="subTitle-lbl" text="Renseignez vos identifiants" />
+            </HBox>
+            <HBox styleClass="to-center">
+                <VBox>
+                    <Label styleClass="form-lbl" text="Pseudo" />
+                    <TextField fx:id="textFieldPseudo" styleClass="form-field" />
+                </VBox>
+            </HBox>
+            <HBox styleClass="to-center">
+                <VBox>
+                    <Label styleClass="form-lbl" text="Mot de passe" />
+                    <PasswordField fx:id="textFieldPassword" styleClass="form-field" />
+                </VBox>
+            </HBox>
+            <HBox styleClass="form-btn-hbox, to-center">
+                <Button fx:id="buttonLogin" onAction="#actionLogin" styleClass="important-btn, form-btn" text="Connexion" />
+            </HBox>
+            <HBox styleClass="form-btn-hbox, to-center">
+                <Label text="Vous possédez déjà un compte ?" />
+                <Label fx:id="lblImport" styleClass="lbl-btn, form-lbl" text="Importer un compte" />
+            </HBox>
         </children>
-    </Pane>
-    <columnConstraints>
-        <ColumnConstraints />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints />
-    </rowConstraints>
-</GridPane>
+    </VBox>
+  </center>
+  <top>
+      <BorderPane styleClass="at-launch-header-section, header-section">
+          <left>
+              <ImageView fx:id="imgDouzer" preserveRatio="true">
+                  <image>
+                      <Image preserveRatio="true" smooth="true" url="@../images/douzer.png" />
+                  </image>
+              </ImageView>
+          </left>
+          <right>
+              <HBox styleClass="header-btn-box">
+                  <Button disable="true" text="Connexion" />
+                  <Button fx:id="buttonSignUp" onAction="#actionSignup" text="Inscription" />
+              </HBox>
+          </right>
+      </BorderPane>
+  </top>
+</BorderPane>
