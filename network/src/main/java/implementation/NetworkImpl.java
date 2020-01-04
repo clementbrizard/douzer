@@ -69,4 +69,9 @@ public class NetworkImpl implements Net {
     //Clears the list of threads
     this.netProvider.getThreads().clear();
   }
+
+  @Override
+  public void createServer() {
+    netProvider.createServer();
+  }
 }

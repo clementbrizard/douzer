@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="100.0" maxWidth="241.0" minHeight="1.0" minWidth="241.0" prefHeight="100.0" prefWidth="241.0" style="-fx-background-color: #9fc5f8; -fx-border-color: #000000; -fx-border-image-width: 2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.DownloadController">
+   <children>
+      <GridPane alignment="CENTER" prefHeight="100.0" prefWidth="241.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ProgressBar fx:id="progressDownload" prefWidth="200.0" progress="0.0" GridPane.rowIndex="1" />
+            <Label fx:id="lblDownload" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
