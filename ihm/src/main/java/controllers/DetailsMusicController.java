@@ -189,6 +189,23 @@ public class DetailsMusicController implements Controller {
           this.radioPrivate.setSelected(true);
           break;
       }
+
+      if (localMusic.getMetadata() != null) {
+        if (localMusic.getMetadata().getRatings() != null) {
+          LocalUser localUser = getMyMusicsController()
+              .getCentralFrameController()
+              .getMainController()
+              .getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .getCurrentUser();
+
+          Integer rating;
+          if ((rating = localMusic.getMetadata().getRatings().get(localUser)) != null) {
+            setStars(rating);
+          }
+        }
+      }
     } else {
       radioPublic.setDisable(true);
       radioFriends.setDisable(true);
@@ -202,6 +219,11 @@ public class DetailsMusicController implements Controller {
       this.dateYear.setEditable(false);
       this.textFieldAddTag.setEditable(false);
       this.buttonAddTag.setDisable(true);
+      this.starOne.setVisible(false);
+      this.starTwo.setVisible(false);
+      this.starThree.setVisible(false);
+      this.starFour.setVisible(false);
+      this.starFive.setVisible(false);
     }
 
     if (musicSelected.getMetadata() != null) {
@@ -243,23 +265,6 @@ public class DetailsMusicController implements Controller {
       if (musicSelected.getMetadata().getTags() != null) {
         tags.addAll(musicSelected.getMetadata().getTags());
         listViewTagsList.setItems(tags);
-      }
-    }
-
-    if (musicSelected.getMetadata() != null) {
-      if (musicSelected.getMetadata().getRatings() != null) {
-        LocalUser localUser = getMyMusicsController()
-            .getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser();
-
-        Integer rating;
-        if ((rating = musicSelected.getMetadata().getRatings().get(localUser)) != null) {
-          setStars(rating);
-        }
       }
     }
   }
