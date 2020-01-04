@@ -87,8 +87,12 @@
                      <Label fx:id="lblTitle" text="Paramètres du compte"/>
                  </left>
                  <right>
-                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToMyMusics"
-                             text="Mes musiques"/>
+                     <HBox styleClass="header-btn-box">
+                         <Button fx:id="btnMyMusicsCenter" onAction="#changeFrameToMyMusics"
+                                 text="Mes musiques"/>
+                         <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToAllMusics"
+                                 text="Toutes les musiques"/>
+                     </HBox>
                  </right>
              </BorderPane>
          </top>

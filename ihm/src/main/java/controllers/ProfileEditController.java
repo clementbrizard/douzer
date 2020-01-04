@@ -199,6 +199,11 @@ public class ProfileEditController implements Controller {
     ProfileEditController.this.centralFrameController.setCentralContentMyMusics();
   }
 
+  @FXML
+  public void changeFrameToAllMusics(ActionEvent event) {
+    ProfileEditController.this.centralFrameController.setCentralContentAllMusics();
+  }
+
   /**
    * Called upon clicking the button to edit user's avatar.
    * Opens a file dialog to choose avatar file locally.
