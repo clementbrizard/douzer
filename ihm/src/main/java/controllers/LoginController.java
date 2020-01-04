@@ -6,18 +6,21 @@ import core.IhmAlert;
 import java.io.File;
 import java.io.IOException;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import javax.security.auth.login.LoginException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import org.controlsfx.control.Notifications;
 
 /**
@@ -35,6 +38,9 @@ public class LoginController implements Controller {
 
   @FXML
   private Button buttonLogin;
+  
+  @FXML
+  private Label lblImport;
 
   private Application application;
   
@@ -52,6 +58,7 @@ public class LoginController implements Controller {
 
   @Override
   public void initialize() {
+    lblImport.setOnMouseClicked(event -> importClicked(event));
   }
 
   @FXML
@@ -107,11 +114,10 @@ public class LoginController implements Controller {
   
   /**
    * The function who call the windows to choose a export directory. 
-   * @param evt the clicked event
+   * @param event the clicked event
    */
-  @FXML
-  public void importClicked(ActionEvent evt) {
-    Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
+  public void importClicked(MouseEvent event) {
+    Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     importDirectory = importProfilDirectory.showDialog(primaryStage);
     try {
       this.application

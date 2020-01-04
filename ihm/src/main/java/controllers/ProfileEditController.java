@@ -1,5 +1,7 @@
 package controllers;
 
+import core.IhmAlert;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
@@ -25,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import org.controlsfx.control.Notifications;
+
 import utils.FormatImage;
 import utils.FormatJavaFxObjects;
 
