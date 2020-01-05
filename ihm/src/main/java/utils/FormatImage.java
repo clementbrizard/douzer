@@ -2,6 +2,7 @@ package utils;
 
 import static impl.org.controlsfx.tools.MathTools.min;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.RenderedImage;
@@ -32,13 +33,39 @@ public class FormatImage {
     Hashtable properties = new Hashtable();
     String[] keys = img.getPropertyNames();
     if (keys != null) {
-      for (int i = 0; i < keys.length; i++) {
-        properties.put(keys[i], img.getProperty(keys[i]));
+      for (String key : keys) {
+        properties.put(key, img.getProperty(key));
       }
     }
     BufferedImage result = new BufferedImage(cm, raster, isAlphaPremultiplied, properties);
     img.copyData(raster);
     return result;
+  }
+
+  /**
+   * Converts a given Image into a BufferedImage
+   * I took this function here https://stackoverflow.com/questions/13605248/java-converting-image-to-bufferedimage
+   * @param img The Image to be converted
+   * @return The converted BufferedImage
+   */
+  public static BufferedImage toBufferedImage(java.awt.Image img) {
+    if (img instanceof BufferedImage) {
+      return (BufferedImage) img;
+    }
+
+    // Create a buffered image with transparency
+    BufferedImage bimage = new BufferedImage(
+        img.getWidth(null),
+        img.getHeight(null),
+        BufferedImage.TYPE_INT_ARGB);
+
+    // Draw the image on to the buffered image
+    Graphics2D bufferedGr = bimage.createGraphics();
+    bufferedGr.drawImage(img, 0, 0, null);
+    bufferedGr.dispose();
+
+    // Return the buffered image
+    return bimage;
   }
 
   /**
