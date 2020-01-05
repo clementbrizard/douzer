@@ -1,5 +1,6 @@
 package controllers;
 
+import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.User;
@@ -16,6 +17,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,7 +34,7 @@ import utils.FormatImage;
 public class DistantUserController implements Controller {
   /* Logger */
   private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
-  
+
   @FXML
   private ImageView imgAvatar;
   @FXML
@@ -45,6 +47,9 @@ public class DistantUserController implements Controller {
   private Label dateOfBirth;
   @FXML
   private Label title;
+
+  @FXML
+  private Button btnManageFriendship;
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -89,7 +94,7 @@ public class DistantUserController implements Controller {
     this.nameAndSurname.setText(String.format("%s %s", name, surname));
   }
 
-  private void setDateOfBirth(LocalDate dateOfBirth) {  
+  private void setDateOfBirth(LocalDate dateOfBirth) {
     DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
     if (dateOfBirth.isEqual(LocalDate.MIN)) {
       this.dateOfBirth.setVisible(false);
@@ -171,13 +176,31 @@ public class DistantUserController implements Controller {
     } catch (UnsupportedOperationException e) {
       logger.error(e);
     }
+
+    refreshFriendshipStatus();
   }
 
   /* FXML methods (to handle events from user) */
 
+  /**
+   * Action executed upon clicking friendship button. Add or deletes friend.
+   * @param event Click event
+   */
   @FXML
-  public  void manageFriendship(ActionEvent event) {
-    // TODO
+  public void manageFriendship(ActionEvent event) {
+    LocalUser currentUser = this.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
+    if (currentUser.getFriends().contains(distantUser)) {
+      currentUser.removeFriend(distantUser);
+    } else {
+      currentUser.addFriend(distantUser);
+    }
+
+    refreshFriendshipStatus();
   }
 
   @FXML
@@ -225,5 +248,22 @@ public class DistantUserController implements Controller {
     }
 
     return distantUserMusicsMetaData;
+  }
+
+  /**
+   * Refreshes friendship status to display correct text.
+   */
+  private void refreshFriendshipStatus() {
+    LocalUser currentUser = this.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
+    if (currentUser.getFriends().contains(distantUser)) {
+      btnManageFriendship.setText("Supprimer le poto");
+    } else {
+      btnManageFriendship.setText("Ajouter le poto");
+    }
   }
 }
