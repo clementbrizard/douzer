@@ -195,16 +195,31 @@ public class NewMusicController implements Controller {
    */
   @FXML
   private void chooseFile(ActionEvent event) {
-    Stage stage = (Stage) this.textFile.getScene().getWindow();
+
     FileChooser fileChooser = new FileChooser();
+
+    // Add extension here if needed
+    FileChooser.ExtensionFilter audioExtensionFilter =
+            new FileChooser.ExtensionFilter(
+                    "Fichier audio",
+                    "*.mp3",
+                    "*.aac",
+                    "*.flac",
+                    "*.mid",
+                    "*.midi",
+                    "*.oga",
+                    "*.ogg",
+                    "*.wav",
+                    "*.weba"
+            );
+    fileChooser.getExtensionFilters().add(audioExtensionFilter);
+
     fileChooser.setTitle("Ouvrir un fichier de musique");
-    fileChooser.setSelectedExtensionFilter(
-        new FileChooser.ExtensionFilter("Fichier musique", "*.mp3")
-    );
-    File newMusic = fileChooser.showOpenDialog(stage);
-    
-    if (newMusic != null) {
-      this.file = newMusic;
+
+    Stage stage = (Stage) this.textFile.getScene().getWindow();
+
+    this.file = fileChooser.showOpenDialog(stage);
+    if (this.file != null) {
       this.hasChosenFile = true;
       this.textFile.setText(this.file.getAbsolutePath());
       this.textFile.setStyle(null);
