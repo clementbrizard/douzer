@@ -1,10 +1,11 @@
 package features;
 
 import core.Datacore;
-import datamodel.LocalMusic;
 import datamodel.LocalUser;
+import datamodel.ShareStatus;
 import datamodel.User;
 import java.net.InetAddress;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,60 +16,66 @@ import java.util.stream.Collectors;
  */
 public class LoginPayload extends ShareMusicsPayload {
   private User user;
+  private Set<InetAddress> ips;
+  private boolean isResponse;
 
-  LoginPayload(LocalUser user) {
-    super(
-        user.getMusics().stream()
-            .filter(LocalMusic::isShared)
+  LoginPayload(LocalUser user, Set<InetAddress> addresses) {
+    super(user,
+        user.getLocalMusics().stream()
+            .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
             .collect(Collectors.toSet())
     );
     // copy constructor instead of cast to not send sensitive info over the network
     this.user = new User(user);
+    this.ips = new HashSet<>(addresses);
+    this.isResponse = false;
+  }
+
+  private LoginPayload(LocalUser user, Set<InetAddress> addresses, boolean isResponse) {
+    super(user,
+        user.getLocalMusics().stream()
+            .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
+            .collect(Collectors.toSet())
+    );
+    // copy constructor instead of cast to not send sensitive info over the network
+    this.user = new User(user);
+    this.ips = new HashSet<>(addresses);
+    this.isResponse = isResponse;
   }
 
   @Override
   public void process(Datacore dc, InetAddress senderIp) {
-    LoginResponsePayload response = new LoginResponsePayload(
-        dc.getCurrentUser(),
-        dc.getOnlineUsers().map(User::getIp).collect(Collectors.toSet())
-    );
-    dc.net.sendToUser(response, senderIp);
-    this.updateData(dc, senderIp);
-  }
-
-  void updateData(Datacore dc, InetAddress senderIp) {
+    // Register the new user
+    dc.getAllIps().add(senderIp);
     this.user.setIp(senderIp);
     dc.addUser(this.user);
     dc.ihm.notifyUserConnection(this.user);
+
+    // Answer to sender
+    if (!this.isResponse) {
+      LoginPayload responsePayload = new LoginPayload(
+          dc.getCurrentUser(),
+          dc.getAllIps().stream()
+              .filter(ip -> ip != senderIp)
+              .collect(Collectors.toSet()),
+          true
+      );
+      dc.net.sendToUser(responsePayload, senderIp);
+    }
+
+    // Preparing login payload for unknown IPs
+    LoginPayload payload = new LoginPayload(
+        dc.getCurrentUser(),
+        dc.getAllIps()
+    );
+
+    // Connecting to unknown IPs
+    dc.net.sendToUsers(
+        payload,
+        this.ips.stream()
+            .filter(ip -> !dc.getAllIps().contains(ip) && ip != dc.getCurrentUser().getIp())
+            .peek(ip -> dc.getAllIps().add(ip))
+    );
     super.run(dc); // update musics
-  }
-
-  /*
-   * Connection handshake
-   * Payload for "Hey, I see you just connected ! Here is me, the ips I know and my shared musics"
-   * Extends LoginPayload because the "me and my shared music" bit is the same
-   */
-  static class LoginResponsePayload extends LoginPayload {
-    private Set<InetAddress> otherIps;
-
-    LoginResponsePayload(LocalUser user, Set<InetAddress> otherIps) {
-      super(user);
-      this.otherIps = otherIps;
-    }
-
-    @Override
-    public void process(Datacore dc, InetAddress senderIp) {
-      this.updateData(dc, senderIp);
-
-      Set<InetAddress> knownIps = dc.getOnlineUsers()
-          .map(User::getIp)
-          .collect(Collectors.toSet());
-
-      // keep only the IPs that we didn't know about (to not send infinite login payloads)
-      this.otherIps.removeAll(knownIps);
-      LoginPayload payload = new LoginPayload(dc.getCurrentUser());
-      // send new handshake to these new ips
-      dc.net.connect(payload, this.otherIps);
-    }
   }
 }

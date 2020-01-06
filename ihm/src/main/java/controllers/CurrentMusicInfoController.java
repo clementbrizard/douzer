@@ -18,24 +18,24 @@ import org.apache.logging.log4j.Logger;
 
 
 /*
- * Right panel controller. Contains informations about the current music, sharing button,
- * download progress bar
+ * Right panel controller. Contains information about the current music, sharing button,
+ * download progress bar.
  */
 public class CurrentMusicInfoController implements Controller {
 
   private static final Logger currentMusicInfoLogger = LogManager.getLogger();
 
   @FXML
-  private Button buttonShare;
+  private Button btnShare;
 
   @FXML
   private ProgressBar downloadProgress;
-  
+
   @FXML
   private CommentsController commentCurrentMusicController;
 
   private ShareController shareController;
-  private CommentsController newCommentController;
+  private NewCommentController newCommentController;
   private MainController mainController;
 
   private Scene shareScene;
@@ -44,11 +44,20 @@ public class CurrentMusicInfoController implements Controller {
   private Music currentMusic;
 
   // Getters
+
+  public Button getBtnShare() {
+    return this.btnShare;
+  }
+
   public ShareController getShareController() {
     return shareController;
   }
 
-  public CommentsController getNewCommentController() {
+  public CommentsController getCommentCurrentMusicController() {
+    return commentCurrentMusicController;
+  }
+
+  public NewCommentController getNewCommentController() {
     return newCommentController;
   }
 
@@ -65,16 +74,27 @@ public class CurrentMusicInfoController implements Controller {
    */
   @Override
   public void initialize() {
-    // TODO Auto-generated method stub
+    //The share button is invisible unless the selected music is a localMusic (see in Init method)
+    btnShare.setVisible(false);
+
   }
 
+  /**
+   * Initialize the current music info view with a selected music.
+   *
+   * @param music selected music
+   */
   public void init(Music music) {
-    // TODO link currentMusicInfoController with MainController instead of IhmCore
     this.currentMusic = music;
+
+    // The user can only see his/her own musics (that are localMusics)
+    if (music instanceof LocalMusic) {
+      btnShare.setVisible(true);
+    }
 
     commentCurrentMusicController.setCurrentMusicController(this);
     commentCurrentMusicController.init(music);
-    
+
   }
 
   public Music getCurrentMusic() {
@@ -86,7 +106,7 @@ public class CurrentMusicInfoController implements Controller {
     this.shareController = shareController;
   }
 
-  public void setNewCommentController(CommentsController newCommentController) {
+  public void setNewCommentController(NewCommentController newCommentController) {
     this.newCommentController = newCommentController;
   }
 
@@ -119,7 +139,8 @@ public class CurrentMusicInfoController implements Controller {
    */
   @FXML
   private void share(ActionEvent event) {
-    if (this.currentMusic == null) {
+    if (this.currentMusic == null || !(this.currentMusic instanceof LocalMusic)) {
+      // TODO: do not display the button
       return;
     }
     try {
@@ -130,7 +151,7 @@ public class CurrentMusicInfoController implements Controller {
       ShareController shareController = shareLoader.getController();
       this.setShareController(shareController);
       shareController.setCurrentMusicInfoController(this);
-      shareController.initializeCurrentMusicInfo(this.currentMusic);
+      shareController.initializeCurrentMusicInfo((LocalMusic) this.currentMusic);
 
     } catch (IOException e) {
       currentMusicInfoLogger.error(e);

@@ -7,7 +7,8 @@ import java.util.Objects;
 import java.util.Set;
 
 public class LocalMusic extends Music {
-  private boolean shared;
+  private static final long serialVersionUID = 1L;
+  private ShareStatus shareStatus;
   private String mp3Path;
 
   public LocalMusic(MusicMetadata metadata, Set<User> owners) {
@@ -17,14 +18,21 @@ public class LocalMusic extends Music {
   public LocalMusic(MusicMetadata metadata, String mp3Path) {
     super(metadata);
     this.mp3Path = mp3Path;
+    this.shareStatus = ShareStatus.PRIVATE;
   }
 
-  public boolean isShared() {
-    return shared;
+  public LocalMusic(MusicMetadata metadata, String mp3Path, ShareStatus shareStatus) {
+    super(metadata);
+    this.mp3Path = mp3Path;
+    this.shareStatus = shareStatus;
   }
 
-  public void setShared(boolean shared) {
-    this.shared = shared;
+  public ShareStatus getShareStatus() {
+    return shareStatus;
+  }
+
+  public void setShareStatus(ShareStatus shareStatus) {
+    this.shareStatus = shareStatus;
   }
 
   public String getMp3Path() {
@@ -60,12 +68,12 @@ public class LocalMusic extends Music {
       return false;
     }
     LocalMusic that = (LocalMusic) o;
-    return shared == that.shared
+    return shareStatus == that.shareStatus
         && Objects.equals(mp3Path, that.mp3Path);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), shared, mp3Path);
+    return Objects.hash(super.hashCode());
   }
 }

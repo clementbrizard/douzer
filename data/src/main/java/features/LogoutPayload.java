@@ -2,14 +2,13 @@ package features;
 
 import core.Datacore;
 import core.Payload;
+import datamodel.LocalUser;
 import datamodel.User;
 import java.util.UUID;
 
 public class LogoutPayload extends Payload {
-  private UUID uuid;
-
-  public LogoutPayload(UUID uuid) {
-    this.uuid = uuid;
+  public LogoutPayload(LocalUser sender) {
+    super(sender);
   }
 
   /**
@@ -17,8 +16,8 @@ public class LogoutPayload extends Payload {
    */
   @Override
   public void run(Datacore dc) {
-    User disconnectedUser = dc.getUser(uuid);
-    // this line is not useless if the user is referenced in a Contact
+    User disconnectedUser = dc.getUser(this.senderUuid);
+    // this line is not useless if the user is referenced is a friend
     disconnectedUser.setConnected(false);
     dc.ihm.notifyUserDisconnection(disconnectedUser);
     dc.removeOwner(disconnectedUser);

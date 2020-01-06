@@ -1,9 +1,7 @@
 package features;
 
 import core.Datacore;
-import datamodel.Contact;
 import datamodel.LocalUser;
-import exceptions.data.LocalUsersFileException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,8 +10,10 @@ import java.net.UnknownHostException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collectors;
 import javax.security.auth.login.LoginException;
 
@@ -31,7 +31,7 @@ public abstract class Login {
     }
   }
 
-  private static Collection<InetAddress> getInitialIpsFromConfig(Path filePath)
+  private static Set<InetAddress> getInitialIpsFromConfig(Path filePath)
       throws IOException {
     Properties prop = new Properties();
     InputStream is = new FileInputStream(filePath.toFile());
@@ -42,7 +42,7 @@ public abstract class Login {
         .map(String::trim)
         .map(Login::getIpFromString)
         .filter(Objects::nonNull)
-        .collect(Collectors.toList());
+        .collect(Collectors.toSet());
   }
 
   /**
@@ -64,7 +64,7 @@ public abstract class Login {
       }
 
       run(dc, user);
-    } catch (LocalUsersFileException e) {
+    } catch (NullPointerException e) {
       throw new LoginException("No such user found");
     }
   }
@@ -81,12 +81,15 @@ public abstract class Login {
     user.setConnected(true);
     dc.setCurrentUser(user);
     dc.addUser(user);
-    user.getMusics().forEach(dc::addMusic);
-    user.getContacts().stream().map(Contact::getUser).forEach(dc::addUser);
+    user.getLocalMusics().forEach(dc::addMusic);
+    user.getFriends().forEach(dc::addUser);
 
-    LoginPayload payload = new LoginPayload(user);
+    LoginPayload payload = new LoginPayload(user, dc.getOnlineIps()
+        .collect(Collectors.toCollection(HashSet::new)));
     // TODO: template for filename
     Path configPath = user.getSavePath().resolve(user.getUsername() + "-config.properties");
-    dc.net.connect(payload, getInitialIpsFromConfig(configPath));
+    Collection<InetAddress> ips = getInitialIpsFromConfig(configPath);
+    dc.setAllIps((HashSet<InetAddress>) ips);
+    dc.net.sendToUsers(payload, ips.stream());
   }
 }

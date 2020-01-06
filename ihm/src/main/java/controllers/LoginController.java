@@ -1,13 +1,10 @@
 package controllers;
 
 import core.Application;
-import core.IhmCore;
-
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-
 import javax.security.auth.login.LoginException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,31 +28,31 @@ public class LoginController implements Controller {
   // Other methods
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @FXML
   private void actionLogin() {
     String userName = textFieldPseudo.getText();
     String password = textFieldPassword.getText();
 
-    loginLogger.info("User {} logged in", userName);
     try {
       this.application.getIhmCore().getDataForIhm().login(userName, password);
       application.getMainController().init();
       this.application.showMainScene();
 
-    } catch (LoginException le) {
+    } catch (LoginException e) {
 
-      le.printStackTrace();
-      
+      loginLogger.error(e);
+
       Notifications.create()
-              .title("Connection failed")
-              .text("It seems you entered a wrong username/password. Try again.")
-              .darkStyle()
-              .showWarning();
-      
-    } catch (IOException ioe) {
-      ioe.printStackTrace();
+          .title("Connection failed")
+          .text("It seems you entered a wrong username/password. Try again.")
+          .darkStyle()
+          .showWarning();
+
+    } catch (IOException e) {
+      loginLogger.error(e);
     }
   }
 

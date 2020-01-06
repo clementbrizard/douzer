@@ -2,12 +2,15 @@ package features;
 
 import core.Datacore;
 import datamodel.LocalUser;
-import exceptions.data.LocalUsersFileException;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class DeleteUser {
+  private static final Logger deleteUserLogger = LogManager.getLogger();
+
   /**
    * Delete an account.
    * Remove user from the lo23-users.ser file.
@@ -18,18 +21,14 @@ public abstract class DeleteUser {
    */
   public static void run(Datacore dc) throws IOException {
     LocalUser user = dc.getCurrentUser();
-    try {
-      dc.getLocalUsersFileHandler().remove(user);
-    } catch (LocalUsersFileException e) {
-      throw new IOException(e);
-    }
+    dc.getLocalUsersFileHandler().remove(user);
 
     File propFileToDelete = user.getSavePath().resolve(user.getUsername()
         + "-config.properties").toFile();
     if (propFileToDelete.exists() && propFileToDelete.delete()) {
-      System.out.println("Properties file deleted");
+      deleteUserLogger.info("Properties file deleted");
     } else {
-      System.out.println("Properties file for this user does not exist. Can't be deleted");
+      deleteUserLogger.info("Properties file for this user does not exist. Can't be deleted");
     }
 
     dc.wipe();

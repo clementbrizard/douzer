@@ -28,7 +28,8 @@ public class MusicMetadata implements java.io.Serializable {
   /**
    * MusicMetadata constructor.
    */
-  public MusicMetadata() {
+  public MusicMetadata(String hash) {
+    this.hash = hash;
     this.tags = new HashSet<>();
     this.ratings = new HashMap<>();
     this.comments = new ArrayList<>();
@@ -92,6 +93,16 @@ public class MusicMetadata implements java.io.Serializable {
   public void setRatings(Map<User, Integer> ratings) {
     updateTimeStamp();
     this.ratings = ratings;
+  }
+
+  public void addRating(User user, int rating) {
+    updateTimeStamp();
+    this.ratings.put(user, rating);
+  }
+
+  public void deleteRating(User user, int rating) {
+    updateTimeStamp();
+    this.ratings.remove(user, rating);
   }
 
   public List<Comment> getComments() {
@@ -167,6 +178,6 @@ public class MusicMetadata implements java.io.Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(hash, title, artist, album, duration, releaseYear, tags, ratings, comments);
+    return Objects.hash(hash);
   }
 }

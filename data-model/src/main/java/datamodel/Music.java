@@ -7,8 +7,14 @@ import java.util.Objects;
 import java.util.Set;
 
 public class Music implements java.io.Serializable {
+  private static final long serialVersionUID = 1L;
   private transient MusicMetadata metadata;
   private transient Set<User> owners;
+
+  public Music(Music other) {
+    this.metadata = other.metadata;
+    this.owners = other.owners;
+  }
 
   public Music(MusicMetadata metadata) {
     this.metadata = metadata;
@@ -57,6 +63,5 @@ public class Music implements java.io.Serializable {
   @Override
   public int hashCode() {
     return Objects.hash(metadata);
-    // no hash on owners so no infinite recursion
   }
 }

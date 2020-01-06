@@ -6,29 +6,42 @@ import datamodel.Music;
 import datamodel.User;
 import interfaces.Ihm;
 import interfaces.Net;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Datacore {
+  private static final Logger logger = LogManager.getLogger();
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
-  private final LocalUsersFileHandler localUsersFileHandler;
   public Net net;
   public Ihm ihm;
+  private LocalUsersFileHandler localUsersFileHandler;
   private volatile HashMap<UUID, User> users;
   private volatile HashMap<String, Music> musics;
   private volatile LocalUser currentUser;
-  private static final Logger startLogger = LogManager.getLogger();
+  private volatile HashSet<InetAddress> allIps;
 
   Datacore(Net net, Ihm ihm) {
     this.net = net;
     this.ihm = ihm;
     this.users = new HashMap<>();
     this.musics = new HashMap<>();
-    this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
+    this.allIps = new HashSet<>();
+    try {
+      this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
+    } catch (IOException e) {
+      logger.error(e);
+    }
+  }
+
+  public static Logger getLogger() {
+    return logger;
   }
 
   /**
@@ -64,7 +77,7 @@ public class Datacore {
     this.users.remove(user.getUuid());
   }
 
-  public HashMap<UUID, User> getUsers() {
+  HashMap<UUID, User> getUsers() {
     return users;
   }
 
@@ -97,6 +110,28 @@ public class Datacore {
     this.currentUser = user;
   }
 
+  public Set<InetAddress> getAllIps() {
+    return allIps;
+  }
+
+  public Stream<InetAddress> getOnlineFriendsIps() {
+    return this.getCurrentUser().getFriends().stream().filter(User::isConnected).map(User::getIp);
+  }
+
+  public Stream<InetAddress> getOnlineNonFriendsIps() {
+    return this.users.values().stream()
+        .filter(u -> !this.getCurrentUser().getFriends().contains(u))
+        .map(User::getIp);
+  }
+
+  public void setAllIps(HashSet<InetAddress> allIps) {
+    this.allIps = allIps;
+  }
+
+  public Stream<InetAddress> getOnlineIps() {
+    return this.getOnlineUsers().map(User::getIp);
+  }
+
   public LocalUsersFileHandler getLocalUsersFileHandler() {
     return localUsersFileHandler;
   }
@@ -117,10 +152,7 @@ public class Datacore {
    */
   public void removeOwner(User user) {
     this.musics.values().forEach(m -> {
-      m.getOwners().remove(user);
-      if (m.getOwners().isEmpty()) {
-        this.musics.remove(m.getMetadata().getHash());
-      }
+      this.removeOwner(m, user);
     });
   }
 
@@ -132,6 +164,7 @@ public class Datacore {
     music.getOwners().remove(user);
     if (music.getOwners().isEmpty()) {
       this.musics.remove(music.getMetadata().getHash());
+      this.ihm.notifyMusicDeletion(music);
     }
   }
 
@@ -150,7 +183,6 @@ public class Datacore {
       music2.getMetadata().getTags().addAll(music1.getMetadata().getTags());
       music2.getMetadata().getComments().addAll(music1.getMetadata().getComments());
       music2.getMetadata().getRatings().putAll(music1.getMetadata().getRatings());
-
       music1.getMetadata().updateMusicMetadata(music2.getMetadata());
     } else {
       // else, music1 is the most recent, so we just merge set attributes
@@ -181,14 +213,5 @@ public class Datacore {
     this.users.clear();
     this.musics.clear();
     this.currentUser = null;
-  }
-
-  public Stream<InetAddress> getIps() {
-    return this.getOnlineUsers()
-        .map(User::getIp).filter(ip -> ip != this.currentUser.getIp());
-  }
-
-  public static Logger getStartLogger() {
-    return startLogger;
   }
 }

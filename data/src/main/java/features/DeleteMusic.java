@@ -1,10 +1,11 @@
 package features;
 
-import static core.Datacore.getStartLogger;
+import static core.Datacore.getLogger;
 
 import core.Datacore;
 
 import datamodel.LocalMusic;
+import datamodel.ShareStatus;
 import java.io.File;
 import java.util.Set;
 
@@ -17,16 +18,18 @@ public class DeleteMusic {
    * @param dc datacore
    */
   public static void run(LocalMusic music, boolean deleteLocal, Datacore dc) {
-    Set musics = dc.getCurrentUser().getMusics();
+    Set musics = dc.getCurrentUser().getLocalMusics();
     if (musics.contains(music)) {
+      music.setShareStatus(ShareStatus.PRIVATE);
       UnshareMusics.unshareMusic(music, dc);
+      dc.removeOwner(music, dc.getCurrentUser());
       musics.remove(music);
       if (deleteLocal) {
         File file = new File(music.getMp3Path());
         if (file.delete()) {
-          getStartLogger().info(music.getMetadata().getTitle() + "is deleted locally");
+          getLogger().info(music.getMetadata().getTitle() + "is deleted locally");
         } else {
-          getStartLogger().error("Delete operation for the local music has failed.");
+          getLogger().error("Delete operation for the local music has failed.");
         }
       }
     }

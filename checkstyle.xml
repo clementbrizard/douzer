@@ -257,5 +257,20 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
         <module name="CommentsIndentation"/>
+        <module name="DeclarationOrder">
+            <message key="declaration.order.access"
+                     value="Cette variable n'apparaît pas dans le bon ordre (d''abord les publiques, puis les protected, puis les private)."
+            />
+            <message key="declaration.order.constructor"
+                     value="Les constructeurs doivent être déclarés entre les variables et les méthodes."
+            />
+            <message key="declaration.order.instance"
+                     value="Les variables non-statiques doivent être déclarés après les variables statiques."
+            />
+            <message key="declaration.order.static"
+                     value="Les variables statiques doivent être déclarés avant les variables non-statiques."
+            />
+        </module>
+        <module name="InnerTypeLast"/>
     </module>
 </module>

@@ -36,6 +36,10 @@ public class MainController implements Controller {
 
   // Getters
 
+  public MyPlaylistsController getMyPlaylistsController() {
+    return myPlaylistsController;
+  }
+
   public UserInfoController getUserInfoController() {
     return userInfoController;
   }
@@ -122,7 +126,6 @@ public class MainController implements Controller {
     }
     try {
       this.playerController.setMainController(this);
-      this.playerController.setPlayerText("Test artist", "Test music");
     } catch (UnsupportedOperationException e) {
       logger.warn("Player Controller calls : " + e.getMessage());
     }
@@ -149,7 +152,7 @@ public class MainController implements Controller {
 
     try {
       this.currentMusicInfoController.setMainController(this);
-      //this.currentMusicInfoController.init();
+      this.currentMusicInfoController.init(null);
       this.currentMusicInfoController.setApplication(this.application);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
@@ -161,5 +164,5 @@ public class MainController implements Controller {
       logger.warn("My Playlists Controller calls : " + e.getMessage());
     }
   }
-
 }
+

@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.NoRouteToHostException;
 import java.net.Socket;
 
 import message.Message;
@@ -42,7 +43,10 @@ public class SendToUserThread extends ThreadExtend {
       socket.close();
     } catch (ConnectException e) {
       logger.error("Unable to send message. Is receiver listening ?");
+    } catch (NoRouteToHostException e) {
+      logger.error("Could not join distant user. It might not be connected yet.");
     } catch (Exception e) {
+      logger.error(e);
       e.printStackTrace();
     }
   }

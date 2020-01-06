@@ -1,13 +1,12 @@
 package controllers;
 
 import java.io.IOException;
-
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+
 
 
 /**
@@ -21,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 public class CentralFrameController implements Controller {
 
   public static final String allMusicsView = "/fxml/AllMusicsCenterView.fxml";
-  public static final String allMusicsAdvancedSearchView = "/fxml/AllMusicsAdvancedSearchView.fxml";
   public static final String profileEditView = "/fxml/MyAccountView.fxml";
   public static final String myMusicsView = "/fxml/MyMusicsCenterView.fxml";
   public static final String distantUserView = "/fxml/UserProfileView.fxml";
@@ -185,6 +183,7 @@ public class CentralFrameController implements Controller {
       this.profileEditParent = profileEditLoader.load();
       this.profileEditController = profileEditLoader.getController();
       this.profileEditController.setCentralFrameController(this);
+      this.profileEditController.init();
 
       FXMLLoader myMusicsLoader = new FXMLLoader(
           getClass().getResource(CentralFrameController.myMusicsView));
@@ -192,6 +191,7 @@ public class CentralFrameController implements Controller {
       this.myMusicsController = myMusicsLoader.getController();
       this.myMusicsController.setCentralFrameController(this);
       this.myMusicsController.init();
+      this.myMusicsController.setApplication(this.mainController.getApplication());
 
       FXMLLoader distantUserLoader = new FXMLLoader(
           getClass().getResource(CentralFrameController.distantUserView));
@@ -218,10 +218,6 @@ public class CentralFrameController implements Controller {
 
   public void setCentralContentMyMusics() {
     this.content.getChildren().setAll(((Node) this.myMusicsParent));
-  }
-
-  public void setCentralContentAllMusicsAdvancedSearch() {
-    // TODO
   }
 
   public void setCentralContentDistantUser() {

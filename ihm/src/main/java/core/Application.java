@@ -227,6 +227,7 @@ public class Application extends javafx.application.Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
     this.ihmCore = IhmCore.init();
+    this.ihmCore.setApplication(this);
 
     //  Get the loader for LoginView
     FXMLLoader loginLoader = new FXMLLoader(getClass().getResource("/fxml/LoginView.fxml"));
@@ -283,19 +284,6 @@ public class Application extends javafx.application.Application {
     // Add the root scene (login)
     primaryStage.setScene(loginScene);
     primaryStage.setResizable(false);
-    //primaryStage.show();
-
-    // Handle window closing
-    primaryStage.setOnCloseRequest(event -> {
-      applicationLogger.info("Stage is closing");
-      if (this.ihmCore.getDataForIhm() != null) {
-        try {
-          this.ihmCore.getDataForIhm().logout();
-        } catch (UnsupportedOperationException | IOException ex) {
-          ex.printStackTrace();
-        }
-      }
-    });
 
     primaryStage.show();
   }
@@ -305,8 +293,14 @@ public class Application extends javafx.application.Application {
    */
   @Override
   public void stop() {
-    // Tell data to exit
-    //getDataForIhm().logout();
+    if (this.ihmCore.getDataForIhm() != null
+            && this.ihmCore.getDataForIhm().getCurrentUser() != null) {
+      try {
+        this.ihmCore.getDataForIhm().logout();
+      } catch (UnsupportedOperationException | IOException ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
   /**

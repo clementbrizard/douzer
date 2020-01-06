@@ -2,19 +2,28 @@ package controllers;
 
 import datamodel.User;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * The left middle view containing all connected users.
  */
 public class OnlineUsersListController implements Controller {
+  private static final Logger onlineUsersListLogger = LogManager.getLogger();
+
   @FXML
   private ListView<String> lvwOnlineUsers;
+
+  // The list view updates itself when this observable list changes
+  private ObservableList<String> onlineUsersList;
 
   private MainController mainController;
 
@@ -27,7 +36,13 @@ public class OnlineUsersListController implements Controller {
   // Other methods
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    // Initialize the observable list
+    onlineUsersList = FXCollections.observableArrayList();
+
+    // Set it as the data model of the ListView
+    lvwOnlineUsers.setItems(onlineUsersList);
+  }
 
   public void init() {
     try {
@@ -38,21 +53,56 @@ public class OnlineUsersListController implements Controller {
   }
 
   /**
-   * Fills the view with the ips of users.
+   * Add new online user in online users list
+   * which will update the list view.
+   * @param user the user to add
+   *
+   */
+  public void addNewOnlineUser(User user) {
+    if (!onlineUsersList.contains(user.getUsername())) {
+
+      // This is done to avoid a "Not on FX application thread" error
+      // Solution found here : https://stackoverflow.com/a/23007018
+      Platform.runLater(new Runnable() {
+        @Override
+        public void run() {
+          onlineUsersList.add(user.getUsername());
+        }
+      });
+
+    }
+  }
+
+  /**
+   * Remove online user in online users list
+   * which will update the list view.
+   * @param user the user to add
+   *
+   */
+  public void removeOnlineUser(User user) {
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        onlineUsersList.remove(user.getUsername());
+      }
+    });
+  }
+
+  /**
+   * Fills the view with the username of already connected users.
    **/
 
   public void displayOnlineUsers() {
-    Stream<User> users = this.mainController
+    ObservableList<String> onlineUsers = this.mainController
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getOnlineUsers();
+        .getOnlineUsers()
+        .map(user -> user.getUsername())
+        .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-    ObservableList<String> items =
-        users.map(user -> user.getIp().toString())
-             .collect(Collectors.toCollection(FXCollections::observableArrayList));
-
-    lvwOnlineUsers.setItems(items);
+    onlineUsersListLogger.info("Retrieved {} online users from Data", onlineUsers.size());
+    onlineUsersList.setAll(onlineUsers);
   }
 
 }
