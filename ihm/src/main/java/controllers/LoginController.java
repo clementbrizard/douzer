@@ -16,6 +16,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.security.auth.login.LoginException;
@@ -46,9 +47,13 @@ public class LoginController implements Controller {
 
   private Application application;
 
-  private DirectoryChooser importProfilDirectory = new DirectoryChooser();
+  private FileChooser importProfilFile = new FileChooser();
 
-  private File importDirectory;
+  private File importFile;
+  
+  private DirectoryChooser importProfilDirectory = new DirectoryChooser();
+  
+  private File directoryFile;
 
   /* Getters */
 
@@ -120,21 +125,38 @@ public class LoginController implements Controller {
    */
   public void importClicked(MouseEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    importDirectory = importProfilDirectory.showDialog(primaryStage);
+    importFile = importProfilFile.showOpenDialog(primaryStage);
+    if (importFile == null) {
+      IhmAlert
+          .showAlert("File",
+                   "aucun fichier source choisi pour importer le profil selectionné",
+                   "critical");
+      return;
+    }
+    directoryFile = importProfilDirectory.showDialog(primaryStage);
+    if (directoryFile == null) {
+      IhmAlert
+          .showAlert("Directory",
+                   "aucun Dossier cible choisi pour importer le profil selectionné",
+                   "critical");
+      return;
+    }
     try {
       // TODO: save add savepath
       this.application
         .getIhmCore()
         .getDataForIhm()
-        .importProfile(importDirectory.toPath(), Paths.get(""));
+        .importProfile(importFile.toPath(), directoryFile.toPath());
     } catch (java.io.IOException e) {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert
-        .showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
+        .showAlert("Directory","aucun dossier pour importer le profil selectionné","critical");
     } catch (DataException e) {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert
-          .showAlert("Data","données corompues, impossible de réaliser l'export","critical");
+          .showAlert("Data",
+                     "données corompues, impossible de réaliser l'import du profil",
+                     "critical");
     }
   }
 }
