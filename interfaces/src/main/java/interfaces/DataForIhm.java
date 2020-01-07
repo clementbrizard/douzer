@@ -77,7 +77,7 @@ public interface DataForIhm {
    * @throws DataException if the username already exists.
    */
   void importProfile(Path pathToBackup, Path newSavePath)
-      throws IOException, ClassNotFoundException, DataException;
+      throws IOException, DataException;
 
   void login(String username, String password) throws IOException, LoginException;
 
