@@ -39,9 +39,9 @@ public class Application extends javafx.application.Application {
   private SignUpController signUpController;
   private ForgottenPasswordController forgottenPasswordController;
 
-  // Window size properties
-  private double width = Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2;
-  private double height = Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 2;
+  // Screen size properties
+  private double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+  private double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 
   // Reference to ihmCore
   private IhmCore ihmCore;
@@ -63,7 +63,6 @@ public class Application extends javafx.application.Application {
   public Scene getForgottenPasswordScene() {
     return forgottenPasswordScene;
   }
-
 
   public Scene getMainScene() {
     return mainScene;
@@ -180,11 +179,15 @@ public class Application extends javafx.application.Application {
   public void showLoginScene() {
     primaryStage.setScene(loginScene);
 
-    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    // Recentrage de la fenêtre
+    /* Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2); */
 
-    primaryStage.setTitle("Connexion");
+    // Bind Login Button to the Enter key
+    this.loginController.getLoginButton().setDefaultButton(true);
+
+    primaryStage.setTitle("Douzer - Connexion");
   }
 
   /**
@@ -193,11 +196,15 @@ public class Application extends javafx.application.Application {
   public void showSignUpScene() {
     primaryStage.setScene(signUpScene);
 
-    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    // Recentrage de la fenêtre
+    /* Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2); */
 
-    primaryStage.setTitle("Inscription");
+    // Bind SignUp Button to the Enter key
+    this.signUpController.getSignUpButton().setDefaultButton(true);
+
+    primaryStage.setTitle("Douzer - Inscription");
   }
 
   /**
@@ -210,7 +217,7 @@ public class Application extends javafx.application.Application {
     primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
     primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
 
-    primaryStage.setTitle("Mot de passe oublié");
+    primaryStage.setTitle("Douzer - Mot de passe oublié");
   }
 
   /**
@@ -218,7 +225,12 @@ public class Application extends javafx.application.Application {
    */
   public void showMainScene() {
     primaryStage.setScene(mainScene);
-    primaryStage.setTitle("Vue principale");
+
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);
+
+    primaryStage.setTitle("Douzer");
   }
 
   /**
@@ -279,11 +291,21 @@ public class Application extends javafx.application.Application {
     // Initialize the first view
     this.primaryStage = primaryStage;
 
-    //primaryStage.initStyle(StageStyle.UNDECORATED);
+    // Set min window size for the whole application
+    primaryStage.setResizable(true);
+    primaryStage.setMinWidth(500);
+    primaryStage.setMinHeight(430);
 
     // Add the root scene (login)
-    primaryStage.setScene(loginScene);
-    primaryStage.setResizable(false);
+    this.showLoginScene();
+
+    // Set window position at launch
+    Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+    primaryStage.setX((primScreenBounds.getWidth() - 500) / 2);
+    primaryStage.setY((primScreenBounds.getHeight() - 500) / 2);
+
+    // Bind Login Button to the Enter key
+    this.loginController.getLoginButton().setDefaultButton(true);
 
     primaryStage.show();
   }

@@ -6,12 +6,16 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.Playlist;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
+import exceptions.data.DataException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
@@ -58,9 +62,22 @@ public interface DataForIhm {
 
   void download(Music music);
 
-  void exportProfile(String path);
+  /**
+   * Backup the current LocalUser, its musics and its avatar.
+   * @param path path to the directory that will contain the backup.
+   * @throws IOException if there is a problem creating or deleting any file.
+   */
+  void exportProfile(Path path) throws IOException;
 
-  void importProfile(String path);
+  /**
+   * Import a previously exported LocalUser.
+   * @param pathToBackup the path to the backup directory.
+   * @param newSavePath the new savePath for the imported LocalUser.
+   * @throws IOException if it is not possible to read a file.
+   * @throws DataException if the username already exists.
+   */
+  void importProfile(Path pathToBackup, Path newSavePath)
+      throws IOException, DataException;
 
   void login(String username, String password) throws IOException, LoginException;
 
@@ -85,13 +102,27 @@ public interface DataForIhm {
 
   void unshareMusics(Collection<LocalMusic> musics);
 
+  Playlist createPlaylist(String name);
+
+  void addMusicToPlaylist(LocalMusic music, Playlist playlist, Integer order);
+
+  void removeMusicFromPlaylist(LocalMusic music, Playlist playlist);
+
+  void deletePlaylist(Playlist playlist);
+
+  void changeMusicOrder(Playlist playlist, LocalMusic music, Integer order);
+
   Stream<User> getOnlineUsers();
 
   Stream<Music> getAvailableMusics();
 
   Stream<LocalMusic> getLocalMusics();
 
-  List<LocalMusic> getPlaylist();
+  Collection<Playlist> getPlaylist();
+
+  Playlist getPlaylistByName(String name) throws IllegalArgumentException;
+
+  void setPlaylistMusicList(Playlist playlist, ArrayList<LocalMusic> musicList);
 
   LocalUser getCurrentUser();
 

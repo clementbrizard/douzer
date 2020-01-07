@@ -171,6 +171,21 @@ public class NewMusicController implements Controller {
     this.hasChosenFile = false;
   }
 
+  
+  /**
+   * clear all field in the view.
+   */
+  private void clear() {
+
+    this.file = null;
+    this.hasChosenFile = false;
+    this.tags.clear();
+    this.textAlbum.setText("");
+    this.textArtist.setText("");
+    this.textFile.setText("");
+    this.textNewTag.setText("");
+    this.textTitle.setText("");
+  }
 
   /**
    * Open a window to choose the music file.
@@ -180,12 +195,28 @@ public class NewMusicController implements Controller {
    */
   @FXML
   private void chooseFile(ActionEvent event) {
-    Stage stage = new Stage();
+
     FileChooser fileChooser = new FileChooser();
+
+    // Add extension here if needed
+    FileChooser.ExtensionFilter audioExtensionFilter =
+            new FileChooser.ExtensionFilter(
+                    "Fichier audio",
+                    "*.mp3",
+                    "*.aac",
+                    "*.flac",
+                    "*.mid",
+                    "*.midi",
+                    "*.oga",
+                    "*.ogg",
+                    "*.wav",
+                    "*.weba"
+            );
+    fileChooser.getExtensionFilters().add(audioExtensionFilter);
+
     fileChooser.setTitle("Ouvrir un fichier de musique");
-    fileChooser.setSelectedExtensionFilter(
-        new FileChooser.ExtensionFilter("Fichier musique", "*.mp3")
-    );
+
+    Stage stage = (Stage) this.textFile.getScene().getWindow();
 
     this.file = fileChooser.showOpenDialog(stage);
     if (this.file != null) {
@@ -257,6 +288,10 @@ public class NewMusicController implements Controller {
         return;
       }
 
+    } else {
+      if (this.file == null) {
+        clear();
+      }
     }
   }
 

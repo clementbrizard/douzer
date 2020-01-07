@@ -18,7 +18,7 @@ import java.util.Map;
 public class LocalUsersFileHandler {
   private Path filePath;
 
-  LocalUsersFileHandler(String filePath) throws IOException {
+  public LocalUsersFileHandler(String filePath) throws IOException {
     Path savePath = Paths.get("").toAbsolutePath();
     this.filePath = savePath.resolve(filePath);
 
