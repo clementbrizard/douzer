@@ -161,7 +161,7 @@ public class NewCommentController implements Controller {
 
       valide = false;
       Notifications.create()
-          .title("Commentaire non sauvegardée")
+          .title("Commentaire non sauvegardé")
           .text("Le commentaire que vous avez saisi est vide.")
           .darkStyle()
           .showError();
@@ -170,7 +170,7 @@ public class NewCommentController implements Controller {
     if (rate == 0) {
       valide = false;
       Notifications.create()
-          .title("Commentaire non sauvegardée")
+          .title("Commentaire non sauvegardé")
           .text("La note est vide.")
           .darkStyle()
           .showError();
