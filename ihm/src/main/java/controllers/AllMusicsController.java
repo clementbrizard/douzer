@@ -9,25 +9,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import datamodel.SearchQuery;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import java.util.stream.Stream;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -35,17 +25,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import utils.FormatDuration;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.FormatDuration;
-
 
 /**
  * Central view show up all music in the network.
@@ -144,7 +130,7 @@ public class AllMusicsController implements Controller {
    */
   public void init() {
     // Download button is availabe only a music that is not local is selected
-    //btnDownload.setDisable(true);
+    btnDownload.setDisable(true);
 
     // "artist", "title", "album", "duration" refer to MusicMetaData attributes
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
