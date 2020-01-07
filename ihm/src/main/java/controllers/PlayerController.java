@@ -250,7 +250,7 @@ public class PlayerController implements Controller {
 
     String saveTitle = "NOTHING";
 
-    if (!arrayMusic.isEmpty() && currentIndex < arrayMusic.size()) {
+    if (!arrayMusic.isEmpty() && currentIndex != -1 && currentIndex < arrayMusic.size()) {
       saveTitle = arrayMusic.get(currentIndex).getTitle();
     }
 
