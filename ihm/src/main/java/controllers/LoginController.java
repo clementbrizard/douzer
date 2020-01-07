@@ -7,7 +7,6 @@ import exceptions.data.DataException;
 import java.io.File;
 import java.io.IOException;
 
-import java.nio.file.Paths;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -47,9 +46,9 @@ public class LoginController implements Controller {
 
   private Application application;
 
-  private FileChooser importProfilFile = new FileChooser();
+  private DirectoryChooser importProfilDirectorySource = new DirectoryChooser();
 
-  private File importFile;
+  private File imporDirectorySource;
   
   private DirectoryChooser importProfilDirectory = new DirectoryChooser();
   
@@ -125,11 +124,11 @@ public class LoginController implements Controller {
    */
   public void importClicked(MouseEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    importFile = importProfilFile.showOpenDialog(primaryStage);
-    if (importFile == null) {
+    imporDirectorySource = importProfilDirectorySource.showDialog(primaryStage);
+    if (imporDirectorySource == null) {
       IhmAlert
           .showAlert("File",
-                   "aucun fichier source choisi pour importer le profil selectionné",
+                   "aucun Dossier source choisi pour importer le profil selectionné",
                    "critical");
       return;
     }
@@ -146,7 +145,7 @@ public class LoginController implements Controller {
       this.application
         .getIhmCore()
         .getDataForIhm()
-        .importProfile(importFile.toPath(), directoryFile.toPath());
+        .importProfile(imporDirectorySource.toPath(), directoryFile.toPath());
     } catch (java.io.IOException e) {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert
