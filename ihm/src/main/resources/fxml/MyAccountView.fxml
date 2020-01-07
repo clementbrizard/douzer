@@ -23,7 +23,7 @@
                          <Label styleClass="center-sub-title" text="Actions sur le compte"/>
                      </HBox>
                      <HBox styleClass="form-btn-hbox">
-                         <Button fx:id="buttonDeleteAccount" styleClass="form-btn" text="Supprimer" />
+                         <Button fx:id="buttonDeleteAccount" styleClass="warning-btn" text="Supprimer" />
                          <Button fx:id="buttonExportAccount" styleClass="form-btn" text="Exporter" onAction="#exportClicked"/>
                      </HBox>
 
@@ -61,6 +61,7 @@
                                  </Pane>
                                  <VBox styleClass="form-btn-hbox">
                                      <Button fx:id="buttonEditAvatar" onAction="#avatarEdition" styleClass="form-btn" text="éditer" />
+                                     <Button fx:id="buttonDeleteAvatar" onAction="#avatarDeletion" styleClass="form-btn" text="supprimer" />
                                  </VBox>
                              </HBox>
                          </VBox>
@@ -87,8 +88,12 @@
                      <Label fx:id="lblTitle" text="Paramètres du compte"/>
                  </left>
                  <right>
-                     <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToMyMusics"
-                             text="Mes musiques"/>
+                     <HBox styleClass="header-btn-box">
+                         <Button fx:id="btnMyMusicsCenter" onAction="#changeFrameToMyMusics"
+                                 text="Mes musiques"/>
+                         <Button fx:id="btnAllMusicsCenter" onAction="#changeFrameToAllMusics"
+                                 text="Toutes les musiques"/>
+                     </HBox>
                  </right>
              </BorderPane>
          </top>

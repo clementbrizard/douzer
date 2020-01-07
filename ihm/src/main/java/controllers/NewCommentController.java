@@ -1,5 +1,7 @@
 package controllers;
 
+import core.IhmAlert;
+
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
@@ -8,7 +10,9 @@ import datamodel.User;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +35,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.controlsfx.control.Notifications;
 
 
 public class NewCommentController implements Controller {
@@ -97,15 +102,16 @@ public class NewCommentController implements Controller {
    * Sets the stars to the value set by user.
    * @param rating the rating of the current user
    */
-  public void setStars(int rating) {
-    File fullStarFile = new File(getClass().getResource("/images/FullStarSymbol.png").getFile());
-    File emptyStarFile = new File(getClass().getResource("/images/EmptyStarSymbol.png").getFile());
+  public void setStars(int rating) {    
+    URL fullStarFile = getClass().getResource("/images/FullStarSymbol.png");
+    URL emptyStarFile = getClass().getResource("/images/EmptyStarSymbol.png");
+
 
     try {
-      InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
-      InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
-      Image fullStarImage = new Image(fullStarInputStream);
-      Image emptyStarImage = new Image(emptyStarInputStream);
+      Image fullStarImage;
+      Image emptyStarImage;
+      fullStarImage = new Image(fullStarFile.openStream());
+      emptyStarImage = new Image(emptyStarFile.openStream());
 
       for (int i = 1; i <= rating; i++) {
         starsMap.get(i).setImage(fullStarImage);
@@ -116,6 +122,9 @@ public class NewCommentController implements Controller {
       }
     } catch (FileNotFoundException e) {
       newCommentLogger.error(e);
+    } catch (IOException e) {
+      newCommentLogger.error(e);
+      IhmAlert.showAlert("Chargement Image", "Erreur : Chargement Des Etoiles", "critical");
     }
   }
 
@@ -149,7 +158,22 @@ public class NewCommentController implements Controller {
     if (textAreaComment == null
         || textAreaComment.getText() == null
         || textAreaComment.getText().trim().equals("")) {
+
       valide = false;
+      Notifications.create()
+          .title("Commentaire non sauvegardé")
+          .text("Le commentaire que vous avez saisi est vide.")
+          .darkStyle()
+          .showError();
+    }
+
+    if (rate == 0) {
+      valide = false;
+      Notifications.create()
+          .title("Commentaire non sauvegardé")
+          .text("La note est vide.")
+          .darkStyle()
+          .showError();
     }
 
     return valide;

@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
@@ -25,10 +27,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -56,6 +61,9 @@ public class MyMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> albumCol;
   @FXML
   private TableColumn<MusicMetadata, String> durationCol;
+  @FXML
+  private TableColumn<MusicMetadata, Set<String>> tagsCol;
+
   @FXML
   private TextField tfSearch;
   @FXML
@@ -155,6 +163,8 @@ public class MyMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
+    this.tagsCol.setCellValueFactory(new PropertyValueFactory<>("tags"));
+
 
     // Duration MusicMetaData attribute has type Duration
     // so we need to convert it to a string
@@ -401,7 +411,15 @@ public class MyMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query);
+        .getDataForIhm().searchMusics(query)
+        .filter(music -> music.getOwners().contains(this
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+        ));
 
     updateMusicsOnSearch(searchResults);
   }
@@ -474,6 +492,20 @@ public class MyMusicsController implements Controller {
   public void displayAvailableMusics() {
     List<MusicMetadata> listMusic = this.retrieveLocalMusics();
     tvMusics.getItems().setAll(listMusic);
+
+    //change the size of Tags column
+    ArrayList<Double> d = new ArrayList<Double>();
+    d.add(0.0);
+    listMusic.forEach(metadata -> {
+      double numberOfChar = 0;
+      for (String tag : metadata.getTags()) {
+        numberOfChar += tag.length();
+      }
+      if (numberOfChar > d.get(0)) {
+        d.set(0,numberOfChar);
+      }
+    });
+    this.tagsCol.setPrefWidth(d.get(0) * 9);
   }
 
   /**
@@ -554,5 +586,4 @@ public class MyMusicsController implements Controller {
 
     return localMusicsMetadata;
   }
-
 }
