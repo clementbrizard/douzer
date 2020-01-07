@@ -150,4 +150,13 @@ public class LoginController implements Controller {
                      "critical");
     }
   }
+
+  /**
+   * Refresh login view.
+   */
+  public void refresh() {
+    // Clear all text fields
+    textFieldPassword.setText("");
+    textFieldPseudo.setText("");
+  }
 }
