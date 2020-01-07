@@ -16,7 +16,7 @@
         <VBox fx:id="SignupForm">
             <children>
                 <HBox styleClass="to-center">
-                    <Label styleClass="subTitle-lbl" text="Je m'inscris"/>
+                    <Label styleClass="subTitle-lbl" text="Inscrivez vous"/>
                 </HBox>
 
                 <HBox styleClass="to-center">
