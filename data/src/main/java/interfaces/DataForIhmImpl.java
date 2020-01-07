@@ -3,6 +3,7 @@ package interfaces;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
+import core.LocalUsersFileHandler;
 import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
@@ -12,9 +13,12 @@ import datamodel.Playlist;
 import datamodel.SearchQuery;
 import datamodel.ShareStatus;
 import datamodel.User;
+import exceptions.data.DataException;
 import features.CreateUser;
 import features.DeleteMusic;
 import features.DeleteUser;
+import features.ExportUser;
+import features.ImportUser;
 import features.Login;
 import features.Logout;
 import features.ParseMusicMetadata;
@@ -28,11 +32,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -121,13 +130,13 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void exportProfile(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void exportProfile(Path path) throws IOException {
+    ExportUser.run(dc.getCurrentUser(), path);
   }
 
   @Override
-  public void importProfile(String path) {
-    throw new UnsupportedOperationException("Not implemented yet");
+  public void importProfile(Path pathToBackup, Path newSavePath) throws IOException, DataException {
+    ImportUser.run(pathToBackup, newSavePath, this.dc);
   }
 
   @Override
