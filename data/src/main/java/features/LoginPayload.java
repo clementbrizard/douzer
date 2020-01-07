@@ -23,7 +23,7 @@ public class LoginPayload extends UpdateMusicsPayload {
     super(user,
         user.getLocalMusics().stream()
             .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
-            .collect(Collectors.toSet())
+            .collect(Collectors.toCollection(HashSet::new))
     );
     // copy constructor instead of cast to not send sensitive info over the network
     this.user = new User(user);
@@ -35,7 +35,7 @@ public class LoginPayload extends UpdateMusicsPayload {
     super(user,
         user.getLocalMusics().stream()
             .filter(m -> m.getShareStatus() == ShareStatus.PUBLIC)
-            .collect(Collectors.toSet())
+            .collect(Collectors.toCollection(HashSet::new))
     );
     // copy constructor instead of cast to not send sensitive info over the network
     this.user = new User(user);
@@ -57,7 +57,7 @@ public class LoginPayload extends UpdateMusicsPayload {
           dc.getCurrentUser(),
           dc.getAllIps().stream()
               .filter(ip -> !ip.equals(senderIp))
-              .collect(Collectors.toSet()),
+              .collect(Collectors.toCollection(HashSet::new)),
           true
       );
       dc.net.sendToUser(responsePayload, senderIp);
