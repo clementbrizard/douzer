@@ -39,7 +39,9 @@ public class MainController implements Controller {
     return userInfoController;
   }
 
-  public MyPlaylistsController getMyPlaylistsController() { return myPlaylistsController; }
+  public MyPlaylistsController getMyPlaylistsController() {
+    return myPlaylistsController;
+  }
 
   public CurrentMusicInfoController getCurrentMusicInfoController() {
     return currentMusicInfoController;

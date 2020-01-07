@@ -58,18 +58,18 @@ public class MyPlaylistsController implements Controller {
 
     MenuItem menuDeletePlaylist = new MenuItem("Supprimer");
     menuDeletePlaylist.setOnAction(event -> {
-        String playlistToDeleteName = MyPlaylistsController.this.getSelectedPlaylist();
-        Playlist playlistToDelete = MyPlaylistsController.this.mainController
-            .getApplication().getIhmCore().getDataForIhm().getCurrentUser()
-            .getPlaylistByName(playlistToDeleteName);
+      String playlistToDeleteName = MyPlaylistsController.this.getSelectedPlaylist();
+      Playlist playlistToDelete = MyPlaylistsController.this.mainController
+          .getApplication().getIhmCore().getDataForIhm().getCurrentUser()
+          .getPlaylistByName(playlistToDeleteName);
 
-        MyPlaylistsController.this.mainController.getApplication().getIhmCore()
-            .getDataForIhm().getCurrentUser().removePlaylist(playlistToDelete);
+      MyPlaylistsController.this.mainController.getApplication().getIhmCore()
+          .getDataForIhm().getCurrentUser().removePlaylist(playlistToDelete);
 
-        MyPlaylistsController.this.updatePlaylists();
-        MyPlaylistsController.this.resetSelection();
-        MyPlaylistsController.this.mainController.getCentralFrameController()
-            .getMyMusicsController().reset();
+      MyPlaylistsController.this.updatePlaylists();
+      MyPlaylistsController.this.resetSelection();
+      MyPlaylistsController.this.mainController.getCentralFrameController()
+          .getMyMusicsController().showPlaylist("Mes morceaux");
     });
 
     contextMenu.getItems().add(menuDeletePlaylist);
@@ -79,6 +79,9 @@ public class MyPlaylistsController implements Controller {
     return lvPlaylists.getSelectionModel().getSelectedIndex();
   }
 
+  /**
+   * Sets the selection to "mes morceaux".
+   */
   public void resetSelection() {
     lvPlaylists.getSelectionModel().select(0);
   }
@@ -99,8 +102,9 @@ public class MyPlaylistsController implements Controller {
 
     result.ifPresent(name -> {
       name = name.trim();
-      if(!name.isEmpty()) {
-        this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser().addPlaylist(name);
+      if (!name.isEmpty()) {
+        this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser()
+            .addPlaylist(name);
       }
     });
 
@@ -109,34 +113,34 @@ public class MyPlaylistsController implements Controller {
 
   @FXML
   private void handleListClickedEvent(MouseEvent click) {
-
+    // Left click
     if (click.getButton().equals(MouseButton.PRIMARY)) {
+      // Sets the controller & view to MyMusics
       MyPlaylistsController.this.mainController.getCentralFrameController()
           .setCentralContentMyMusics();
 
-      if (lvPlaylists.getSelectionModel().getSelectedIndices().get(0) == 0) {
-        // Reset central frame to myMusics
-        MyPlaylistsController.this.mainController.getCentralFrameController().getMyMusicsController().reset();
-      } else {
+      MyPlaylistsController.this.mainController.getCentralFrameController()
+          .getMyMusicsController()
+          .showPlaylist(MyPlaylistsController.this.getSelectedPlaylist());
 
-        MyPlaylistsController.this.mainController.getCentralFrameController().getMyMusicsController()
-            .showPlaylist(MyPlaylistsController.this.getSelectedPlaylist());
-      }
     } else if (click.getButton().equals(MouseButton.SECONDARY)) {
-        contextMenu.show(lvPlaylists, click.getScreenX(), click.getScreenY());
+      contextMenu.show(lvPlaylists, click.getScreenX(), click.getScreenY());
     }
   }
+
   /**
-   * Creates the empty "Mes morceaux" playlist and adds all playlist names from Data.
+   * Creates the playlist "Mes morceaux" which is the same as "mes musiques"
+   * and adds all playlist names from Data.
    */
   private void updatePlaylists() {
-    List<String> mesMorceaux = new ArrayList();
-    mesMorceaux.add("Mes morceaux");
-
-    List<String> playlistsFromData = this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser().getPlaylists().stream().map(p -> p.getName()).collect(Collectors.toList());
+    List<String> playlistsFromData = this.mainController.getApplication()
+        .getIhmCore().getDataForIhm()
+        .getCurrentUser().getPlaylists()
+        .stream().map(p -> p.getName()).collect(Collectors.toList());
 
     List<String> totalPlaylists = new ArrayList();
-    totalPlaylists.addAll(mesMorceaux);
+    // Clicking on "mes morceaux" has the same behavior as clicking on "mes musiques"
+    totalPlaylists.add("Mes morceaux");
     totalPlaylists.addAll(playlistsFromData);
 
     lvPlaylists.setItems(FXCollections.observableList(totalPlaylists));

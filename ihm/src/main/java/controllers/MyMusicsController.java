@@ -11,7 +11,7 @@ import datamodel.SearchQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -91,15 +91,14 @@ public class MyMusicsController implements Controller {
   private LocalMusic currentLocalMusic;
 
   // Local musics hashmap to access them instantly
-  private LinkedHashMap<String, LocalMusic> localMusics;
+  private HashMap<String, LocalMusic> localMusics;
+  // MusicsToDispay is used to filter playlists
   private List<MusicMetadata> musicsToDisplay;
 
 
   @Override
   public void initialize() {
-    // TODO Auto-generated method stub
-    //logger = LogManager.getLogger();
-    localMusics = new LinkedHashMap<String, LocalMusic>();
+    localMusics = new HashMap<String, LocalMusic>();
     musicsToDisplay = new ArrayList<>();
   }
 
@@ -623,18 +622,23 @@ public class MyMusicsController implements Controller {
    */
   public void showPlaylist(String playlistName) {
     this.lblTitle.setText(playlistName);
-    this.musicsToDisplay.clear();
 
-    // Get musics in playlist
-    this.getApplication().getIhmCore().getDataForIhm().getPlaylistByName(playlistName);
-    if (this.getApplication().getIhmCore().getDataForIhm()
-        .getPlaylistByName(playlistName) !=  null) {
-      ArrayList<LocalMusic> musicsInPlaylist = this.getApplication().getIhmCore()
-          .getDataForIhm().getPlaylistByName(playlistName).getMusicList();
-      musicsInPlaylist.forEach(m -> musicsToDisplay.add(m.getMetadata()));
+    if (playlistName.equals("Mes morceaux")) {
+      this.displayLocalMusics();
+    } else {
+      this.musicsToDisplay.clear();
+
+      // Get musics in playlist
+      this.getApplication().getIhmCore().getDataForIhm().getPlaylistByName(playlistName);
+      if (this.getApplication().getIhmCore().getDataForIhm()
+          .getPlaylistByName(playlistName) !=  null) {
+        ArrayList<LocalMusic> musicsInPlaylist = this.getApplication().getIhmCore()
+            .getDataForIhm().getPlaylistByName(playlistName).getMusicList();
+        musicsInPlaylist.forEach(m -> musicsToDisplay.add(m.getMetadata()));
+      }
+
+      this.updateTableMusics();
     }
-
-    this.updateTableMusics();
   }
 
   /**
@@ -665,9 +669,4 @@ public class MyMusicsController implements Controller {
     return localMusicsMetadata;
   }
 
-
-  public void reset() {
-    this.lblTitle.setText("Mes morceaux");
-    this.displayLocalMusics();
-  }
 }
