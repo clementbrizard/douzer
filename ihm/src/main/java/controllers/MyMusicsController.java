@@ -411,7 +411,15 @@ public class MyMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query);
+        .getDataForIhm().searchMusics(query)
+        .filter(music -> music.getOwners().contains(this
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+        ));
 
     updateMusicsOnSearch(searchResults);
   }
