@@ -199,7 +199,7 @@ public class MyMusicsController implements Controller {
     MenuItem itemInformation = new MenuItem("Informations");
     itemInformation.setOnAction(event -> showMusicInformation(currentLocalMusic));
 
-    MenuItem playMusic = new MenuItem("Play");
+    MenuItem playMusic = new MenuItem("Jouer");
     playMusic.setOnAction(event -> {
       ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
 

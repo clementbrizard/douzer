@@ -215,7 +215,7 @@ public class AllMusicsController implements Controller {
         });
     
     if (musicSelected instanceof LocalMusic && isOnlyLocalMusicSelected) {
-      MenuItem playMusic = new MenuItem("Play");
+      MenuItem playMusic = new MenuItem("Jouer");
       playMusic.setOnAction(new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
