@@ -56,7 +56,7 @@ public class Music implements java.io.Serializable {
       return false;
     }
     Music music = (Music) o;
-    return Objects.equals(metadata, music.metadata);
+    return Objects.equals(this.metadata, music.metadata);
     // no check on owners so no infinite recursion
   }
 
