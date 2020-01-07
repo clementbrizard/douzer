@@ -3,9 +3,11 @@ package controllers;
 import core.Application;
 import core.IhmAlert;
 
+import exceptions.data.DataException;
 import java.io.File;
 import java.io.IOException;
 
+import java.nio.file.Paths;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -38,14 +40,14 @@ public class LoginController implements Controller {
 
   @FXML
   private Button buttonLogin;
-  
+
   @FXML
   private Label lblImport;
 
   private Application application;
-  
+
   private DirectoryChooser importProfilDirectory = new DirectoryChooser();
-  
+
   private File importDirectory;
 
   /* Getters */
@@ -111,26 +113,28 @@ public class LoginController implements Controller {
   public void setApplication(Application application) {
     this.application = application;
   }
-  
+
   /**
-   * The function who call the windows to choose a export directory. 
+   * The function who call the windows to choose a export directory.
    * @param event the clicked event
    */
   public void importClicked(MouseEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     importDirectory = importProfilDirectory.showDialog(primaryStage);
     try {
+      // TODO: save add savepath
       this.application
         .getIhmCore()
         .getDataForIhm()
-        .importProfile(importDirectory.getAbsolutePath());
-    } catch (UnsupportedOperationException e) {
-      LogManager.getLogger().error(e.getMessage());
-      IhmAlert.showAlert("implementation","pas encore implémenté","critical");
-    } catch (java.lang.RuntimeException e) {
+        .importProfile(importDirectory.toPath(), Paths.get(""));
+    } catch (java.io.IOException e) {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert
         .showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
+    } catch (DataException e) {
+      LogManager.getLogger().error(e.getMessage());
+      IhmAlert
+          .showAlert("Data","données corompues, impossible de réaliser l'export","critical");
     }
   }
 }

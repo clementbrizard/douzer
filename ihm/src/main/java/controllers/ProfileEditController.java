@@ -5,6 +5,7 @@ import core.IhmAlert;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 
@@ -327,14 +328,12 @@ public class ProfileEditController implements Controller {
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .exportProfile(exportDirectory.getAbsolutePath());
-    } catch (UnsupportedOperationException e) {
+        .exportProfile(exportDirectory.toPath());
+    } catch (IOException e) {
       LogManager.getLogger().error(e.getMessage());
-      IhmAlert.showAlert("implementation","pas encore implémenté","critical");
-    } catch (java.lang.RuntimeException e) {
       IhmAlert
-        .showAlert("Directory","aucun dossier pour exporter le profile selectionné","critical");
+          .showAlert("Directory","aucun dossier pour exporter le profile selectionné","critical");
     }
-    
+
   }
 }
