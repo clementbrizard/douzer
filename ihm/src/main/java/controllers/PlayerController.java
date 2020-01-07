@@ -450,8 +450,13 @@ public class PlayerController implements Controller {
     this.mainController = mainController;
   }
 
+  /**
+   * getCurrentMusicTitle : get current music title.
+   *
+   * @return string format
+   */
   public String getCurrentMusicTitle() {
-    if ( !arrayMusic.isEmpty() && currentIndex != -1) {
+    if (!arrayMusic.isEmpty() && currentIndex != -1) {
       return arrayMusic.get(currentIndex).getTitle();
     }
     return "";
