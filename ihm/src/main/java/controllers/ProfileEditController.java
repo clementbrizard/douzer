@@ -322,6 +322,9 @@ public class ProfileEditController implements Controller {
   public void exportClicked(ActionEvent evt) {
     Stage primaryStage = (Stage) ((Node) evt.getSource()).getScene().getWindow();
     exportDirectory = exportProfilDirectory.showDialog(primaryStage);
+    if (exportDirectory == null) {
+      return;
+    }
     try {
       getCentralFrameController()
         .getMainController()
