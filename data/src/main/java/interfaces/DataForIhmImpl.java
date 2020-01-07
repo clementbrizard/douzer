@@ -3,7 +3,6 @@ package interfaces;
 import com.mpatric.mp3agic.InvalidDataException;
 import com.mpatric.mp3agic.UnsupportedTagException;
 import core.Datacore;
-import core.LocalUsersFileHandler;
 import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
@@ -32,16 +31,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -146,8 +140,9 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public void notifyUserUpdate(LocalUser user) {
+  public void notifyUserUpdate(LocalUser user) throws IOException {
     UpdateUserPayload payload = new UpdateUserPayload(user);
+    dc.getLocalUsersFileHandler().update(user);
     this.dc.net.sendToUsers(payload, this.dc.getOnlineIps());
   }
 
