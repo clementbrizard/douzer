@@ -2,8 +2,10 @@ package core;
 
 import java.util.Optional;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Screen;
 
 public class IhmAlert {
 
@@ -35,7 +37,11 @@ public class IhmAlert {
       alert.setTitle(kind + ": " + title);
       alert.setHeaderText(null);
       alert.setContentText(text);
-      alert.showAndWait();  
+      alert.showAndWait();
+      
+      Rectangle2D primScreenBounds = Screen.getPrimary().getBounds();
+      alert.setX((primScreenBounds.getWidth() - alert.getWidth()) / 2);
+      alert.setY((primScreenBounds.getHeight() - alert.getHeight()) / 2);
     }
   }
 
@@ -54,6 +60,10 @@ public class IhmAlert {
 
     // option != null.
     Optional<ButtonType> option = alert.showAndWait();
+    
+    Rectangle2D primScreenBounds = Screen.getPrimary().getBounds();
+    alert.setX((primScreenBounds.getWidth() - alert.getWidth()) / 2);
+    alert.setY((primScreenBounds.getHeight() - alert.getHeight()) / 2);
 
     if (option.get() == ButtonType.OK) { 
       return true; 

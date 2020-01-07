@@ -1,13 +1,14 @@
 package controllers;
 
-import com.sun.javafx.logging.Logger;
-
+import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import core.Application;
 import datamodel.LocalMusic;
-
+import datamodel.Playlist;
+import datamodel.SearchQuery;
 import datamodel.Music;
 import datamodel.MusicMetadata;
-import datamodel.Playlist;
+import java.io.IOException;
+import java.time.Duration;
 import datamodel.SearchQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +27,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -38,8 +41,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
@@ -75,12 +80,13 @@ public class MyMusicsController implements Controller {
   private TextField tfSearchAlbum;
   @FXML
   private TextField tfSearchTags;
+  @FXML
+  private Button btnAddMusic;
 
   private NewMusicController newMusicController;
   private SearchMusicController searchMusicController;
   private DetailsMusicController detailsMusicController;
   private CentralFrameController centralFrameController;
-
   private Scene addMusicScene;
   private Scene infoMusicScene;
   private Application application;
@@ -93,16 +99,14 @@ public class MyMusicsController implements Controller {
   private LinkedHashMap<String, LocalMusic> localMusics;
   private List<MusicMetadata> musicsToDisplay;
 
-  private Logger logger;
 
   @Override
   public void initialize() {
+    // TODO Auto-generated method stub
     //logger = LogManager.getLogger();
     localMusics = new LinkedHashMap<String, LocalMusic>();
     musicsToDisplay = new ArrayList<>();
   }
-
-  /* Getters */
 
   public NewMusicController getNewMusicController() {
     return newMusicController;
@@ -118,6 +122,18 @@ public class MyMusicsController implements Controller {
 
   public DetailsMusicController getDetailsMusicController(DetailsMusicController controller) {
     return this.detailsMusicController;
+  }
+
+  /**
+   * getLocalMusicInView.
+   */
+  public ArrayList<LocalMusic> getLocalMusicInView() {
+    ArrayList<LocalMusic> h = new ArrayList<>();
+    this.tvMusics.getItems().forEach(item -> {
+      h.add(localMusics.get(item.getHash()));
+    });
+
+    return h;
   }
 
   public Application getApplication() {
@@ -209,100 +225,93 @@ public class MyMusicsController implements Controller {
 
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
-    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        showMusicInformation(currentLocalMusic);
-      }
-    });
+    itemInformation.setOnAction(event -> showMusicInformation(currentLocalMusic));
 
     MenuItem playMusic = new MenuItem("Play");
-    playMusic.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
+    playMusic.setOnAction(event -> {
+      ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
 
-        ObservableList<MusicMetadata> selectedItems = tvMusics
-            .getSelectionModel()
-            .getSelectedItems();
+      ObservableList<MusicMetadata> selectedItems = tvMusics
+          .getSelectionModel()
+          .getSelectedItems();
 
-        selectedItems.forEach(item -> {
-          listMusicClicked.add(localMusics.get(item.getHash()));
-        });
+      selectedItems.forEach(item -> {
+        listMusicClicked.add(localMusics.get(item.getHash()));
+      });
 
-        //add to the list with right click play to the list
-        if (listMusicClicked.isEmpty()) {
+      //add to the list with right click play to the list
+      if (listMusicClicked.isEmpty()) {
+        listMusicClicked.add(currentLocalMusic);
+      } else {
+        if (!listMusicClicked.contains(currentLocalMusic)) {
           listMusicClicked.add(currentLocalMusic);
-        } else {
-          if (!listMusicClicked.contains(currentLocalMusic)) {
-            listMusicClicked.add(currentLocalMusic);
-          }
         }
-        getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .setArrayMusic(listMusicClicked);
-
-        getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .playerOnMusic();
       }
+
+      getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
     });
 
     // Add delete item in context menu
     MenuItem itemDelete = new MenuItem("Supprimer");
-    itemDelete.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent event) {
-        ArrayList<LocalMusic> musicsDelete = new ArrayList<LocalMusic>();
-        ObservableList<MusicMetadata> selectedItems = tvMusics
-            .getSelectionModel()
-            .getSelectedItems();
+    itemDelete.setOnAction(event -> {
+      ArrayList<LocalMusic> musicsDelete = new ArrayList<>();
+      ObservableList<MusicMetadata> selectedItems = tvMusics
+          .getSelectionModel()
+          .getSelectedItems();
 
-        selectedItems.forEach(item -> {
-          musicsDelete.add(localMusics.get(item.getHash()));
-        });
-
-        deleteMusics(musicsDelete);
-      }
+      selectedItems.forEach(item -> {
+        musicsDelete.add(localMusics.get(item.getHash()));
+      });
+      deleteMusics(musicsDelete);
     });
 
     Menu menuAddToPlaylist = new Menu("Ajouter à la la playlist...");
-    menuAddToPlaylist.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent actionEvent) {
-        menuAddToPlaylist.getItems().clear();
-        List<String> playlistNames = MyMusicsController.this.getApplication()
-                                                       .getIhmCore().getDataForIhm()
-                                                       .getCurrentUser().getPlaylists()
-                                                       .stream().map(p -> p.getName())
-                                                       .collect(Collectors.toList());
-        playlistNames.forEach(name -> {
-          MenuItem menuPlaylist = new MenuItem(name);
-          menuPlaylist.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-              Playlist playlist = MyMusicsController.this.getApplication()
-                                             .getIhmCore().getDataForIhm()
-                                             .getPlaylistByName(name);
-              ObservableList<MusicMetadata> selectedItems = tvMusics
-                  .getSelectionModel()
-                  .getSelectedItems();
+    menuAddToPlaylist.setOnAction(event -> {
+      menuAddToPlaylist.getItems().clear();
+      List<String> playlistNames = MyMusicsController.this.getApplication()
+          .getIhmCore().getDataForIhm()
+          .getCurrentUser().getPlaylists()
+          .stream().map(p -> p.getName())
+          .collect(Collectors.toList());
+      playlistNames.forEach(name -> {
+        MenuItem menuPlaylist = new MenuItem(name);
+        menuPlaylist.setOnAction(ev -> {
+            Playlist playlist = MyMusicsController.this.getApplication()
+                .getIhmCore().getDataForIhm()
+                .getPlaylistByName(name);
+            ObservableList<MusicMetadata> selectedItems = tvMusics
+                .getSelectionModel()
+                .getSelectedItems();
 
-              selectedItems.forEach(item -> {
-                MyMusicsController.this.getApplication()
-                    .getIhmCore().getDataForIhm()
-                    .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
-              });
-            }
-          });
-          menuAddToPlaylist.getItems().add(menuPlaylist);
+            selectedItems.forEach(item -> {
+              MyMusicsController.this.getApplication()
+                  .getIhmCore().getDataForIhm()
+                  .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
+            });
         });
-      }
+        menuAddToPlaylist.getItems().add(menuPlaylist);
+      });
     });
+
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete, menuAddToPlaylist);
+
+
+    // Header click event
+    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+      if (event.getTarget() instanceof TableColumnHeader) {
+        event.consume();
+        this.getCentralFrameController()
+            .getMainController()
+            .getPlayerController()
+            .updateArrayMusic();
+      }
+
+    });
+
   }
 
   /* FXML methods (to handle events from user) */
@@ -323,7 +332,21 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
+
+        this.getCentralFrameController().getMainController()
+            .getPlayerController()
+            .selectOneMusic(tvMusics.getSelectionModel()
+                .getFocusedIndex());
       }
+    }
+    // If double left click, play music
+
+    if (click.getClickCount() == 2 && !click.isConsumed()) {
+      click.consume();
+      this.getCentralFrameController().getMainController()
+          .getPlayerController()
+          .playOneMusic(tvMusics.getSelectionModel()
+              .getFocusedIndex());
     }
 
     // If right click, show context menu
@@ -334,6 +357,16 @@ public class MyMusicsController implements Controller {
       }
     }
   }
+
+  /*
+  private List<MusicMetadata> parseMusic() {
+    this.listMusics.addAll(this.getCentralFrameController().getMainController().getApplication()
+            .getIhmCore().getDataForIhm().getLocalMusics().collect(Collectors.toList()));
+
+    return this.getCentralFrameController().getMainController().getApplication()
+            .getIhmCore().getDataForIhm().getLocalMusics()
+            .map(x -> x.getMetadata()).collect(Collectors.toList());
+  }*/
 
   public void displayLocalMusics() {
     musicsToDisplay = this.retrieveLocalMusics();
@@ -367,7 +400,8 @@ public class MyMusicsController implements Controller {
     musicSharingPopup.setScene(this.addMusicScene);
 
     // Show add music popup.
-    musicSharingPopup.show();
+    musicSharingPopup.initModality(Modality.APPLICATION_MODAL);
+    musicSharingPopup.showAndWait();
   }
 
   /**
@@ -435,16 +469,15 @@ public class MyMusicsController implements Controller {
 
         query.withTags(tags);
       }
-
-
-      Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
-          .getMainController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm().searchMusics(query);
-
-      updateMusicsOnSearch(searchResults);
     }
+
+    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm().searchMusics(query);
+
+    updateMusicsOnSearch(searchResults);
   }
 
   /**
@@ -454,18 +487,31 @@ public class MyMusicsController implements Controller {
    */
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
-    MyMusicsController.this.getCentralFrameController().getMainController()
-        .getMyPlaylistsController().resetSelection();
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
+    this.getCentralFrameController().getMainController().getMyPlaylistsController().resetSelection();
   }
 
-  /* Logic methods */
+  /**
+   * Handle click on loopPlayer musics button.
+   *
+   * @return
+   */
+  @FXML
+  public void loopPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().loopPlayer();
+  }
 
   /**
-   * Handle click on information item in context menu.
+   * Handle click on randomPlayer musics button.
    *
-   * @param music the music on which the user right clicked
+   * @return
    */
+  @FXML
+  public void randomPlayer() {
+    this.getCentralFrameController().getMainController().getPlayerController().randomPlayer();
+  }
+
+
   private void showMusicInformation(LocalMusic music) {
     try {
       // Initialize scene and controller.
@@ -487,9 +533,17 @@ public class MyMusicsController implements Controller {
     musicDetailsPopup.setScene(this.infoMusicScene);
 
     // Show music info popup.
-    musicDetailsPopup.show();
+    musicDetailsPopup.initModality(Modality.APPLICATION_MODAL);
+    musicDetailsPopup.showAndWait();
   }
 
+  /**
+   * Refresh the table by retrieving local musics from Data.
+   */
+  public void displayAvailableMusics() {
+    List<MusicMetadata> listMusic = this.retrieveLocalMusics();
+    tvMusics.getItems().setAll(listMusic);
+  }
 
   /**
    * Update musics table content with search result.
@@ -497,9 +551,9 @@ public class MyMusicsController implements Controller {
    * @param newMusics the search result
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
-    tvMusics.getItems().setAll(newMusics.map(x -> x.getMetadata()).collect(Collectors.toList()));
+    tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
+    this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
-
   /**
    * Delete a list of one or more musics.
    *
@@ -536,12 +590,12 @@ public class MyMusicsController implements Controller {
     deleteChoice.ifPresent(choice -> {
       if (choice.equals(deleteOnPlaylist)) {
         String playlistName = this.getCentralFrameController()
-                                  .getMainController()
-                                  .getMyPlaylistsController()
-                                  .getSelectedPlaylist();
+            .getMainController()
+            .getMyPlaylistsController()
+            .getSelectedPlaylist();
         Playlist playlist = this.getApplication()
-                                .getIhmCore().getDataForIhm()
-                                .getPlaylistByName(playlistName);
+            .getIhmCore().getDataForIhm()
+            .getPlaylistByName(playlistName);
         musicsToDelete.forEach(music -> {
           this.getApplication().getIhmCore().getDataForIhm()
               .removeMusicFromPlaylist(music, playlist);
@@ -567,31 +621,6 @@ public class MyMusicsController implements Controller {
   }
 
   /**
-   * Retrieve user's local musics from Data.
-   *
-   * @return list of metadata of user's local musics
-   */
-  private List<MusicMetadata> retrieveLocalMusics() {
-    localMusics.clear();
-    Set<LocalMusic> localMusicsStream = this
-        .getCentralFrameController()
-        .getMainController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .getCurrentUser()
-        .getLocalMusics();
-
-    ArrayList<MusicMetadata> localMusicsMetadata = new ArrayList<>();
-    for (LocalMusic localMusic : (Iterable<LocalMusic>) localMusicsStream::iterator) {
-      localMusics.put(localMusic.getMetadata().getHash(), localMusic);
-      localMusicsMetadata.add(localMusic.getMetadata());
-    }
-
-    return localMusicsMetadata;
-  }
-
-  /**
    * Sets the view to show the current playlist only.
    * @param playlistName name of the playlist
    */
@@ -610,6 +639,35 @@ public class MyMusicsController implements Controller {
 
     this.updateTableMusics();
   }
+
+  /**
+   * Retrieve user's local musics from Data.
+   *
+   * @return list of metadata of user's local musics
+   */
+  private List<MusicMetadata> retrieveLocalMusics() {
+    localMusics.clear();
+    Set<LocalMusic> localMusicsStream = this
+        .getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser()
+        .getLocalMusics();
+
+    List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
+    for (LocalMusic localMusic : localMusicsStream) {
+      //if the current localMusic isn't already in our localMusics we add it.
+      if (localMusics.get(localMusic.getMetadata().getHash()) == null) {
+        localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+        localMusicsMetadata.add(localMusic.getMetadata());
+      }
+    }
+
+    return localMusicsMetadata;
+  }
+
 
   public void reset() {
     this.lblTitle.setText("Mes morceaux");

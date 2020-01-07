@@ -57,22 +57,19 @@ public class MyPlaylistsController implements Controller {
     contextMenu = new ContextMenu();
 
     MenuItem menuDeletePlaylist = new MenuItem("Supprimer");
-    menuDeletePlaylist.setOnAction(new EventHandler<ActionEvent>() {
-      @Override
-      public void handle(ActionEvent actionEvent) {
+    menuDeletePlaylist.setOnAction(event -> {
         String playlistToDeleteName = MyPlaylistsController.this.getSelectedPlaylist();
-        Playlist playlistToDelete = MyPlaylistsController.this.getMainController()
+        Playlist playlistToDelete = MyPlaylistsController.this.mainController
             .getApplication().getIhmCore().getDataForIhm().getCurrentUser()
             .getPlaylistByName(playlistToDeleteName);
 
-        MyPlaylistsController.this.getMainController().getApplication().getIhmCore()
+        MyPlaylistsController.this.mainController.getApplication().getIhmCore()
             .getDataForIhm().getCurrentUser().removePlaylist(playlistToDelete);
 
         MyPlaylistsController.this.updatePlaylists();
         MyPlaylistsController.this.resetSelection();
-        MyPlaylistsController.this.getMainController().getCentralFrameController()
+        MyPlaylistsController.this.mainController.getCentralFrameController()
             .getMyMusicsController().reset();
-      }
     });
 
     contextMenu.getItems().add(menuDeletePlaylist);
@@ -103,7 +100,7 @@ public class MyPlaylistsController implements Controller {
     result.ifPresent(name -> {
       name = name.trim();
       if(!name.isEmpty()) {
-        this.getMainController().getApplication().getIhmCore().getDataForIhm().getCurrentUser().addPlaylist(name);
+        this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser().addPlaylist(name);
       }
     });
 
@@ -114,15 +111,15 @@ public class MyPlaylistsController implements Controller {
   private void handleListClickedEvent(MouseEvent click) {
 
     if (click.getButton().equals(MouseButton.PRIMARY)) {
-      MyPlaylistsController.this.getMainController().getCentralFrameController()
+      MyPlaylistsController.this.mainController.getCentralFrameController()
           .setCentralContentMyMusics();
 
       if (lvPlaylists.getSelectionModel().getSelectedIndices().get(0) == 0) {
         // Reset central frame to myMusics
-        MyPlaylistsController.this.getMainController().getCentralFrameController().getMyMusicsController().reset();
+        MyPlaylistsController.this.mainController.getCentralFrameController().getMyMusicsController().reset();
       } else {
 
-        MyPlaylistsController.this.getMainController().getCentralFrameController().getMyMusicsController()
+        MyPlaylistsController.this.mainController.getCentralFrameController().getMyMusicsController()
             .showPlaylist(MyPlaylistsController.this.getSelectedPlaylist());
       }
     } else if (click.getButton().equals(MouseButton.SECONDARY)) {
@@ -136,7 +133,7 @@ public class MyPlaylistsController implements Controller {
     List<String> mesMorceaux = new ArrayList();
     mesMorceaux.add("Mes morceaux");
 
-    List<String> playlistsFromData = this.getMainController().getApplication().getIhmCore().getDataForIhm().getCurrentUser().getPlaylists().stream().map(p -> p.getName()).collect(Collectors.toList());
+    List<String> playlistsFromData = this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser().getPlaylists().stream().map(p -> p.getName()).collect(Collectors.toList());
 
     List<String> totalPlaylists = new ArrayList();
     totalPlaylists.addAll(mesMorceaux);

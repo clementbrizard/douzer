@@ -37,6 +37,10 @@ public class Playlist implements Serializable {
     this.musicList.remove(music);
   }
 
+  public void setMusicList(ArrayList<LocalMusic> newList) {
+    this.musicList = newList;
+  }
+
   /**
    * Changes the index of a music in the playlist.
    * @param music The music to change the index

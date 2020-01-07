@@ -17,7 +17,8 @@ public class MainController implements Controller {
   private ContactListController contactListController;
   @FXML
   private OnlineUsersListController onlineUsersListController;
-
+  @FXML
+  private MyPlaylistsController myPlaylistsController;
   // Central controllers
   @FXML
   private CentralFrameController centralFrameController;
@@ -29,20 +30,16 @@ public class MainController implements Controller {
   private DownloadController downloadController;
   @FXML
   private CurrentMusicInfoController currentMusicInfoController;
-  @FXML
-  private MyPlaylistsController myPlaylistsController;
 
   private Application application;
 
   // Getters
 
-  public MyPlaylistsController getMyPlaylistsController() {
-    return myPlaylistsController;
-  }
-
   public UserInfoController getUserInfoController() {
     return userInfoController;
   }
+
+  public MyPlaylistsController getMyPlaylistsController() { return myPlaylistsController; }
 
   public CurrentMusicInfoController getCurrentMusicInfoController() {
     return currentMusicInfoController;
@@ -120,6 +117,7 @@ public class MainController implements Controller {
     Logger logger = LogManager.getLogger();
     try {
       userInfoController.setMainController(this);
+      this.setUserInfoController(userInfoController);
       userInfoController.init();
     } catch (UnsupportedOperationException e) {
       logger.warn("User Info Controller calls : %s", e.toString());
@@ -152,16 +150,24 @@ public class MainController implements Controller {
 
     try {
       this.currentMusicInfoController.setMainController(this);
-      this.currentMusicInfoController.init(null);
       this.currentMusicInfoController.setApplication(this.application);
+      this.currentMusicInfoController.init(null);
     } catch (UnsupportedOperationException e) {
       logger.warn("Current Music Info Controller calls : " + e.getMessage());
     }
+
+    try {
+      this.downloadController.setMainController(this);
+      this.downloadController.initialize();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Download Controller calls : " + e.getMessage());
+    }
+
     try {
       this.myPlaylistsController.setMainController(this);
       this.myPlaylistsController.init();
     } catch (UnsupportedOperationException e) {
-      logger.warn("My Playlists Controller calls : " + e.getMessage());
+      logger.warn("Playlists Controller calls : " + e.getMessage());
     }
   }
 }

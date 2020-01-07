@@ -9,7 +9,7 @@ import datamodel.ShareStatus;
 import java.io.File;
 import java.util.Set;
 
-public class DeleteMusic {
+public abstract class DeleteMusic {
 
   /**
    * to delete a music in the library, eventually delete locally, and unshare the music.

@@ -40,13 +40,16 @@ public class DownloadFile extends Message {
     try {      
       ObjectOutputStream stream = new ObjectOutputStream(socket.getOutputStream());
       
+      File file = data.getLocalMusic(hashMusic);
+      int fileLength = (int)file.length(); 
+      
       //Send a message to warn distant user that it'll receive a file
       SendFile message = new SendFile(null);
       message.setHashMusic(hashMusic);
+      message.setMusicSize(fileLength);
       stream.writeObject(message);
       
-      
-      File file = data.getLocalMusic(hashMusic);
+      //Sends the file in the socket
       FileInputStream fis = new FileInputStream(file);
       BufferedInputStream bis = new BufferedInputStream(fis); 
             
@@ -55,9 +58,9 @@ public class DownloadFile extends Message {
                   
       //Read File Contents into contents array 
       byte[] contents;
-      long fileLength = file.length(); 
       long current = 0;
-          
+      long progress = 0;
+      
       while (current != fileLength) { 
         int size = 10000;
         if (fileLength - current >= size) {
@@ -69,7 +72,12 @@ public class DownloadFile extends Message {
         contents = new byte[size]; 
         bis.read(contents, 0, size); 
         os.write(contents);
-        logger.info("Sending file ... " + (current * 100) / fileLength + "% complete!\n");
+        
+        //Display log each 25%
+        if (((current * 100) / fileLength) >= progress + 25) {
+          progress = (((current * 100) / fileLength) / 25) * 25;
+          logger.info("Sending file ... " + (current * 100) / fileLength + "% complete!");
+        }
       }   
           
       os.flush(); 

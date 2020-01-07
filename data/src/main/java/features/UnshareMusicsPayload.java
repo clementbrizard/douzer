@@ -29,4 +29,11 @@ public class UnshareMusicsPayload extends Payload {
       dc.ihm.updateMusic(musicToUnshare);
     });
   }
+
+  @Override
+  public String toString() {
+    return "UnshareMusicsPayload{"
+        + "musicHashs=" + musicHashs
+        + '}';
+  }
 }

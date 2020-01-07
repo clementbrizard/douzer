@@ -29,6 +29,7 @@
                  <VBox BorderPane.alignment="TOP_LEFT">
                     <children>
                         <fx:include fx:id="currentMusicInfo" source="CurrentMusicInfoView.fxml" />
+                        <fx:include fx:id="download" source="DownloadView.fxml"/>
                     </children>
                  </VBox>
              </right>
