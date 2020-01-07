@@ -1,5 +1,6 @@
 package controllers;
 
+import core.IhmAlert;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.ShareStatus;
@@ -7,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashMap;
@@ -248,14 +250,16 @@ public class DetailsMusicController implements Controller {
    */
 
   public void setStars(int rating) {
-    File fullStarFile = new File(getClass().getResource("/images/FullStarSymbol.png").getFile());
-    File emptyStarFile = new File(getClass().getResource("/images/EmptyStarSymbol.png").getFile());
+    URL fullStarFile = getClass().getResource("/images/FullStarSymbol.png");
+    URL emptyStarFile = getClass().getResource("/images/EmptyStarSymbol.png");
 
     try {
-      InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
-      InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
-      Image fullStarImage = new Image(fullStarInputStream);
-      Image emptyStarImage = new Image(emptyStarInputStream);
+      Image fullStarImage;
+      Image emptyStarImage;
+      fullStarImage = new Image(fullStarFile.openStream());
+      emptyStarImage = new Image(emptyStarFile.openStream());
+
+
 
       for (int i = 1; i <= rating; i++) {
         starsMap.get(i).setImage(fullStarImage);
@@ -264,8 +268,8 @@ public class DetailsMusicController implements Controller {
       for (int i = rating + 1; i <= 5; i++) {
         starsMap.get(i).setImage(emptyStarImage);
       }
-    } catch (FileNotFoundException e) {
-      detailsMusicLogger.error(e);
+    } catch (Exception e) {
+      IhmAlert.showAlert("Pictures Load", "Fail : picture load PLAYER", "critical");
     }
   }
 
