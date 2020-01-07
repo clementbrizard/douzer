@@ -396,5 +396,43 @@ public class ProfileEditController implements Controller {
     }
 
   }
+  
+  /**
+   * Delete of current user account.
+   * @param e the ActionEvent of delete button.
+   */
+  @FXML
+  public void deleteAccount(ActionEvent e) {
+    //String password = textFieldPassword.getText();
+    try {
+      this.centralFrameController
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .deleteAccount();
+      this.getCentralFrameController()
+        .getMainController()
+        .getUserInfoController()
+        .logout(null);
+      
+      Notifications.create()
+        .title("Suppression")
+        .text("Le compte à été supprimé")
+        .darkStyle()
+        .showWarning();      
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    } catch (Exception de) {
+      de.printStackTrace();
+
+      Notifications.create()
+          .title("Suppresion echoué")
+          .text("quelquechose est arrivé")
+          .darkStyle()
+          .showWarning();
+
+    }
+  }
 }
 

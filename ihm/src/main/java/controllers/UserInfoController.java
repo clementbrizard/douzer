@@ -1,5 +1,7 @@
 package controllers;
 
+import interfaces.DataForIhm;
+
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import utils.FormatImage;
 
 
@@ -100,10 +103,23 @@ public class UserInfoController implements Controller {
     this.showParameters();
   }
 
+  /**
+   * Fonction qui permet de sortir de l'application.
+   * @param event le clique sur le bouton deconnexion.
+   */
   @FXML
   public void logout(ActionEvent event) {
     try {
-      this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
+      DataForIhm di = this.getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm();
+      if (di != null && di.getCurrentUser() != null) {
+        this.mainController
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm().logout();
+      }
       this.mainController.getApplication().showLoginScene();
       this.mainController.getPlayerController().stopPlayer();
     } catch (IOException e) {
