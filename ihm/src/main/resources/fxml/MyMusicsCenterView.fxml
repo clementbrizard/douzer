@@ -42,7 +42,7 @@
                      <TextField fx:id="tfSearchArtist" layoutX="63.0" layoutY="133.0" prefHeight="31.0" prefWidth="254.0" promptText="Artiste" />
                      <TextField fx:id="tfSearchAlbum" layoutX="325.0" layoutY="98.0" prefHeight="31.0" prefWidth="248.0" promptText="Album" />
                      <TextField fx:id="tfSearchTags" layoutX="325.0" layoutY="133.0" prefHeight="31.0" prefWidth="249.0" promptText="Tags" />
-                     <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" onMouseClicked="#handleClickTableView" prefHeight="384.0" prefWidth="505.0">
+                     <TableView fx:id="tvMusics" layoutX="63.0" layoutY="172.0" onMouseClicked="#handleClickTableView" prefHeight="384.0" prefWidth="599.0">
                          <columns>
                              <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
                              <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />
@@ -50,7 +50,7 @@
                              <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="92.0" text="Durée" />
                              <TableColumn fx:id="tagsCol" prefWidth="100.0" text="tags" />
                          </columns>
-                     </TableView>           
+                     </TableView>
                 </children>
              </Pane>
          </center>
