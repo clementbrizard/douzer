@@ -101,6 +101,8 @@ public class OnlineUsersListController implements Controller {
         @Override
         public void run() {
           onlineUsersList.add(user);
+          // Update ContactList :
+          mainController.getContactListController().displayContacts();
         }
       });
 
@@ -149,6 +151,8 @@ public class OnlineUsersListController implements Controller {
       @Override
       public void run() {
         onlineUsersList.remove(user);
+        // Update ContactList :
+        mainController.getContactListController().displayContacts();
       }
     });
   }
