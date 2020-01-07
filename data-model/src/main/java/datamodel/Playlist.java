@@ -2,8 +2,6 @@ package datamodel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Playlist is an list of ordered musics.
@@ -20,17 +18,21 @@ public class Playlist implements Serializable {
 
   /**
    * Adds a new music to the playlist with the index indicated.
+   *
    * @param music Music to add as type MusicMetadata
    * @param order Index of the music
    */
   public void addMusic(LocalMusic music, Integer order) {
-    if (!this.musicList.contains(music)) {
+    if (this.musicList.stream().noneMatch(
+        m -> m.getMetadata().getHash().equals(music.getMetadata().getHash()))
+    ) {
       this.musicList.add(order, music);
     }
   }
 
   /**
    * Removes the music from the playlist.
+   *
    * @param music the music to remove.
    */
   public void removeMusic(LocalMusic music) {
@@ -43,16 +45,15 @@ public class Playlist implements Serializable {
 
   /**
    * Changes the index of a music in the playlist.
-   * @param music The music to change the index
+   *
+   * @param music    The music to change the index
    * @param newOrder new index for the music
    */
   public void changeOrder(LocalMusic music, Integer newOrder) {
-    if (this.musicList.contains(music)) {
-      this.musicList.remove(music);
-      this.musicList.add(newOrder, music);
-    } else {
-      throw new UnsupportedOperationException("Music does not exist in the playlist.");
-    }
+    this.musicList.removeIf(
+        localMusic -> localMusic.getMetadata().getHash().equals(music.getMetadata().getHash())
+    );
+    this.musicList.add(newOrder, music);
   }
 
   public ArrayList<LocalMusic> getMusicList() {

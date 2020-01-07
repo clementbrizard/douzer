@@ -11,21 +11,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class ImportUser {
 
   /**
    * Import a previously exported LocalUser.
+   *
    * @param pathToBackup the path to the backup directory.
-   * @param newSavePath the new savePath for the imported LocalUser.
-   * @param dc the datacore.
+   * @param newSavePath  the new savePath for the imported LocalUser.
+   * @param dc           the datacore.
    * @throws DataException if the username already exists.
    */
   public static void run(Path pathToBackup, Path newSavePath, Datacore dc)
       throws DataException, IOException {
     //Searching for the .ser file.
-    List list = Arrays.stream(new File(pathToBackup.toUri()).listFiles())
+    List list = Arrays.stream(Objects.requireNonNull(new File(pathToBackup.toUri()).listFiles()))
         .filter(f -> f.getName().matches(".*\\.ser"))
         .map(File::getName)
         .collect(Collectors.toList());

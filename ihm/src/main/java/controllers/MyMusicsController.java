@@ -15,25 +15,18 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -222,12 +215,10 @@ public class MyMusicsController implements Controller {
       });
 
       //add to the list with right click play to the list
-      if (listMusicClicked.isEmpty()) {
+      if (listMusicClicked.stream().noneMatch(
+          m -> m.getMetadata().getHash().equals(currentLocalMusic.getMetadata().getHash()))
+      ) {
         listMusicClicked.add(currentLocalMusic);
-      } else {
-        if (!listMusicClicked.contains(currentLocalMusic)) {
-          listMusicClicked.add(currentLocalMusic);
-        }
       }
 
       getCentralFrameController()
@@ -502,7 +493,7 @@ public class MyMusicsController implements Controller {
         numberOfChar += tag.length();
       }
       if (numberOfChar > d.get(0)) {
-        d.set(0,numberOfChar);
+        d.set(0, numberOfChar);
       }
     });
     this.tagsCol.setPrefWidth(d.get(0) * 9);
