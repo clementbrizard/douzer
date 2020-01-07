@@ -1,15 +1,22 @@
 package controllers;
 
-import datamodel.LocalUser;
+import java.awt.image.RenderedImage;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.FormatImage;
 
 
 /**
@@ -20,14 +27,17 @@ public class UserInfoController implements Controller {
   private static final Logger logger = LogManager.getLogger();
 
   @FXML
-  private Label lblUserPseudo;
+  private Label userPseudoSideLbl;
   @FXML
-  private Button btnModifyProfile;
-  @FXML
-  private Button btnDisconnect;
-
+  private Pane userProfilePane;
   @FXML
   private Button btnLogout;
+  @FXML
+  private Button btnParameters;
+  @FXML
+  private ImageView imgAvatar;
+  @FXML
+  private Pane paneImgAvatar;
 
   private MainController mainController;
 
@@ -61,8 +71,33 @@ public class UserInfoController implements Controller {
         .getCurrentUser()
         .getUsername();
 
-    lblUserPseudo.setText(name);
-    this.connectButtons();
+    userPseudoSideLbl.setText(name);
+
+    RenderedImage avatar = this.mainController
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser()
+        .getAvatar();
+
+    // Show avatar
+    FormatImage.cropAvatar(avatar, imgAvatar);
+
+    double circleRadius = 45;
+    paneImgAvatar.setMinWidth(circleRadius * 2);
+    paneImgAvatar.setMinHeight(circleRadius * 2);
+    imgAvatar.setFitHeight(circleRadius * 2);
+    imgAvatar.setFitWidth(circleRadius * 2);
+
+    WritableImage croppedImage = imgAvatar.snapshot(null, null);
+
+    // Add a clip to have a circled avatar image
+    Circle clip = new Circle(imgAvatar.getFitHeight() / 2,
+        imgAvatar.getFitWidth() / 2,
+        circleRadius);
+    paneImgAvatar.setClip(clip);
+
+    this.showParameters();
   }
 
   @FXML
@@ -75,14 +110,20 @@ public class UserInfoController implements Controller {
       logger.error(e);
     }
   }
-    
+
+  @FXML
+  private void showParameterView(ActionEvent event) {
+    UserInfoController.this.mainController.getCentralFrameController()
+        .setCentralContentProfileEdit();
+  }
+
   /**
-   * Connects the buttons to functions.
+   * Open the ProfileEditView at click on the StackPane.
    */
-  private void connectButtons() {
-    this.btnModifyProfile.setOnAction(new EventHandler<ActionEvent>() {
+  private void showParameters() {
+    this.userProfilePane.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
-      public void handle(ActionEvent event) {
+      public void handle(MouseEvent event) {
         UserInfoController.this.mainController.getCentralFrameController()
             .setCentralContentProfileEdit();
       }

@@ -100,6 +100,9 @@ public class FormatImage {
         Rectangle2D croppedPortion = new Rectangle2D(x, y, minSide, minSide);
         imgAvatar.setViewport(croppedPortion);
       }
+    } else {
+      Rectangle2D croppedPortion = new Rectangle2D(0, 0, minSide, minSide);
+      imgAvatar.setViewport(croppedPortion);
     }
   }
 }
