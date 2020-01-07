@@ -15,6 +15,7 @@ local.properties
 .loadpath
 .recommenders
 
+
 # External tool builders
 .externalToolBuilders/
 
@@ -210,5 +211,8 @@ lo23-users.ser
 
 ### Properties file ###
 *.properties
+
+### Downloaded music file ###
+*-musics/
 
 # End of https://www.gitignore.io/api/java,maven,eclipse,netbeans,intellij+all

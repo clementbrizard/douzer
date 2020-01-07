@@ -1,17 +1,17 @@
 package controllers;
 
+import core.IhmAlert;
 import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.ShareStatus;
-import datamodel.User;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,7 +51,7 @@ public class DetailsMusicController implements Controller {
   private Spinner<Integer> dateYear;
 
   @FXML
-  private TextField textFieldLastUploader;
+  private ListView<String> ownersListView;
 
   @FXML
   private TextField textFieldAddTag;
@@ -213,10 +213,7 @@ public class DetailsMusicController implements Controller {
     }
 
     if (localMusic.getOwners() != null) {
-      Iterator<User> itOwners = localMusic.getOwners().iterator();
-      if (itOwners.hasNext()) {
-        textFieldLastUploader.setText(itOwners.next().getUsername());
-      }
+      localMusic.getOwners().forEach(owner -> ownersListView.getItems().add(owner.getUsername()));
     }
 
     tags = FXCollections.observableArrayList();
@@ -253,14 +250,16 @@ public class DetailsMusicController implements Controller {
    */
 
   public void setStars(int rating) {
-    File fullStarFile = new File(getClass().getResource("/images/FullStarSymbol.png").getFile());
-    File emptyStarFile = new File(getClass().getResource("/images/EmptyStarSymbol.png").getFile());
+    URL fullStarFile = getClass().getResource("/images/FullStarSymbol.png");
+    URL emptyStarFile = getClass().getResource("/images/EmptyStarSymbol.png");
 
     try {
-      InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
-      InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
-      Image fullStarImage = new Image(fullStarInputStream);
-      Image emptyStarImage = new Image(emptyStarInputStream);
+      Image fullStarImage;
+      Image emptyStarImage;
+      fullStarImage = new Image(fullStarFile.openStream());
+      emptyStarImage = new Image(emptyStarFile.openStream());
+
+
 
       for (int i = 1; i <= rating; i++) {
         starsMap.get(i).setImage(fullStarImage);
@@ -269,8 +268,8 @@ public class DetailsMusicController implements Controller {
       for (int i = rating + 1; i <= 5; i++) {
         starsMap.get(i).setImage(emptyStarImage);
       }
-    } catch (FileNotFoundException e) {
-      detailsMusicLogger.error(e);
+    } catch (Exception e) {
+      IhmAlert.showAlert("Pictures Load", "Fail : picture load PLAYER", "critical");
     }
   }
 
@@ -302,15 +301,7 @@ public class DetailsMusicController implements Controller {
     } else {
       textFieldAlbum.setStyle(" -fx-background-color:white;");
     }
-
-    if (textFieldLastUploader.getText() == null
-        || textFieldLastUploader.getText().trim().equals("")) {
-      bool = false;
-      textFieldLastUploader.setStyle(" -fx-background-color:red;");
-    } else {
-      textFieldLastUploader.setStyle(" -fx-background-color:white;");
-    }
-
+    
     return bool;
   }
 
