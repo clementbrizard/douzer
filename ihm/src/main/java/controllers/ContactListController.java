@@ -75,7 +75,7 @@ public class ContactListController implements Controller {
    * Fills the view with the username of contacts.
    **/
 
-  private void displayContacts() {
+  public void displayContacts() {
 
     ObservableList<User> contacts = this.mainController
             .getApplication()

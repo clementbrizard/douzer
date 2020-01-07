@@ -196,8 +196,18 @@ public class DistantUserController implements Controller {
             .getCurrentUser();
     if (currentUser.getFriends().contains(distantUser)) {
       currentUser.removeFriend(distantUser);
+      logger.info("Removed " +
+              distantUser.getUsername() +
+              " from friendlist of "+
+              currentUser.getUsername()
+      );
     } else {
       currentUser.addFriend(distantUser);
+      logger.info("Added " +
+              distantUser.getUsername() +
+              " to friendlist of " +
+              currentUser.getUsername()
+      );
     }
 
     refreshFriendshipStatus();
@@ -260,10 +270,18 @@ public class DistantUserController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .getCurrentUser();
-    if (currentUser.getFriends().contains(distantUser)) {
-      btnManageFriendship.setText("Supprimer le poto");
+    if (!currentUser.getFriends().contains(distantUser)) {
+      btnManageFriendship.setText("Ajouter ce contact");
     } else {
-      btnManageFriendship.setText("Ajouter le poto");
+      btnManageFriendship.setText("Supprimer ce contact");
     }
+    /*
+    this
+            .getCentralFrameController()
+            .getMainController()
+            .getContactListController()
+            .displayContacts();
+
+     */
   }
 }
