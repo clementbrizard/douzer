@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -14,13 +20,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AllMusicsController">
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.AllMusicsController">
    <children>
       <BorderPane>
          <center>
              <Pane fx:id="pnCenterPage" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="605.0" prefWidth="720.0" style="-fx-background-color: #9fc5f8;">
                  <children>
-                     <TableView fx:id="tvMusics" layoutX="68.0" layoutY="172.0" prefHeight="384.0" prefWidth="505.0">
+                     <TableView fx:id="tvMusics" layoutX="58.0" layoutY="172.0" prefHeight="384.0" prefWidth="606.0">
                          <columns>
                              <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
                              <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />
@@ -30,29 +36,14 @@
                          </columns>
                      </TableView>
                      <TextField fx:id="tfSearch" layoutX="110.0" layoutY="24.0" prefHeight="31.0" prefWidth="473.0" promptText="Rechercher" />
-                     <ImageView fx:id="ivPlay" fitHeight="35.0" fitWidth="42.0" layoutX="14.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/DownloadSymbol.png" />
-                         </image>
-                     </ImageView>
-                     <ImageView fx:id="ivShare" fitHeight="31.0" fitWidth="31.0" layoutX="629.0" layoutY="208.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/InformationsSymbol.png" />
-                         </image>
-                     </ImageView>
-                     <ImageView fx:id="ivDeleteLocal" fitHeight="12.0" fitWidth="76.0" layoutX="588.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/minusSymbol.png" />
-                         </image>
-                     </ImageView>
                      <Button fx:id="btnAdvancedSearch" layoutX="111.0" layoutY="59.0" onAction="#showAdvancedSearch" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Recherche avancée">
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets></Button>
-                  <TextField fx:id="tfSearchTitle" layoutX="68.0" layoutY="97.0" prefHeight="31.0" prefWidth="250.0" promptText="Titre" />
-                  <TextField fx:id="tfSearchArtist" layoutX="68.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Artiste" />
-                  <TextField fx:id="tfSearchAlbum" layoutX="323.0" layoutY="96.0" prefHeight="31.0" prefWidth="250.0" promptText="Album" />
-                  <TextField fx:id="tfSearchTags" layoutX="323.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Tags" />
+                  <TextField fx:id="tfSearchTitle" layoutX="75.0" layoutY="97.0" prefHeight="31.0" prefWidth="250.0" promptText="Titre" />
+                  <TextField fx:id="tfSearchArtist" layoutX="75.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Artiste" />
+                  <TextField fx:id="tfSearchAlbum" layoutX="387.0" layoutY="97.0" prefHeight="31.0" prefWidth="250.0" promptText="Album" />
+                  <TextField fx:id="tfSearchTags" layoutX="387.0" layoutY="134.0" prefHeight="31.0" prefWidth="250.0" promptText="Tags" />
                  </children>
              </Pane>
          </center>
