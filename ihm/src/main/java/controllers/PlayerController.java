@@ -350,6 +350,10 @@ public class PlayerController implements Controller {
       player.stop();
       play.setGraphic(new ImageView(playIcon));
       isPlaying = false;
+      songInfo.setText(" - ");
+      lblTime.setText("0:00");
+      pgMusicProgress.setProgress(0.0);
+      fullTime.setText("0:00");
     }
   }
 
@@ -444,6 +448,13 @@ public class PlayerController implements Controller {
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+  }
+
+  public String getCurrentMusicTitle() {
+    if ( !arrayMusic.isEmpty() && currentIndex != -1) {
+      return arrayMusic.get(currentIndex).getTitle();
+    }
+    return "";
   }
 
 }
