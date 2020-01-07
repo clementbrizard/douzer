@@ -1,14 +1,14 @@
 package cells;
 
+import core.IhmAlert;
+
 import datamodel.Comment;
 import datamodel.Music;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.fxml.FXML;
@@ -85,17 +85,16 @@ public class CommentListViewCell extends ListCell<Comment> {
         v.setVisible(false);
       });
 
-    } else {
-      File fullStarFile = new File(
-          getClass().getResource("/images/FullStarSymbol.png").getFile());
-      File emptyStarFile = new File(
-          getClass().getResource("/images/EmptyStarSymbol.png").getFile());
+    } else {    
+      URL fullStarFile = getClass().getResource("/images/FullStarSymbol.png");
+      URL emptyStarFile = getClass().getResource("/images/EmptyStarSymbol.png");
+
 
       try {
-        InputStream fullStarInputStream = new FileInputStream(fullStarFile.getAbsolutePath());
-        InputStream emptyStarInputStream = new FileInputStream(emptyStarFile.getAbsolutePath());
-        Image fullStarImage = new Image(fullStarInputStream);
-        Image emptyStarImage = new Image(emptyStarInputStream);
+        Image fullStarImage;
+        Image emptyStarImage;
+        fullStarImage = new Image(fullStarFile.openStream());
+        emptyStarImage = new Image(emptyStarFile.openStream());
 
         for (int i = 1; i <= rating; i++) {
           starsMap.get(i).setImage(fullStarImage);
@@ -107,6 +106,9 @@ public class CommentListViewCell extends ListCell<Comment> {
 
       } catch (FileNotFoundException e) {
         commentLogger.error(e);
+      } catch (IOException e) {
+        commentLogger.error(e);
+        IhmAlert.showAlert("Chargement Image", "Erreur : Chargement Des Etoiles", "critical");
       }
     }
   }

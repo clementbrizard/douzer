@@ -3,6 +3,7 @@ package controllers;
 import core.Application;
 import core.IhmAlert;
 
+import exceptions.data.DataException;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.security.auth.login.LoginException;
@@ -38,15 +40,19 @@ public class LoginController implements Controller {
 
   @FXML
   private Button buttonLogin;
-  
+
   @FXML
   private Label lblImport;
 
   private Application application;
+
+  private DirectoryChooser importProfilDirectorySource = new DirectoryChooser();
+
+  private File imporDirectorySource;
   
   private DirectoryChooser importProfilDirectory = new DirectoryChooser();
   
-  private File importDirectory;
+  private File directoryFile;
 
   /* Getters */
 
@@ -111,26 +117,37 @@ public class LoginController implements Controller {
   public void setApplication(Application application) {
     this.application = application;
   }
-  
+
   /**
-   * The function who call the windows to choose a export directory. 
+   * The function who call the windows to choose a export directory.
    * @param event the clicked event
    */
   public void importClicked(MouseEvent event) {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-    importDirectory = importProfilDirectory.showDialog(primaryStage);
+    imporDirectorySource = importProfilDirectorySource.showDialog(primaryStage);
+    if (imporDirectorySource == null) {
+      return;
+    }
+    directoryFile = importProfilDirectory.showDialog(primaryStage);
+    if (directoryFile == null) {
+      return;
+    }
     try {
+      // TODO: save add savepath
       this.application
         .getIhmCore()
         .getDataForIhm()
-        .importProfile(importDirectory.getAbsolutePath());
-    } catch (UnsupportedOperationException e) {
-      LogManager.getLogger().error(e.getMessage());
-      IhmAlert.showAlert("implementation","pas encore implémenté","critical");
-    } catch (java.lang.RuntimeException e) {
+        .importProfile(imporDirectorySource.toPath(), directoryFile.toPath());
+    } catch (java.io.IOException e) {
       LogManager.getLogger().error(e.getMessage());
       IhmAlert
-        .showAlert("Directory","aucun dossier pour exporter le profil selectionné","critical");
+        .showAlert("Directory","aucun dossier pour importer le profil selectionné","critical");
+    } catch (DataException e) {
+      LogManager.getLogger().error(e.getMessage());
+      IhmAlert
+          .showAlert("Data",
+                     "données corompues, impossible de réaliser l'import du profil",
+                     "critical");
     }
   }
 }

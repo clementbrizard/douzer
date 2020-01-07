@@ -202,15 +202,7 @@ public class NewMusicController implements Controller {
     FileChooser.ExtensionFilter audioExtensionFilter =
             new FileChooser.ExtensionFilter(
                     "Fichier audio",
-                    "*.mp3",
-                    "*.aac",
-                    "*.flac",
-                    "*.mid",
-                    "*.midi",
-                    "*.oga",
-                    "*.ogg",
-                    "*.wav",
-                    "*.weba"
+                    "*.mp3"
             );
     fileChooser.getExtensionFilters().add(audioExtensionFilter);
 
