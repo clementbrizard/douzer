@@ -3,13 +3,11 @@ package controllers;
 import com.sun.javafx.scene.control.skin.TableColumnHeader;
 import core.Application;
 import datamodel.LocalMusic;
-import datamodel.Playlist;
-import datamodel.SearchQuery;
 import datamodel.Music;
 import datamodel.MusicMetadata;
-import java.io.IOException;
-import java.time.Duration;
+import datamodel.Playlist;
 import datamodel.SearchQuery;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,10 +22,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -48,7 +44,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.util.ArrayUtils;
 import utils.FormatDuration;
 
 /**
@@ -279,18 +274,18 @@ public class MyMusicsController implements Controller {
       playlistNames.forEach(name -> {
         MenuItem menuPlaylist = new MenuItem(name);
         menuPlaylist.setOnAction(ev -> {
-            Playlist playlist = MyMusicsController.this.getApplication()
-                .getIhmCore().getDataForIhm()
-                .getPlaylistByName(name);
-            ObservableList<MusicMetadata> selectedItems = tvMusics
-                .getSelectionModel()
-                .getSelectedItems();
+          Playlist playlist = MyMusicsController.this.getApplication()
+              .getIhmCore().getDataForIhm()
+              .getPlaylistByName(name);
+          ObservableList<MusicMetadata> selectedItems = tvMusics
+              .getSelectionModel()
+              .getSelectedItems();
 
-            selectedItems.forEach(item -> {
-              MyMusicsController.this.getApplication()
-                  .getIhmCore().getDataForIhm()
-                  .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
-            });
+          selectedItems.forEach(item -> {
+            MyMusicsController.this.getApplication()
+              .getIhmCore().getDataForIhm()
+              .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
+          });
         });
         menuAddToPlaylist.getItems().add(menuPlaylist);
       });
@@ -488,7 +483,8 @@ public class MyMusicsController implements Controller {
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
-    this.getCentralFrameController().getMainController().getMyPlaylistsController().resetSelection();
+    this.getCentralFrameController().getMainController().getMyPlaylistsController()
+        .resetSelection();
   }
 
   /**
@@ -554,6 +550,7 @@ public class MyMusicsController implements Controller {
     tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
     this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
+
   /**
    * Delete a list of one or more musics.
    *
