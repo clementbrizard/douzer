@@ -167,7 +167,7 @@ public class NewCommentController implements Controller {
           .showError();
     }
 
-    if( rate == 0) {
+    if (rate == 0) {
       valide = false;
       Notifications.create()
           .title("Commentaire non sauvegardée")
