@@ -44,10 +44,10 @@
                          </image>
                      </ImageView>
                      <Button fx:id="btnAdvancedSearchMm" layoutX="147.0" layoutY="57.0" mnemonicParsing="false" onAction="#showAdvancedSearch" prefHeight="33.0" prefWidth="160.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Recherche avancée" />
-                     <TextField fx:id="tfSearchTitle" layoutX="85.0" layoutY="98.0" prefHeight="31.0" prefWidth="254.0" promptText="Titre" />
-                     <TextField fx:id="tfSearchArtist" layoutX="85.0" layoutY="133.0" prefHeight="31.0" prefWidth="254.0" promptText="Artiste" />
-                     <TextField fx:id="tfSearchAlbum" layoutX="387.0" layoutY="98.0" prefHeight="31.0" prefWidth="248.0" promptText="Album" />
-                     <TextField fx:id="tfSearchTags" layoutX="386.0" layoutY="133.0" prefHeight="31.0" prefWidth="249.0" promptText="Tags" />
+                     <TextField fx:id="tfSearchTitle" layoutX="63.0" layoutY="98.0" prefHeight="31.0" prefWidth="254.0" promptText="Titre" />
+                     <TextField fx:id="tfSearchArtist" layoutX="63.0" layoutY="133.0" prefHeight="31.0" prefWidth="254.0" promptText="Artiste" />
+                     <TextField fx:id="tfSearchAlbum" layoutX="325.0" layoutY="98.0" prefHeight="31.0" prefWidth="248.0" promptText="Album" />
+                     <TextField fx:id="tfSearchTags" layoutX="325.0" layoutY="133.0" prefHeight="31.0" prefWidth="249.0" promptText="Tags" />
                      <TableView fx:id="tvMusics" layoutX="63.0" layoutY="172.0" onMouseClicked="#handleClickTableView" prefHeight="384.0" prefWidth="599.0">
                          <columns>
                              <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
@@ -56,7 +56,7 @@
                              <TableColumn fx:id="durationCol" minWidth="4.0" prefWidth="92.0" text="Durée" />
                              <TableColumn fx:id="tagsCol" prefWidth="100.0" text="tags" />
                          </columns>
-                     </TableView>           
+                     </TableView>
                 </children>
              </Pane>
          </center>

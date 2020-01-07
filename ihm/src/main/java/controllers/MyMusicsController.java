@@ -68,7 +68,7 @@ public class MyMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> durationCol;
   @FXML
   private TableColumn<MusicMetadata, Set<String>> tagsCol;
-  
+
   @FXML
   private TextField tfSearch;
   @FXML
@@ -95,7 +95,7 @@ public class MyMusicsController implements Controller {
 
   // Local musics hashmap to access them instantly
   private HashMap<String, LocalMusic> localMusics;
-  
+
   /* Getters */
 
   public NewMusicController getNewMusicController() {
@@ -153,9 +153,9 @@ public class MyMusicsController implements Controller {
    */
   public void init() {
     // Bind columns to corresponding attributes in MusicMetaData
-    this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
-    this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
-    this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
+    this.artistCol.setCellValueFactory(new PropertyValueFactory<>("artist"));
+    this.titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+    this.albumCol.setCellValueFactory(new PropertyValueFactory<>("album"));
     this.tagsCol.setCellValueFactory(new PropertyValueFactory<>("tags"));
 
 
@@ -454,12 +454,12 @@ public class MyMusicsController implements Controller {
   public void displayAvailableMusics() {
     List<MusicMetadata> listMusic = this.retrieveLocalMusics();
     tvMusics.getItems().setAll(listMusic);
-    
+
     //change the size of Tags column
     ArrayList<Double> d = new ArrayList<Double>();
     d.add(0.0);
     listMusic.forEach(metadata -> {
-      double numberOfChar = 0;      
+      double numberOfChar = 0;
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
