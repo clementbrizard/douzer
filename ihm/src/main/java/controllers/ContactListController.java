@@ -4,17 +4,13 @@ import datamodel.User;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-//replace by javadocs
-//the down left view in the main view
 public class ContactListController implements Controller {
 
   private static final Logger contactListLogger = LogManager.getLogger();
@@ -55,17 +51,14 @@ public class ContactListController implements Controller {
       }
     });
 
-    lvContacts.setOnMouseClicked(new EventHandler<MouseEvent>() {
-      @Override
-      public void handle(MouseEvent click) {
-        if (click.getClickCount() == 2) {
-          User clickedOnlineUser = lvContacts.getSelectionModel().getSelectedItem();
-          contactListLogger.debug(clickedOnlineUser.getUsername());
-          mainController.getCentralFrameController()
-                  .setCentralContentDistantUser();
-          mainController.getCentralFrameController()
-                  .getDistantUserController().setDistantUser(clickedOnlineUser);
-        }
+    lvContacts.setOnMouseClicked(click -> {
+      if (click.getClickCount() == 2) {
+        User clickedOnlineUser = lvContacts.getSelectionModel().getSelectedItem();
+        contactListLogger.debug(clickedOnlineUser.getUsername());
+        mainController.getCentralFrameController()
+                .setCentralContentDistantUser();
+        mainController.getCentralFrameController()
+                .getDistantUserController().setDistantUser(clickedOnlineUser);
       }
     });
   }
@@ -82,7 +75,7 @@ public class ContactListController implements Controller {
    * Fills the view with the username of contacts.
    **/
 
-  public void displayContacts() {
+  private void displayContacts() {
 
     ObservableList<User> contacts = this.mainController
             .getApplication()
@@ -93,7 +86,7 @@ public class ContactListController implements Controller {
             .stream()
             .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
-    contactListLogger.info("Retrieved {} online users from Data", contacts.size());
+    contactListLogger.info("Retrieved {} contacts from Data", contacts.size());
     contactsList.setAll(contacts);
   }
 
@@ -101,7 +94,7 @@ public class ContactListController implements Controller {
     return mainController;
   }
 
-  public void setMainController(MainController mainController) {
+  void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
 }
