@@ -101,6 +101,12 @@ public class IhmForData implements Ihm {
         });
       }
     }
+    this.ihmCore
+      .getApplication()
+      .getMainController()
+      .getCentralFrameController()
+      .getAllMusicsController()
+      .displayAvailableMusics();
   }
 
   /**

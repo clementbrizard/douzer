@@ -2,6 +2,7 @@ package controllers;
 
 import cells.CommentListViewCell;
 import datamodel.Comment;
+import datamodel.LocalMusic;
 import datamodel.Music;
 
 import javafx.collections.FXCollections;
@@ -96,6 +97,10 @@ public class CommentsController implements Controller {
         return c;
       }
     });
+    
+    if (!(music instanceof LocalMusic)) {
+      commentButton.setDisable(true);
+    }
   }
 
   /**

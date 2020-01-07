@@ -286,6 +286,7 @@ public class AllMusicsController implements Controller {
    * display All Music Available in the center table.
    */
   public void displayAvailableMusics() {
+    tvMusics.getItems().clear();
     tvMusics.getItems().setAll(this.retrieveAvailableMusics());
     
     //change the size of Tags column

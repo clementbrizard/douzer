@@ -20,6 +20,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
@@ -93,6 +94,9 @@ public class DetailsMusicController implements Controller {
 
   @FXML
   private RadioButton radioPrivate;
+  
+  @FXML
+  private Label noteLabel;
 
   private MyMusicsController myMusicsController;
 
@@ -224,6 +228,7 @@ public class DetailsMusicController implements Controller {
       this.starThree.setVisible(false);
       this.starFour.setVisible(false);
       this.starFive.setVisible(false);
+      this.noteLabel.setVisible(false);
     }
 
     if (musicSelected.getMetadata() != null) {

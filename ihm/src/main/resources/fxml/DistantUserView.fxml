@@ -52,7 +52,7 @@
                         </BorderPane>
                     </HBox>
                     <HBox styleClass="to-center">
-                        <TableView fx:id="tvMusics">
+                        <TableView fx:id="tvMusics" onMouseClicked="#handleClickTableView">
                             <columns>
                                 <TableColumn fx:id="artistCol" prefWidth="129.0" text="Artiste" />
                                 <TableColumn fx:id="titleCol" prefWidth="152.0" text="Titre" />
