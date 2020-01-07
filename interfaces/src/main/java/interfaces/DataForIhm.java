@@ -81,7 +81,7 @@ public interface DataForIhm {
 
   void login(String username, String password) throws IOException, LoginException;
 
-  void notifyUserUpdate(LocalUser user);
+  void notifyUserUpdate(LocalUser user) throws IOException;
 
   /**
    * Extract metadata from mp3 file.
