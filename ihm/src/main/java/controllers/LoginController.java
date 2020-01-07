@@ -126,18 +126,10 @@ public class LoginController implements Controller {
     Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
     imporDirectorySource = importProfilDirectorySource.showDialog(primaryStage);
     if (imporDirectorySource == null) {
-      IhmAlert
-          .showAlert("File",
-                   "aucun Dossier source choisi pour importer le profil selectionné",
-                   "critical");
       return;
     }
     directoryFile = importProfilDirectory.showDialog(primaryStage);
     if (directoryFile == null) {
-      IhmAlert
-          .showAlert("Directory",
-                   "aucun Dossier cible choisi pour importer le profil selectionné",
-                   "critical");
       return;
     }
     try {
