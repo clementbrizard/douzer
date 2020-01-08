@@ -48,6 +48,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import org.apache.logging.log4j.LogManager;
+import org.controlsfx.control.Notifications;
 import utils.FormatDuration;
 
 /**
@@ -728,16 +729,20 @@ public class MyMusicsController implements Controller {
       newOrder = 0;
     }
 
-    if (currentPlaylistName.equals("Mes morceaux")) {
-      System.out.println("Keybind not implemented for \"Mes morceaux\" yet...");
-      return;
-    } else {
+    if (!currentPlaylistName.equals("Mes morceaux")) {
       Playlist currentPlaylist = this.getApplication().getIhmCore().getDataForIhm()
           .getCurrentUser().getPlaylistByName(currentPlaylistName);
-      if (newOrder > currentPlaylist.getMusicList().size() - 1){
+      if (newOrder > currentPlaylist.getMusicList().size() - 1) {
         newOrder = currentPlaylist.getMusicList().size() - 1;
       }
       currentPlaylist.changeOrder(selectedMusic, newOrder);
+    } else {
+      Notifications.create()
+          .title("Impossible de changer l'ordre des musiques")
+          .text("L'ordre des morceaux ne peut être modifié que "
+              + "dans une playlist que vous avez créée.")
+          .darkStyle()
+          .showWarning();
     }
     //Update track order
     this.showPlaylist(currentPlaylistName);
