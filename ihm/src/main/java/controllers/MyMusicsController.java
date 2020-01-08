@@ -655,6 +655,13 @@ public class MyMusicsController implements Controller {
                   .stopPlayer();
             }
 
+            // Remove music from every playlist
+            for (Playlist playlist : this.getApplication().getIhmCore().getDataForIhm().
+                getCurrentUser().getPlaylists()) {
+              this.getApplication().getIhmCore().getDataForIhm().removeMusicFromPlaylist(
+                  music, playlist
+              );
+            }
             this.displayAvailableMusics();
           } catch (NullPointerException e) {
             myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
