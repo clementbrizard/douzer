@@ -39,11 +39,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import org.apache.logging.log4j.LogManager;
 import utils.FormatDuration;
 
@@ -307,9 +310,15 @@ public class MyMusicsController implements Controller {
             .getPlayerController()
             .updateArrayMusic();
       }
-
     });
 
+    // Remove up / down arrows keybinding (used to move playlists)
+    tvMusics.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.DOWN) {
+        this.moveMusicInCurrentPlaylist(keyEvent);
+        keyEvent.consume();
+      }
+    });
   }
 
   /* FXML methods (to handle events from user) */
@@ -694,6 +703,44 @@ public class MyMusicsController implements Controller {
 
       this.updateTableMusics();
     }
+  }
+
+  /**
+   * Moves a music in the current playlist.
+   *
+   * @param keyEvent : up or down arrow key press
+   */
+  private void moveMusicInCurrentPlaylist(KeyEvent keyEvent) {
+    String currentPlaylistName = this.lblTitle.getText();
+    int currentIndexRow = tvMusics.getSelectionModel().getSelectedIndex();
+    LocalMusic selectedMusic = getLocalMusicInView().get(currentIndexRow);
+    int newOrder = 0;
+
+    if (keyEvent.getCode() == KeyCode.DOWN) {
+      newOrder = currentIndexRow + 1;
+    } else if (keyEvent.getCode() == KeyCode.UP) {
+      newOrder = currentIndexRow - 1;
+    } else {
+      myMusicsLogger.error("Caught wrong key press event !");
+    }
+
+    if (newOrder < 0) {
+      newOrder = 0;
+    }
+
+    if (currentPlaylistName.equals("Mes morceaux")) {
+      System.out.println("Keybind not implemented for \"Mes morceaux\" yet...");
+      return;
+    } else {
+      Playlist currentPlaylist = this.getApplication().getIhmCore().getDataForIhm()
+          .getCurrentUser().getPlaylistByName(currentPlaylistName);
+      if (newOrder > currentPlaylist.getMusicList().size() - 1){
+        newOrder = currentPlaylist.getMusicList().size() - 1;
+      }
+      currentPlaylist.changeOrder(selectedMusic, newOrder);
+    }
+    //Update track order
+    this.showPlaylist(currentPlaylistName);
   }
 
   /**
