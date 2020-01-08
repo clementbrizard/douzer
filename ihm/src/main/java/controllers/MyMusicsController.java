@@ -637,14 +637,30 @@ public class MyMusicsController implements Controller {
                 .getIhmCore()
                 .getDataForIhm()
                 .deleteMusic(music, deleteLocal);
-            this.displayLocalMusics();
+
+            if (music.getMetadata()
+                .getTitle()
+                .equals(
+                    this
+                        .getCentralFrameController()
+                        .getMainController()
+                        .getPlayerController()
+                        .getCurrentMusicTitle())
+
+            ) {
+              this
+                  .getCentralFrameController()
+                  .getMainController()
+                  .getPlayerController()
+                  .stopPlayer();
+            }
+
+            this.displayAvailableMusics();
           } catch (NullPointerException e) {
             myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
           }
         });
-        this.displayLocalMusics();
       }
-
     });
   }
 

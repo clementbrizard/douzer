@@ -42,7 +42,7 @@ public abstract class Login {
         .map(String::trim)
         .map(Login::getIpFromString)
         .filter(Objects::nonNull)
-        .collect(Collectors.toSet());
+        .collect(Collectors.toCollection(HashSet::new));
   }
 
   /**

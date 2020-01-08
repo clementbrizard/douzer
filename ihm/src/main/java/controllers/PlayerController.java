@@ -250,7 +250,7 @@ public class PlayerController implements Controller {
 
     String saveTitle = "NOTHING";
 
-    if (!arrayMusic.isEmpty() && currentIndex < arrayMusic.size() && currentIndex != -1) {
+    if (!arrayMusic.isEmpty() && currentIndex != -1 && currentIndex < arrayMusic.size()) {
       saveTitle = arrayMusic.get(currentIndex).getTitle();
     }
 
@@ -352,6 +352,10 @@ public class PlayerController implements Controller {
       player.stop();
       play.setGraphic(new ImageView(playIcon));
       isPlaying = false;
+      songInfo.setText(" - ");
+      lblTime.setText("0:00");
+      pgMusicProgress.setProgress(0.0);
+      fullTime.setText("0:00");
     }
   }
 
@@ -446,6 +450,18 @@ public class PlayerController implements Controller {
 
   public void setMainController(MainController mainController) {
     this.mainController = mainController;
+  }
+
+  /**
+   * getCurrentMusicTitle : get current music title.
+   *
+   * @return string format
+   */
+  public String getCurrentMusicTitle() {
+    if (!arrayMusic.isEmpty() && currentIndex != -1) {
+      return arrayMusic.get(currentIndex).getTitle();
+    }
+    return "";
   }
 
 }
