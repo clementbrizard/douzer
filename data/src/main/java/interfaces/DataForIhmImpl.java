@@ -114,7 +114,7 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void download(Music music) {
     ArrayList<InetAddress> ownersIPs = new ArrayList<>();
-    String musicHash = music.getMetadata().getHash();
+    String musicHash = music.getHash();
     
     for (User owner : music.getOwners()) {
       ownersIPs.add(owner.getIp());
