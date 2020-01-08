@@ -27,7 +27,7 @@ public class Music implements java.io.Serializable {
   }
 
   public String getHash() {
-    return this.getHash();
+    return this.getMetadata().getHash();
   }
 
   public MusicMetadata getMetadata() {
