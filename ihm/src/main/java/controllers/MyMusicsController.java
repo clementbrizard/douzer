@@ -767,8 +767,8 @@ public class MyMusicsController implements Controller {
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : localMusicsStream) {
       //if the current localMusic isn't already in our localMusics we add it.
-      if (localMusics.get(localMusic.getMetadata().getHash()) == null) {
-        localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+      if (localMusics.get(localMusic.getHash()) == null) {
+        localMusics.put(localMusic.getHash(), localMusic);
         localMusicsMetadata.add(localMusic.getMetadata());
       }
     }
