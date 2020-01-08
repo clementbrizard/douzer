@@ -220,8 +220,8 @@ public class IhmForData implements Ihm {
     }
 
     if (controllerCurrentMusic.getCurrentMusic() != null
-        && controllerCurrentMusic.getCurrentMusic().getMetadata().getHash()
-        .equals(music.getMetadata().getHash())) {
+        && controllerCurrentMusic.getCurrentMusic().getHash()
+        .equals(music.getHash())) {
       controllerCurrentMusic.init(null);
     }
 

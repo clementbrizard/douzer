@@ -23,10 +23,10 @@ public abstract class UnshareMusics {
     musics.forEach(m -> {
           switch (m.getShareStatus()) {
             case PRIVATE:
-              musicHashsForAll.add(m.getMetadata().getHash());
+              musicHashsForAll.add(m.getHash());
               break;
             case FRIENDS:
-              musicHashsForNonFriends.add(m.getMetadata().getHash());
+              musicHashsForNonFriends.add(m.getHash());
               break;
             default:
               break;

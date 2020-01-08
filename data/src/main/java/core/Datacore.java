@@ -49,11 +49,11 @@ public class Datacore {
    * or by merging it into the existing music.
    */
   public void addMusic(Music music) {
-    Music original = this.musics.get(music.getMetadata().getHash());
+    Music original = this.musics.get(music.getHash());
     if (original != null) {
       this.mergeMusics(original, music);
     } else {
-      this.musics.put(music.getMetadata().getHash(), music);
+      this.musics.put(music.getHash(), music);
     }
   }
 
@@ -163,7 +163,7 @@ public class Datacore {
   public void removeOwner(Music music, User user) {
     music.getOwners().remove(user);
     if (music.getOwners().isEmpty()) {
-      this.musics.remove(music.getMetadata().getHash());
+      this.musics.remove(music.getHash());
       this.ihm.notifyMusicDeletion(music);
     }
   }
@@ -208,7 +208,7 @@ public class Datacore {
   
   public LocalMusic upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
     LocalMusic newMusic = new LocalMusic(toUpgrade.getMetadata(), mp3Path);
-    this.musics.remove(toUpgrade.getMetadata().getHash());
+    this.musics.remove(toUpgrade.getHash());
     this.addMusic(newMusic);
     
     newMusic.getOwners().add(this.getCurrentUser());

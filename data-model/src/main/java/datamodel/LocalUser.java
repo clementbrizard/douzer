@@ -181,11 +181,8 @@ public class LocalUser extends User {
         if (entry.getKey() == this.getUuid()) { //UUID is from localUser
           comments.add(new Comment(entry.getValue(), this));
         } else { //UUID is from a friend
-          User user = this.getFriends().stream().filter(u -> entry.getKey() == u.getUuid())
-              .findFirst().orElse(null);
-          if (user != null) {
-            comments.add(new Comment(entry.getValue(), user));
-          }
+          this.getFriends().stream().filter(u -> entry.getKey() == u.getUuid())
+              .findFirst().ifPresent(user -> comments.add(new Comment(entry.getValue(), user)));
         }
       });
       music.getMetadata().setComments(comments);
@@ -201,11 +198,8 @@ public class LocalUser extends User {
           if (uuid == this.getUuid()) { //UUID is from localUser
             ratings.put(this, rate);
           } else { //UUID is from a friend
-            User user = this.getFriends().stream().filter(u -> uuid == u.getUuid())
-                .findFirst().orElse(null);
-            if (user != null) {
-              ratings.put(user, rate);
-            }
+            this.getFriends().stream().filter(u -> uuid == u.getUuid())
+                .findFirst().ifPresent(user -> ratings.put(user, rate));
           }
         }
       });

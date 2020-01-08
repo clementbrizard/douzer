@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public abstract class ImportUser {
@@ -25,7 +26,7 @@ public abstract class ImportUser {
   public static void run(Path pathToBackup, Path newSavePath, Datacore dc)
       throws DataException, IOException {
     //Searching for the .ser file.
-    List list = Arrays.stream(new File(pathToBackup.toUri()).listFiles())
+    List list = Arrays.stream(Objects.requireNonNull(new File(pathToBackup.toUri()).listFiles()))
         .filter(f -> f.getName().matches(".*\\.ser"))
         .map(File::getName)
         .collect(Collectors.toList());
