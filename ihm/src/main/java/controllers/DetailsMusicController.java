@@ -170,7 +170,6 @@ public class DetailsMusicController implements Controller {
 
       @Override
       public void handle(MouseEvent event) {
-        boolean hasTag = false;
         String selectedItem = listViewTagsList.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
           Iterator<String> it = localMusic.getMetadata().getTags().iterator();
