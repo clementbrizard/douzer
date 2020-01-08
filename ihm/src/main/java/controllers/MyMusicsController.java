@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +28,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ContextMenu;
@@ -458,22 +458,32 @@ public class MyMusicsController implements Controller {
         query.withTags(tags);
       }
     }
-
-    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+    Stream<Music> rawResult = MyMusicsController.this.getCentralFrameController()
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query)
-        .filter(music -> music.getOwners().contains(this
+        .getDataForIhm().searchMusics(query);
+
+    Stream<Music> specificResult = rawResult;
+
+    if (this.lblTitle.getText().equals("Mes morceaux")) {
+      specificResult = rawResult.filter(music ->
+        music.getOwners().contains(this
             .getCentralFrameController()
             .getMainController()
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
-            .getCurrentUser()
-        ));
+            .getCurrentUser())
+      );
+    } else {
+      Playlist currentPlaylist = this.getApplication().getIhmCore().getDataForIhm()
+          .getCurrentUser().getPlaylistByName(this.lblTitle.getText());
+      specificResult = rawResult.filter(music -> currentPlaylist.getMusicList()
+          .contains(music));
+    }
 
-    updateMusicsOnSearch(searchResults);
+    updateMusicsOnSearch(specificResult);
   }
 
   /**

@@ -250,7 +250,7 @@ public class PlayerController implements Controller {
 
     String saveTitle = "NOTHING";
 
-    if (!arrayMusic.isEmpty() && currentIndex < arrayMusic.size()) {
+    if (!arrayMusic.isEmpty() && currentIndex < arrayMusic.size() && currentIndex != -1) {
       saveTitle = arrayMusic.get(currentIndex).getTitle();
     }
 
@@ -274,11 +274,13 @@ public class PlayerController implements Controller {
       }
     }
 
+    /* Removed because of bug when changing playlist
+
     // change currentINDEX (header tableView click event)
     if (! saveTitle.equals("NOTHING")) {
       currentIndex = localCurrentMusic;
     }
-
+    */
   }
 
   /**
