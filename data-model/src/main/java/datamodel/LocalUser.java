@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -176,7 +177,7 @@ public class LocalUser extends User {
     Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>> commentsMap =
         (Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>>) stream.readObject();
     commentsMap.forEach((music, mapList) -> {
-      List<Comment> comments = new ArrayList<>();
+      LinkedHashSet<Comment> comments = new LinkedHashSet<>();
       mapList.forEach(entry -> {
         if (entry.getKey() == this.getUuid()) { //UUID is from localUser
           comments.add(new Comment(entry.getValue(), this));

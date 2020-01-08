@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class MusicMetadata implements java.io.Serializable {
   private Year releaseYear;
   private Set<String> tags;
   private transient Map<User, Integer> ratings;
-  private transient List<Comment> comments;
+  private transient LinkedHashSet<Comment> comments;
   private Date timeStamp;
 
   /**
@@ -32,7 +33,7 @@ public class MusicMetadata implements java.io.Serializable {
     this.hash = hash;
     this.tags = new HashSet<>();
     this.ratings = new HashMap<>();
-    this.comments = new ArrayList<>();
+    this.comments = new LinkedHashSet<>();
 
     updateTimeStamp();
   }
@@ -105,11 +106,11 @@ public class MusicMetadata implements java.io.Serializable {
     this.ratings.remove(user, rating);
   }
 
-  public List<Comment> getComments() {
+  public LinkedHashSet<Comment> getComments() {
     return comments;
   }
 
-  public void setComments(List<Comment> comments) {
+  public void setComments(LinkedHashSet<Comment> comments) {
     updateTimeStamp();
     this.comments = comments;
   }
@@ -153,7 +154,7 @@ public class MusicMetadata implements java.io.Serializable {
   private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
     stream.defaultReadObject();
     this.setRatings(new HashMap<>());
-    this.setComments(new ArrayList<>());
+    this.setComments(new LinkedHashSet<>());
   }
 
   @Override
