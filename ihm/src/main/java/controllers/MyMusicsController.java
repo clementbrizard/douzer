@@ -270,37 +270,12 @@ public class MyMusicsController implements Controller {
       deleteMusics(musicsDelete);
     });
 
-    Menu menuAddToPlaylist = new Menu("Ajouter à la la playlist...");
-    menuAddToPlaylist.setOnAction(event -> {
-      menuAddToPlaylist.getItems().clear();
-      List<String> playlistNames = MyMusicsController.this.getApplication()
-          .getIhmCore().getDataForIhm()
-          .getCurrentUser().getPlaylists()
-          .stream().map(p -> p.getName())
-          .collect(Collectors.toList());
-      playlistNames.forEach(name -> {
-        MenuItem menuPlaylist = new MenuItem(name);
-        menuPlaylist.setOnAction(ev -> {
-          Playlist playlist = MyMusicsController.this.getApplication()
-              .getIhmCore().getDataForIhm()
-              .getPlaylistByName(name);
-          ObservableList<MusicMetadata> selectedItems = tvMusics
-              .getSelectionModel()
-              .getSelectedItems();
-
-          selectedItems.forEach(item -> {
-            MyMusicsController.this.getApplication()
-              .getIhmCore().getDataForIhm()
-              .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
-          });
-        });
-        menuAddToPlaylist.getItems().add(menuPlaylist);
-      });
-    });
 
     // Add MenuItem to ContextMenu
-    contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete, menuAddToPlaylist);
-
+    // menuAddToPlaylist should ALWAYS be the last item of contextMenu !
+    // @see refreshMenuPlaylist() which removes the last item to replace it with playlist menu
+    contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+    refreshMenuPlaylist(false);
 
     // Header click event
     tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
@@ -322,6 +297,59 @@ public class MyMusicsController implements Controller {
     });
   }
 
+  /**
+   * Adds the "ajouter à la playlist..." menu to the context menu which pops up with a right click.
+   *
+   * @param removeOldMenu if true, removes the old playlist menu to replace it with a new one.
+   *                      false should be used for initialization only, or else the menu
+   *                      will be duplicated.
+   */
+  private void refreshMenuPlaylist(boolean removeOldMenu) {
+    if (removeOldMenu) {
+      contextMenu.getItems().remove(contextMenu.getItems().size() - 1);
+    }
+    Menu menuAddToPlaylist = new Menu("Ajouter à la la playlist...");
+    menuAddToPlaylist.getItems().clear();
+    List<String> playlistNames = MyMusicsController.this.getApplication()
+        .getIhmCore().getDataForIhm()
+        .getCurrentUser().getPlaylists()
+        .stream().map(p -> p.getName())
+        .collect(Collectors.toList());
+
+    playlistNames.forEach(name -> {
+      MenuItem menuPlaylist = new MenuItem(name);
+      menuPlaylist.setOnAction(ev -> {
+        Playlist playlist = MyMusicsController.this.getApplication()
+            .getIhmCore().getDataForIhm()
+            .getPlaylistByName(name);
+        ObservableList<MusicMetadata> selectedItems = tvMusics
+            .getSelectionModel()
+            .getSelectedItems();
+
+        selectedItems.forEach(item -> {
+          if (playlist.getMusicList().contains(localMusics.get(item.getHash()))) {
+            Notifications.create()
+                .title("Ajout non nécessaire")
+                .text("Le morceau \"" + item.getTitle() + "\" est déjà présent dans la playlist \""
+                    + playlist.getName() + "\" !")
+                .showWarning();
+          } else {
+            MyMusicsController.this.getApplication()
+                .getIhmCore().getDataForIhm()
+                .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
+
+            Notifications.create()
+                .title("Ajout réussi")
+                .text("Morceau \"" + item.getTitle() + "\" ajouté dans la playlist \""
+                    + playlist.getName() + "\" avec succès !")
+                .showInformation();
+          }
+        });
+      });
+      menuAddToPlaylist.getItems().add(menuPlaylist);
+    });
+    contextMenu.getItems().add(menuAddToPlaylist);
+  }
   /* FXML methods (to handle events from user) */
 
   /**
@@ -361,6 +389,7 @@ public class MyMusicsController implements Controller {
     if (click.getButton().equals(MouseButton.SECONDARY)) {
       if (music != null) {
         currentLocalMusic = localMusics.get(music.getHash());
+        this.refreshMenuPlaylist(true);
         contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
       }
     }
