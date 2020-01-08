@@ -656,8 +656,8 @@ public class MyMusicsController implements Controller {
             }
 
             // Remove music from every playlist
-            for (Playlist playlist : this.getApplication().getIhmCore().getDataForIhm().
-                getCurrentUser().getPlaylists()) {
+            for (Playlist playlist : this.getApplication().getIhmCore().getDataForIhm()
+                .getCurrentUser().getPlaylists()) {
               this.getApplication().getIhmCore().getDataForIhm().removeMusicFromPlaylist(
                   music, playlist
               );
