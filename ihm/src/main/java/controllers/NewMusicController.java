@@ -354,7 +354,7 @@ public class NewMusicController implements Controller {
       Iterator<String> it = tags.iterator();
 
       while (it.hasNext()) {
-        if (it.next() == selectedItem) {	// remove even elements
+        if (it.next() == selectedItem) {
           it.remove();
         }
       }

@@ -175,7 +175,7 @@ public class DetailsMusicController implements Controller {
           Iterator<String> it = localMusic.getMetadata().getTags().iterator();
 
           while (it.hasNext()) {
-            if (it.next() == selectedItem) {	// remove even elements
+            if (it.next() == selectedItem) {
               it.remove();
             }
           }
@@ -183,7 +183,7 @@ public class DetailsMusicController implements Controller {
           it = tags.iterator();
 
           while (it.hasNext()) {
-            if (it.next() == selectedItem) {	// remove even elements
+            if (it.next() == selectedItem) {
               it.remove();
             }
           }
