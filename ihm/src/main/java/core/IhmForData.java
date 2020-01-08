@@ -52,6 +52,13 @@ public class IhmForData implements Ihm {
       return;
     }
     controller.addNewOnlineUser(user);
+    //Refresh music now that new user has been added
+    this.getIhmCore()
+        .getApplication()
+        .getMainController()
+        .getCentralFrameController()
+        .getAllMusicsController()
+        .displayAvailableMusics();
   }
 
   /**
