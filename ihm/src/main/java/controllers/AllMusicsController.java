@@ -320,7 +320,7 @@ public class AllMusicsController implements Controller {
 
     List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
     for (Music music : availableMusicsStream) {
-      availableMusics.put(music.getMetadata().getHash(), music);
+      availableMusics.put(music.getHash(), music);
       availableMusicsMetaData.add(music.getMetadata());
     }
 

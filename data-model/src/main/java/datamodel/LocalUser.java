@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -176,16 +177,13 @@ public class LocalUser extends User {
     Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>> commentsMap =
         (Map<LocalMusic, List<AbstractMap.SimpleEntry<UUID, String>>>) stream.readObject();
     commentsMap.forEach((music, mapList) -> {
-      List<Comment> comments = new ArrayList<>();
+      LinkedHashSet<Comment> comments = new LinkedHashSet<>();
       mapList.forEach(entry -> {
         if (entry.getKey() == this.getUuid()) { //UUID is from localUser
           comments.add(new Comment(entry.getValue(), this));
         } else { //UUID is from a friend
-          User user = this.getFriends().stream().filter(u -> entry.getKey() == u.getUuid())
-              .findFirst().orElse(null);
-          if (user != null) {
-            comments.add(new Comment(entry.getValue(), user));
-          }
+          this.getFriends().stream().filter(u -> entry.getKey() == u.getUuid())
+              .findFirst().ifPresent(user -> comments.add(new Comment(entry.getValue(), user)));
         }
       });
       music.getMetadata().setComments(comments);
@@ -201,11 +199,8 @@ public class LocalUser extends User {
           if (uuid == this.getUuid()) { //UUID is from localUser
             ratings.put(this, rate);
           } else { //UUID is from a friend
-            User user = this.getFriends().stream().filter(u -> uuid == u.getUuid())
-                .findFirst().orElse(null);
-            if (user != null) {
-              ratings.put(user, rate);
-            }
+            this.getFriends().stream().filter(u -> uuid == u.getUuid())
+                .findFirst().ifPresent(user -> ratings.put(user, rate));
           }
         }
       });
