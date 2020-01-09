@@ -66,9 +66,9 @@ public class OnlineUsersListController implements Controller {
     lvwOnlineUsers.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent click) {
-        if (click.getClickCount() == 2) {
+        if (click.getClickCount() == 2
+            && lvwOnlineUsers.getSelectionModel().getSelectedItem() != null) {
           User clickedOnlineUser = lvwOnlineUsers.getSelectionModel().getSelectedItem();
-          onlineUsersListLogger.debug(clickedOnlineUser.getUsername());
           OnlineUsersListController.this.mainController.getCentralFrameController()
             .setCentralContentDistantUser();
           OnlineUsersListController.this.mainController.getCentralFrameController()
