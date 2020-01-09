@@ -25,8 +25,10 @@ public class UnshareMusicsPayload extends Payload {
   public void run(Datacore dc) {
     this.musicHashs.forEach(hash -> {
       Music musicToUnshare = dc.getMusic(hash);
-      dc.removeOwner(musicToUnshare, dc.getUser(this.senderUuid));
-      dc.ihm.updateMusic(musicToUnshare);
+      if (musicToUnshare != null) {
+        dc.removeOwner(musicToUnshare, dc.getUser(this.senderUuid));
+        dc.ihm.updateMusic(musicToUnshare);
+      }
     });
   }
 

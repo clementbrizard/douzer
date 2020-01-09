@@ -206,15 +206,16 @@ public class Datacore {
     // No else, the user1 is the template
   }
   
-  public LocalMusic upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
+  public void upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
     LocalMusic newMusic = new LocalMusic(toUpgrade.getMetadata(), mp3Path);
     this.musics.remove(toUpgrade.getHash());
-    this.addMusic(newMusic);
-    
     newMusic.getOwners().add(this.getCurrentUser());
+
+    this.addMusic(newMusic);
+    // Get the potentially new ref
+    newMusic = this.getLocalMusic(newMusic.getHash());
     this.getCurrentUser().getLocalMusics().add(newMusic);
-    
-    return newMusic;
+
   }
 
   /**
