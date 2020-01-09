@@ -5,11 +5,14 @@ import com.mpatric.mp3agic.UnsupportedTagException;
 import datamodel.MusicMetadata;
 import datamodel.ShareStatus;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -108,6 +111,11 @@ public class NewMusicController implements Controller {
    * Mp3 file.
    */
   private File file;
+  
+  /**
+   * list of selected MP3 files.
+   */
+  private List<File> files;
 
   /**
    * Boolean to check if a file was chosen by the user.
@@ -205,79 +213,85 @@ public class NewMusicController implements Controller {
                     "*.mp3"
             );
     fileChooser.getExtensionFilters().add(audioExtensionFilter);
-
+    
     fileChooser.setTitle("Ouvrir un fichier de musique");
 
     Stage stage = (Stage) this.textFile.getScene().getWindow();
-
-    this.file = fileChooser.showOpenDialog(stage);
-    if (this.file != null) {
-      this.hasChosenFile = true;
-      this.textFile.setText(this.file.getAbsolutePath());
-      this.textFile.setStyle(null);
-
-      try {
-        meta = myMusicsController.getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .parseMusicMetadata(file.getAbsolutePath());
-
-        if (meta.getAlbum() != null) {
-          this.textAlbum.setText(meta.getAlbum());
-        } else {
-          this.textAlbum.setText("");
+    files = fileChooser.showOpenMultipleDialog(stage);
+    //this.file = fileChooser.showOpenMultipleDialog(stage);
+    if (this.files != null) {
+        
+      if (this.files.size() == 1) {
+        this.file = this.files.get(0);
+        this.hasChosenFile = true;
+        this.textFile.setText(this.file.getAbsolutePath());
+        this.textFile.setStyle(null);
+  
+        try {
+          meta = myMusicsController.getCentralFrameController()
+              .getMainController()
+              .getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .parseMusicMetadata(file.getAbsolutePath());
+  
+          if (meta.getAlbum() != null) {
+            this.textAlbum.setText(meta.getAlbum());
+          } else {
+            this.textAlbum.setText("");
+          }
+          if (meta.getArtist() != null) {
+            this.textArtist.setText(meta.getArtist());
+          } else {
+            this.textArtist.setText("");
+          }
+          if (meta.getTitle() != null) {
+            this.textTitle.setText(meta.getTitle());
+          } else {
+            this.textTitle.setText("");
+          }
+          if (meta.getReleaseYear() != null) {
+            this.dateYear.setValueFactory(new SpinnerValueFactory
+                .IntegerSpinnerValueFactory(1000,
+                LocalDate.now().getYear(),
+                meta.getReleaseYear().getValue()));
+          } else {
+            this.dateYear.setValueFactory(new SpinnerValueFactory
+                .IntegerSpinnerValueFactory(1000,
+                LocalDate.now().getYear(),
+                LocalDate.now().getYear()));
+          }
+  
+        } catch (IOException e) {
+          newMusicLogger.error(e);
+          Notifications.create()
+              .title("Ajout de la musique raté")
+              .text("le fichier " + file.getName() + " selectionné ne correspond pas au bon format")
+              .darkStyle()
+              .showWarning();
+          return;
+        } catch (UnsupportedTagException e) {
+          newMusicLogger.error(e);
+          Notifications.create()
+              .title("Ajout de la musique raté")
+              .text("les tags ne correspondent pas au fichier")
+              .darkStyle()
+              .showWarning();
+          return;
+        } catch (InvalidDataException e) {
+          Notifications.create()
+              .title("Ajout de la musique raté")
+              .text("des erreurs dans le format de données on été detectées")
+              .darkStyle()
+              .showWarning();
+          newMusicLogger.error(e);
+          return;
+        } catch (NoSuchAlgorithmException e) {
+          newMusicLogger.error(e);
+          return;
         }
-        if (meta.getArtist() != null) {
-          this.textArtist.setText(meta.getArtist());
-        } else {
-          this.textArtist.setText("");
-        }
-        if (meta.getTitle() != null) {
-          this.textTitle.setText(meta.getTitle());
-        } else {
-          this.textTitle.setText("");
-        }
-        if (meta.getReleaseYear() != null) {
-          this.dateYear.setValueFactory(new SpinnerValueFactory
-              .IntegerSpinnerValueFactory(1000,
-              LocalDate.now().getYear(),
-              meta.getReleaseYear().getValue()));
-        } else {
-          this.dateYear.setValueFactory(new SpinnerValueFactory
-              .IntegerSpinnerValueFactory(1000,
-              LocalDate.now().getYear(),
-              LocalDate.now().getYear()));
-        }
-
-      } catch (IOException e) {
-        newMusicLogger.error(e);
-        Notifications.create()
-            .title("Ajout de la musique raté")
-            .text("le fichier selectionné ne correspond pas au bon format")
-            .darkStyle()
-            .showWarning();
-        return;
-      } catch (UnsupportedTagException e) {
-        newMusicLogger.error(e);
-        Notifications.create()
-            .title("Ajout de la musique raté")
-            .text("les tags ne correspondent pas au fichier")
-            .darkStyle()
-            .showWarning();
-        return;
-      } catch (InvalidDataException e) {
-        Notifications.create()
-            .title("Ajout de la musique raté")
-            .text("des erreurs dans le format de données on été detectées")
-            .darkStyle()
-            .showWarning();
-        newMusicLogger.error(e);
-        return;
-      } catch (NoSuchAlgorithmException e) {
-        newMusicLogger.error(e);
-        return;
+      } else {
+        this.adds();
       }
 
     } else {
@@ -360,6 +374,79 @@ public class NewMusicController implements Controller {
     }
   }
 
+  
+  private void adds() {
+    if (this.files != null) {
+      this.files.forEach(fileSelected -> {
+        try {
+          meta = myMusicsController.getCentralFrameController()
+              .getMainController()
+              .getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .parseMusicMetadata(fileSelected.getAbsolutePath());
+          
+          if (meta.getTitle() == null || meta.getTitle().equals("")) {
+            meta.setTitle(fileSelected.getName());
+          }
+         
+        } catch (UnsupportedTagException e) {
+          newMusicLogger.error(e);
+          Notifications.create()
+            .title("Ajout de la musique raté")
+            .text("les tags ne correspondent pas au fichier")
+            .darkStyle()
+            .showWarning();
+          return;
+        } catch (InvalidDataException e) {
+          Notifications.create()
+            .title("Ajout de la musique raté")
+            .text("des erreurs dans le format de données on été detectées")
+            .darkStyle()
+            .showWarning();
+          newMusicLogger.error(e);
+          return;
+        } catch (NoSuchAlgorithmException e) {
+          newMusicLogger.error(e);
+          return;
+        } catch (IOException e) {
+          newMusicLogger.error(e);
+          Notifications.create()
+            .title("Ajout de la musique raté")
+            .text("le fichier " 
+                + fileSelected.getName() 
+                + " selectionné ne correspond pas au bon format")
+            .darkStyle()
+            .showWarning();
+          return;
+        }
+        ShareStatus sharestatus = ShareStatus.PRIVATE;
+        try {
+          myMusicsController.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .addMusic(meta, fileSelected.getAbsolutePath(), sharestatus);
+        } catch (FileNotFoundException e) {
+          newMusicLogger.error("File not found : " + file.getAbsolutePath());
+          Notifications.create()
+              .title("Ajout de la musique raté")
+              .text("le fichier " 
+                  + fileSelected.getName() 
+                  + " selectionné ne correspond pas au bon format")
+              .darkStyle()
+              .showWarning();
+        }
+      });
+      this.getMyMusicsController().displayAvailableMusics();
+      this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
+          .displayAvailableMusics();
+      Stage stage = (Stage) this.textFile.getScene().getWindow();
+      stage.close();
+    }
+  }
+  
   /**
    * Check the given information and add the new music through Data.
    * Action method on click on Add music Button.
@@ -375,14 +462,14 @@ public class NewMusicController implements Controller {
       textTitle.setStyle("-fx-control-inner-background: red");
       valid = false;
     }
-    if (textArtist.getText().isEmpty()) {
+    /*if (textArtist.getText().isEmpty()) {
       textArtist.setStyle("-fx-control-inner-background: red");
       valid = false;
-    }
-    if (textAlbum.getText().isEmpty()) {
+    }*/
+    /*if (textAlbum.getText().isEmpty()) {
       textAlbum.setStyle("-fx-control-inner-background: red");
       valid = false;
-    }
+    }*/
     if (!hasChosenFile) {
       textFile.setStyle("-fx-control-inner-background: red");
       valid = false;
@@ -421,7 +508,7 @@ public class NewMusicController implements Controller {
         newMusicLogger.error("File not found : " + file.getAbsolutePath());
         Notifications.create()
             .title("Ajout de la musique raté")
-            .text("le fichier selectionné ne correspond pas au bon format")
+            .text("le fichier " + file.getName() + " selectionné ne correspond pas au bon format")
             .darkStyle()
             .showWarning();
       }
