@@ -220,7 +220,7 @@ public class DistantUserController implements Controller {
 
     List<MusicMetadata> distantUserMusicsMetaData = new ArrayList<>();
     for (Music music : distantUserMusicsList) {
-      distantUserMusics.put(music.getMetadata().getHash(), music);
+      distantUserMusics.put(music.getHash(), music);
       distantUserMusicsMetaData.add(music.getMetadata());
     }
 

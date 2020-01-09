@@ -80,6 +80,15 @@
                               </ImageView>
                            </graphic>
                         </Button>
+                         <Button fx:id="buttonDeleteTags" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteTag" textAlignment="CENTER">
+                             <graphic>
+                                 <ImageView fx:id="imageDeleteTags" fitHeight="204.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                     <image>
+                                         <Image url="@../images/minusSymbol.png" />
+                                     </image>
+                                 </ImageView>
+                             </graphic>
+                         </Button>
                      </children>
                   </HBox>
                </children>

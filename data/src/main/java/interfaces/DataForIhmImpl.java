@@ -36,6 +36,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -71,7 +74,14 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void addComment(Music music, String comment) {
     // Add a new Comment created from the String and this current LocalUser
-    music.getMetadata().getComments().add(new Comment(comment, this.dc.getCurrentUser()));
+    Optional<Comment> existingCom = music.getMetadata().getComments().stream()
+        .filter(c -> c.getOwner().equals(this.dc.getCurrentUser())).findAny();
+
+    if (existingCom.isPresent()) {
+      existingCom.get().setComment(comment);
+    } else {
+      music.getMetadata().getComments().add(new Comment(comment, this.dc.getCurrentUser()));
+    }
 
     this.dc.net.sendToUsers(
         new UpdateMusicsPayload(this.dc.getCurrentUser(), Collections.singleton(music)),
@@ -114,7 +124,7 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public void download(Music music) {
     ArrayList<InetAddress> ownersIPs = new ArrayList<>();
-    String musicHash = music.getMetadata().getHash();
+    String musicHash = music.getHash();
     
     for (User owner : music.getOwners()) {
       ownersIPs.add(owner.getIp());
