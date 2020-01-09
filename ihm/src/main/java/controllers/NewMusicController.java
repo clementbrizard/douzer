@@ -361,6 +361,20 @@ public class NewMusicController implements Controller {
     }
   }
 
+  @FXML
+  private void deleteTag(ActionEvent event) {
+    String selectedItem = listViewTags.getSelectionModel().getSelectedItem();
+    if (selectedItem != null) {
+      Iterator<String> it = tags.iterator();
+
+      while (it.hasNext()) {
+        if (it.next() == selectedItem) {
+          it.remove();
+        }
+      }
+    }
+  }
+
   /**
    * Delete the selected tag (if the key pressed is DELETE or BACK_SPACE).
    *
