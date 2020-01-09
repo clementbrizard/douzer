@@ -203,14 +203,14 @@ public class AllMusicsController implements Controller {
     contextMenu = new ContextMenu();
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
-    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+    /*itemInformation.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         getCentralFrameController()
           .getMyMusicsController()
           .showMusicInformation(musicSelected);
       }
-    });
+    });*/
     
     //check the selected item
     tvMusics
@@ -261,10 +261,10 @@ public class AllMusicsController implements Controller {
               readIndex++;
             }
 
-            getCentralFrameController()
+           /* getCentralFrameController()
                 .getMainController()
                 .getPlayerController()
-                .playOneMusic(readIndex);
+                .playOneMusic(readIndex);*/
           }
         }
       });

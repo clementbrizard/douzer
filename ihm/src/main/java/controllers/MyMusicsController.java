@@ -234,10 +234,10 @@ public class MyMusicsController implements Controller {
       for(MusicMetadata m : tvMusics.getItems()) {
         musics.add(localMusics.get(m.getHash()));
       }
-      /*getCentralFrameController()
+      getCentralFrameController()
           .getMainController()
           .getPlayerController()
-          .playOneMusic(musics);*/
+          .playOneMusic(musics,0);
     });
 
     // Add delete item in context menu
@@ -293,8 +293,7 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getPlayerController()
-            .selectOneMusic(tvMusics.getSelectionModel()
-                .getFocusedIndex());
+            .selectOneMusic(currentLocalMusic);
       }
     }
 
