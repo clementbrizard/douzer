@@ -109,7 +109,7 @@ public class MyPlaylistsController implements Controller {
           try {
             this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser()
                 .addPlaylist(name);
-          } catch(IllegalArgumentException e) {
+          } catch (IllegalArgumentException e) {
             Notifications.create()
                 .title("Ajout de la playlist impossible")
                 .text("La playlist \"" + name + "\" existe déjà !")
@@ -136,8 +136,8 @@ public class MyPlaylistsController implements Controller {
           .getMyMusicsController()
           .showPlaylist(MyPlaylistsController.this.getSelectedPlaylist());
 
-    } else if (click.getButton().equals(MouseButton.SECONDARY) &&
-               !this.getSelectedPlaylist().equals("Mes morceaux")) {
+    } else if (click.getButton().equals(MouseButton.SECONDARY)
+               && !this.getSelectedPlaylist().equals("Mes morceaux")) {
       contextMenu.show(lvPlaylists, click.getScreenX(), click.getScreenY());
     }
   }

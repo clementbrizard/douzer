@@ -178,15 +178,10 @@ public class MyMusicsController implements Controller {
     // so we need to convert it to a string
     this.durationCol
         .setCellValueFactory(
-            new Callback<TableColumn.CellDataFeatures<MusicMetadata, String>,
-                ObservableValue<String>>() {
-              public ObservableValue<String> call(
-                  TableColumn.CellDataFeatures<MusicMetadata, String> metadata) {
-                return new SimpleStringProperty(
-                    FormatDuration.run(metadata.getValue().getDuration())
-                );
-              }
-            });
+            metadata -> new SimpleStringProperty(
+                FormatDuration.run(metadata.getValue().getDuration())
+            ));
+
 
     // Hide advanced search fields
     tfSearchTitle.setVisible(false);
@@ -194,13 +189,7 @@ public class MyMusicsController implements Controller {
     tfSearchAlbum.setVisible(false);
     tfSearchTags.setVisible(false);
 
-    ChangeListener<String> textListener = new ChangeListener<String>() {
-      @Override
-      public void changed(ObservableValue<? extends String> observable,
-                          String oldValue, String newValue) {
-        searchMusics();
-      }
-    };
+    ChangeListener<String> textListener = (observable, oldValue, newValue) -> searchMusics();
 
     // Bind listener to simple and advanced search fields for instant search
     tfSearch.textProperty().addListener(textListener);
