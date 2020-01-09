@@ -98,7 +98,7 @@ public class UserInfoController implements Controller {
     // Refresh login view
     this.getMainController().getApplication().getLoginController().refresh();
     // Refresh sign up view
-    this.getMainController().getApplication().getSignUpController().refesh();
+    this.getMainController().getApplication().getSignUpController().refresh();
     // Refresh music info view (it refresh comment music info view)
     this.getMainController().getCurrentMusicInfoController().refresh();
   }

@@ -244,7 +244,7 @@ public class SignUpController implements Controller {
   /**
    * Refresh sign up view.
    */
-  public void refesh() {
+  public void refresh() {
     // Clear all text fields
     this.textFieldFirstName.setText("");
     this.textFieldLastName.setText("");
