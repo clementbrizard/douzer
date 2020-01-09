@@ -118,10 +118,7 @@ public class UserInfoController implements Controller {
           .getIhmCore()
           .getDataForIhm();
       if (di != null && di.getCurrentUser() != null) {
-        this.mainController
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm().logout();
+        di.logout();
       }
       this.mainController.getApplication().showLoginScene();
       this.mainController.getPlayerController().stopPlayer();
