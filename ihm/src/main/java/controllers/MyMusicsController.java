@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -592,8 +593,8 @@ public class MyMusicsController implements Controller {
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getCurrentUser()
-        .getLocalMusics();
+        .getLocalMusics()
+        .collect(Collectors.toCollection(HashSet::new));
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : localMusicsStream) {
