@@ -1,6 +1,7 @@
 package core;
 
 import controllers.AllMusicsController;
+import controllers.CommentsController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
 import controllers.DownloadController;
@@ -51,6 +52,13 @@ public class IhmForData implements Ihm {
       return;
     }
     controller.addNewOnlineUser(user);
+    //Refresh music now that new user has been added
+    this.getIhmCore()
+        .getApplication()
+        .getMainController()
+        .getCentralFrameController()
+        .getAllMusicsController()
+        .displayAvailableMusics();
   }
 
   /**
@@ -85,6 +93,13 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
+    //Refresh music now that user isn't available anymore
+    this.getIhmCore()
+        .getApplication()
+        .getMainController()
+        .getCentralFrameController()
+        .getAllMusicsController()
+        .displayAvailableMusics();
 
     if (controllerDistantUser.getDistantUser() != null) {
       if (controllerDistantUser.getDistantUser().equals(user)) {
@@ -162,7 +177,8 @@ public class IhmForData implements Ihm {
     }
 
     if (controllerCurrentMusic.getCurrentMusic() != null
-        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
+        && controllerCurrentMusic.getCurrentMusic().getMetadata().getHash()
+        .equals(music.getMetadata().getHash())) {
       controllerCurrentMusic.init(music);
     }
 

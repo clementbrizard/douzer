@@ -7,28 +7,24 @@ import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.Playlist;
 import datamodel.SearchQuery;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
@@ -45,8 +41,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import org.apache.logging.log4j.LogManager;
 import org.controlsfx.control.Notifications;
 import utils.FormatDuration;
@@ -88,6 +82,7 @@ public class MyMusicsController implements Controller {
   private SearchMusicController searchMusicController;
   private DetailsMusicController detailsMusicController;
   private CentralFrameController centralFrameController;
+
   private Scene addMusicScene;
   private Scene infoMusicScene;
   private Application application;
@@ -101,12 +96,7 @@ public class MyMusicsController implements Controller {
   // MusicsToDispay is used to filter playlists
   private List<MusicMetadata> musicsToDisplay;
 
-
-  @Override
-  public void initialize() {
-    localMusics = new HashMap<String, LocalMusic>();
-    musicsToDisplay = new ArrayList<>();
-  }
+  /* Getters */
 
   public NewMusicController getNewMusicController() {
     return newMusicController;
@@ -162,6 +152,14 @@ public class MyMusicsController implements Controller {
     this.application = application;
   }
 
+  /* Initialisation methods */
+
+  @Override
+  public void initialize() {
+    localMusics = new HashMap<String, LocalMusic>();
+    musicsToDisplay = new ArrayList<>();
+  }
+
   /**
    * Setup the table columns to receive data,
    * this method has to be called right after the creation of the view.
@@ -179,9 +177,7 @@ public class MyMusicsController implements Controller {
     this.durationCol
         .setCellValueFactory(
             metadata -> new SimpleStringProperty(
-                FormatDuration.run(metadata.getValue().getDuration())
-            ));
-
+                FormatDuration.run(metadata.getValue().getDuration())));
 
     // Hide advanced search fields
     tfSearchTitle.setVisible(false);
@@ -258,7 +254,6 @@ public class MyMusicsController implements Controller {
       });
       deleteMusics(musicsDelete);
     });
-
 
     // Add MenuItem to ContextMenu
     // menuAddToPlaylist should ALWAYS be the last item of contextMenu !
@@ -339,6 +334,7 @@ public class MyMusicsController implements Controller {
     });
     contextMenu.getItems().add(menuAddToPlaylist);
   }
+
   /* FXML methods (to handle events from user) */
 
   /**
@@ -584,6 +580,7 @@ public class MyMusicsController implements Controller {
     d.add(0.0);
     musicsToDisplay.forEach(metadata -> {
       double numberOfChar = 0;
+      d.set(0,7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
@@ -625,7 +622,6 @@ public class MyMusicsController implements Controller {
 
     deleteOptions.add(deleteOnApp);
     deleteOptions.add(deleteOnAppAndDisk);
-
 
     ChoiceDialog<String> deleteMusicChoiceDialog = new ChoiceDialog<>(
         deleteOptions.get(0),
@@ -773,8 +769,8 @@ public class MyMusicsController implements Controller {
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getCurrentUser()
-        .getLocalMusics();
+        .getLocalMusics()
+        .collect(Collectors.toCollection(HashSet::new));
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : localMusicsStream) {

@@ -417,7 +417,11 @@ public class PlayerController implements Controller {
    */
   private void showSongInfo(MusicMetadata song) {
     if (song != null) {
-      songInfo.setText(song.getArtist() + " - " + song.getTitle());
+      if (song.getArtist() == null || song.getArtist().trim().equals("")) {
+        songInfo.setText(song.getTitle());
+      } else {
+        songInfo.setText(song.getArtist() + " - " + song.getTitle());
+      }
       lblTime.setText("0:00");
       fullTime.setText(FormatDuration.run(song.getDuration()));
     } else {

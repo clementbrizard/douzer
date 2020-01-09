@@ -1,5 +1,7 @@
 package controllers;
 
+import interfaces.DataForIhm;
+
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import javafx.event.ActionEvent;
@@ -16,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 import utils.FormatImage;
 
 
@@ -100,10 +103,23 @@ public class UserInfoController implements Controller {
     this.showParameters();
   }
 
+  /**
+   * Fonction qui permet de sortir de l'application.
+   * @param event le clique sur le bouton deconnexion.
+   */
   @FXML
-  private void logout(ActionEvent event) {
+  public void logout(ActionEvent event) {
     try {
+      // Refresh views before logout
+      this.refreshViews();
       this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
+      DataForIhm di = this.getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm();
+      if (di != null && di.getCurrentUser() != null) {
+        di.logout();
+      }
       this.mainController.getApplication().showLoginScene();
       this.mainController.getPlayerController().stopPlayer();
     } catch (IOException e) {
@@ -128,6 +144,18 @@ public class UserInfoController implements Controller {
             .setCentralContentProfileEdit();
       }
     });
+  }
+
+  /**
+   * Refresh all necessaries views.
+   */
+  public void refreshViews() {
+    // Refresh login view
+    this.getMainController().getApplication().getLoginController().refresh();
+    // Refresh sign up view
+    this.getMainController().getApplication().getSignUpController().refresh();
+    // Refresh music info view (it refresh comment music info view)
+    this.getMainController().getCurrentMusicInfoController().refresh();
   }
 }
 

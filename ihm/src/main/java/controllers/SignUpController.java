@@ -241,5 +241,21 @@ public class SignUpController implements Controller {
     }
   }
 
+  /**
+   * Refresh sign up view.
+   */
+  public void refresh() {
+    // Clear all text fields
+    this.textFieldFirstName.setText("");
+    this.textFieldLastName.setText("");
+    this.textFieldPassword.setText("");
+    this.textFieldUsername.setText("");
 
+    // Cleat file paths
+    this.avatarFilePath.setText("");
+    this.profileFilePath.setText("");
+
+    // Clear date of birth date picker
+    this.datePickerBirth.getEditor().clear();
+  }
 }
