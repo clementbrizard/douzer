@@ -238,6 +238,10 @@ public class DistantUserController implements Controller {
     return distantUserMusicsMetaData;
   }
   
+  /**
+   * Gestion du click sur la table des musiques.
+   * @param click.
+   */
   @FXML
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
@@ -281,8 +285,8 @@ public class DistantUserController implements Controller {
       }
     });
 
-      // Add MenuItem to ContextMenu
-      contextMenu.getItems().addAll(itemInformation);
+    // Add MenuItem to ContextMenu
+    contextMenu.getItems().addAll(itemInformation);
   }
   
   
