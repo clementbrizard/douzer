@@ -256,6 +256,11 @@ public class DetailsMusicController implements Controller {
           dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
               1000, LocalDate.now().getYear(), musicSelected.getMetadata()
               .getReleaseYear().getValue(), 1));
+        } else {
+          dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+              musicSelected.getMetadata().getReleaseYear().getValue(), 
+              musicSelected.getMetadata().getReleaseYear().getValue(), 
+              musicSelected.getMetadata().getReleaseYear().getValue(), 1));
         }
       }
     }
