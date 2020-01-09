@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -188,6 +189,8 @@ public class AllMusicsController implements Controller {
 
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
+
+    tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
   }
   
   /**
@@ -243,15 +246,22 @@ public class AllMusicsController implements Controller {
                 listMusicClicked.add((LocalMusic) musicSelected);
               }
             }
-            /*getCentralFrameController()
-                .getMainController()
-                .getPlayerController()
-                .setArrayMusic(listMusicClicked);*/
-    
+
+            // Get the first local music selected index (do not count the distant musics)
+            int readIndex = 0;
+            for (MusicMetadata m : tvMusics.getItems()) {
+              if (listMusicClicked.get(0).getHash() == m.getHash()) {
+                break;
+              }
+              if (availableMusics.get(m.getHash()) instanceof LocalMusic) {
+                readIndex++;
+              }
+            }
+
             getCentralFrameController()
                 .getMainController()
                 .getPlayerController()
-                .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
+                .playOneMusic(readIndex);
           }
         }
       });
