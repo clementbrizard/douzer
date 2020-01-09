@@ -74,6 +74,10 @@ public class PlayerController implements Controller {
   private ArrayList<MediaPlayer> medias;
   private ArrayList<MusicMetadata> arrayMusic;
 
+  private ArrayList<LocalMusic> playList; // checker et faire musique
+
+
+
   @Override
   public void initialize() {
 
@@ -172,16 +176,35 @@ public class PlayerController implements Controller {
     }
   }
 
+
+
+
+  public void newMusicMedia(LocalMusic music){
+    if(music != null){
+      File file = new File(music.getMp3Path());
+      Media pick = new Media(file.toURI().toString()); //throws here
+      player = new MediaPlayer(pick);
+      //player.play();
+    }
+  }
+
   /**
    * Function playerOneMusic with index item row.
    *
-   * @param currentIndexRow : music index
    * @return
    */
-  public void playOneMusic(int currentIndexRow) {
-    currentIndex = currentIndexRow;
-    updateArrayMusic();
-    playerOnMusic();
+  public void playOneMusic(LocalMusic music) {
+
+    if(music != null){
+      File file = new File(music.getMp3Path());
+      Media pick = new Media(file.toURI().toString()); //throws here
+      player = new MediaPlayer(pick);
+      player.play();
+    }
+
+    //currentIndex = currentIndexRow;
+    //updateArrayMusic();
+    //playerOnMusic();
   }
 
   /**
@@ -396,7 +419,8 @@ public class PlayerController implements Controller {
           pgMusicProgress.setProgress(0.0);
 
           if (isLoop && isRandom) {
-            playOneMusic(rand.nextInt(arrayMusic.size()));
+            //playOneMusic(rand.nextInt(arrayMusic.size()));
+            System.out.println("dd");
           } else {
             if (isLoop && !isRandom) {
               playNext(null);
@@ -415,11 +439,7 @@ public class PlayerController implements Controller {
    */
   private void showSongInfo(MusicMetadata song) {
     if (song != null) {
-      if (song.getArtist() == null || song.getArtist().trim().equals("")) {
-        songInfo.setText(song.getTitle());
-      } else {
-        songInfo.setText(song.getArtist() + " - " + song.getTitle());
-      }
+      songInfo.setText(song.getArtist() + " - " + song.getTitle());
       lblTime.setText("0:00");
       fullTime.setText(FormatDuration.run(song.getDuration()));
     } else {
