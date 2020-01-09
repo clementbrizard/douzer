@@ -152,7 +152,7 @@ public class UserInfoController implements Controller {
   /**
    * Refresh all necessaries views.
    */
-  private void refreshViews() {
+  public void refreshViews() {
     // Refresh login view
     this.getMainController().getApplication().getLoginController().refresh();
     // Refresh sign up view

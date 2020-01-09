@@ -21,7 +21,10 @@ public abstract class DeleteUser {
    */
   public static void run(Datacore dc) throws IOException {
     LocalUser user = dc.getCurrentUser();
+
     dc.getLocalUsersFileHandler().remove(user);
+
+    Logout.run(dc);
 
     File propFileToDelete = user.getSavePath().resolve(user.getUsername()
         + "-config.properties").toFile();

@@ -412,18 +412,19 @@ public class ProfileEditController implements Controller {
    */
   @FXML
   public void deleteAccount(ActionEvent e) {
-    //String password = textFieldPassword.getText();
     try {
+      MainController mainController = this.getCentralFrameController().getMainController();
+      // Refresh views and display login view
+      mainController.getUserInfoController().refreshViews();
+      mainController.getApplication().showLoginScene();
+      mainController.getPlayerController().stopPlayer();
+
       this.centralFrameController
         .getMainController()
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
         .deleteAccount();
-      this.getCentralFrameController()
-        .getMainController()
-        .getUserInfoController()
-        .logout(null);
       
       Notifications.create()
         .title("Suppression")
