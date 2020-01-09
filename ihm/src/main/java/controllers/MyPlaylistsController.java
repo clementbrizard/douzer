@@ -14,6 +14,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import org.controlsfx.control.Notifications;
 
 
 /**
@@ -96,9 +97,27 @@ public class MyPlaylistsController implements Controller {
 
     result.ifPresent(name -> {
       name = name.trim();
+
       if (!name.isEmpty()) {
-        this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser()
-            .addPlaylist(name);
+        if (name.equals("Mes morceaux")) {
+          Notifications.create()
+              .title("Ajout de la playlist impossible")
+              .text("La playlist \"Mes morceaux\" existe déjà !")
+              .darkStyle()
+              .showError();
+        } else {
+          try {
+            this.mainController.getApplication().getIhmCore().getDataForIhm().getCurrentUser()
+                .addPlaylist(name);
+          } catch(IllegalArgumentException e) {
+            Notifications.create()
+                .title("Ajout de la playlist impossible")
+                .text("La playlist \"" + name + "\" existe déjà !")
+                .darkStyle()
+                .showError();
+          }
+
+        }
       }
     });
 
@@ -117,7 +136,8 @@ public class MyPlaylistsController implements Controller {
           .getMyMusicsController()
           .showPlaylist(MyPlaylistsController.this.getSelectedPlaylist());
 
-    } else if (click.getButton().equals(MouseButton.SECONDARY)) {
+    } else if (click.getButton().equals(MouseButton.SECONDARY) &&
+               !this.getSelectedPlaylist().equals("Mes morceaux")) {
       contextMenu.show(lvPlaylists, click.getScreenX(), click.getScreenY());
     }
   }
