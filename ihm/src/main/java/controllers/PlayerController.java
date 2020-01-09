@@ -274,11 +274,13 @@ public class PlayerController implements Controller {
       }
     }
 
+    /* Removed because of bug when changing playlist
+
     // change currentINDEX (header tableView click event)
     if (! saveTitle.equals("NOTHING")) {
       currentIndex = localCurrentMusic;
     }
-
+    */
   }
 
   /**

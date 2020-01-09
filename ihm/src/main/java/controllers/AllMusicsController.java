@@ -29,7 +29,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.FormatDuration;
 
-
 /**
  * Central view show up all music in the network.
  */
@@ -48,7 +47,7 @@ public class AllMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> durationCol;
   @FXML
   private TableColumn<MusicMetadata, Set<String>> tagsCol;
-  
+
   @FXML
   private TextField tfSearch;
   @FXML
@@ -184,12 +183,12 @@ public class AllMusicsController implements Controller {
    */
   public void displayAvailableMusics() {
     tvMusics.getItems().setAll(this.retrieveAvailableMusics());
-    
+
     //change the size of Tags column
     ArrayList<Double> d = new ArrayList<Double>();
     d.add(0.0);
     tvMusics.getItems().forEach(metadata -> {
-      double numberOfChar = 0;      
+      double numberOfChar = 0;
       d.set(0,7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();

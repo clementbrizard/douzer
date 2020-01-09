@@ -220,6 +220,7 @@ public class CentralFrameController implements Controller {
 
   public void setCentralContentMyMusics() {
     this.content.getChildren().setAll(((Node) this.myMusicsParent));
+    this.myMusicsController.showPlaylist("Mes morceaux");
   }
 
   public void setCentralContentDistantUser() {

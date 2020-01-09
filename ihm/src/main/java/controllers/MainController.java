@@ -17,7 +17,8 @@ public class MainController implements Controller {
   private ContactListController contactListController;
   @FXML
   private OnlineUsersListController onlineUsersListController;
-
+  @FXML
+  private MyPlaylistsController myPlaylistsController;
   // Central controllers
   @FXML
   private CentralFrameController centralFrameController;
@@ -36,6 +37,10 @@ public class MainController implements Controller {
 
   public UserInfoController getUserInfoController() {
     return userInfoController;
+  }
+
+  public MyPlaylistsController getMyPlaylistsController() {
+    return myPlaylistsController;
   }
 
   public CurrentMusicInfoController getCurrentMusicInfoController() {
@@ -158,6 +163,13 @@ public class MainController implements Controller {
       this.downloadController.initialize();
     } catch (UnsupportedOperationException e) {
       logger.warn("Download Controller calls : " + e.getMessage());
+    }
+
+    try {
+      this.myPlaylistsController.setMainController(this);
+      this.myPlaylistsController.init();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Playlists Controller calls : " + e.getMessage());
     }
   }
 }
