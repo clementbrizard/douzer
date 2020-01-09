@@ -249,13 +249,16 @@ public class AllMusicsController implements Controller {
 
             // Get the first local music selected index (do not count the distant musics)
             int readIndex = 0;
-            for (MusicMetadata m : tvMusics.getItems()) {
+            ArrayList<LocalMusic> arrayMusicAll =
+                getCentralFrameController()
+                    .getMyMusicsController()
+                    .getLocalMusicInView();
+
+            for (LocalMusic m : arrayMusicAll) {
               if (listMusicClicked.get(0).getHash() == m.getHash()) {
                 break;
               }
-              if (availableMusics.get(m.getHash()) instanceof LocalMusic) {
-                readIndex++;
-              }
+              readIndex++;
             }
 
             getCentralFrameController()
