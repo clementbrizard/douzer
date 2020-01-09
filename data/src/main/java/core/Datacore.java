@@ -151,9 +151,9 @@ public class Datacore {
    * and remove the music if it has no more owners.
    */
   public void removeOwner(User user) {
-    this.musics.values().forEach(m -> {
-      this.removeOwner(m, user);
-    });
+    for (HashMap.Entry<String, Music> m : musics.entrySet()) {
+      this.removeOwner(m.getValue(),user);
+    }
   }
   
   /**
