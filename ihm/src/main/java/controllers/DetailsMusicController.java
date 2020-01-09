@@ -177,7 +177,7 @@ public class DetailsMusicController implements Controller {
       public void handle(MouseEvent event) {
         String selectedItem = listViewTagsList.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
-          Iterator<String> it = localMusic.getMetadata().getTags().iterator();
+          Iterator<String> it = music.getMetadata().getTags().iterator();
 
           while (it.hasNext()) {
             if (it.next() == selectedItem) {
