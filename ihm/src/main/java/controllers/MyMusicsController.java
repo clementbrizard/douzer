@@ -6,6 +6,8 @@ import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
+
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -171,8 +173,7 @@ public class MyMusicsController implements Controller {
     this.durationCol
         .setCellValueFactory(
             metadata -> new SimpleStringProperty(
-                FormatDuration.run(metadata.getValue().getDuration())
-            ));
+                FormatDuration.run(metadata.getValue().getDuration())));
 
     // Hide advanced search fields
     tfSearchTitle.setVisible(false);
