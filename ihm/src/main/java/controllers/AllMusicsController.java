@@ -19,9 +19,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.Glow; 
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
@@ -151,6 +153,31 @@ public class AllMusicsController implements Controller {
                 );
               }
             });
+
+    /* Give a glow effect to music row if music is distant
+    https://docs.oracle.com/javase/8/javafx/api/javafx/scene/control/Cell.html#updateItem-T-boolean- */
+    this.tvMusics.setRowFactory(tv -> new TableRow<MusicMetadata>() {
+      @Override
+      public void updateItem(MusicMetadata item, boolean empty) {
+        super.updateItem(item, empty);
+        if (empty || item == null) {
+          // Necessary to avoid graphical issues
+          setText(null);
+          setGraphic(null);
+        } else if (!(availableMusics.get(item.getHash()) instanceof LocalMusic)) {
+            // If music is distant, we set a glow effect
+            Glow glow = new Glow();
+            glow.setLevel(0.6);
+            setEffect(glow);
+          } else {
+            /* Let a distant music be at index 3 in the table, and a local music at index 4.
+            If the distant music is unshared, the new music at index 3 (the one which was
+            at index 4 before deletion) will keep the glow effect of the previous distant
+            music. So we must remove this effect. */
+            setEffect(null);
+          }
+        }
+    });
 
     try {
       this.displayAvailableMusics();
