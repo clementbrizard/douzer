@@ -216,7 +216,7 @@ public class MyMusicsController implements Controller {
     tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
     try {
-      this.displayLocalMusics();
+      this.displayAvailableMusics();
     } catch (UnsupportedOperationException e) {
       myMusicsLogger.error(e);
     }
@@ -393,11 +393,6 @@ public class MyMusicsController implements Controller {
         contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
       }
     }
-  }
-
-  public void displayLocalMusics() {
-    musicsToDisplay = this.retrieveLocalMusics();
-    this.updateTableMusics();
   }
 
   private void updateTableMusics() {
@@ -593,13 +588,12 @@ public class MyMusicsController implements Controller {
    * Refresh the table by retrieving local musics from Data.
    */
   public void displayAvailableMusics() {
-    List<MusicMetadata> listMusic = this.retrieveLocalMusics();
-    tvMusics.getItems().setAll(listMusic);
-
+    musicsToDisplay = this.retrieveLocalMusics();
+    this.updateTableMusics();
     //change the size of Tags column
     ArrayList<Double> d = new ArrayList<Double>();
     d.add(0.0);
-    listMusic.forEach(metadata -> {
+    musicsToDisplay.forEach(metadata -> {
       double numberOfChar = 0;
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
@@ -718,7 +712,7 @@ public class MyMusicsController implements Controller {
     this.lblTitle.setText(playlistName);
 
     if (playlistName.equals("Mes morceaux")) {
-      this.displayLocalMusics();
+      this.displayAvailableMusics();
     } else {
       this.musicsToDisplay.clear();
 
