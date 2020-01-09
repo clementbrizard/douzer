@@ -63,7 +63,7 @@ public class DetailsMusicController implements Controller {
 
   private ObservableList<String> tags;
 
-  private Music localMusic;
+  private Music music;
 
   @FXML
   private Button validateButton;
@@ -116,7 +116,7 @@ public class DetailsMusicController implements Controller {
   }
 
   public Music getMusic() {
-    return this.localMusic;
+    return this.music;
   }
 
   @Override
@@ -149,10 +149,10 @@ public class DetailsMusicController implements Controller {
       @Override
       public void handle(MouseEvent event) {
         boolean hasTag = false;
-        if (localMusic.getMetadata() != null) {
-          if (localMusic.getMetadata().getTags() != null) {
+        if (music.getMetadata() != null) {
+          if (music.getMetadata().getTags() != null) {
 
-            for (String s : localMusic.getMetadata().getTags()) {
+            for (String s : music.getMetadata().getTags()) {
               if (s.trim().equals(textFieldAddTag.getText().trim())) {
                 hasTag = true;
               }
@@ -177,7 +177,7 @@ public class DetailsMusicController implements Controller {
    *                   the localMusic on which the user clicked.
    */
   public void initMusic(Music musicSelected) {
-    this.localMusic = musicSelected;
+    this.music = musicSelected;
     
     if (musicSelected instanceof LocalMusic) {
       LocalMusic localMusic = (LocalMusic) musicSelected;
@@ -221,6 +221,7 @@ public class DetailsMusicController implements Controller {
       this.textFieldArtist.setEditable(false);
       this.textFieldTitle.setEditable(false);
       this.dateYear.setEditable(false);
+      
       this.textFieldAddTag.setEditable(false);
       this.buttonAddTag.setDisable(true);
       this.starOne.setVisible(false);
@@ -251,14 +252,16 @@ public class DetailsMusicController implements Controller {
 
     if (musicSelected.getMetadata() != null) {
       if (musicSelected.getMetadata().getReleaseYear() != null) {
-        dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
-            1000, LocalDate.now().getYear(), musicSelected.getMetadata()
-            .getReleaseYear().getValue(), 1));
+        if (music instanceof LocalMusic) {
+          dateYear.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(
+              1000, LocalDate.now().getYear(), musicSelected.getMetadata()
+              .getReleaseYear().getValue(), 1));
+        }
       }
     }
 
-    if (localMusic.getOwners() != null) {
-      localMusic.getOwners().forEach(owner -> ownersListView.getItems().add(owner.getUsername()));
+    if (music.getOwners() != null) {
+      music.getOwners().forEach(owner -> ownersListView.getItems().add(owner.getUsername()));
     }
 
     tags = FXCollections.observableArrayList();
@@ -343,10 +346,10 @@ public class DetailsMusicController implements Controller {
     if (!checkFields()) {
       return;
     }
-    localMusic.getMetadata().setTitle(textFieldTitle.getText());
+    music.getMetadata().setTitle(textFieldTitle.getText());
 
-    if (localMusic instanceof LocalMusic) {
-      LocalMusic localMusic = (LocalMusic) this.localMusic;
+    if (music instanceof LocalMusic) {
+      LocalMusic localMusic = (LocalMusic) this.music;
       if (this.radioPublic.isSelected()) {
         localMusic.setShareStatus(ShareStatus.PUBLIC);
       } else if (this.radioFriends.isSelected()) {

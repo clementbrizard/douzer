@@ -240,7 +240,7 @@ public class DistantUserController implements Controller {
   
   /**
    * Gestion du click sur la table des musiques.
-   * @param click.
+   * @param click l'evenements du clique
    */
   @FXML
   public void handleClickTableView(MouseEvent click) {
