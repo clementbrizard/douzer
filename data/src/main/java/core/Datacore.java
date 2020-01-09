@@ -172,11 +172,12 @@ public class Datacore {
    * Merge music2 into music1.
    *
    * @param music1 the reference that will be updated.
-   * @param music2 the reference that will not be updated.
+   * @param music2 the reference that will not be updated. It should be discarded.
    */
   private void mergeMusics(Music music1, Music music2) {
-    //Local User must be owner of the music
-    music1.getOwners().add(this.currentUser);
+
+    // Always merge the owners
+    music1.getOwners().addAll(music2.getOwners());
 
     //music2's was created first
     if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
@@ -207,7 +208,7 @@ public class Datacore {
   }
   
   public void upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
-    LocalMusic newMusic = new LocalMusic(toUpgrade.getMetadata(), mp3Path);
+    LocalMusic newMusic = new LocalMusic(toUpgrade, mp3Path);
     this.musics.remove(toUpgrade.getHash());
     newMusic.getOwners().add(this.getCurrentUser());
 

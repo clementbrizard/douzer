@@ -11,6 +11,12 @@ public class LocalMusic extends Music {
   private ShareStatus shareStatus;
   private String mp3Path;
 
+  public LocalMusic(Music music, String mp3Path) {
+    super(music);
+    this.mp3Path = mp3Path;
+    this.shareStatus = ShareStatus.PRIVATE;
+  }
+
   public LocalMusic(MusicMetadata metadata, Set<User> owners) {
     super(metadata, owners);
   }
