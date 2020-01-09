@@ -428,7 +428,7 @@ public class ProfileEditController implements Controller {
       
       Notifications.create()
         .title("Suppression")
-        .text("Le compte à été supprimé")
+        .text("Le compte a été supprimé")
         .darkStyle()
         .showWarning();      
     } catch (IOException ex) {
@@ -437,8 +437,8 @@ public class ProfileEditController implements Controller {
       de.printStackTrace();
 
       Notifications.create()
-          .title("Suppresion echoué")
-          .text("quelquechose est arrivé")
+          .title("La suppresion a echouée")
+          .text("Quelque chose est arrivé")
           .darkStyle()
           .showWarning();
 
