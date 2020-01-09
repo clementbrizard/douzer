@@ -42,10 +42,8 @@ public class ContactListController implements Controller {
             if (user == null) {
               setText(null);
             } else {
-
-
               if (user.isConnected()) {
-                setText("*" + user.getUsername());
+                setText("> " + user.getUsername());
               } else {
                 setText(user.getUsername());
               }
@@ -80,14 +78,7 @@ public class ContactListController implements Controller {
    **/
 
   public void displayContacts() {
-    this.mainController
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser()
-            .getFriends().forEach(
-                u -> contactListLogger.error(u.getUuid() + ", " + u.getUsername())
-      );
+    contactListLogger.info("ContactList just refreshed.");
 
     ObservableList<User> contacts = this.mainController
             .getApplication()

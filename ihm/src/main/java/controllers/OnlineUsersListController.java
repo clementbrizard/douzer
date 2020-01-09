@@ -136,6 +136,9 @@ public class OnlineUsersListController implements Controller {
               .getDistantUserController()
               .setDistantUser(user);
         }
+
+        // Update ContactList :
+        mainController.getContactListController().displayContacts();
       }
     });
   }
