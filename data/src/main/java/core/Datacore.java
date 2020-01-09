@@ -225,6 +225,7 @@ public class Datacore {
   public void wipe() {
     this.users.clear();
     this.musics.clear();
+    this.allIps.clear();
     this.currentUser = null;
   }
 }
