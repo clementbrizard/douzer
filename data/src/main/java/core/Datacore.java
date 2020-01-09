@@ -62,12 +62,25 @@ public class Datacore {
    * or by merging it into the existing user.
    */
   public void addUser(User user) {
-    User original = this.users.get(user.getUuid());
+    // try to get the original ref
+    User original = this.currentUser
+            .getFriends()
+            .stream()
+            .filter(u -> u.equals(user)).findAny().orElse(null);
+    if (original == null) {
+      original = this.users.get(user.getUuid());
+    }
+
     if (original != null) {
       this.mergeUsers(original, user);
+      if (!this.users.containsKey(user.getUuid())) {
+        this.users.put(user.getUuid(), user);
+      }
     } else {
       this.users.put(user.getUuid(), user);
     }
+
+
   }
 
   /**

@@ -39,9 +39,11 @@ public class ContactListController implements Controller {
           @Override
           public void updateItem(User user, boolean empty) {
             super.updateItem(user, empty);
+            contactListLogger.info("ContactList just refreshed.");
             if (user == null) {
               setText(null);
             } else {
+
               if (user.isConnected()) {
                 setText("> " + user.getUsername());
               } else {
@@ -78,7 +80,6 @@ public class ContactListController implements Controller {
    **/
 
   public void displayContacts() {
-    contactListLogger.info("ContactList just refreshed.");
 
     ObservableList<User> contacts = this.mainController
             .getApplication()
