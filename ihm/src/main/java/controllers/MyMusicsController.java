@@ -411,7 +411,15 @@ public class MyMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query);
+        .getDataForIhm().searchMusics(query)
+        .filter(music -> music.getOwners().contains(this
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+        ));
 
     updateMusicsOnSearch(searchResults);
   }
@@ -543,6 +551,24 @@ public class MyMusicsController implements Controller {
               .getIhmCore()
               .getDataForIhm()
               .deleteMusic(music, deleteLocal);
+
+          if (music.getMetadata()
+              .getTitle()
+              .equals(
+                  this
+                      .getCentralFrameController()
+                      .getMainController()
+                      .getPlayerController()
+                      .getCurrentMusicTitle())
+
+          ) {
+            this
+                .getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .stopPlayer();
+          }
+
           this.displayAvailableMusics();
         } catch (NullPointerException e) {
           myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
@@ -570,8 +596,8 @@ public class MyMusicsController implements Controller {
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : localMusicsStream) {
       //if the current localMusic isn't already in our localMusics we add it.
-      if (localMusics.get(localMusic.getMetadata().getHash()) == null) {
-        localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+      if (localMusics.get(localMusic.getHash()) == null) {
+        localMusics.put(localMusic.getHash(), localMusic);
         localMusicsMetadata.add(localMusic.getMetadata());
       }
     }

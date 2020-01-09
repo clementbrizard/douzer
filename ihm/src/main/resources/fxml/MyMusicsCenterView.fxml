@@ -32,11 +32,6 @@
                              <Image url="@../images/randomArrow.png" />
                          </image>
                      </ImageView>
-                     <ImageView fx:id="ivSearch" fitHeight="35.0" fitWidth="38.0" layoutX="510.0" layoutY="14.0" onMouseClicked="#searchMusics" pickOnBounds="true" preserveRatio="true">
-                         <image>
-                             <Image url="@../images/searchSymbol.png" />
-                         </image>
-                     </ImageView>
                      <Button fx:id="btnAddMusic" layoutX="540.0" layoutY="57.0" mnemonicParsing="false" onAction="#addMusic" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Ajouter une musique" />
                      <ImageView fx:id="ivLoop" fitHeight="34.0" fitWidth="35.0" layoutX="20.0" layoutY="14.0" onMouseClicked="#loopPlayer" pickOnBounds="true" preserveRatio="true">
                          <image>

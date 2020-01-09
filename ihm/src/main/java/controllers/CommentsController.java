@@ -74,8 +74,10 @@ public class CommentsController implements Controller {
     listComment.setVisible(true);
     this.music = music;
     if (music == null) {
+      this.commentButton.setDisable(true);
       return;
     }
+    this.commentButton.setDisable(false);
     titleMusic.setText(music.getMetadata().getTitle());
     if (commentObservableList == null) {
       commentObservableList = FXCollections.observableArrayList();
@@ -135,7 +137,23 @@ public class CommentsController implements Controller {
   public void initialize() {
     if (this.music == null) {
       listComment.setVisible(false);
+      this.commentButton.setDisable(true);
     }
+  }
+
+  /**
+   * Refresh comment music info view.
+   */
+  public void refresh() {
+    // Clear list of comments
+    this.listComment.setVisible(false);
+    this.listComment.getItems().clear();
+    // Clear label music
+    this.titleMusic.setText("");
+    // Clear current music
+    this.music = null;
+    // Disable comment button
+    this.commentButton.setDisable(true);
   }
 
 }

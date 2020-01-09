@@ -35,7 +35,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
+import org.controlsfx.control.Notifications;
 
 
 public class NewCommentController implements Controller {
@@ -158,7 +158,22 @@ public class NewCommentController implements Controller {
     if (textAreaComment == null
         || textAreaComment.getText() == null
         || textAreaComment.getText().trim().equals("")) {
+
       valide = false;
+      Notifications.create()
+          .title("Commentaire non sauvegardé")
+          .text("Le commentaire que vous avez saisi est vide.")
+          .darkStyle()
+          .showError();
+    }
+
+    if (rate == 0) {
+      valide = false;
+      Notifications.create()
+          .title("Commentaire non sauvegardé")
+          .text("La note est vide.")
+          .darkStyle()
+          .showError();
     }
 
     return valide;

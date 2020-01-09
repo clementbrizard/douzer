@@ -26,6 +26,10 @@ public class Music implements java.io.Serializable {
     this.owners = owners;
   }
 
+  public String getHash() {
+    return this.getMetadata().getHash();
+  }
+
   public MusicMetadata getMetadata() {
     return metadata;
   }
@@ -56,7 +60,7 @@ public class Music implements java.io.Serializable {
       return false;
     }
     Music music = (Music) o;
-    return Objects.equals(metadata, music.metadata);
+    return Objects.equals(this.metadata.getHash(), music.metadata.getHash());
     // no check on owners so no infinite recursion
   }
 

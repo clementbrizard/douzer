@@ -12,6 +12,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -68,6 +69,9 @@ public class DetailsMusicController implements Controller {
 
   @FXML
   private Button buttonAddTag;
+
+  @FXML
+  private Button buttonDeleteTag;
 
   @FXML
   private ImageView starOne;
@@ -159,6 +163,32 @@ public class DetailsMusicController implements Controller {
         }
         //give new tag or new tag list to data
         textFieldAddTag.clear();
+      }
+    }));
+
+    buttonDeleteTag.setOnMousePressed((new EventHandler<MouseEvent>() {
+
+      @Override
+      public void handle(MouseEvent event) {
+        String selectedItem = listViewTagsList.getSelectionModel().getSelectedItem();
+        if (selectedItem != null) {
+          Iterator<String> it = localMusic.getMetadata().getTags().iterator();
+
+          while (it.hasNext()) {
+            if (it.next() == selectedItem) {
+              it.remove();
+            }
+          }
+
+          it = tags.iterator();
+
+          while (it.hasNext()) {
+            if (it.next() == selectedItem) {
+              it.remove();
+            }
+          }
+        }
+
       }
     }));
   }

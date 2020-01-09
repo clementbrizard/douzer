@@ -15,7 +15,7 @@ public class Playlist implements Serializable {
 
   public Playlist(String name) {
     this.name = name;
-    this.musicList = new ArrayList<LocalMusic>();
+    this.musicList = new ArrayList<>();
   }
 
   /**
