@@ -351,18 +351,27 @@ public class ProfileEditController implements Controller {
           .setDateOfBirth(LocalDate.MIN);
     }
 
-    this.centralFrameController.getMainController()
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .notifyUserUpdate(
-            this.centralFrameController
-                .getMainController()
-                .getApplication()
-                .getIhmCore()
-                .getDataForIhm()
-                .getCurrentUser()
-      );
+    try {
+      this.centralFrameController.getMainController()
+          .getApplication()
+          .getIhmCore()
+          .getDataForIhm()
+          .notifyUserUpdate(
+              this.centralFrameController
+                  .getMainController()
+                  .getApplication()
+                  .getIhmCore()
+                  .getDataForIhm()
+                  .getCurrentUser()
+        );
+    } catch (IOException e) {
+      e.printStackTrace();
+      Notifications.create()
+          .title("Sauvegarde ratée")
+          .text("Vos informations n'ont pas pu être mises à jour")
+          .darkStyle()
+          .showError();
+    }
 
     Notifications.create()
             .title("Sauvegarde effectuée")

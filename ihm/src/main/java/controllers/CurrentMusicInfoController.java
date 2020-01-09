@@ -168,6 +168,18 @@ public class CurrentMusicInfoController implements Controller {
     musicSharingPopup.initModality(Modality.APPLICATION_MODAL);
     musicSharingPopup.showAndWait();
   }
+
+  /**
+   * Refresh current music info view.
+   */
+  public void refresh() {
+    // Clear current music
+    //this.currentMusic = null;
+    // Disable share button
+    this.btnShare.setDisable(true);
+    // Refresh comment current music info view
+    this.commentCurrentMusicController.refresh();
+  }
 }
 
 

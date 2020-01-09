@@ -6,10 +6,13 @@ import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
+
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -171,8 +174,7 @@ public class MyMusicsController implements Controller {
     this.durationCol
         .setCellValueFactory(
             metadata -> new SimpleStringProperty(
-                FormatDuration.run(metadata.getValue().getDuration())
-            ));
+                FormatDuration.run(metadata.getValue().getDuration())));
 
     // Hide advanced search fields
     tfSearchTitle.setVisible(false);
@@ -411,7 +413,15 @@ public class MyMusicsController implements Controller {
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query);
+        .getDataForIhm().searchMusics(query)
+        .filter(music -> music.getOwners().contains(this
+            .getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+        ));
 
     updateMusicsOnSearch(searchResults);
   }
@@ -490,6 +500,7 @@ public class MyMusicsController implements Controller {
     d.add(0.0);
     listMusic.forEach(metadata -> {
       double numberOfChar = 0;
+      d.set(0,7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
@@ -543,6 +554,24 @@ public class MyMusicsController implements Controller {
               .getIhmCore()
               .getDataForIhm()
               .deleteMusic(music, deleteLocal);
+
+          if (music.getMetadata()
+              .getTitle()
+              .equals(
+                  this
+                      .getCentralFrameController()
+                      .getMainController()
+                      .getPlayerController()
+                      .getCurrentMusicTitle())
+
+          ) {
+            this
+                .getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .stopPlayer();
+          }
+
           this.displayAvailableMusics();
         } catch (NullPointerException e) {
           myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
@@ -564,14 +593,14 @@ public class MyMusicsController implements Controller {
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getCurrentUser()
-        .getLocalMusics();
+        .getLocalMusics()
+        .collect(Collectors.toCollection(HashSet::new));
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : localMusicsStream) {
       //if the current localMusic isn't already in our localMusics we add it.
-      if (localMusics.get(localMusic.getMetadata().getHash()) == null) {
-        localMusics.put(localMusic.getMetadata().getHash(), localMusic);
+      if (localMusics.get(localMusic.getHash()) == null) {
+        localMusics.put(localMusic.getHash(), localMusic);
         localMusicsMetadata.add(localMusic.getMetadata());
       }
     }

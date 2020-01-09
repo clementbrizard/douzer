@@ -110,6 +110,9 @@ public class UserInfoController implements Controller {
   @FXML
   public void logout(ActionEvent event) {
     try {
+      // Refresh views before logout
+      this.refreshViews();
+      this.mainController.getApplication().getIhmCore().getDataForIhm().logout();
       DataForIhm di = this.getMainController()
           .getApplication()
           .getIhmCore()
@@ -144,6 +147,18 @@ public class UserInfoController implements Controller {
             .setCentralContentProfileEdit();
       }
     });
+  }
+
+  /**
+   * Refresh all necessaries views.
+   */
+  private void refreshViews() {
+    // Refresh login view
+    this.getMainController().getApplication().getLoginController().refresh();
+    // Refresh sign up view
+    this.getMainController().getApplication().getSignUpController().refresh();
+    // Refresh music info view (it refresh comment music info view)
+    this.getMainController().getCurrentMusicInfoController().refresh();
   }
 }
 

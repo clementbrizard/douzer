@@ -190,6 +190,7 @@ public class AllMusicsController implements Controller {
     d.add(0.0);
     tvMusics.getItems().forEach(metadata -> {
       double numberOfChar = 0;      
+      d.set(0,7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
@@ -216,7 +217,7 @@ public class AllMusicsController implements Controller {
 
     List<MusicMetadata> availableMusicsMetaData = new ArrayList<>();
     for (Music music : availableMusicsStream) {
-      availableMusics.put(music.getMetadata().getHash(), music);
+      availableMusics.put(music.getHash(), music);
       availableMusicsMetaData.add(music.getMetadata());
     }
 
