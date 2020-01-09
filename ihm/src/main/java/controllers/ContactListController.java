@@ -1,7 +1,9 @@
 package controllers;
 
 import datamodel.User;
+
 import java.util.stream.Collectors;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -40,10 +42,12 @@ public class ContactListController implements Controller {
             if (user == null) {
               setText(null);
             } else {
+
+
               if (user.isConnected()) {
-                  setText("*" + user.getUsername());
+                setText("*" + user.getUsername());
               } else {
-                  setText(user.getUsername());
+                setText(user.getUsername());
               }
             }
           }
@@ -76,6 +80,14 @@ public class ContactListController implements Controller {
    **/
 
   public void displayContacts() {
+    this.mainController
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser()
+            .getFriends().forEach(
+                u -> contactListLogger.error(u.getUuid() + ", " + u.getUsername())
+      );
 
     ObservableList<User> contacts = this.mainController
             .getApplication()

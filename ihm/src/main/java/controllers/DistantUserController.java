@@ -196,21 +196,27 @@ public class DistantUserController implements Controller {
             .getCurrentUser();
     if (currentUser.getFriends().contains(distantUser)) {
       currentUser.removeFriend(distantUser);
-      logger.info("Removed " +
-              distantUser.getUsername() +
-              " from friendlist of "+
-              currentUser.getUsername()
+      logger.info("Removed "
+              + distantUser.getUsername()
+              + " from friendlist of "
+              + currentUser.getUsername()
       );
     } else {
       currentUser.addFriend(distantUser);
-      logger.info("Added " +
-              distantUser.getUsername() +
-              " to friendlist of " +
-              currentUser.getUsername()
+      logger.info("Added "
+              + distantUser.getUsername()
+              + " to friendlist of "
+              + currentUser.getUsername()
       );
     }
 
     refreshFriendshipStatus();
+
+    this
+            .getCentralFrameController()
+            .getMainController()
+            .getContactListController()
+            .displayContacts();
   }
 
   @FXML
@@ -262,6 +268,7 @@ public class DistantUserController implements Controller {
 
   /**
    * Refreshes friendship status to display correct text.
+   * Only used to refresh the button's text on distant user's profile
    */
   private void refreshFriendshipStatus() {
     LocalUser currentUser = this.getCentralFrameController()
@@ -270,18 +277,14 @@ public class DistantUserController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .getCurrentUser();
+
     if (!currentUser.getFriends().contains(distantUser)) {
       btnManageFriendship.setText("Ajouter ce contact");
     } else {
       btnManageFriendship.setText("Supprimer ce contact");
     }
-    /*
-    this
-            .getCentralFrameController()
-            .getMainController()
-            .getContactListController()
-            .displayContacts();
 
-     */
+    logger.info(currentUser.getFriends());
+
   }
 }
