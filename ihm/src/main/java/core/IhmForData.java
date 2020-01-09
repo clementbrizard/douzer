@@ -1,6 +1,7 @@
 package core;
 
 import controllers.AllMusicsController;
+import controllers.CommentsController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
 import controllers.DownloadController;
@@ -168,7 +169,8 @@ public class IhmForData implements Ihm {
     }
 
     if (controllerCurrentMusic.getCurrentMusic() != null
-        && controllerCurrentMusic.getCurrentMusic().equals(music)) {
+        && controllerCurrentMusic.getCurrentMusic().getMetadata().getHash()
+        .equals(music.getMetadata().getHash())) {
       controllerCurrentMusic.init(music);
     }
 
