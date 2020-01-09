@@ -229,10 +229,14 @@ public class MyMusicsController implements Controller {
           listMusicClicked.add(currentLocalMusic);
         }
       }
-
-      ArrayList<LocalMusic> musics = new ArrayList<LocalMusic>();
-      for(MusicMetadata m : tvMusics.getItems()) {
-        musics.add(localMusics.get(m.getHash()));
+      if (listMusicClicked.size() == 1) {
+        ArrayList<LocalMusic> musics = new ArrayList<LocalMusic>();
+        for(MusicMetadata m : tvMusics.getItems()) {
+          musics.add(localMusics.get(m.getHash()));
+          //send to player the list of all musics .
+        }
+      } else {
+        //send to player the listMusicClicked
       }
       getCentralFrameController()
           .getMainController()
