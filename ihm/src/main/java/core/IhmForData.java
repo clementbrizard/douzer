@@ -93,6 +93,13 @@ public class IhmForData implements Ihm {
       e.printStackTrace();
       return;
     }
+    //Refresh music now that user isn't available anymore
+    this.getIhmCore()
+        .getApplication()
+        .getMainController()
+        .getCentralFrameController()
+        .getAllMusicsController()
+        .displayAvailableMusics();
 
     if (controllerDistantUser.getDistantUser() != null) {
       if (controllerDistantUser.getDistantUser().equals(user)) {
