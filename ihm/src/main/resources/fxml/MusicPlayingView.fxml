@@ -8,11 +8,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
+<?import javafx.scene.control.Slider?>
 <AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
     <children>
         <Pane prefHeight="100" prefWidth="720.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
             <children>
-                <ProgressBar fx:id="pgMusicProgress" layoutX="145.0" layoutY="41.0" prefHeight="23.0" prefWidth="496.0" />
+                <Slider fx:id="pgMusicProgress" layoutX="145.0" layoutY="41.0" prefHeight="23.0" prefWidth="496.0" />
 
                       <Label fx:id="songInfo" layoutX="10.0" layoutY="10.0" text="-" />
 
