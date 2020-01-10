@@ -135,10 +135,15 @@ public class PlayerController implements Controller {
         });
 
       });
+      
+      pgMusicProgress.setOnMousePressed(event -> {
+        player.pause();
+      });
 
       pgMusicProgress.setOnMouseReleased(event -> {
         if (player != null) {
           player.seek(Duration.seconds(pgMusicProgress.getValue()));
+          player.play();
         } else {
           pgMusicProgress.setValue(0.0);
         }
