@@ -465,7 +465,7 @@ public class MyMusicsController implements Controller {
    *
    * @param music the music on which the user right clicked
    */
-  private void showMusicInformation(LocalMusic music) {
+  public void showMusicInformation(Music music) {
     try {
       // Initialize scene and controller.
       FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
