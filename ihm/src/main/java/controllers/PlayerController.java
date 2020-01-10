@@ -5,7 +5,6 @@ import static utils.Converter.convertFrom;
 import core.IhmAlert;
 
 import datamodel.LocalMusic;
-import datamodel.MusicMetadata;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +14,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -24,8 +24,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.sound.sampled.AudioFormat;
@@ -65,6 +65,7 @@ public class PlayerController implements Controller {
 
   // check and play music
   private ArrayList<LocalMusic> playList;
+  private LocalMusic previewMusic;
 
   @Override
   public void initialize() {
@@ -87,7 +88,26 @@ public class PlayerController implements Controller {
     } catch (Exception e) {
       IhmAlert.showAlert("Pictures Load", "Fail : picture load PLAYER", "critical");
     }
+  }
 
+  private void createMediaLinux(LocalMusic music) {
+    if (music != null) {
+      File file = new File(music.getMp3Path());
+      Media pick = new Media(file.toURI().toString());
+      player = new MediaPlayer(pick);
+
+      if (System.getProperty("os.name").toLowerCase().contains("nux")
+          || System.getProperty("os.name").toLowerCase().contains("nix")
+          || System.getProperty("os.name").toLowerCase().contains("mac")) {
+
+        String filename = file.getName().substring(0, file.getName().indexOf('.'));
+
+        File newFile = new File("/tmp/" + filename + ".wav");
+
+        pick = new Media(newFile.toURI().toString());
+
+      }
+    }
   }
 
   /**
@@ -96,20 +116,18 @@ public class PlayerController implements Controller {
    */
   private void createMedia(LocalMusic music) {
     if (music != null) {
+
       File file = new File(music.getMp3Path());
       Media pick = new Media(file.toURI().toString());
       player = new MediaPlayer(pick);
 
-      pgMusicProgress.setMax(music.getMetadata().getDuration().getSeconds());
+      player.setOnEndOfMedia(() -> playNext(null));
+
+      player.setOnReady(() -> pgMusicProgress.setMax(player.getMedia().getDuration().toSeconds()));
 
       player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
                                                 Duration oldValue,
                                                 Duration newValue) -> {
-
-        if (pgMusicProgress.getMax() == pgMusicProgress.getValue()) {
-          pgMusicProgress.setValue(0.0);
-          playNext(null);
-        }
 
         Platform.runLater(() -> {
           lblTime.setText(secToMin((long) newValue.toSeconds()));
@@ -118,8 +136,8 @@ public class PlayerController implements Controller {
 
       });
 
-      pgMusicProgress.setOnMouseClicked((MouseEvent mouseEvent) -> {
-        if(player != null && player.getStatus() == MediaPlayer.Status.PLAYING ) {
+      pgMusicProgress.setOnMouseReleased(event -> {
+        if (player != null) {
           player.seek(Duration.seconds(pgMusicProgress.getValue()));
         } else {
           pgMusicProgress.setValue(0.0);
@@ -131,7 +149,6 @@ public class PlayerController implements Controller {
 
   /**
    * Function playerOneMusic with index item row.
-   *
    */
   public void playOneMusic(ArrayList<LocalMusic> musics, int index) {
     if (musics != null) {
@@ -148,16 +165,15 @@ public class PlayerController implements Controller {
       currentIndex = index;
 
       LocalMusic item = playList.get(index);
-      createMedia(item);
+      showSongInfo(item);
 
-      showSongInfo(item.getMetadata());
+      createMedia(item);
 
       player.play();
       play.setGraphic(new ImageView(pauseIcon));
 
     }
   }
-
 
   /**
    * Function playPause: Play and Pause button interactions.
@@ -167,12 +183,23 @@ public class PlayerController implements Controller {
   @FXML
   private void playPause(ActionEvent e) {
     if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
+
       play.setGraphic(new ImageView(playIcon));
       player.pause();
+
     } else {
-      if ( !playList.isEmpty() ){
+      if (!songInfo.getText().equals("-")) {
         play.setGraphic(new ImageView(pauseIcon));
-        player.play();
+
+        if (playList.isEmpty() && previewMusic != null) {
+          ArrayList<LocalMusic> tmp = new ArrayList<LocalMusic>();
+          tmp.add(previewMusic);
+          playOneMusic(tmp,0);
+          previewMusic = null;
+        } else {
+          player.play();
+        }
+
       }
     }
   }
@@ -215,18 +242,6 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function selectOneMusic with selected LocalMusic.
-   *
-   * @param music : LocalMusic
-   * @return
-   */
-  public void selectOneMusic(LocalMusic music) {
-    if (music != null && player != null && player.getStatus() == MediaPlayer.Status.STOPPED) {
-      showSongInfo(music.getMetadata());
-    }
-  }
-
-  /**
    * Function Play only one song.
    */
   private void playerOnMusic() {
@@ -235,14 +250,87 @@ public class PlayerController implements Controller {
     }
 
     LocalMusic item = playList.get(currentIndex);
-    createMedia(item);
+    showSongInfo(item);
 
-    showSongInfo(item.getMetadata());
+    createMedia(item);
 
     player.play();
     play.setGraphic(new ImageView(pauseIcon));
   }
 
+  /**
+   * Function stopPlayer: Stop player.
+   *
+   * @return
+   */
+  public void stopPlayer() {
+    if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
+
+      play.setGraphic(new ImageView(playIcon));
+      player.stop();
+
+      if (!playList.isEmpty()) {
+        playList.clear();
+        player.dispose();
+      }
+
+      fullTime.setText("0:00");
+      lblTime.setText("0:00");
+
+      songInfo.setText("-");
+      pgMusicProgress.setValue(0.0);
+    }
+  }
+
+  /**
+   * Function to call.
+   *
+   * @param song : LocalMusic object
+   */
+  private void specialCall(LocalMusic song) {
+    if (System.getProperty("os.name").toLowerCase().contains("nux")
+        || System.getProperty("os.name").toLowerCase().contains("nix")
+        || System.getProperty("os.name").toLowerCase().contains("mac")) {
+
+      File file = new File(song.getMp3Path());
+
+      Platform.runLater(() -> {
+        try {
+          convertMp3ToWav(file.getPath());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      });
+
+    }
+  }
+
+  /**
+   * Function to show musicInfo.
+   *
+   * @param song : LocalMusic object
+   */
+  public void showSongInfo(LocalMusic song) {
+    if (song != null) {
+
+      previewMusic = song; // preview song
+
+      // linux, mac convert mp3
+      specialCall(song);
+
+      if (song.getMetadata().getArtist() != null) {
+        songInfo.setText(song.getMetadata().getArtist() + " - " + song.getMetadata().getTitle());
+      } else {
+        songInfo.setText(song.getMetadata().getTitle());
+      }
+      lblTime.setText("0:00");
+      fullTime.setText(FormatDuration.run(song.getMetadata().getDuration()));
+    } else {
+      songInfo.setText("-");
+      lblTime.setText("0:00");
+      fullTime.setText("-");
+    }
+  }
 
   /**
    * Function to convertMp3ToWav.
@@ -276,82 +364,6 @@ public class PlayerController implements Controller {
       } catch (IOException | UnsupportedAudioFileException e) {
         throw new IllegalStateException(e);
       }
-    }
-  }
-
-
-  /**
-   * Function creating PlayerList using musicPath.
-   *
-   * @param url : MusicPath
-   * @return
-   */
-  private MediaPlayer createPlayer(String url) {
-    Media media = null;
-    File file = new File(url);
-    String filename = file.getName().substring(0, file.getName().indexOf('.'));
-
-    if (System.getProperty("os.name").toLowerCase().contains("nux")
-        || System.getProperty("os.name").toLowerCase().contains("nix")
-        || System.getProperty("os.name").toLowerCase().contains("mac")) {
-
-      try {
-        convertMp3ToWav(file.getPath());
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      File newFile = new File("/tmp/" + filename + ".wav");
-      media = new Media(newFile.toURI().toString());
-
-    } else {
-      media = new Media(file.toURI().toString());
-    }
-
-    return new MediaPlayer(media);
-  }
-
-  /**
-   * Function stopPlayer: Stop player.
-   *
-   * @return
-   */
-  public void stopPlayer() {
-    if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
-
-      play.setGraphic(new ImageView(playIcon));
-      player.stop();
-
-      if(!playList.isEmpty()) {
-        playList.clear();
-        player.dispose();
-      }
-
-      fullTime.setText("0:00");
-      lblTime.setText("0:00");
-
-      songInfo.setText(" - ");
-      pgMusicProgress.setValue(0.0);
-    }
-  }
-
-  /**
-   * Function to show musicInfo.
-   *
-   * @param song : LocalMusic object
-   */
-  public void showSongInfo(MusicMetadata song) {
-    if (song != null) {
-      if (song.getArtist() != null) {
-        songInfo.setText(song.getArtist() + " - " + song.getTitle());
-      } else {
-        songInfo.setText(song.getTitle());
-      }
-      lblTime.setText("0:00");
-      fullTime.setText(FormatDuration.run(song.getDuration()));
-    } else {
-      songInfo.setText("-");
-      lblTime.setText("0:00");
-      fullTime.setText("-");
     }
   }
 
