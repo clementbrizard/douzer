@@ -134,7 +134,7 @@ public class CommentListViewCell extends ListCell<Comment> {
       }
 
       music.getMetadata().getRatings().forEach((user,note) -> {
-        if (user.equals(comment.getOwner())) {
+        if (user.getUuid().equals(comment.getOwner().getUuid())) {
           ifUserNote = true;
           setStars(note);
         }
