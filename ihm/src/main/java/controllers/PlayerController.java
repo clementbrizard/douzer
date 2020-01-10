@@ -25,7 +25,6 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import javax.sound.sampled.AudioFormat;
@@ -90,6 +89,9 @@ public class PlayerController implements Controller {
     }
   }
 
+  /**
+   * Function to createMediaLinux
+   */
   private void createMediaLinux(LocalMusic music) {
     if (music != null) {
       File file = new File(music.getMp3Path());
@@ -106,6 +108,7 @@ public class PlayerController implements Controller {
 
         pick = new Media(newFile.toURI().toString());
 
+        player = new MediaPlayer(pick);
       }
     }
   }
@@ -311,25 +314,20 @@ public class PlayerController implements Controller {
    * @param song : LocalMusic object
    */
   public void showSongInfo(LocalMusic song) {
-    if (song != null) {
+    if (song != null ) {
+        previewMusic = song; // preview song
 
-      previewMusic = song; // preview song
+        // linux, mac convert mp3
+        specialCall(song);
 
-      // linux, mac convert mp3
-      specialCall(song);
-
-      if (song.getMetadata().getArtist() != null) {
-        songInfo.setText(song.getMetadata().getArtist() + " - " + song.getMetadata().getTitle());
-      } else {
-        songInfo.setText(song.getMetadata().getTitle());
+        if (song.getMetadata().getArtist() != null) {
+          songInfo.setText(song.getMetadata().getArtist() + " - " + song.getMetadata().getTitle());
+        } else {
+          songInfo.setText(song.getMetadata().getTitle());
+        }
+        lblTime.setText("0:00");
+        fullTime.setText(FormatDuration.run(song.getMetadata().getDuration()));
       }
-      lblTime.setText("0:00");
-      fullTime.setText(FormatDuration.run(song.getMetadata().getDuration()));
-    } else {
-      songInfo.setText("-");
-      lblTime.setText("0:00");
-      fullTime.setText("-");
-    }
   }
 
   /**
