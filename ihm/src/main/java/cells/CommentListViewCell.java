@@ -82,7 +82,7 @@ public class CommentListViewCell extends ListCell<Comment> {
 
     if (rating == 0) {
       starsMap.forEach((k, v) -> {
-        v.setVisible(false);
+        v.setVisible(true);
       });
 
     } else {    
