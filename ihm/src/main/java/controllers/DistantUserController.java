@@ -278,10 +278,11 @@ public class DistantUserController implements Controller {
             .getDataForIhm()
             .getCurrentUser();
 
+    // Because this is what we do
     if (!currentUser.getFriends().contains(distantUser)) {
-      btnManageFriendship.setText("Ajouter ce contact");
+      btnManageFriendship.setText("Ajouter/Supprimer ce contact");
     } else {
-      btnManageFriendship.setText("Supprimer ce contact");
+      btnManageFriendship.setText("Ajouter/Supprimer ce contact");
     }
 
     logger.info(currentUser.getFriends());

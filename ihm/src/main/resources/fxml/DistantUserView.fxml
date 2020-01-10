@@ -39,7 +39,7 @@
                                 </HBox>
                             </left>
                             <right>
-                                <Button fx:id="btnManageFriendship" onAction="#manageFriendship" styleClass="form-btn" text="ajouter aux contacts">
+                                <Button fx:id="btnManageFriendship" onAction="#manageFriendship" styleClass="form-btn" text="Ajouter/Supprimer ce contact">
                                     <!--<graphic>
                                         <ImageView fx:id="ivAddUser">
                                             <image>

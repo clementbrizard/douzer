@@ -39,7 +39,6 @@ public class ContactListController implements Controller {
           @Override
           public void updateItem(User user, boolean empty) {
             super.updateItem(user, empty);
-            contactListLogger.info("ContactList just refreshed.");
             if (user == null) {
               setText(null);
             } else {
