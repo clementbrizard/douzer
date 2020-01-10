@@ -15,7 +15,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -312,7 +311,7 @@ public class MyMusicsController implements Controller {
         // refresh player view music information
         this.getCentralFrameController().getMainController()
             .getPlayerController()
-            .showSongInfo(currentLocalMusic.getMetadata());
+            .showSongInfo(currentLocalMusic);
       }
     }
 
