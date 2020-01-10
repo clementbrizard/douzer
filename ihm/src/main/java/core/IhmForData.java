@@ -102,12 +102,35 @@ public class IhmForData implements Ihm {
         });
       }
     }
-    this.ihmCore
-      .getApplication()
-      .getMainController()
-      .getCentralFrameController()
-      .getAllMusicsController()
-      .displayAvailableMusics();
+    if (this.ihmCore != null) {
+      if (this.ihmCore
+            .getApplication() != null) {
+        if (this.ihmCore
+              .getApplication()
+              .getMainController() != null) {
+          if (this.ihmCore
+                .getApplication()
+                .getMainController()
+                .getCentralFrameController() != null) {
+            if (this.ihmCore
+                  .getApplication()
+                  .getMainController()
+                  .getCentralFrameController()
+                  .getAllMusicsController() != null) {
+              this.ihmCore
+                .getApplication()
+                .getMainController()
+                .getCentralFrameController()
+                .getAllMusicsController()
+                .displayAvailableMusics(); 
+              ihmForDataLogger.info("Reload de la vue principale " 
+                  + "suite à la réception d'une deconnexion");
+            }
+          }
+        }
+      }
+    }
+
   }
 
   /**
