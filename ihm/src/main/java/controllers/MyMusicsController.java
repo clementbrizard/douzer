@@ -386,8 +386,8 @@ public class MyMusicsController implements Controller {
             .getCurrentMusicInfoController().init(currentLocalMusic);
 
         // refresh player view music information -
-        if( this.getCentralFrameController().getMainController()
-            .getPlayerController().getPlayer() == null ){
+        if (this.getCentralFrameController().getMainController()
+              .getPlayerController().getPlayer() == null) {
 
           this.getCentralFrameController().getMainController()
               .getPlayerController()
