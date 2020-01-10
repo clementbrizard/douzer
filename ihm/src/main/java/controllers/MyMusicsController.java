@@ -5,6 +5,7 @@ import core.Application;
 import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
+import datamodel.Playlist;
 import datamodel.SearchQuery;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,33 +16,32 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
+import org.controlsfx.control.Notifications;
 import utils.FormatDuration;
 
 /**
@@ -49,6 +49,9 @@ import utils.FormatDuration;
  */
 public class MyMusicsController implements Controller {
   private static final org.apache.logging.log4j.Logger myMusicsLogger = LogManager.getLogger();
+
+  @FXML
+  private Label lblTitle;
 
   @FXML
   private TableView<MusicMetadata> tvMusics;
@@ -89,6 +92,8 @@ public class MyMusicsController implements Controller {
 
   // Local musics hashmap to access them instantly
   private HashMap<String, LocalMusic> localMusics;
+  // MusicsToDispay is used to filter playlists
+  private List<MusicMetadata> musicsToDisplay;
 
   /* Getters */
 
@@ -150,7 +155,8 @@ public class MyMusicsController implements Controller {
 
   @Override
   public void initialize() {
-    localMusics = new HashMap<>();
+    localMusics = new HashMap<String, LocalMusic>();
+    musicsToDisplay = new ArrayList<>();
   }
 
   /**
@@ -268,12 +274,83 @@ public class MyMusicsController implements Controller {
       selectedItems.forEach(item -> {
         musicsDelete.add(localMusics.get(item.getHash()));
       });
-
       deleteMusics(musicsDelete);
     });
 
     // Add MenuItem to ContextMenu
+    // menuAddToPlaylist should ALWAYS be the last item of contextMenu !
+    // @see refreshMenuPlaylist() which removes the last item to replace it with playlist menu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+    refreshMenuPlaylist(false);
+
+    // Header click event
+    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+      if (event.getTarget() instanceof TableColumnHeader) {
+        event.consume();
+      }
+    });
+
+    // Remove up / down arrows keybinding (used to move playlists)
+    tvMusics.addEventFilter(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.DOWN) {
+        this.moveMusicInCurrentPlaylist(keyEvent);
+        keyEvent.consume();
+      }
+    });
+  }
+
+  /**
+   * Adds the "ajouter à la playlist..." menu to the context menu which pops up with a right click.
+   *
+   * @param removeOldMenu if true, removes the old playlist menu to replace it with a new one.
+   *                      false should be used for initialization only, or else the menu
+   *                      will be duplicated.
+   */
+  private void refreshMenuPlaylist(boolean removeOldMenu) {
+    if (removeOldMenu) {
+      contextMenu.getItems().remove(contextMenu.getItems().size() - 1);
+    }
+    Menu menuAddToPlaylist = new Menu("Ajouter à la la playlist...");
+    menuAddToPlaylist.getItems().clear();
+    List<String> playlistNames = MyMusicsController.this.getApplication()
+        .getIhmCore().getDataForIhm()
+        .getCurrentUser().getPlaylists()
+        .stream().map(p -> p.getName())
+        .collect(Collectors.toList());
+
+    playlistNames.forEach(name -> {
+      MenuItem menuPlaylist = new MenuItem(name);
+      menuPlaylist.setOnAction(ev -> {
+        Playlist playlist = MyMusicsController.this.getApplication()
+            .getIhmCore().getDataForIhm()
+            .getPlaylistByName(name);
+        ObservableList<MusicMetadata> selectedItems = tvMusics
+            .getSelectionModel()
+            .getSelectedItems();
+
+        selectedItems.forEach(item -> {
+          if (playlist.getMusicList().contains(localMusics.get(item.getHash()))) {
+            Notifications.create()
+                .title("Ajout non nécessaire")
+                .text("Le morceau \"" + item.getTitle() + "\" est déjà présent dans la playlist \""
+                    + playlist.getName() + "\" !")
+                .showWarning();
+          } else {
+            MyMusicsController.this.getApplication()
+                .getIhmCore().getDataForIhm()
+                .addMusicToPlaylist(localMusics.get(item.getHash()), playlist, 0);
+
+            Notifications.create()
+                .title("Ajout réussi")
+                .text("Morceau \"" + item.getTitle() + "\" ajouté dans la playlist \""
+                    + playlist.getName() + "\" avec succès !")
+                .showInformation();
+          }
+        });
+      });
+      menuAddToPlaylist.getItems().add(menuPlaylist);
+    });
+    contextMenu.getItems().add(menuAddToPlaylist);
   }
 
   /* FXML methods (to handle events from user) */
@@ -314,7 +391,6 @@ public class MyMusicsController implements Controller {
             .showSongInfo(currentLocalMusic);
       }
     }
-
     // If double left click, play music
 
     if (click.getClickCount() == 2 && !click.isConsumed()) {
@@ -332,9 +408,14 @@ public class MyMusicsController implements Controller {
     if (click.getButton().equals(MouseButton.SECONDARY)) {
       if (music != null) {
         currentLocalMusic = localMusics.get(music.getHash());
+        this.refreshMenuPlaylist(true);
         contextMenu.show(tvMusics, click.getScreenX(), click.getScreenY());
       }
     }
+  }
+
+  private void updateTableMusics() {
+    tvMusics.getItems().setAll(musicsToDisplay);
   }
 
   /**
@@ -430,22 +511,32 @@ public class MyMusicsController implements Controller {
         query.withTags(tags);
       }
     }
-
-    Stream<Music> searchResults = MyMusicsController.this.getCentralFrameController()
+    Stream<Music> rawResult = MyMusicsController.this.getCentralFrameController()
         .getMainController()
         .getApplication()
         .getIhmCore()
-        .getDataForIhm().searchMusics(query)
-        .filter(music -> music.getOwners().contains(this
+        .getDataForIhm().searchMusics(query);
+
+    Stream<Music> specificResult = rawResult;
+
+    if (this.lblTitle.getText().equals("Mes morceaux")) {
+      specificResult = rawResult.filter(music ->
+        music.getOwners().contains(this
             .getCentralFrameController()
             .getMainController()
             .getApplication()
             .getIhmCore()
             .getDataForIhm()
-            .getCurrentUser()
-        ));
+            .getCurrentUser())
+      );
+    } else {
+      Playlist currentPlaylist = this.getApplication().getIhmCore().getDataForIhm()
+          .getCurrentUser().getPlaylistByName(this.lblTitle.getText());
+      specificResult = rawResult.filter(music -> currentPlaylist.getMusicList()
+          .contains(music));
+    }
 
-    updateMusicsOnSearch(searchResults);
+    updateMusicsOnSearch(specificResult);
   }
 
   /**
@@ -456,6 +547,8 @@ public class MyMusicsController implements Controller {
   @FXML
   public void changeFrameToAllMusics(ActionEvent event) {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
+    this.getCentralFrameController().getMainController().getMyPlaylistsController()
+        .resetSelection();
   }
 
   /* Logic methods */
@@ -494,13 +587,12 @@ public class MyMusicsController implements Controller {
    * Refresh the table by retrieving local musics from Data.
    */
   public void displayAvailableMusics() {
-    List<MusicMetadata> listMusic = this.retrieveLocalMusics();
-    tvMusics.getItems().setAll(listMusic);
-
+    musicsToDisplay = this.retrieveLocalMusics();
+    this.updateTableMusics();
     //change the size of Tags column
     ArrayList<Double> d = new ArrayList<Double>();
     d.add(0.0);
-    listMusic.forEach(metadata -> {
+    musicsToDisplay.forEach(metadata -> {
       double numberOfChar = 0;
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
@@ -530,8 +622,15 @@ public class MyMusicsController implements Controller {
 
     final String deleteOnApp = "Seulement sur l'application";
     final String deleteOnAppAndDisk = "Sur l'application et le disque";
+    final String deleteOnPlaylist = "Supprimer de la playlist uniquement";
 
     List<String> deleteOptions = new ArrayList<String>();
+
+    if (this.getCentralFrameController().getMainController().getMyPlaylistsController()
+        .getSelectedIndex() != 0) {
+      // We are viewing a playlist
+      deleteOptions.add(deleteOnPlaylist);
+    }
 
     deleteOptions.add(deleteOnApp);
     deleteOptions.add(deleteOnAppAndDisk);
@@ -547,33 +646,108 @@ public class MyMusicsController implements Controller {
     Optional<String> deleteChoice = deleteMusicChoiceDialog.showAndWait();
 
     deleteChoice.ifPresent(choice -> {
-      boolean deleteLocal = choice.equals(deleteOnAppAndDisk);
-      musicsToDelete.forEach(music -> {
-        try {
-          this.getApplication()
-              .getIhmCore()
-              .getDataForIhm()
-              .deleteMusic(music, deleteLocal);
-
-          if (music.equals(this
-              .getCentralFrameController()
-              .getMainController()
-              .getPlayerController()
-              .getCurrentMusic())
-          ) {
-            this
-                .getCentralFrameController()
-                .getMainController()
-                .getPlayerController()
-                .stopPlayer();
+      if (choice.equals(deleteOnPlaylist)) {
+        String playlistName = this.getCentralFrameController()
+            .getMainController()
+            .getMyPlaylistsController()
+            .getSelectedPlaylist();
+        Playlist playlist = this.getApplication()
+            .getIhmCore().getDataForIhm()
+            .getPlaylistByName(playlistName);
+        musicsToDelete.forEach(music -> {
+          this.getApplication().getIhmCore().getDataForIhm()
+              .removeMusicFromPlaylist(music, playlist);
+        });
+        this.showPlaylist(playlistName);
+      } else {
+        boolean deleteLocal = choice.equals(deleteOnAppAndDisk);
+        musicsToDelete.forEach(music -> {
+          try {
+            this.getApplication()
+                .getIhmCore()
+                .getDataForIhm()
+                .deleteMusic(music, deleteLocal);
+            // Remove music from every playlist
+            for (Playlist playlist : this.getApplication().getIhmCore().getDataForIhm()
+                .getCurrentUser().getPlaylists()) {
+              this.getApplication().getIhmCore().getDataForIhm().removeMusicFromPlaylist(
+                  music, playlist
+              );
+            }
+            this.displayAvailableMusics();
+          } catch (NullPointerException e) {
+            myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
           }
-
-          this.displayAvailableMusics();
-        } catch (NullPointerException e) {
-          myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
-        }
-      });
+        });
+      }
     });
+  }
+
+  /**
+   * Sets the view to show the current playlist only.
+   * @param playlistName name of the playlist
+   */
+  public void showPlaylist(String playlistName) {
+    this.lblTitle.setText(playlistName);
+
+    if (playlistName.equals("Mes morceaux")) {
+      this.displayAvailableMusics();
+    } else {
+      this.musicsToDisplay.clear();
+
+      // Get musics in playlist
+      this.getApplication().getIhmCore().getDataForIhm().getPlaylistByName(playlistName);
+      if (this.getApplication().getIhmCore().getDataForIhm()
+          .getPlaylistByName(playlistName) !=  null) {
+        ArrayList<LocalMusic> musicsInPlaylist = this.getApplication().getIhmCore()
+            .getDataForIhm().getPlaylistByName(playlistName).getMusicList();
+        musicsInPlaylist.forEach(m -> musicsToDisplay.add(m.getMetadata()));
+      }
+
+      this.updateTableMusics();
+    }
+  }
+
+  /**
+   * Moves a music in the current playlist.
+   *
+   * @param keyEvent : up or down arrow key press
+   */
+  private void moveMusicInCurrentPlaylist(KeyEvent keyEvent) {
+    String currentPlaylistName = this.lblTitle.getText();
+    int currentIndexRow = tvMusics.getSelectionModel().getSelectedIndex();
+    LocalMusic selectedMusic = getLocalMusicInView().get(currentIndexRow);
+    int newOrder = 0;
+
+    if (keyEvent.getCode() == KeyCode.DOWN) {
+      newOrder = currentIndexRow + 1;
+    } else if (keyEvent.getCode() == KeyCode.UP) {
+      newOrder = currentIndexRow - 1;
+    } else {
+      myMusicsLogger.error("Caught wrong key press event !");
+    }
+
+    if (newOrder < 0) {
+      newOrder = 0;
+    }
+
+    if (!currentPlaylistName.equals("Mes morceaux")) {
+      Playlist currentPlaylist = this.getApplication().getIhmCore().getDataForIhm()
+          .getCurrentUser().getPlaylistByName(currentPlaylistName);
+      if (newOrder > currentPlaylist.getMusicList().size() - 1) {
+        newOrder = currentPlaylist.getMusicList().size() - 1;
+      }
+      currentPlaylist.changeOrder(selectedMusic, newOrder);
+    } else {
+      Notifications.create()
+          .title("Impossible de changer l'ordre des musiques")
+          .text("L'ordre des morceaux ne peut être modifié que "
+              + "dans une playlist que vous avez créée.")
+          .darkStyle()
+          .showWarning();
+    }
+    //Update track order
+    this.showPlaylist(currentPlaylistName);
   }
 
   /**

@@ -23,7 +23,7 @@
                          <Label styleClass="center-sub-title" text="Actions sur le compte"/>
                      </HBox>
                      <HBox styleClass="form-btn-hbox">
-                         <Button fx:id="buttonDeleteAccount" styleClass="warning-btn" text="Supprimer" />
+                         <Button fx:id="buttonDeleteAccount" styleClass="warning-btn" text="Supprimer" onAction="#deleteAccount"/>
                          <Button fx:id="buttonExportAccount" styleClass="form-btn" text="Exporter" onAction="#exportClicked"/>
                      </HBox>
 

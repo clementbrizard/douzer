@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.Button?>
+<AnchorPane xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MyPlaylistsController">
+    <children>
+        <Pane fx:id="pnPlaylists" prefHeight="200.0" prefWidth="200.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
+            <children>
+                <Label layoutX="20.0" layoutY="14.0" text="Mes playlists">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Label>
+                <Button onAction="#addPlaylist" layoutX="143.0" layoutY="13.5">
+                    <graphic>
+                        <ImageView fitHeight="27.0" fitWidth="30.0"  pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../images/plus.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <ListView onMouseClicked="#handleListClickedEvent" fx:id="lvPlaylists" layoutX="16.0" layoutY="58.0" prefHeight="124.0" prefWidth="170.0" />
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
+

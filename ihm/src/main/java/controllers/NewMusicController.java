@@ -516,6 +516,9 @@ public class NewMusicController implements Controller {
         this.getMyMusicsController().displayAvailableMusics();
         this.getMyMusicsController().getCentralFrameController().getAllMusicsController()
             .displayAvailableMusics();
+        this.getMyMusicsController().getCentralFrameController()
+            .getMainController().getMyPlaylistsController().resetSelection();
+        this.getMyMusicsController().showPlaylist("Mes morceaux");
         Stage stage = (Stage) this.textFile.getScene().getWindow();
         stage.close();
       } catch (java.io.FileNotFoundException e) {
