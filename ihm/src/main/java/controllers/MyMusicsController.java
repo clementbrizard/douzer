@@ -287,14 +287,32 @@ public class MyMusicsController implements Controller {
   @FXML
   public void handleClickTableView(MouseEvent click) {
     MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
+    ArrayList<LocalMusic> musicsList = new ArrayList<LocalMusic>();
+    int index = -1;
+
+    if (music != null) {
+      currentLocalMusic = localMusics.get(music.getHash());
+      index = 0;
+      for (int i = 0; i < tvMusics.getItems().size(); i++) {
+        MusicMetadata m = tvMusics.getItems().get(i);
+        if (currentLocalMusic.getMetadata().getHash().equals(m.getHash())) {
+          index = i;
+        }
+        musicsList.add(localMusics.get(m.getHash()));
+      }
+    }
 
     // If left click, show current music info at right of the screen
     if (click.getButton().equals(MouseButton.PRIMARY)) {
       if (music != null) {
-        currentLocalMusic = localMusics.get(music.getHash());
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
+
+        // refresh player view music information
+        this.getCentralFrameController().getMainController()
+            .getPlayerController()
+            .showSongInfo(currentLocalMusic.getMetadata());
       }
     }
 
@@ -302,10 +320,13 @@ public class MyMusicsController implements Controller {
 
     if (click.getClickCount() == 2 && !click.isConsumed()) {
       click.consume();
-      //this.getCentralFrameController().getMainController()
-      // .getPlayerController()
-      //.playOneMusic(tvMusics.getSelectionModel()
-      // .getFocusedIndex());
+      if (music != null && !musicsList.isEmpty()) {
+
+        getCentralFrameController()
+            .getMainController()
+            .getPlayerController()
+            .playOneMusic(musicsList,index);
+      }
     }
 
     // If right click, show context menu
@@ -438,26 +459,6 @@ public class MyMusicsController implements Controller {
     MyMusicsController.this.centralFrameController.setCentralContentAllMusics();
   }
 
-  /**
-   * Handle click on loopPlayer musics button.
-   *
-   * @return
-   */
-  @FXML
-  public void loopPlayer() {
-    this.getCentralFrameController().getMainController().getPlayerController().loopPlayer();
-  }
-
-  /**
-   * Handle click on randomPlayer musics button.
-   *
-   * @return
-   */
-  @FXML
-  public void randomPlayer() {
-    this.getCentralFrameController().getMainController().getPlayerController().randomPlayer();
-  }
-
   /* Logic methods */
 
   /**
@@ -555,15 +556,11 @@ public class MyMusicsController implements Controller {
               .getDataForIhm()
               .deleteMusic(music, deleteLocal);
 
-          if (music.getMetadata()
-              .getTitle()
-              .equals(
-                  this
-                      .getCentralFrameController()
-                      .getMainController()
-                      .getPlayerController()
-                      .getCurrentMusicTitle())
-
+          if (music.equals(this
+              .getCentralFrameController()
+              .getMainController()
+              .getPlayerController()
+              .getCurrentMusic())
           ) {
             this
                 .getCentralFrameController()

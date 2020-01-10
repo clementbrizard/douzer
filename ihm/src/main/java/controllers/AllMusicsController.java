@@ -252,8 +252,8 @@ public class AllMusicsController implements Controller {
               int y = 0;
               for (int i = 0; i < tvMusics.getItems().size(); i++) {
                 MusicMetadata m = tvMusics.getItems().get(i);
-                if (availableMusics.get(m) instanceof LocalMusic) {
-                  LocalMusic localMusic = (LocalMusic) availableMusics.get(m);
+                if (availableMusics.get(m.getHash()) instanceof LocalMusic) {
+                  LocalMusic localMusic = (LocalMusic) availableMusics.get(m.getHash());
                   if (localMusic.getHash().equals(musicSelected.getHash())) {
                     index = y;
                   }
