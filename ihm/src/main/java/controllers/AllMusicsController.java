@@ -71,11 +71,11 @@ public class AllMusicsController implements Controller {
 
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
-  
+
   private ContextMenu contextMenu;
-  
+
   private Music musicSelected;
-  
+
   private boolean isOnlyLocalMusicSelected = true;
 
   @FXML
@@ -176,7 +176,7 @@ public class AllMusicsController implements Controller {
     ChangeListener<String> textListener = new ChangeListener<String>() {
       @Override
       public void changed(ObservableValue<? extends String> observable,
-              String oldValue, String newValue) {
+                          String oldValue, String newValue) {
         searchMusics();
       }
     };
@@ -191,7 +191,7 @@ public class AllMusicsController implements Controller {
 
     tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
   }
-  
+
   /**
    * construct the contextMenu (the windows who appear when user right click on a music)
    * depend on which music the user selected.
@@ -206,11 +206,11 @@ public class AllMusicsController implements Controller {
       @Override
       public void handle(ActionEvent event) {
         getCentralFrameController()
-          .getMyMusicsController()
-          .showMusicInformation(musicSelected);
+            .getMyMusicsController()
+            .showMusicInformation(musicSelected);
       }
     });
-    
+
     //check the selected item
     tvMusics
         .getSelectionModel()
@@ -219,7 +219,7 @@ public class AllMusicsController implements Controller {
           if (!(availableMusics.get(item.getHash()) instanceof LocalMusic)) {
             isOnlyLocalMusicSelected = false;
           }
-        });    
+        });
     if (musicSelected instanceof LocalMusic && isOnlyLocalMusicSelected) {
       MenuItem playMusic = new MenuItem("Jouer");
       playMusic.setOnAction(new EventHandler<ActionEvent>() {
@@ -227,15 +227,15 @@ public class AllMusicsController implements Controller {
         public void handle(ActionEvent event) {
           if (musicSelected instanceof LocalMusic) {
             ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
-    
+
             ObservableList<MusicMetadata> selectedItems = tvMusics
                 .getSelectionModel()
                 .getSelectedItems();
-    
+
             selectedItems.forEach(item -> {
               listMusicClicked.add((LocalMusic) availableMusics.get(item.getHash()));
             });
-    
+
             //add to the list with right click play to the list
             if (listMusicClicked.isEmpty()) {
               listMusicClicked.add((LocalMusic) musicSelected);
@@ -261,35 +261,35 @@ public class AllMusicsController implements Controller {
                 }
               }
               getCentralFrameController()
-                .getMainController()
-                .getPlayerController()
-                .playOneMusic(musics,index);
-              
+                  .getMainController()
+                  .getPlayerController()
+                  .playOneMusic(musics, index);
+
             } else {
-            
+
               // Get the first local music selected index (do not count the distant musics)
               int readIndex = 0;
               ArrayList<LocalMusic> arrayMusicAll =
                   getCentralFrameController()
                       .getMyMusicsController()
                       .getLocalMusicInView();
-  
+
               for (LocalMusic m : arrayMusicAll) {
                 if (listMusicClicked.get(0).getHash().equals(m.getHash())) {
                   break;
                 }
                 readIndex++;
               }
-  
+
               getCentralFrameController()
-                .getMainController()
-                .getPlayerController()
-                .playOneMusic(listMusicClicked,readIndex);
+                  .getMainController()
+                  .getPlayerController()
+                  .playOneMusic(listMusicClicked, readIndex);
             }
           }
         }
       });
-  
+
       // Add delete item in context menu
       MenuItem itemDelete = new MenuItem("Supprimer");
       itemDelete.setOnAction(new EventHandler<ActionEvent>() {
@@ -299,13 +299,13 @@ public class AllMusicsController implements Controller {
           ObservableList<MusicMetadata> selectedItems = tvMusics
               .getSelectionModel()
               .getSelectedItems();
-  
+
           selectedItems.forEach(item -> {
             musicsDelete.add((LocalMusic) availableMusics.get(item.getHash()));
           });
           getCentralFrameController()
-            .getMyMusicsController()
-            .deleteMusics(musicsDelete);
+              .getMyMusicsController()
+              .deleteMusics(musicsDelete);
         }
       });
 
@@ -317,18 +317,17 @@ public class AllMusicsController implements Controller {
         @Override
         public void handle(ActionEvent event) {
           centralFrameController
-            .getMainController()
-            .getDownloadController()
-            .download(musicSelected);
+              .getMainController()
+              .getDownloadController()
+              .download(musicSelected);
         }
       });
-      
-      
-      
-      contextMenu.getItems().addAll(itemInformation,download);
+
+
+      contextMenu.getItems().addAll(itemInformation, download);
     }
   }
-  
+
   /**
    * display All Music Available in the center table.
    */
@@ -341,12 +340,12 @@ public class AllMusicsController implements Controller {
     d.add(0.0);
     tvMusics.getItems().forEach(metadata -> {
       double numberOfChar = 0;
-      d.set(0,7.0);
+      d.set(0, 7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
       if (numberOfChar > d.get(0)) {
-        d.set(0,numberOfChar);
+        d.set(0, numberOfChar);
       }
     });
     this.tagsCol.setPrefWidth(d.get(0) * 9);
@@ -424,6 +423,7 @@ public class AllMusicsController implements Controller {
 
   /**
    * handle the click on the TableView.
+   *
    * @param click the MouseEvent
    */
   @FXML
@@ -453,15 +453,15 @@ public class AllMusicsController implements Controller {
       if (music != null) {
         musicSelected = availableMusics.get(music.getHash());
 
-          if ((musicSelected instanceof LocalMusic)) {
-            ArrayList<LocalMusic> tmp = new ArrayList<>();
-            tmp.add((LocalMusic)musicSelected);
+        if ((musicSelected instanceof LocalMusic)) {
+          ArrayList<LocalMusic> tmp = new ArrayList<>();
+          tmp.add((LocalMusic) musicSelected);
 
-            getCentralFrameController()
-                .getMainController()
-                .getPlayerController()
-                .playOneMusic(tmp,0);
-          }
+          getCentralFrameController()
+              .getMainController()
+              .getPlayerController()
+              .playOneMusic(tmp, 0);
+        }
       }
     }
 
@@ -478,7 +478,6 @@ public class AllMusicsController implements Controller {
 
   /**
    * Search all musics that correspond to the labels content.
-   *
    */
   @FXML
   public void searchMusics() {
