@@ -26,6 +26,7 @@ import features.ShareMusics;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
 import features.UpdateUserPayload;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,12 +37,12 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.UUID;
 import java.util.stream.Stream;
-import javax.security.auth.login.LoginException;
 
+import javax.security.auth.login.LoginException;
 
 public class DataForIhmImpl implements DataForIhm {
   private Datacore dc;
@@ -125,11 +126,11 @@ public class DataForIhmImpl implements DataForIhm {
   public void download(Music music) {
     ArrayList<InetAddress> ownersIPs = new ArrayList<>();
     String musicHash = music.getHash();
-    
+
     for (User owner : music.getOwners()) {
       ownersIPs.add(owner.getIp());
     }
-    
+
     this.dc.net.requestDownload(ownersIPs.stream(), musicHash);
   }
 
@@ -208,6 +209,11 @@ public class DataForIhmImpl implements DataForIhm {
   @Override
   public Stream<User> getOnlineUsers() {
     return this.dc.getOnlineUsers();
+  }
+
+  @Override
+  public HashMap<UUID, User> getOnlineUsersSet() {
+    return this.dc.getOnlineUsersSet();
   }
 
   @Override

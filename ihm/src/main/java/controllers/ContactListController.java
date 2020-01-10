@@ -44,7 +44,9 @@ public class ContactListController implements Controller {
               setText(null);
             } else {
 
-              if (user.isConnected()) {
+              if (mainController.getApplication().getIhmCore()
+                      .getDataForIhm().getOnlineUsersSet()
+                      .containsKey(user.getUuid())) {
                 setText("> " + user.getUsername());
               } else {
                 setText(user.getUsername());

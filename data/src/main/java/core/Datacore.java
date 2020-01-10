@@ -159,6 +159,10 @@ public class Datacore {
         .filter(m -> (m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
+  public HashMap<UUID, User> getOnlineUsersSet() {
+    return this.users;
+  }
+
   /**
    * Remove the user from all the owners sets
    * and remove the music if it has no more owners.
