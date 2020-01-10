@@ -308,10 +308,15 @@ public class MyMusicsController implements Controller {
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
 
-        // refresh player view music information
-        this.getCentralFrameController().getMainController()
-            .getPlayerController()
-            .showSongInfo(currentLocalMusic);
+        // refresh player view music information -
+        if( this.getCentralFrameController().getMainController()
+            .getPlayerController().getPlayer() == null ){
+
+          this.getCentralFrameController().getMainController()
+              .getPlayerController()
+              .showSongInfo(currentLocalMusic);
+        }
+
       }
     }
 

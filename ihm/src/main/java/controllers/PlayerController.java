@@ -404,4 +404,7 @@ public class PlayerController implements Controller {
     return null;
   }
 
+  public MediaPlayer getPlayer() {
+    return player;
+  }
 }
