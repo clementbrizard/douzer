@@ -276,17 +276,28 @@ public class DistantUserController implements Controller {
     contextMenu = new ContextMenu();
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
-    /*itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         getCentralFrameController()
           .getMyMusicsController()
           .showMusicInformation(musicSelected);
       }
-    });*/
+    });
 
+    MenuItem download = new MenuItem("Telechargement");
+    download.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        centralFrameController
+          .getMainController()
+          .getDownloadController()
+          .download(musicSelected);
+      }
+    });
+    
     // Add MenuItem to ContextMenu
-    contextMenu.getItems().addAll(itemInformation);
+    contextMenu.getItems().addAll(itemInformation,download);
   }
   
   

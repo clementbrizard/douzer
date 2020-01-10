@@ -203,14 +203,14 @@ public class AllMusicsController implements Controller {
     contextMenu = new ContextMenu();
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
-    /*itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         getCentralFrameController()
           .getMyMusicsController()
           .showMusicInformation(musicSelected);
       }
-    });*/
+    });
     
     //check the selected item
     tvMusics
@@ -220,8 +220,7 @@ public class AllMusicsController implements Controller {
           if (!(availableMusics.get(item.getHash()) instanceof LocalMusic)) {
             isOnlyLocalMusicSelected = false;
           }
-        });
-    
+        });    
     if (musicSelected instanceof LocalMusic && isOnlyLocalMusicSelected) {
       MenuItem playMusic = new MenuItem("Jouer");
       playMusic.setOnAction(new EventHandler<ActionEvent>() {
@@ -314,7 +313,20 @@ public class AllMusicsController implements Controller {
       // Add MenuItem to ContextMenu
       contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
     } else {
-      contextMenu.getItems().add(itemInformation);
+      MenuItem download = new MenuItem("Telechargement");
+      download.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          centralFrameController
+            .getMainController()
+            .getDownloadController()
+            .download(musicSelected);
+        }
+      });
+      
+      
+      
+      contextMenu.getItems().addAll(itemInformation,download);
     }
   }
   
