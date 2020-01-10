@@ -231,17 +231,31 @@ public class MyMusicsController implements Controller {
       }
       if (listMusicClicked.size() == 1) {
         ArrayList<LocalMusic> musics = new ArrayList<LocalMusic>();
-        for(MusicMetadata m : tvMusics.getItems()) {
+        int index = 0;
+        for (int i = 0; i < tvMusics.getItems().size(); i++) {
+          MusicMetadata m = tvMusics.getItems().get(i);
+          if (currentLocalMusic.getMetadata().getHash().equals(m.getHash())) {
+            index = i;
+          }
+          
           musics.add(localMusics.get(m.getHash()));
-          //send to player the list of all musics .
         }
-      } else {
-        //send to player the listMusicClicked
-      }
-      getCentralFrameController()
+        getCentralFrameController()
           .getMainController()
           .getPlayerController()
-          .playOneMusic(musics,0);
+          .playOneMusic(musics,index);
+      } else {
+        int index = 0;
+        for (int i = 0; i < listMusicClicked.size(); i++) {
+          if (currentLocalMusic.getMetadata().getHash().equals(listMusicClicked.get(i).getHash())) {
+            index = i;
+          }
+        }
+        getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .playOneMusic(listMusicClicked,index);
+      }
     });
 
     // Add delete item in context menu
@@ -261,19 +275,6 @@ public class MyMusicsController implements Controller {
 
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
-
-    // Header click event
-    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-      if (event.getTarget() instanceof TableColumnHeader) {
-        event.consume();
-        this.getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .updateArrayMusic();
-      }
-
-    });
-
   }
 
   /* FXML methods (to handle events from user) */
@@ -294,10 +295,6 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
-
-        this.getCentralFrameController().getMainController()
-            .getPlayerController()
-            .selectOneMusic(currentLocalMusic);
       }
     }
 
@@ -522,7 +519,6 @@ public class MyMusicsController implements Controller {
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
     tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
-    this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
 
   /**

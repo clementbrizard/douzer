@@ -318,47 +318,6 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function Refresh ArrayMusic.
-   *
-   * @return
-   */
-  public void updateArrayMusic() {
-
-    String saveTitle = "NOTHING";
-
-    if (!arrayMusic.isEmpty() && currentIndex != -1 && currentIndex < arrayMusic.size()) {
-      saveTitle = arrayMusic.get(currentIndex).getTitle();
-    }
-
-    medias.clear();
-    arrayMusic.clear();
-
-    ArrayList<LocalMusic> arrayMusicAll =
-        mainController
-            .getCentralFrameController()
-            .getMyMusicsController()
-            .getLocalMusicInView();
-
-    int localCurrentMusic = 0;
-
-    for (LocalMusic musicMetadata : arrayMusicAll) {
-      medias.add(createPlayer(musicMetadata.getMp3Path()));
-      arrayMusic.add(musicMetadata.getMetadata());
-      if (!arrayMusic.get(localCurrentMusic).getTitle()
-          .equals(saveTitle)) {
-        localCurrentMusic++;
-      }
-    }
-
-    // change currentINDEX (header tableView click event)
-    if (!saveTitle.equals("NOTHING")) {
-      currentIndex = localCurrentMusic;
-    }
-
-  }
-
-
-  /**
    * Function stopPlayer: Stop player.
    *
    * @return
