@@ -6,13 +6,10 @@ import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.SearchQuery;
-
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -174,7 +171,8 @@ public class MyMusicsController implements Controller {
     this.durationCol
         .setCellValueFactory(
             metadata -> new SimpleStringProperty(
-                FormatDuration.run(metadata.getValue().getDuration())));
+                FormatDuration.run(metadata.getValue().getDuration())
+            ));
 
     // Hide advanced search fields
     tfSearchTitle.setVisible(false);
@@ -211,7 +209,7 @@ public class MyMusicsController implements Controller {
     MenuItem itemInformation = new MenuItem("Informations");
     itemInformation.setOnAction(event -> showMusicInformation(currentLocalMusic));
 
-    MenuItem playMusic = new MenuItem("Jouer");
+    MenuItem playMusic = new MenuItem("Play");
     playMusic.setOnAction(event -> {
       ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
 
@@ -231,11 +229,33 @@ public class MyMusicsController implements Controller {
           listMusicClicked.add(currentLocalMusic);
         }
       }
-
-      getCentralFrameController()
+      if (listMusicClicked.size() == 1) {
+        ArrayList<LocalMusic> musics = new ArrayList<LocalMusic>();
+        int index = 0;
+        for (int i = 0; i < tvMusics.getItems().size(); i++) {
+          MusicMetadata m = tvMusics.getItems().get(i);
+          if (currentLocalMusic.getMetadata().getHash().equals(m.getHash())) {
+            index = i;
+          }
+          
+          musics.add(localMusics.get(m.getHash()));
+        }
+        getCentralFrameController()
           .getMainController()
           .getPlayerController()
-          .playOneMusic(tvMusics.getSelectionModel().getFocusedIndex());
+          .playOneMusic(musics,index);
+      } else {
+        int index = 0;
+        for (int i = 0; i < listMusicClicked.size(); i++) {
+          if (currentLocalMusic.getMetadata().getHash().equals(listMusicClicked.get(i).getHash())) {
+            index = i;
+          }
+        }
+        getCentralFrameController()
+          .getMainController()
+          .getPlayerController()
+          .playOneMusic(listMusicClicked,index);
+      }
     });
 
     // Add delete item in context menu
@@ -255,19 +275,6 @@ public class MyMusicsController implements Controller {
 
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
-
-    // Header click event
-    tvMusics.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-      if (event.getTarget() instanceof TableColumnHeader) {
-        event.consume();
-        this.getCentralFrameController()
-            .getMainController()
-            .getPlayerController()
-            .updateArrayMusic();
-      }
-
-    });
-
   }
 
   /* FXML methods (to handle events from user) */
@@ -288,11 +295,6 @@ public class MyMusicsController implements Controller {
 
         this.getCentralFrameController().getMainController()
             .getCurrentMusicInfoController().init(currentLocalMusic);
-
-        this.getCentralFrameController().getMainController()
-            .getPlayerController()
-            .selectOneMusic(tvMusics.getSelectionModel()
-                .getFocusedIndex());
       }
     }
 
@@ -300,10 +302,10 @@ public class MyMusicsController implements Controller {
 
     if (click.getClickCount() == 2 && !click.isConsumed()) {
       click.consume();
-      this.getCentralFrameController().getMainController()
-          .getPlayerController()
-          .playOneMusic(tvMusics.getSelectionModel()
-              .getFocusedIndex());
+      //this.getCentralFrameController().getMainController()
+      // .getPlayerController()
+      //.playOneMusic(tvMusics.getSelectionModel()
+      // .getFocusedIndex());
     }
 
     // If right click, show context menu
@@ -461,9 +463,9 @@ public class MyMusicsController implements Controller {
   /**
    * Handle click on information item in context menu.
    *
-   * @param musicSelected the music on which the user right clicked
+   * @param music the music on which the user right clicked
    */
-  public void showMusicInformation(Music musicSelected) {
+  private void showMusicInformation(LocalMusic music) {
     try {
       // Initialize scene and controller.
       FXMLLoader musicDetailsLoader = new FXMLLoader(getClass()
@@ -473,7 +475,7 @@ public class MyMusicsController implements Controller {
       DetailsMusicController detailsMusicController = musicDetailsLoader.getController();
       this.setDetailsMusicController(detailsMusicController);
       detailsMusicController.setMyMusicsController(this);
-      detailsMusicController.initMusic(musicSelected);
+      detailsMusicController.initMusic(music);
 
     } catch (Exception e) {
       myMusicsLogger.error(e);
@@ -500,7 +502,6 @@ public class MyMusicsController implements Controller {
     d.add(0.0);
     listMusic.forEach(metadata -> {
       double numberOfChar = 0;
-      d.set(0,7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
@@ -518,7 +519,6 @@ public class MyMusicsController implements Controller {
    */
   private void updateMusicsOnSearch(Stream<Music> newMusics) {
     tvMusics.getItems().setAll(newMusics.map(Music::getMetadata).collect(Collectors.toList()));
-    this.getCentralFrameController().getMainController().getPlayerController().updateArrayMusic();
   }
 
   /**
@@ -593,8 +593,8 @@ public class MyMusicsController implements Controller {
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
-        .getLocalMusics()
-        .collect(Collectors.toCollection(HashSet::new));
+        .getCurrentUser()
+        .getLocalMusics();
 
     List<MusicMetadata> localMusicsMetadata = new ArrayList<>();
     for (LocalMusic localMusic : localMusicsStream) {

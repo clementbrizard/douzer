@@ -203,14 +203,14 @@ public class AllMusicsController implements Controller {
     contextMenu = new ContextMenu();
     // Create information item for context menu
     MenuItem itemInformation = new MenuItem("Informations");
-    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+    /*itemInformation.setOnAction(new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
         getCentralFrameController()
           .getMyMusicsController()
           .showMusicInformation(musicSelected);
       }
-    });
+    });*/
     
     //check the selected item
     tvMusics
@@ -247,24 +247,47 @@ public class AllMusicsController implements Controller {
               }
             }
 
-            // Get the first local music selected index (do not count the distant musics)
-            int readIndex = 0;
-            ArrayList<LocalMusic> arrayMusicAll =
-                getCentralFrameController()
-                    .getMyMusicsController()
-                    .getLocalMusicInView();
-
-            for (LocalMusic m : arrayMusicAll) {
-              if (listMusicClicked.get(0).getHash() == m.getHash()) {
-                break;
+            if (listMusicClicked.size() == 1) {
+              ArrayList<LocalMusic> musics = new ArrayList<LocalMusic>();
+              int index = 0;
+              int y = 0;
+              for (int i = 0; i < tvMusics.getItems().size(); i++) {
+                MusicMetadata m = tvMusics.getItems().get(i);
+                if (availableMusics.get(m) instanceof LocalMusic) {
+                  LocalMusic localMusic = (LocalMusic) availableMusics.get(m);
+                  if (localMusic.getHash().equals(musicSelected.getHash())) {
+                    index = y;
+                  }
+                  musics.add(localMusic);
+                  y += 1;
+                }
               }
-              readIndex++;
-            }
-
-            getCentralFrameController()
+              getCentralFrameController()
                 .getMainController()
                 .getPlayerController()
-                .playOneMusic(readIndex);
+                .playOneMusic(musics,index);
+              
+            } else {
+            
+              // Get the first local music selected index (do not count the distant musics)
+              int readIndex = 0;
+              ArrayList<LocalMusic> arrayMusicAll =
+                  getCentralFrameController()
+                      .getMyMusicsController()
+                      .getLocalMusicInView();
+  
+              for (LocalMusic m : arrayMusicAll) {
+                if (listMusicClicked.get(0).getHash().equals(m.getHash())) {
+                  break;
+                }
+                readIndex++;
+              }
+  
+              getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .playOneMusic(listMusicClicked,readIndex);
+            }
           }
         }
       });

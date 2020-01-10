@@ -17,14 +17,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -42,7 +45,7 @@ public class PlayerController implements Controller {
   static final double TIMER = 0.99;
 
   @FXML
-  private ProgressBar pgMusicProgress;
+  private Slider pgMusicProgress;
 
   @FXML
   private Button play;
@@ -68,29 +71,18 @@ public class PlayerController implements Controller {
 
   private Duration duration;
   private double totalDuration;
-  private Random rand = new Random();
 
-  private MediaPlayer player;
   private ArrayList<MediaPlayer> medias;
   private ArrayList<MusicMetadata> arrayMusic;
+
+  private MediaPlayer player;
+  private ArrayList<LocalMusic> playList; // checker et faire musique
 
   @Override
   public void initialize() {
 
     initPictures();
-    medias = new ArrayList<>();
-    arrayMusic = new ArrayList<>();
-    isPlaying = false;
-
-    // Click on progressBar
-    pgMusicProgress.setOnMouseClicked(e -> {
-      double dx = e.getX();
-      double dwidth = pgMusicProgress.getWidth();
-      double progression = (dx / dwidth);
-      double milliseconds = (progression * player.getTotalDuration().toMillis());
-      Duration duration = new Duration(milliseconds);
-      player.seek(duration);
-    });
+    playList = new ArrayList<>();
   }
 
   /**
@@ -110,6 +102,154 @@ public class PlayerController implements Controller {
     }
 
   }
+
+  /**
+   * Function to createMedia.
+   */
+  private void createMedia(LocalMusic music) {
+    if (music != null) {
+      File file = new File(music.getMp3Path());
+      Media pick = new Media(file.toURI().toString());
+      player = new MediaPlayer(pick);
+
+      pgMusicProgress.setMax(music.getMetadata().getDuration().getSeconds());
+
+      player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
+                                                Duration oldValue,
+                                                Duration newValue) -> {
+
+        if (pgMusicProgress.getMax() == pgMusicProgress.getValue()) {
+          pgMusicProgress.setValue(0.0);
+          playNext(null);
+        }
+
+        Platform.runLater(() -> {
+          lblTime.setText(secToMin((long) newValue.toSeconds()));
+          pgMusicProgress.setValue(newValue.toSeconds());
+        });
+
+      });
+
+      pgMusicProgress.setOnMouseClicked((MouseEvent mouseEvent) -> {
+        player.seek(Duration.seconds(pgMusicProgress.getValue()));
+      });
+
+    }
+  }
+
+  /**
+   * Function playerOneMusic with index item row.
+   *
+   * @return
+   */
+  public void playOneMusic(ArrayList<LocalMusic> musics, int index) {
+    if (musics != null) {
+
+      if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
+        player.stop();
+      }
+
+      if (!playList.isEmpty()) {
+        playList.clear();
+      }
+
+      playList.addAll(musics);
+      currentIndex = index;
+
+      LocalMusic item = playList.get(index);
+      createMedia(item);
+
+      showSongInfo(item.getMetadata());
+
+      player.play();
+      play.setGraphic(new ImageView(pauseIcon));
+
+    }
+  }
+
+
+  /**
+   * Function playPause: Play and Pause button interactions.
+   *
+   * @return
+   */
+  @FXML
+  private void playPause(ActionEvent e) {
+    if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
+      play.setGraphic(new ImageView(playIcon));
+      player.pause();
+    } else {
+      play.setGraphic(new ImageView(pauseIcon));
+      player.play();
+    }
+  }
+
+  /**
+   * Function playNext: play the next music.
+   */
+  @FXML
+  private void playNext(ActionEvent e) {
+    if (playList != null && !playList.isEmpty() && currentIndex != -1) {
+
+      if (currentIndex + 1 < playList.size()) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+
+      playerOnMusic();
+    }
+  }
+
+  /**
+   * Function playBack : play the music before.
+   *
+   * @return
+   */
+  @FXML
+  private void playBack(ActionEvent e) {
+
+    if (playList != null && !playList.isEmpty() && currentIndex != -1) {
+
+      if (currentIndex - 1 >= 0) {
+        currentIndex--;
+      } else {
+        currentIndex = playList.size() - 1;
+      }
+
+      playerOnMusic();
+    }
+  }
+
+  /**
+   * Function selectOneMusic with selected LocalMusic.
+   *
+   * @param music : LocalMusic
+   * @return
+   */
+  public void selectOneMusic(LocalMusic music) {
+    if (music != null && !isPlaying) {
+      showSongInfo(music.getMetadata());
+    }
+  }
+
+  /**
+   * Function Play only one song.
+   */
+  private void playerOnMusic() {
+    if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
+      player.stop();
+    }
+
+    LocalMusic item = playList.get(currentIndex);
+    createMedia(item);
+
+    showSongInfo(item.getMetadata());
+
+    player.play();
+    play.setGraphic(new ImageView(pauseIcon));
+  }
+
 
   /**
    * Function to convertMp3ToWav.
@@ -146,70 +286,6 @@ public class PlayerController implements Controller {
     }
   }
 
-  /**
-   * Function selectOneMusic with index item row.
-   *
-   * @param currentIndexRow : music index
-   * @return
-   */
-  public void selectOneMusic(int currentIndexRow) {
-    if (!isPlaying) {
-      currentIndex = currentIndexRow;
-      updateArrayMusic();
-
-      showSongInfo(arrayMusic.get(currentIndex));
-
-      player = medias.get(currentIndex);
-
-      showSongInfo(arrayMusic.get(currentIndex));
-
-      player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
-                                                Duration oldValue,
-                                                Duration newValue) -> {
-        duration = player.getMedia().getDuration();
-        updateValues();
-      });
-    }
-  }
-
-  /**
-   * Function playerOneMusic with index item row.
-   *
-   * @param currentIndexRow : music index
-   * @return
-   */
-  public void playOneMusic(int currentIndexRow) {
-    currentIndex = currentIndexRow;
-    updateArrayMusic();
-    playerOnMusic();
-  }
-
-  /**
-   * Function Play only one song.
-   */
-  private void playerOnMusic() {
-
-    stopPlayer();
-
-    player = medias.get(currentIndex);
-
-    showSongInfo(arrayMusic.get(currentIndex));
-
-    totalDuration = arrayMusic.get(this.currentIndex)
-        .getDuration()
-        .toMillis();
-
-    player.currentTimeProperty().addListener((ObservableValue<? extends Duration> observable,
-                                              Duration oldValue,
-                                              Duration newValue) -> {
-      duration = player.getMedia().getDuration();
-      updateValues();
-    });
-
-    player.play();
-    isPlaying = true;
-    play.setGraphic(new ImageView(pauseIcon));
-  }
 
   /**
    * Function creating PlayerList using musicPath.
@@ -242,124 +318,27 @@ public class PlayerController implements Controller {
   }
 
   /**
-   * Function Refresh ArrayMusic.
-   *
-   * @return
-   */
-  public void updateArrayMusic() {
-
-    String saveTitle = "NOTHING";
-
-    if (!arrayMusic.isEmpty() && currentIndex != -1 && currentIndex < arrayMusic.size()) {
-      saveTitle = arrayMusic.get(currentIndex).getTitle();
-    }
-
-    medias.clear();
-    arrayMusic.clear();
-
-    ArrayList<LocalMusic> arrayMusicAll =
-        mainController
-            .getCentralFrameController()
-            .getMyMusicsController()
-            .getLocalMusicInView();
-
-    int localCurrentMusic = 0;
-
-    for (LocalMusic musicMetadata : arrayMusicAll) {
-      medias.add(createPlayer(musicMetadata.getMp3Path()));
-      arrayMusic.add(musicMetadata.getMetadata());
-      if (!arrayMusic.get(localCurrentMusic).getTitle()
-              .equals(saveTitle)) {
-        localCurrentMusic++;
-      }
-    }
-
-    // change currentINDEX (header tableView click event)
-    if (! saveTitle.equals("NOTHING")) {
-      currentIndex = localCurrentMusic;
-    }
-
-  }
-
-  /**
-   * Function playBack : play the music before.
-   *
-   * @return
-   */
-  @FXML
-  private void playBack(ActionEvent e) {
-
-    if (arrayMusic != null && !arrayMusic.isEmpty() && currentIndex != -1) {
-
-      if (currentIndex - 1 >= 0) {
-        currentIndex--;
-      } else {
-        currentIndex = medias.size() - 1;
-      }
-
-      playerOnMusic();
-    }
-  }
-
-  /**
-   * Function playNext: play the next music.
-   *
-   * @return
-   */
-  @FXML
-  private void playNext(ActionEvent e) {
-    if (arrayMusic != null && !arrayMusic.isEmpty() && currentIndex != -1) {
-
-      if (currentIndex + 1 < medias.size()) {
-        currentIndex++;
-      } else {
-        currentIndex = 0;
-      }
-
-      playerOnMusic();
-    }
-  }
-
-  /**
-   * Function playPause: Play and Pause button interactions.
-   *
-   * @return
-   */
-  @FXML
-  private void playPause(ActionEvent e) {
-    if (currentIndex != -1) {
-      if (isPlaying) {
-        play.setGraphic(new ImageView(playIcon));
-        isPlaying = false;
-        player.pause();
-      } else {
-        play.setGraphic(new ImageView(pauseIcon));
-        isPlaying = true;
-        player.play();
-      }
-    }
-  }
-
-  /**
    * Function stopPlayer: Stop player.
    *
    * @return
    */
   public void stopPlayer() {
     if (isPlaying) {
-      player.stop();
       play.setGraphic(new ImageView(playIcon));
+
+      player.stop();
       isPlaying = false;
-      songInfo.setText(" - ");
-      lblTime.setText("0:00");
-      pgMusicProgress.setProgress(0.0);
+
       fullTime.setText("0:00");
+      lblTime.setText("0:00");
+
+      songInfo.setText(" - ");
+      //pgMusicProgress.setProgress(0.0);
     }
   }
 
   /**
    * Function loopPlayer: Play all playlist.
-   *
    */
   public void loopPlayer() {
     isLoop = !isLoop;
@@ -367,46 +346,11 @@ public class PlayerController implements Controller {
 
   /**
    * Function randomPlayer : play random music.
-   *
    */
   public void randomPlayer() {
     isRandom = !isRandom;
   }
 
-  /**
-   * Function updateValues: Update GUI (progressBar and timer).
-   *
-   * @return
-   */
-  protected void updateValues() {
-    if (pgMusicProgress != null && duration != null) {
-      Platform.runLater(() -> {
-
-        Duration currentTime = player.getCurrentTime();
-
-        double timer = (currentTime.toMillis() / totalDuration);
-
-        if (timer < TIMER) {
-          lblTime.setText(secToMin((long) player.getCurrentTime().toSeconds()));
-          pgMusicProgress.setProgress(timer);
-        } else {
-          play.setGraphic(new ImageView(playIcon));
-          isPlaying = false;
-          player.stop();
-          pgMusicProgress.setProgress(0.0);
-
-          if (isLoop && isRandom) {
-            playOneMusic(rand.nextInt(arrayMusic.size()));
-          } else {
-            if (isLoop && !isRandom) {
-              playNext(null);
-            }
-          }
-
-        }
-      });
-    }
-  }
 
   /**
    * Function to show musicInfo.
@@ -415,10 +359,10 @@ public class PlayerController implements Controller {
    */
   private void showSongInfo(MusicMetadata song) {
     if (song != null) {
-      if (song.getArtist() == null || song.getArtist().trim().equals("")) {
-        songInfo.setText(song.getTitle());
-      } else {
+      if (song.getArtist() != null) {
         songInfo.setText(song.getArtist() + " - " + song.getTitle());
+      } else {
+        songInfo.setText(song.getTitle());
       }
       lblTime.setText("0:00");
       fullTime.setText(FormatDuration.run(song.getDuration()));
