@@ -445,6 +445,26 @@ public class AllMusicsController implements Controller {
       }
     }
 
+    // If double left click, play music
+
+    if (click.getClickCount() == 2 && !click.isConsumed()) {
+      click.consume();
+
+      if (music != null) {
+        musicSelected = availableMusics.get(music.getHash());
+
+          if ((musicSelected instanceof LocalMusic)) {
+            ArrayList<LocalMusic> tmp = new ArrayList<>();
+            tmp.add((LocalMusic)musicSelected);
+
+            getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .playOneMusic(tmp,0);
+          }
+      }
+    }
+
     // If right click, show context menu
     if (click.getButton().equals(MouseButton.SECONDARY)) {
       if (music != null) {
