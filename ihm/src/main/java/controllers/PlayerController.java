@@ -15,15 +15,12 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Random;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,8 +38,6 @@ import utils.FormatDuration;
  * PlayerMusic Controller.
  */
 public class PlayerController implements Controller {
-
-  static final double TIMER = 0.99;
 
   @FXML
   private Slider pgMusicProgress;
@@ -65,22 +60,14 @@ public class PlayerController implements Controller {
   private Image playIcon = null;
 
   private int currentIndex = -1;
-  private boolean isPlaying = false;
-  private boolean isLoop = true;
-  private boolean isRandom = false;
-
-  private Duration duration;
-  private double totalDuration;
-
-  private ArrayList<MediaPlayer> medias;
-  private ArrayList<MusicMetadata> arrayMusic;
 
   private MediaPlayer player;
-  private ArrayList<LocalMusic> playList; // checker et faire musique
+
+  // check and play music
+  private ArrayList<LocalMusic> playList;
 
   @Override
   public void initialize() {
-
     initPictures();
     playList = new ArrayList<>();
   }
@@ -105,6 +92,7 @@ public class PlayerController implements Controller {
 
   /**
    * Function to createMedia.
+   * GUI update.
    */
   private void createMedia(LocalMusic music) {
     if (music != null) {
@@ -131,7 +119,11 @@ public class PlayerController implements Controller {
       });
 
       pgMusicProgress.setOnMouseClicked((MouseEvent mouseEvent) -> {
-        player.seek(Duration.seconds(pgMusicProgress.getValue()));
+        if(player != null && player.getStatus() == MediaPlayer.Status.PLAYING ) {
+          player.seek(Duration.seconds(pgMusicProgress.getValue()));
+        } else {
+          pgMusicProgress.setValue(0.0);
+        }
       });
 
     }
@@ -140,7 +132,6 @@ public class PlayerController implements Controller {
   /**
    * Function playerOneMusic with index item row.
    *
-   * @return
    */
   public void playOneMusic(ArrayList<LocalMusic> musics, int index) {
     if (musics != null) {
@@ -179,8 +170,10 @@ public class PlayerController implements Controller {
       play.setGraphic(new ImageView(playIcon));
       player.pause();
     } else {
-      play.setGraphic(new ImageView(pauseIcon));
-      player.play();
+      if ( !playList.isEmpty() ){
+        play.setGraphic(new ImageView(pauseIcon));
+        player.play();
+      }
     }
   }
 
@@ -228,7 +221,7 @@ public class PlayerController implements Controller {
    * @return
    */
   public void selectOneMusic(LocalMusic music) {
-    if (music != null && !isPlaying) {
+    if (music != null && player != null && player.getStatus() == MediaPlayer.Status.STOPPED) {
       showSongInfo(music.getMetadata());
     }
   }
@@ -323,41 +316,30 @@ public class PlayerController implements Controller {
    * @return
    */
   public void stopPlayer() {
-    if (isPlaying) {
-      play.setGraphic(new ImageView(playIcon));
+    if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
 
+      play.setGraphic(new ImageView(playIcon));
       player.stop();
-      isPlaying = false;
+
+      if(!playList.isEmpty()) {
+        playList.clear();
+        player.dispose();
+      }
 
       fullTime.setText("0:00");
       lblTime.setText("0:00");
 
       songInfo.setText(" - ");
-      //pgMusicProgress.setProgress(0.0);
+      pgMusicProgress.setValue(0.0);
     }
   }
-
-  /**
-   * Function loopPlayer: Play all playlist.
-   */
-  public void loopPlayer() {
-    isLoop = !isLoop;
-  }
-
-  /**
-   * Function randomPlayer : play random music.
-   */
-  public void randomPlayer() {
-    isRandom = !isRandom;
-  }
-
 
   /**
    * Function to show musicInfo.
    *
    * @param song : LocalMusic object
    */
-  private void showSongInfo(MusicMetadata song) {
+  public void showSongInfo(MusicMetadata song) {
     if (song != null) {
       if (song.getArtist() != null) {
         songInfo.setText(song.getArtist() + " - " + song.getTitle());
@@ -403,11 +385,11 @@ public class PlayerController implements Controller {
    *
    * @return string format
    */
-  public String getCurrentMusicTitle() {
-    if (!arrayMusic.isEmpty() && currentIndex != -1) {
-      return arrayMusic.get(currentIndex).getTitle();
+  public LocalMusic getCurrentMusic() {
+    if (!playList.isEmpty() && currentIndex != -1) {
+      return playList.get(currentIndex);
     }
-    return "";
+    return null;
   }
 
 }
