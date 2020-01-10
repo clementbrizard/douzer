@@ -353,20 +353,6 @@ public class DetailsMusicController implements Controller {
     } else {
       textFieldTitle.setStyle(" -fx-background-color:white;");
     }
-
-    if (textFieldArtist.getText() == null || textFieldArtist.getText().trim().equals("")) {
-      bool = false;
-      textFieldArtist.setStyle(" -fx-background-color:red;");
-    } else {
-      textFieldArtist.setStyle(" -fx-background-color:white;");
-    }
-
-    if (textFieldAlbum.getText() == null || textFieldAlbum.getText().trim().equals("")) {
-      bool = false;
-      textFieldAlbum.setStyle(" -fx-background-color:red;");
-    } else {
-      textFieldAlbum.setStyle(" -fx-background-color:white;");
-    }
     
     return bool;
   }
@@ -395,7 +381,9 @@ public class DetailsMusicController implements Controller {
   
       localMusic.getMetadata().setTitle(textFieldTitle.getText());
       localMusic.getMetadata().setAlbum(textFieldAlbum.getText());
-      localMusic.getMetadata().setReleaseYear(Year.parse("" + dateYear.getValue()));
+      if (dateYear.getValue() != null) {
+        localMusic.getMetadata().setReleaseYear(Year.parse("" + dateYear.getValue()));
+      }
       localMusic.getMetadata().setArtist(textFieldArtist.getText());
   
       this.getMyMusicsController().displayAvailableMusics();
