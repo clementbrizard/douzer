@@ -36,9 +36,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -210,7 +210,7 @@ public class DataForIhmImpl implements DataForIhm {
   }
 
   @Override
-  public HashMap<UUID, User> getOnlineUsersSet() {
+  public ConcurrentHashMap<UUID, User> getOnlineUsersSet() {
     return this.dc.getOnlineUsersSet();
   }
 
