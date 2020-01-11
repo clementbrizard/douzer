@@ -160,7 +160,7 @@ public class Datacore {
         .filter(m -> (m instanceof LocalMusic)).map(m -> (LocalMusic) m);
   }
 
-  public HashMap<UUID, User> getOnlineUsersSet() {
+  public ConcurrentHashMap<UUID, User> getOnlineUsersSet() {
     return this.users;
   }
 

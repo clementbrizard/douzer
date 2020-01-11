@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -115,7 +116,7 @@ public interface DataForIhm {
 
   Stream<User> getOnlineUsers();
 
-  HashMap<UUID, User> getOnlineUsersSet();
+  ConcurrentHashMap<UUID, User> getOnlineUsersSet();
 
   Stream<Music> getAvailableMusics();
 
