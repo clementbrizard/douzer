@@ -19,7 +19,7 @@
                 <VBox BorderPane.alignment="TOP_RIGHT">
                     <children>
                         <fx:include fx:id="userInfo" source="ProfileSideView.fxml" />
-                        <fx:include fx:id="myMusics" source="MyMusicsSideView.fxml" />
+                        <fx:include fx:id="myPlaylists" source="MyPlaylistsSideView.fxml" />
                         <fx:include fx:id="onlineUsersList" source="OnlineUsersListView.fxml" />
                         <fx:include fx:id="contactList" source="ContactsView.fxml" />
                     </children>

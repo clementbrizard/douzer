@@ -70,11 +70,14 @@ public class ProfileEditController implements Controller {
   private PasswordEditController passwordEditController;
   private ProfileDeletionController profileDeletionController;
 
+  
+  
   // Getters
 
   public ExportProfileController getExportProfileController() {
     return exportProfileController;
   }
+  
 
   public PasswordEditController getPasswordEditController() {
     return passwordEditController;
@@ -83,7 +86,7 @@ public class ProfileEditController implements Controller {
   public ProfileDeletionController getProfileDeletionController() {
     return profileDeletionController;
   }
-
+  
   public CentralFrameController getCentralFrameController() {
     return centralFrameController;
   }
@@ -93,7 +96,7 @@ public class ProfileEditController implements Controller {
   public void setCentralFrameController(CentralFrameController centralFrameController) {
     this.centralFrameController = centralFrameController;
   }
-
+  
   public void setExportProfileController(ExportProfileController exportProfileController) {
     this.exportProfileController = exportProfileController;
   }
@@ -404,4 +407,44 @@ public class ProfileEditController implements Controller {
     }
 
   }
+  
+  /**
+   * Delete of current user account.
+   * @param e the ActionEvent of delete button.
+   */
+  @FXML
+  public void deleteAccount(ActionEvent e) {
+    try {
+      MainController mainController = this.getCentralFrameController().getMainController();
+      // Refresh views and display login view
+      mainController.getUserInfoController().refreshViews();
+      mainController.getApplication().showLoginScene();
+      mainController.getPlayerController().stopPlayer();
+
+      this.centralFrameController
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .deleteAccount();
+      
+      Notifications.create()
+        .title("Suppression")
+        .text("Le compte a été supprimé")
+        .darkStyle()
+        .showWarning();      
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    } catch (Exception de) {
+      de.printStackTrace();
+
+      Notifications.create()
+          .title("La suppresion a echouée")
+          .text("Quelque chose est arrivé")
+          .darkStyle()
+          .showWarning();
+
+    }
+  }
 }
+

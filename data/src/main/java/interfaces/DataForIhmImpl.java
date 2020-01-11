@@ -26,7 +26,6 @@ import features.ShareMusics;
 import features.UnshareMusics;
 import features.UpdateMusicsPayload;
 import features.UpdateUserPayload;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,7 +40,6 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
-
 import javax.security.auth.login.LoginException;
 
 public class DataForIhmImpl implements DataForIhm {

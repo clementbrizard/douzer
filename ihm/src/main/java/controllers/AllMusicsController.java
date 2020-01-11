@@ -12,12 +12,18 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -28,7 +34,6 @@ import javafx.util.Callback;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import utils.FormatDuration;
-
 
 /**
  * Central view show up all music in the network.
@@ -48,7 +53,7 @@ public class AllMusicsController implements Controller {
   private TableColumn<MusicMetadata, String> durationCol;
   @FXML
   private TableColumn<MusicMetadata, Set<String>> tagsCol;
-  
+
   @FXML
   private TextField tfSearch;
   @FXML
@@ -66,6 +71,12 @@ public class AllMusicsController implements Controller {
 
   // All musics hashmap to access them instantly
   private HashMap<String, Music> availableMusics;
+  
+  private ContextMenu contextMenu;
+  
+  private Music musicSelected;
+  
+  private boolean isOnlyLocalMusicSelected = true;
 
   @FXML
   private Button btnDownload;
@@ -177,19 +188,160 @@ public class AllMusicsController implements Controller {
 
     //event when the user edit the textField
     tfSearch.textProperty().addListener(textListener);
-  }
 
+    tvMusics.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+  }
+  
+  /**
+   * construct the contextMenu (the windows who appear when user right click on a music)
+   * depend on which music the user selected.
+   */
+  private void constructContextMenu() {
+    // Create ContextMenu for getting information
+    // about music on right click.
+    contextMenu = new ContextMenu();
+    // Create information item for context menu
+    MenuItem itemInformation = new MenuItem("Informations");
+    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        getCentralFrameController()
+          .getMyMusicsController()
+          .showMusicInformation(musicSelected);
+      }
+    });
+    
+    //check the selected item
+    tvMusics
+        .getSelectionModel()
+        .getSelectedItems()
+        .forEach(item -> {
+          if (!(availableMusics.get(item.getHash()) instanceof LocalMusic)) {
+            isOnlyLocalMusicSelected = false;
+          }
+        });    
+    if (musicSelected instanceof LocalMusic && isOnlyLocalMusicSelected) {
+      MenuItem playMusic = new MenuItem("Jouer");
+      playMusic.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          if (musicSelected instanceof LocalMusic) {
+            ArrayList<LocalMusic> listMusicClicked = new ArrayList<LocalMusic>();
+    
+            ObservableList<MusicMetadata> selectedItems = tvMusics
+                .getSelectionModel()
+                .getSelectedItems();
+    
+            selectedItems.forEach(item -> {
+              listMusicClicked.add((LocalMusic) availableMusics.get(item.getHash()));
+            });
+    
+            //add to the list with right click play to the list
+            if (listMusicClicked.isEmpty()) {
+              listMusicClicked.add((LocalMusic) musicSelected);
+            } else {
+              if (!listMusicClicked.contains(musicSelected)) {
+                listMusicClicked.add((LocalMusic) musicSelected);
+              }
+            }
+
+            if (listMusicClicked.size() == 1) {
+              ArrayList<LocalMusic> musics = new ArrayList<LocalMusic>();
+              int index = 0;
+              int y = 0;
+              for (int i = 0; i < tvMusics.getItems().size(); i++) {
+                MusicMetadata m = tvMusics.getItems().get(i);
+                if (availableMusics.get(m.getHash()) instanceof LocalMusic) {
+                  LocalMusic localMusic = (LocalMusic) availableMusics.get(m.getHash());
+                  if (localMusic.getHash().equals(musicSelected.getHash())) {
+                    index = y;
+                  }
+                  musics.add(localMusic);
+                  y += 1;
+                }
+              }
+              getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .playOneMusic(musics,index);
+              
+            } else {
+            
+              // Get the first local music selected index (do not count the distant musics)
+              int readIndex = 0;
+              ArrayList<LocalMusic> arrayMusicAll =
+                  getCentralFrameController()
+                      .getMyMusicsController()
+                      .getLocalMusicInView();
+  
+              for (LocalMusic m : arrayMusicAll) {
+                if (listMusicClicked.get(0).getHash().equals(m.getHash())) {
+                  break;
+                }
+                readIndex++;
+              }
+  
+              getCentralFrameController()
+                .getMainController()
+                .getPlayerController()
+                .playOneMusic(listMusicClicked,readIndex);
+            }
+          }
+        }
+      });
+  
+      // Add delete item in context menu
+      MenuItem itemDelete = new MenuItem("Supprimer");
+      itemDelete.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          ArrayList<LocalMusic> musicsDelete = new ArrayList<LocalMusic>();
+          ObservableList<MusicMetadata> selectedItems = tvMusics
+              .getSelectionModel()
+              .getSelectedItems();
+  
+          selectedItems.forEach(item -> {
+            musicsDelete.add((LocalMusic) availableMusics.get(item.getHash()));
+          });
+          getCentralFrameController()
+            .getMyMusicsController()
+            .deleteMusics(musicsDelete);
+        }
+      });
+
+      // Add MenuItem to ContextMenu
+      contextMenu.getItems().addAll(playMusic, itemInformation, itemDelete);
+    } else {
+      MenuItem download = new MenuItem("Telechargement");
+      download.setOnAction(new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+          centralFrameController
+            .getMainController()
+            .getDownloadController()
+            .download(musicSelected);
+        }
+      });
+      
+      
+      
+      contextMenu.getItems().addAll(itemInformation,download);
+    }
+  }
+  
   /**
    * display All Music Available in the center table.
    */
   public void displayAvailableMusics() {
+    tvMusics.getItems().clear();
     tvMusics.getItems().setAll(this.retrieveAvailableMusics());
-    
+
     //change the size of Tags column
     ArrayList<Double> d = new ArrayList<Double>();
     d.add(0.0);
     tvMusics.getItems().forEach(metadata -> {
-      double numberOfChar = 0;      
+      double numberOfChar = 0;
+      d.set(0,7.0);
       for (String tag : metadata.getTags()) {
         numberOfChar += tag.length();
       }
@@ -271,21 +423,35 @@ public class AllMusicsController implements Controller {
   }
 
   /**
-   * Handle click on tableView in order to able or disable download button.
+   * handle the click on the TableView.
+   * @param click the MouseEvent
    */
   @FXML
   public void handleClickTableView(MouseEvent click) {
-    MusicMetadata seletedMusicMetadata = tvMusics.getSelectionModel().getSelectedItem();
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
 
-    // If left click, able or disable download button
+    // If left click, show current music info at right of the screen
     if (click.getButton().equals(MouseButton.PRIMARY)) {
-      if (seletedMusicMetadata != null) {
-        Music selectedMusic = availableMusics.get(seletedMusicMetadata.getHash());
-        if (selectedMusic instanceof LocalMusic) {
+      if (music != null) {
+        musicSelected = availableMusics.get(music.getHash());
+
+        this.getCentralFrameController().getMainController()
+            .getCurrentMusicInfoController().init(musicSelected);
+        if (musicSelected instanceof LocalMusic) {
           btnDownload.setDisable(true);
         } else {
           btnDownload.setDisable(false);
         }
+      }
+    }
+
+    // If right click, show context menu
+    if (click.getButton().equals(MouseButton.SECONDARY)) {
+      if (music != null) {
+        isOnlyLocalMusicSelected = true;
+        musicSelected = availableMusics.get(music.getHash());
+        constructContextMenu();
+        contextMenu.show(tvMusics.getScene().getWindow(), click.getScreenX(), click.getScreenY());
       }
     }
   }

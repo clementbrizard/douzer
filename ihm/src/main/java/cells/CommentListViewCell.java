@@ -82,7 +82,7 @@ public class CommentListViewCell extends ListCell<Comment> {
 
     if (rating == 0) {
       starsMap.forEach((k, v) -> {
-        v.setVisible(false);
+        v.setVisible(true);
       });
 
     } else {    
@@ -134,7 +134,7 @@ public class CommentListViewCell extends ListCell<Comment> {
       }
 
       music.getMetadata().getRatings().forEach((user,note) -> {
-        if (user.equals(comment.getOwner())) {
+        if (user.getUuid().equals(comment.getOwner().getUuid())) {
           ifUserNote = true;
           setStars(note);
         }

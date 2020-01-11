@@ -52,6 +52,7 @@ public abstract class FormatDuration {
         if (matcher.group("second") != null) {
           formattedDuration += formatDigit(matcher.group("second"));
         }
+        
       } catch (IllegalStateException e) {
         formatDurationLogger.error("Error while formatting music {} duration", e);
         return duration.toString();
@@ -69,6 +70,9 @@ public abstract class FormatDuration {
   private static String formatDigit(String toFormat) {
     String formatted = toFormat;
 
+    if (toFormat == null || toFormat.trim().equals("")) {
+      toFormat = "00";
+    }
     // If toFormat is a digit, we want to add a "0" before
     // it for better display
     if (Integer.parseInt(toFormat) < 10) {

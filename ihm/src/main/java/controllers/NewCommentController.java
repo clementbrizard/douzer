@@ -94,6 +94,7 @@ public class NewCommentController implements Controller {
           .getDataForIhm()
           .getCurrentUser())) {
         setStars(note);
+        rate = note;
       }
     });
   }

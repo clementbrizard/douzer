@@ -1,6 +1,7 @@
 package controllers;
 
 import datamodel.LocalUser;
+import datamodel.LocalMusic;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.User;
@@ -15,15 +16,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
 import javafx.util.Callback;
@@ -62,6 +69,8 @@ public class DistantUserController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, String> durationCol;
 
+  private ContextMenu contextMenu;
+
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
 
@@ -69,6 +78,8 @@ public class DistantUserController implements Controller {
   private HashMap<String, Music> distantUserMusics;
 
   private User distantUser;
+
+  private Music musicSelected;
 
   /* Getters */
 
@@ -272,11 +283,11 @@ public class DistantUserController implements Controller {
    */
   private void refreshFriendshipStatus() {
     LocalUser currentUser = this.getCentralFrameController()
-            .getMainController()
-            .getApplication()
-            .getIhmCore()
-            .getDataForIhm()
-            .getCurrentUser();
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser();
 
     // Because this is what we do
     if (!currentUser.getFriends().contains(distantUser)) {
@@ -288,4 +299,68 @@ public class DistantUserController implements Controller {
     logger.info(currentUser.getFriends());
 
   }
+
+  /**
+   * Gestion du click sur la table des musiques.
+   * @param click l'evenements du clique
+   */
+  @FXML
+  public void handleClickTableView(MouseEvent click) {
+    MusicMetadata music = tvMusics.getSelectionModel().getSelectedItem();
+
+    // If left click, show current music info at right of the screen
+    if (click.getButton().equals(MouseButton.PRIMARY)) {
+      if (music != null) {
+        musicSelected = distantUserMusics.get(music.getHash());
+
+        this.getCentralFrameController().getMainController()
+            .getCurrentMusicInfoController().init(musicSelected);
+      }
+    }
+
+    // If right click, show context menu
+    if (click.getButton().equals(MouseButton.SECONDARY)) {
+      if (music != null) {
+        musicSelected = distantUserMusics.get(music.getHash());
+        constructContextMenu();
+        contextMenu.show(tvMusics.getScene().getWindow(), click.getScreenX(), click.getScreenY());
+      }
+    }
+  }
+
+  /**
+   * construct the contextMenu (the windows who appear when user right click on a music)
+   * depend on which music the user selected.
+   */
+  private void constructContextMenu() {
+    // Create ContextMenu for getting information
+    // about music on right click.
+    contextMenu = new ContextMenu();
+    // Create information item for context menu
+    MenuItem itemInformation = new MenuItem("Informations");
+    itemInformation.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        getCentralFrameController()
+          .getMyMusicsController()
+          .showMusicInformation(musicSelected);
+      }
+    });
+
+    MenuItem download = new MenuItem("Telechargement");
+    download.setOnAction(new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        centralFrameController
+          .getMainController()
+          .getDownloadController()
+          .download(musicSelected);
+      }
+    });
+
+    // Add MenuItem to ContextMenu
+    contextMenu.getItems().addAll(itemInformation,download);
+  }
+
+
 }
