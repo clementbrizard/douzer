@@ -73,6 +73,8 @@ public class OnlineUsersListController implements Controller {
             .setCentralContentDistantUser();
           OnlineUsersListController.this.mainController.getCentralFrameController()
             .getDistantUserController().setDistantUser(clickedOnlineUser);
+          OnlineUsersListController.this.mainController.getCentralFrameController()
+              .getDistantUserController().refreshFriendshipStatus();
         }
       }
     });

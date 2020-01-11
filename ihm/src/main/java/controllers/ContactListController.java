@@ -57,11 +57,12 @@ public class ContactListController implements Controller {
     lvContacts.setOnMouseClicked(click -> {
       if (click.getClickCount() == 2) {
         User clickedOnlineUser = lvContacts.getSelectionModel().getSelectedItem();
-        contactListLogger.debug(clickedOnlineUser.getUsername());
         mainController.getCentralFrameController()
                 .setCentralContentDistantUser();
         mainController.getCentralFrameController()
                 .getDistantUserController().setDistantUser(clickedOnlineUser);
+        mainController.getCentralFrameController()
+            .getDistantUserController().refreshFriendshipStatus();
       }
     });
   }
@@ -97,7 +98,7 @@ public class ContactListController implements Controller {
     return mainController;
   }
 
-  void setMainController(MainController mainController) {
+  public void setMainController(MainController mainController) {
     this.mainController = mainController;
   }
 }

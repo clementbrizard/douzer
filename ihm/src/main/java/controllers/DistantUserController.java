@@ -1,6 +1,5 @@
 package controllers;
 
-import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
@@ -16,7 +15,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -187,8 +185,6 @@ public class DistantUserController implements Controller {
     } catch (UnsupportedOperationException e) {
       logger.error(e);
     }
-
-    refreshFriendshipStatus();
   }
 
   /* FXML methods (to handle events from user) */
@@ -281,19 +277,18 @@ public class DistantUserController implements Controller {
    * Refreshes friendship status to display correct text.
    * Only used to refresh the button's text on distant user's profile
    */
-  private void refreshFriendshipStatus() {
+  public void refreshFriendshipStatus() {
     LocalUser currentUser = this.getCentralFrameController()
         .getMainController()
         .getApplication()
         .getIhmCore()
         .getDataForIhm()
         .getCurrentUser();
-
-    // Because this is what we do
+    
     if (!currentUser.getFriends().contains(distantUser)) {
-      btnManageFriendship.setText("Ajouter/Supprimer ce contact");
+      btnManageFriendship.setText("Ajouter ce contact");
     } else {
-      btnManageFriendship.setText("Ajouter/Supprimer ce contact");
+      btnManageFriendship.setText("Supprimer ce contact");
     }
 
     logger.info(currentUser.getFriends());
