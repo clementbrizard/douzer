@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,16 +23,16 @@ public class Datacore {
   public Net net;
   public Ihm ihm;
   private LocalUsersFileHandler localUsersFileHandler;
-  private volatile HashMap<UUID, User> users;
-  private volatile HashMap<String, Music> musics;
+  private volatile ConcurrentHashMap<UUID, User> users;
+  private volatile ConcurrentHashMap<String, Music> musics;
   private volatile LocalUser currentUser;
   private volatile HashSet<InetAddress> allIps;
 
   Datacore(Net net, Ihm ihm) {
     this.net = net;
     this.ihm = ihm;
-    this.users = new HashMap<>();
-    this.musics = new HashMap<>();
+    this.users = new ConcurrentHashMap<>();
+    this.musics = new ConcurrentHashMap<>();
     this.allIps = new HashSet<>();
     try {
       this.localUsersFileHandler = new LocalUsersFileHandler(LOCAL_USERS_FILENAME);
@@ -77,7 +78,7 @@ public class Datacore {
     this.users.remove(user.getUuid());
   }
 
-  HashMap<UUID, User> getUsers() {
+  ConcurrentHashMap<UUID, User> getUsers() {
     return users;
   }
 
@@ -152,10 +153,10 @@ public class Datacore {
    */
   public void removeOwner(User user) {
     for (HashMap.Entry<String, Music> m : musics.entrySet()) {
-      this.removeOwner(m.getValue(),user);
+      this.removeOwner(m.getValue(), user);
     }
   }
-  
+
   /**
    * Remove the user from the music's owner set
    * and remove the music if it has no more owners.
@@ -206,7 +207,7 @@ public class Datacore {
     }
     // No else, the user1 is the template
   }
-  
+
   public void upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
     LocalMusic newMusic = new LocalMusic(toUpgrade, mp3Path);
     this.musics.remove(toUpgrade.getHash());
