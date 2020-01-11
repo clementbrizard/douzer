@@ -66,13 +66,15 @@ public class OnlineUsersListController implements Controller {
     lvwOnlineUsers.setOnMouseClicked(new EventHandler<MouseEvent>() {
       @Override
       public void handle(MouseEvent click) {
-        if (click.getClickCount() == 2) {
+        if (click.getClickCount() == 2
+            && lvwOnlineUsers.getSelectionModel().getSelectedItem() != null) {
           User clickedOnlineUser = lvwOnlineUsers.getSelectionModel().getSelectedItem();
-          onlineUsersListLogger.debug(clickedOnlineUser.getUsername());
           OnlineUsersListController.this.mainController.getCentralFrameController()
             .setCentralContentDistantUser();
           OnlineUsersListController.this.mainController.getCentralFrameController()
             .getDistantUserController().setDistantUser(clickedOnlineUser);
+          OnlineUsersListController.this.mainController.getCentralFrameController()
+              .getDistantUserController().refreshFriendshipStatus();
         }
       }
     });
@@ -94,7 +96,6 @@ public class OnlineUsersListController implements Controller {
    */
   public void addNewOnlineUser(User user) {
     if (!onlineUsersList.contains(user)) {
-
       // This is done to avoid a "Not on FX application thread" error
       // Solution found here : https://stackoverflow.com/a/23007018
       Platform.runLater(new Runnable() {
@@ -121,19 +122,8 @@ public class OnlineUsersListController implements Controller {
             .filter(currentUser -> currentUser.getUuid().equals(user.getUuid()))
             .findAny()
             .orElse(null);
-        onlineUsersList.set(onlineUsersList.indexOf(userToUpdate), user);
 
-        if (OnlineUsersListController.this.mainController
-            .getCentralFrameController()
-            .getDistantUserController()
-            .getDistantUser()
-            .equals(userToUpdate)
-        ) {
-          OnlineUsersListController.this.mainController
-              .getCentralFrameController()
-              .getDistantUserController()
-              .setDistantUser(user);
-        }
+        onlineUsersList.set(onlineUsersList.indexOf(userToUpdate), user);
       }
     });
   }

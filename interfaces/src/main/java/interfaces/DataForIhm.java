@@ -17,7 +17,8 @@ import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
+import java.util.UUID;
 import java.util.stream.Stream;
 import javax.security.auth.login.LoginException;
 
@@ -113,6 +114,8 @@ public interface DataForIhm {
   void changeMusicOrder(Playlist playlist, LocalMusic music, Integer order);
 
   Stream<User> getOnlineUsers();
+
+  HashMap<UUID, User> getOnlineUsersSet();
 
   Stream<Music> getAvailableMusics();
 

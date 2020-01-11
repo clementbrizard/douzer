@@ -138,12 +138,6 @@ public class MainController implements Controller {
     }
 
     try {
-      this.contactListController.setMainController(this);
-    } catch (UnsupportedOperationException e) {
-      logger.warn("Contact List Controller calls : " + e.getMessage());
-    }
-
-    try {
       this.onlineUsersListController.setMainController(this);
       this.onlineUsersListController.init();
     } catch (UnsupportedOperationException e) {
@@ -163,6 +157,13 @@ public class MainController implements Controller {
       this.downloadController.initialize();
     } catch (UnsupportedOperationException e) {
       logger.warn("Download Controller calls : " + e.getMessage());
+    }
+
+    try {
+      this.contactListController.setMainController(this);
+      this.contactListController.init();
+    } catch (UnsupportedOperationException e) {
+      logger.warn("Contact List Controller calls : " + e.getMessage());
     }
 
     try {

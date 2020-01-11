@@ -1,7 +1,7 @@
 package core;
 
 import controllers.AllMusicsController;
-import controllers.CommentsController;
+import controllers.ContactListController;
 import controllers.CurrentMusicInfoController;
 import controllers.DistantUserController;
 import controllers.DownloadController;
@@ -38,27 +38,35 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserConnection(User user) {
-    OnlineUsersListController controller;
+    OnlineUsersListController onlineUsersListController;
+    ContactListController contactListController;
+    AllMusicsController allMusicsController;
+
     try {
       ihmForDataLogger.info("{} was notified of {} connection",
           this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
           user.getUsername()
       );
 
-      controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
+      onlineUsersListController = this.ihmCore
+          .getApplication().getMainController().getOnlineUsersListController();
+      contactListController = this.ihmCore
+          .getApplication().getMainController().getContactListController();
+      allMusicsController = this.ihmCore.getApplication()
+          .getMainController().getCentralFrameController().getAllMusicsController();
+
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    controller.addNewOnlineUser(user);
+
+    onlineUsersListController.addNewOnlineUser(user);
+    contactListController.displayContacts();
+
     //Refresh music now that new user has been added
-    this.getIhmCore()
-        .getApplication()
-        .getMainController()
-        .getCentralFrameController()
-        .getAllMusicsController()
-        .displayAvailableMusics();
+    allMusicsController.displayAvailableMusics();
+
   }
 
   /**
@@ -69,37 +77,36 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void notifyUserDisconnection(User user) {
-    OnlineUsersListController controller;
+    OnlineUsersListController onlineUsersListController;
+    DistantUserController controllerDistantUser;
+    ContactListController contactListController;
+    AllMusicsController allMusicsController;
+
     try {
-      controller = this.ihmCore.getApplication().getMainController().getOnlineUsersListController();
+      onlineUsersListController = this.ihmCore
+          .getApplication().getMainController().getOnlineUsersListController();
+      controllerDistantUser = this.ihmCore.getApplication()
+          .getMainController().getCentralFrameController().getDistantUserController();
+      contactListController = this.ihmCore
+          .getApplication().getMainController().getContactListController();
+      allMusicsController = this.ihmCore.getApplication()
+          .getMainController().getCentralFrameController().getAllMusicsController();
+
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
-    controller.removeOnlineUser(user);
+
+    onlineUsersListController.removeOnlineUser(user);
     ihmForDataLogger.info("{} was notified of {} disconnection",
         this.ihmCore.getDataForIhm().getCurrentUser().getUsername(),
         user.getUsername());
 
-    DistantUserController controllerDistantUser;
-    try {
-      controllerDistantUser = this.ihmCore.getApplication()
-          .getMainController()
-          .getCentralFrameController()
-          .getDistantUserController();
-    } catch (NullPointerException e) {
-      ihmForDataLogger.error("Controller chain not fully initialized : " + e);
-      e.printStackTrace();
-      return;
-    }
+    contactListController.displayContacts();
+
     //Refresh music now that user isn't available anymore
-    this.getIhmCore()
-        .getApplication()
-        .getMainController()
-        .getCentralFrameController()
-        .getAllMusicsController()
-        .displayAvailableMusics();
+    allMusicsController.displayAvailableMusics();
 
     if (controllerDistantUser.getDistantUser() != null) {
       if (controllerDistantUser.getDistantUser().equals(user)) {
@@ -116,35 +123,6 @@ public class IhmForData implements Ihm {
         });
       }
     }
-    if (this.ihmCore != null) {
-      if (this.ihmCore
-            .getApplication() != null) {
-        if (this.ihmCore
-              .getApplication()
-              .getMainController() != null) {
-          if (this.ihmCore
-                .getApplication()
-                .getMainController()
-                .getCentralFrameController() != null) {
-            if (this.ihmCore
-                  .getApplication()
-                  .getMainController()
-                  .getCentralFrameController()
-                  .getAllMusicsController() != null) {
-              this.ihmCore
-                .getApplication()
-                .getMainController()
-                .getCentralFrameController()
-                .getAllMusicsController()
-                .displayAvailableMusics(); 
-              ihmForDataLogger.info("Reload de la vue principale " 
-                  + "suite à la réception d'une deconnexion");
-            }
-          }
-        }
-      }
-    }
-
   }
 
   /**
@@ -180,9 +158,7 @@ public class IhmForData implements Ihm {
     AllMusicsController controllerAllMusic;
     try {
       controllerAllMusic = this.ihmCore.getApplication()
-          .getMainController()
-          .getCentralFrameController()
-          .getAllMusicsController();
+          .getMainController().getCentralFrameController().getAllMusicsController();
     } catch (NullPointerException e) {
       LogManager.getLogger().error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
@@ -197,8 +173,7 @@ public class IhmForData implements Ihm {
     CurrentMusicInfoController controllerCurrentMusic;
     try {
       controllerCurrentMusic = this.ihmCore.getApplication()
-          .getMainController()
-          .getCurrentMusicInfoController();
+          .getMainController().getCurrentMusicInfoController();
     } catch (NullPointerException e) {
       ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
@@ -293,27 +268,32 @@ public class IhmForData implements Ihm {
    */
   @Override
   public void updateUser(User user) {
-    DistantUserController controllerDistantUser;
+    OnlineUsersListController onlineUsersListController;
+    DistantUserController distantUserController;
+    ContactListController contactListController;
+
     try {
-      controllerDistantUser = this.ihmCore.getApplication()
-          .getMainController()
-          .getCentralFrameController()
-          .getDistantUserController();
+      onlineUsersListController = this.ihmCore
+          .getApplication().getMainController().getOnlineUsersListController();
+      distantUserController = this.ihmCore.getApplication()
+          .getMainController().getCentralFrameController().getDistantUserController();
+      contactListController = this.ihmCore
+          .getApplication().getMainController().getContactListController();
     } catch (NullPointerException e) {
       ihmForDataLogger.error("Controller chain not fully initialized : " + e);
       e.printStackTrace();
       return;
     }
+
     // This is done to avoid a "Not on FX application thread" error
     // Solution found here : https://stackoverflow.com/a/23007018
     Platform.runLater(new Runnable() {
       @Override
       public void run() {
         // Refresh online user list
-        ihmCore.getApplication()
-            .getMainController()
-            .getOnlineUsersListController()
-            .updateOnlineUser(user);
+        onlineUsersListController.updateOnlineUser(user);
+        distantUserController.updateDistantUser(user);
+        contactListController.displayContacts();
       }
     });
   }

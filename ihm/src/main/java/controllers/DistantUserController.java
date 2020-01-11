@@ -1,6 +1,6 @@
 package controllers;
 
-import datamodel.LocalMusic;
+import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.User;
@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -39,7 +40,7 @@ import utils.FormatImage;
 public class DistantUserController implements Controller {
   /* Logger */
   private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger();
-  
+
   @FXML
   private ImageView imgAvatar;
   @FXML
@@ -54,6 +55,9 @@ public class DistantUserController implements Controller {
   private Label title;
 
   @FXML
+  private Button btnManageFriendship;
+
+  @FXML
   private TableView<MusicMetadata> tvMusics;
   @FXML
   private TableColumn<MusicMetadata, String> artistCol;
@@ -65,7 +69,7 @@ public class DistantUserController implements Controller {
   private TableColumn<MusicMetadata, String> durationCol;
 
   private ContextMenu contextMenu;
-  
+
   private SearchMusicController searchMusicController;
   private CentralFrameController centralFrameController;
 
@@ -75,7 +79,7 @@ public class DistantUserController implements Controller {
   private User distantUser;
 
   private Music musicSelected;
-  
+
   /* Getters */
 
   public SearchMusicController getSearchMusicController() {
@@ -100,7 +104,7 @@ public class DistantUserController implements Controller {
     this.nameAndSurname.setText(String.format("%s %s", name, surname));
   }
 
-  private void setDateOfBirth(LocalDate dateOfBirth) {  
+  private void setDateOfBirth(LocalDate dateOfBirth) {
     DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT);
     if (dateOfBirth.isEqual(LocalDate.MIN)) {
       this.dateOfBirth.setVisible(false);
@@ -186,9 +190,41 @@ public class DistantUserController implements Controller {
 
   /* FXML methods (to handle events from user) */
 
+  /**
+   * Action executed upon clicking friendship button. Add or deletes friend.
+   * @param event Click event
+   */
   @FXML
-  public  void manageFriendship(ActionEvent event) {
-    // TODO
+  public void manageFriendship(ActionEvent event) {
+    LocalUser currentUser = this.getCentralFrameController()
+            .getMainController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getCurrentUser();
+    if (currentUser.getFriends().contains(distantUser)) {
+      currentUser.removeFriend(distantUser);
+      logger.info("Removed "
+              + distantUser.getUsername()
+              + " from friendlist of "
+              + currentUser.getUsername()
+      );
+    } else {
+      currentUser.addFriend(distantUser);
+      logger.info("Added "
+              + distantUser.getUsername()
+              + " to friendlist of "
+              + currentUser.getUsername()
+      );
+    }
+
+    refreshFriendshipStatus();
+
+    this
+            .getCentralFrameController()
+            .getMainController()
+            .getContactListController()
+            .displayContacts();
   }
 
   @FXML
@@ -202,6 +238,18 @@ public class DistantUserController implements Controller {
   }
 
   /* Logic methods */
+
+  /**
+   * Update the distant user if it is the one displayed at update's notification.
+   * which will update its infos
+   * @param user the user to update
+   *
+   */
+  public void updateDistantUser(User user) {
+    if (distantUser.equals(user)) {
+      this.setDistantUser(user);
+    }
+  }
 
   /**
    * Refresh the table by retrieving local musics from Data.
@@ -237,7 +285,29 @@ public class DistantUserController implements Controller {
 
     return distantUserMusicsMetaData;
   }
-  
+
+  /**
+   * Refreshes friendship status to display correct text.
+   * Only used to refresh the button's text on distant user's profile
+   */
+  public void refreshFriendshipStatus() {
+    LocalUser currentUser = this.getCentralFrameController()
+        .getMainController()
+        .getApplication()
+        .getIhmCore()
+        .getDataForIhm()
+        .getCurrentUser();
+
+    if (!currentUser.getFriends().contains(distantUser)) {
+      btnManageFriendship.setText("Ajouter ce contact");
+    } else {
+      btnManageFriendship.setText("Supprimer ce contact");
+    }
+
+    logger.info(currentUser.getFriends());
+
+  }
+
   /**
    * Gestion du click sur la table des musiques.
    * @param click l'evenements du clique
@@ -265,7 +335,7 @@ public class DistantUserController implements Controller {
       }
     }
   }
-  
+
   /**
    * construct the contextMenu (the windows who appear when user right click on a music)
    * depend on which music the user selected.
@@ -295,10 +365,10 @@ public class DistantUserController implements Controller {
           .download(musicSelected);
       }
     });
-    
+
     // Add MenuItem to ContextMenu
     contextMenu.getItems().addAll(itemInformation,download);
   }
-  
-  
+
+
 }
