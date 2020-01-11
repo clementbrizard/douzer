@@ -239,6 +239,10 @@ Button:hover {
     -fx-padding: 0 0 0.8em 0;
 }
 
+.lv-title-hbox {
+    -fx-padding: 0 0 0.4em 0;
+}
+
 .left-side-pane {
     -fx-min-width: 175px;
     -fx-fill-width: 95%;
@@ -257,7 +261,6 @@ Button:hover {
     -fx-min-width: 105px;
     -fx-max-height: 135px;
     -fx-max-width: 160px;
-    -fx-fill-width: 90%;
     -fx-color: rgb(235, 235, 235);
 }
 
