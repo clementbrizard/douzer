@@ -89,12 +89,12 @@ Button:hover {
     -fx-spacing: 0.6em;
 }
 
-.header-section Label {
+.header-btn-box Label {
     -fx-text-fill: white;
     -fx-font-family: "Open Sans Semibold";
 }
 
-.header-section Button {
+.header-btn-box Button {
     -fx-padding: 4px 8px;
     -fx-font-size: 14px;
     -fx-text-fill: #ffffff;
@@ -103,17 +103,17 @@ Button:hover {
     -fx-border-color: rgba(25, 70, 133, 0.8);
 }
 
-.header-section Button:hover {
+.header-btn-box Button:hover {
     -fx-background-color: linear-gradient(from 70% 70% to 100% 100%, rgba(79, 101, 126, 0.11), rgba(25, 70, 133, 0.8));
 }
 
-.header-section Button:pressed {
+.header-btn-box Button:pressed {
     -fx-background-color: linear-gradient(from 80% 80% to 100% 100%, rgba(79, 101, 126, 0.11), rgba(25, 70, 133, 0.8));
     -fx-text-fill: #ff6812;
     -fx-border-color: #ff6812;
 }
 
-.header-section Button:disabled {
+.header-btn-box Button:disabled {
     -fx-opacity: 0.65;
 }
 
