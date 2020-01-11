@@ -95,17 +95,16 @@ public class OnlineUsersListController implements Controller {
    *
    */
   public void addNewOnlineUser(User user) {
-    if (!onlineUsersList.contains(user)) {
-      // This is done to avoid a "Not on FX application thread" error
-      // Solution found here : https://stackoverflow.com/a/23007018
-      Platform.runLater(new Runnable() {
-        @Override
-        public void run() {
+    // This is done to avoid a "Not on FX application thread" error
+    // Solution found here : https://stackoverflow.com/a/23007018
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        if (!onlineUsersList.contains(user)) {
           onlineUsersList.add(user);
         }
-      });
-
-    }
+      }
+    });
   }
 
   /**
@@ -148,12 +147,13 @@ public class OnlineUsersListController implements Controller {
    **/
 
   public void displayOnlineUsers() {
-    ObservableList<User> onlineUsers = this.mainController
-        .getApplication()
-        .getIhmCore()
-        .getDataForIhm()
-        .getOnlineUsers()
-        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+    ArrayList<User> onlineUsers = new ArrayList<User>(this.mainController
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .getOnlineUsers()
+            .collect(Collectors.toList())
+    );
 
     onlineUsersListLogger.info("Retrieved {} online users from Data", onlineUsers.size());
     onlineUsersList.setAll(onlineUsers);
