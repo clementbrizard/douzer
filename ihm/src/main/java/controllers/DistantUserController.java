@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -239,6 +240,18 @@ public class DistantUserController implements Controller {
   /* Logic methods */
 
   /**
+   * Update the distant user if it is the one displayed at update's notification.
+   * which will update its infos
+   * @param user the user to update
+   *
+   */
+  public void updateDistantUser(User user) {
+    if (distantUser.equals(user)) {
+      this.setDistantUser(user);
+    }
+  }
+
+  /**
    * Refresh the table by retrieving local musics from Data.
    */
   public void displayDistantUserMusics() {
@@ -284,7 +297,7 @@ public class DistantUserController implements Controller {
         .getIhmCore()
         .getDataForIhm()
         .getCurrentUser();
-    
+
     if (!currentUser.getFriends().contains(distantUser)) {
       btnManageFriendship.setText("Ajouter ce contact");
     } else {

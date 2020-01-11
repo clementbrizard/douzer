@@ -4,6 +4,7 @@ import datamodel.User;
 
 import java.util.stream.Collectors;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -91,7 +92,13 @@ public class ContactListController implements Controller {
             .collect(Collectors.toCollection(FXCollections::observableArrayList));
 
     contactListLogger.info("Retrieved {} contacts from Data", contacts.size());
-    contactsList.setAll(contacts);
+
+    Platform.runLater(new Runnable() {
+      @Override
+      public void run() {
+        contactsList.setAll(contacts);
+      }
+    });
   }
 
   public MainController getMainController() {

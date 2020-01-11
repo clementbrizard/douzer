@@ -96,15 +96,12 @@ public class OnlineUsersListController implements Controller {
    */
   public void addNewOnlineUser(User user) {
     if (!onlineUsersList.contains(user)) {
-
       // This is done to avoid a "Not on FX application thread" error
       // Solution found here : https://stackoverflow.com/a/23007018
       Platform.runLater(new Runnable() {
         @Override
         public void run() {
           onlineUsersList.add(user);
-          // Update ContactList :
-          mainController.getContactListController().displayContacts();
         }
       });
 
@@ -125,22 +122,8 @@ public class OnlineUsersListController implements Controller {
             .filter(currentUser -> currentUser.getUuid().equals(user.getUuid()))
             .findAny()
             .orElse(null);
+
         onlineUsersList.set(onlineUsersList.indexOf(userToUpdate), user);
-
-        if (OnlineUsersListController.this.mainController
-            .getCentralFrameController()
-            .getDistantUserController()
-            .getDistantUser()
-            .equals(userToUpdate)
-        ) {
-          OnlineUsersListController.this.mainController
-              .getCentralFrameController()
-              .getDistantUserController()
-              .setDistantUser(user);
-        }
-
-        // Update ContactList :
-        mainController.getContactListController().displayContacts();
       }
     });
   }
@@ -156,8 +139,6 @@ public class OnlineUsersListController implements Controller {
       @Override
       public void run() {
         onlineUsersList.remove(user);
-        // Update ContactList :
-        mainController.getContactListController().displayContacts();
       }
     });
   }
