@@ -232,7 +232,7 @@ Button:hover {
 }
 
 .left-side-view VBox {
-    -fx-padding: 0.8em;
+    -fx-padding: 0.4em 0.8em;
 }
 
 .left-side-view HBox {
@@ -244,6 +244,21 @@ Button:hover {
     -fx-fill-width: 95%;
     -fx-background-color: linear-gradient(from 55% 55% to 100% 100%, #2b78e4, rgba(25, 70, 133, 0.8));
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}
+
+.left-view-title {
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: white;
+}
+
+.left-side-lv {
+    -fx-min-height: 105px;
+    -fx-min-width: 105px;
+    -fx-max-height: 135px;
+    -fx-max-width: 160px;
+    -fx-fill-width: 90%;
+    -fx-color: rgb(235, 235, 235);
 }
 
 /* USER-PROFILE-SIDE-VIEW */
@@ -264,9 +279,9 @@ Button:hover {
 }
 
 #btnParameters {
-    -fx-font-size: 11,5px;
+    -fx-font-size: 11,6px;
 }
 
 #btnLogout {
-    -fx-font-size: 11,5px;
+    -fx-font-size: 11,6px;
 }
