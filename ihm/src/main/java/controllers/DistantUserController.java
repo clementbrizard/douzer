@@ -1,7 +1,7 @@
 package controllers;
 
-import datamodel.LocalUser;
 import datamodel.LocalMusic;
+import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.MusicMetadata;
 import datamodel.User;
