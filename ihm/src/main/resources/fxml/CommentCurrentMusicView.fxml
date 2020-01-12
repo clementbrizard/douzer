@@ -21,8 +21,8 @@
         </rowConstraints>
          <children>
             <Label fx:id="titleMusic" alignment="CENTER" contentDisplay="CENTER" prefHeight="18.0" prefWidth="140.0" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
-            <ListView fx:id="listComment" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1" />
-            <Button fx:id="commentButton" mnemonicParsing="false" onAction="#commentClick" text="Commentaire" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <ListView fx:id="listComment" GridPane.rowIndex="1" />
+            <Button fx:id="commentButton"  styleClass="form-btn" mnemonicParsing="false" onAction="#commentClick" text="Commentaire" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>

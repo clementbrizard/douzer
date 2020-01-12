@@ -12,12 +12,12 @@
 
 <AnchorPane id="AnchorPane" prefHeight="655.0" prefWidth="241.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CurrentMusicInfoController">
   <children>
-    <GridPane alignment="CENTER" prefHeight="655.0" prefWidth="241.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;;">
+    <GridPane alignment="CENTER" prefHeight="655.0" prefWidth="241.0">
       <children>
         <fx:include fx:id="commentCurrentMusic" source="CommentCurrentMusicView.fxml" />
       </children>
       <children>
-        <Button fx:id="btnShare" mnemonicParsing="false" onAction="#share" style="-fx-background-color: #FFFFFF; -fx-border-color: #000000;" text="Partager" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Button fx:id="btnShare" styleClass="form-btn" mnemonicParsing="false" onAction="#share" text="Partager" GridPane.columnIndex="0" GridPane.rowIndex="1" />
       </children>
       <columnConstraints>
         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
