@@ -47,7 +47,7 @@
                                     <TableColumn fx:id="artistCol" minWidth="150" text="Artiste" />
                                     <TableColumn fx:id="albumCol"  minWidth="150" text="Album" />
                                     <TableColumn fx:id="durationCol" minWidth="60" text="Durée" />
-                                    <TableColumn fx:id="tagsCol" minWidth="60" text="tags" />
+                                    <TableColumn fx:id="tagsCol" minWidth="58" text="tags" />
                                 </columns>
                             </TableView>
                             <HBox styleClass="form-btn-hbox, to-center">
