@@ -158,5 +158,6 @@ public class LoginController implements Controller {
     // Clear all text fields
     textFieldPassword.setText("");
     textFieldPseudo.setText("");
+    textFieldPseudo.requestFocus();
   }
 }
