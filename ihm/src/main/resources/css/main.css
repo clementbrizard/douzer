@@ -171,6 +171,24 @@ Button:hover {
     -fx-padding: 1.4em;
 }
 
+.central-music-pane {
+    -fx-min-width: 600px;
+    -fx-background-color: rgba(225, 225, 225, 0.8);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+    -fx-padding: 1.4em;
+}
+
+.advanced-search-hbox {
+    -fx-fill-width: true;
+    -fx-padding: 0.2em 0 0 0;
+    -fx-spacing: 0.2em;
+}
+
+.advanced-search-form-field {
+    -fx-fill-width: true;
+    -fx-min-width: 220px;
+}
+
 #distantUserInfos {
     -fx-padding: 0 0 0 1.4em;
     -fx-spacing: 0.8em;
@@ -261,7 +279,7 @@ Button:hover {
     -fx-min-width: 105px;
     -fx-max-height: 135px;
     -fx-max-width: 160px;
-    -fx-color: rgb(235, 235, 235);
+    -fx-background-color: rgb(235, 235, 235);
 }
 
 /* USER-PROFILE-SIDE-VIEW */
