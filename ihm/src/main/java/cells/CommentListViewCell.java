@@ -27,7 +27,7 @@ public class CommentListViewCell extends ListCell<Comment> {
   private static final Logger commentLogger = LogManager.getLogger();
 
   @FXML
-  TextArea comment;
+  Label comment;
 
   @FXML
   private AnchorPane anchorPane;
@@ -147,7 +147,7 @@ public class CommentListViewCell extends ListCell<Comment> {
       this.labelOwner.setText(comment.getOwner().getUsername());
 
       this.comment.setText(comment.getComment());
-      this.comment.setEditable(false);
+      //this.comment.setEditable(false);
       this.comment.resize(getWidth(), getHeight());
 
       setText(null);
