@@ -41,13 +41,13 @@
                             </BorderPane>
                         </HBox>
                         <VBox styleClass="to-center">
-                            <TableView fx:id="tvMusics" onMouseClicked="#handleClickTableView" minHeight="100" minWidth="600" maxHeight="350" maxWidth="602">
+                            <TableView fx:id="tvMusics" onMouseClicked="#handleClickTableView" minHeight="100" minWidth="600" maxHeight="350" maxWidth="605">
                                 <columns>
                                     <TableColumn fx:id="titleCol" minWidth="180" text="Titre" />
                                     <TableColumn fx:id="artistCol" minWidth="150" text="Artiste" />
                                     <TableColumn fx:id="albumCol"  minWidth="150" text="Album" />
                                     <TableColumn fx:id="durationCol" minWidth="60" text="Durée" />
-                                    <TableColumn fx:id="tagsCol" minWidth="58" text="tags" />
+                                    <TableColumn fx:id="tagsCol" minWidth="60" text="tags" />
                                 </columns>
                             </TableView>
                             <HBox styleClass="form-btn-hbox, to-center">
