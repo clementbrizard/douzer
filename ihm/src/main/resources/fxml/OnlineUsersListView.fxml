@@ -13,7 +13,7 @@
             <StackPane fx:id="pnOnlineUser" styleClass="left-side-pane, to-center">
                 <VBox StackPane.alignment="CENTER">
                     <HBox styleClass="lv-title-hbox, to-center">
-                        <Label styleClass="left-view-title" text="Utilisateur en ligne" />
+                        <Label styleClass="left-view-title" text="Utilisateurs en ligne" />
                     </HBox>
                     <ListView fx:id="lvwOnlineUsers" styleClass="left-side-lv" />
                 </VBox>
