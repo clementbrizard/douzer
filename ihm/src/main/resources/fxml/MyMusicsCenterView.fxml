@@ -40,20 +40,20 @@
                             </right>
                         </BorderPane>
                     </HBox>
-                        <VBox styleClass="to-center">
-                            <TableView fx:id="tvMusics" onMouseClicked="#handleClickTableView" minHeight="100" minWidth="600" maxHeight="350" maxWidth="602">
-                                <columns>
-                                    <TableColumn fx:id="titleCol" minWidth="180" text="Titre" />
-                                    <TableColumn fx:id="artistCol" minWidth="150" text="Artiste" />
-                                    <TableColumn fx:id="albumCol"  minWidth="150" text="Album" />
-                                    <TableColumn fx:id="durationCol" minWidth="60" text="Durée" />
-                                    <TableColumn fx:id="tagsCol" minWidth="60" text="tags" />
-                                </columns>
-                            </TableView>
-                            <HBox styleClass="form-btn-hbox, to-center">
-                                <Button fx:id="btnAddMusic" onAction="#addMusic" styleClass="form-btn" text="Ajouter une musique" />
-                            </HBox>
-                        </VBox>
+                    <VBox styleClass="to-center">
+                        <TableView fx:id="tvMusics" onMouseClicked="#handleClickTableView" minHeight="100" minWidth="600" maxHeight="350" maxWidth="602">
+                            <columns>
+                                <TableColumn fx:id="titleCol" minWidth="180" text="Titre" />
+                                <TableColumn fx:id="artistCol" minWidth="150" text="Artiste" />
+                                <TableColumn fx:id="albumCol"  minWidth="150" text="Album" />
+                                <TableColumn fx:id="durationCol" minWidth="60" text="Durée" />
+                                <TableColumn fx:id="tagsCol" minWidth="60" text="tags" />
+                            </columns>
+                        </TableView>
+                        <HBox styleClass="form-btn-hbox, to-center">
+                            <Button fx:id="btnAddMusic" onAction="#addMusic" styleClass="form-btn" text="Ajouter une musique" />
+                        </HBox>
+                    </VBox>
                 </children>
             </VBox>
         </center>
