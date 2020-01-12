@@ -54,7 +54,7 @@ public class AllMusicsController implements Controller {
   @FXML
   private TableColumn<MusicMetadata, String> durationCol;
   @FXML
-  private TableColumn<MusicMetadata, Set<String>> tagsCol;
+  private TableColumn<MusicMetadata, String> tagsCol;
 
   @FXML
   private TextField tfSearch;
@@ -149,7 +149,14 @@ public class AllMusicsController implements Controller {
     this.artistCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("artist"));
     this.titleCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("title"));
     this.albumCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, String>("album"));
-    this.tagsCol.setCellValueFactory(new PropertyValueFactory<MusicMetadata, Set<String>>("tags"));
+    this.tagsCol.setCellValueFactory(metadata -> {
+      Set<String> tags = metadata.getValue().getTags();
+      if (tags.size() == 0) {
+        return new SimpleStringProperty("");
+      } else {
+        return new SimpleStringProperty(String.join(", ", tags));
+      }
+    });
 
     // Duration MusicMetaData attribute has type Duration
     // so we need to convert it to a string
