@@ -2,57 +2,60 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-
 <?import javafx.scene.control.Slider?>
-<AnchorPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
-    <children>
-        <Pane prefHeight="100" prefWidth="720.0" style="-fx-border-color: #000000; -fx-border-width: 2; -fx-background-color: #9fc5f8;">
-            <children>
-                <Slider fx:id="pgMusicProgress" layoutX="145.0" layoutY="41.0" prefHeight="23.0" prefWidth="496.0" />
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-                      <Label fx:id="songInfo" layoutX="10.0" layoutY="10.0" text="-" />
+<?import javafx.scene.layout.Pane?>
+<Pane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController" styleClass="left-side-view" style="-fx-min-height: 80px;">
+    <VBox styleClass="to-center">
+        <StackPane styleClass="left-side-pane, to-center" style="-fx-padding: 0.2em 0.4em;">
+            <VBox StackPane.alignment="CENTER">
+                <HBox styleClass="lv-title-hbox">
+                    <Label fx:id="songInfo" styleClass="left-view-title" style="-fx-font-weight: normal" text="" />
+                </HBox>
+                <HBox styleClass="lv-title-hbox, to-center">
+                    <Button fx:id="before" styleClass="form-btn" maxHeight="30" maxWidth="30" mnemonicParsing="false" onAction="#playBack">
+                        <graphic>
+                            <ImageView pickOnBounds="true" preserveRatio="true" visible="true">
+                                <image>
+                                    <Image url="@../images/beforeSymbol.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
 
+                    <Button fx:id="play" styleClass="form-btn" maxHeight="30" maxWidth="30" mnemonicParsing="false" onAction="#playPause">
+                        <graphic>
+                            <ImageView pickOnBounds="true" preserveRatio="true" visible="true">
+                                <image>
+                                    <Image url="@../images/playSymbol.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
 
-                <Button fx:id="before" layoutX="10.0" layoutY="36.0" maxHeight="30" maxWidth="30" mnemonicParsing="false" onAction="#playBack">
-                    <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true" visible="true">
-                            <image>
-                                <Image url="@../images/beforeSymbol.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
+                    <Button fx:id="next" styleClass="form-btn" maxHeight="30" maxWidth="30" mnemonicParsing="false" onAction="#playNext">
+                        <graphic>
+                            <ImageView pickOnBounds="true" preserveRatio="true" visible="true">
+                                <image>
+                                    <Image url="@../images/nextSymbol.png" />
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
 
-                <Button fx:id="play" layoutX="53.0" layoutY="36.0" maxHeight="30" maxWidth="30" mnemonicParsing="false" onAction="#playPause">
-                    <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true" visible="true">
-                            <image>
-                                <Image url="@../images/playSymbol.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
+                    <Slider fx:id="pgMusicProgress" prefHeight="23.0" prefWidth="460" />
 
-                <Button fx:id="next" layoutX="96.0" layoutY="36.0" maxHeight="30" maxWidth="30" mnemonicParsing="false" onAction="#playNext">
-                    <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true" visible="true">
-                            <image>
-                                <Image url="@../images/nextSymbol.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-
-                <Label fx:id="lblTime" layoutX="650.0" layoutY="44.0" text="0:00" />
-                <Label layoutX="678.0" layoutY="44.0" text="/" />
-                <Label fx:id="fullTime" layoutX="690.0" layoutY="44.0" text="-" />
-
-            </children>
-        </Pane>
-    </children>
-</AnchorPane>
+                    <Label fx:id="lblTime" styleClass="left-view-title" style="-fx-font-weight: normal" text="0:00" />
+                    <Label layoutX="678.0" styleClass="left-view-title" style="-fx-font-weight: normal" text="/" />
+                    <Label fx:id="fullTime" styleClass="left-view-title" style="-fx-font-weight: normal" text="0:00" />
+                </HBox>
+            </VBox>
+        </StackPane>
+    </VBox>
+</Pane>
