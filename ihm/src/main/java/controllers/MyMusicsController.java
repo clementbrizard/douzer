@@ -686,6 +686,11 @@ public class MyMusicsController implements Controller {
               );
             }
             this.displayAvailableMusics();
+            this.getApplication()
+              .getMainController()
+              .getCentralFrameController()
+              .getAllMusicsController()
+              .displayAvailableMusics();
           } catch (NullPointerException e) {
             myMusicsLogger.error("Erreur lors d'une suppression de musique", e);
           }
