@@ -185,8 +185,6 @@ public class PlayerController implements Controller {
 
   /**
    * Function playPause: Play and Pause button interactions.
-   *
-   * @return
    */
   @FXML
   private void playPause(ActionEvent e) {
@@ -232,8 +230,6 @@ public class PlayerController implements Controller {
 
   /**
    * Function playBack : play the music before.
-   *
-   * @return
    */
   @FXML
   private void playBack(ActionEvent e) {
@@ -269,8 +265,6 @@ public class PlayerController implements Controller {
 
   /**
    * Function stopPlayer: Stop player.
-   *
-   * @return
    */
   public void stopPlayer() {
     if (player != null && player.getStatus() == MediaPlayer.Status.PLAYING) {
