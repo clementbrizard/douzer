@@ -398,7 +398,13 @@ public class DetailsMusicController implements Controller {
             .getIhmCore()
             .getDataForIhm()
             .getCurrentUser();
-  
+
+        Integer currentRating = localMusic.getMetadata().getRatings().get(localUser);
+
+        if (currentRating != null) {
+          localMusic.getMetadata().deleteRating(localUser, currentRating);
+        }
+
         localMusic.getMetadata().addRating(localUser, rating);
       }
   

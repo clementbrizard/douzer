@@ -5,6 +5,7 @@ import datamodel.Comment;
 import datamodel.LocalMusic;
 import datamodel.Music;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -86,7 +87,10 @@ public class CommentsController implements Controller {
       commentObservableList.clear();
     }
 
-    commentObservableList.addAll(music.getMetadata().getComments());
+    Platform.runLater(() -> {
+      commentObservableList.addAll(music.getMetadata().getComments());
+    });
+
     listComment.setItems(commentObservableList);
     
     listComment.setCellFactory(new Callback<ListView<Comment>, ListCell<Comment>>() {
@@ -123,7 +127,7 @@ public class CommentsController implements Controller {
       NewCommentController newCommentController = newComment.getController();
       this.setNewCommentController(newCommentController);
       newCommentController.setCommentsController(this);
-      newCommentController.init(this.music);
+      newCommentController.init((LocalMusic) this.music);
 
     } catch (Exception e) {
       commentsLogger.debug(e);

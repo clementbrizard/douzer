@@ -41,7 +41,7 @@ import org.controlsfx.control.Notifications;
 public class NewCommentController implements Controller {
   private static final Logger newCommentLogger = LogManager.getLogger();
 
-  private Music music;
+  private LocalMusic music;
 
   private CommentsController commentsController;
 
@@ -84,7 +84,7 @@ public class NewCommentController implements Controller {
    * init the new comment view with a music.
    * @param music the music whose we want to add our comment
    */
-  public void init(Music music) {
+  public void init(LocalMusic music) {
     this.music = music;
     this.music.getMetadata().getRatings().forEach((user,note) -> {
       if (user.equals(getCommentsController()
@@ -185,28 +185,36 @@ public class NewCommentController implements Controller {
     if (!check()) {
       return;
     }
-    
+
+    if (rate > 0) {
+      LocalUser userlocal = getCommentsController()
+              .getCurrentMusicInfoController()
+              .getApplication()
+              .getIhmCore()
+              .getDataForIhm()
+              .getCurrentUser();
+
+      Integer currentRating = music.getMetadata().getRatings().get(userlocal);
+      if (currentRating != null) {
+        music.getMetadata().deleteRating(userlocal, currentRating);
+      }
+
+      music.getMetadata().addRating(userlocal, rate);
+    }
+
+    this.getCommentsController()
+            .getCurrentMusicInfoController()
+            .getApplication()
+            .getIhmCore()
+            .getDataForIhm()
+            .notifyMusicUpdate(music);
+
     //add comment
     this.getCommentsController()
     .getCurrentMusicInfoController()
     .getApplication()
     .getIhmCore()
     .getDataForIhm().addComment(music, textAreaComment.getText());
-    
-    if (rate > 0) {
-      LocalUser userlocal = getCommentsController()
-          .getCurrentMusicInfoController()
-          .getApplication()
-          .getIhmCore()
-          .getDataForIhm()
-          .getCurrentUser();
-      
-      if (music.getMetadata().getRatings().get(userlocal) == null) {
-        music.getMetadata().getRatings().put(userlocal, rate);
-      } else {
-        music.getMetadata().getRatings().replace(userlocal, rate);
-      }
-    }
     
     //reload the view of comment
     this.getCommentsController().init(music);

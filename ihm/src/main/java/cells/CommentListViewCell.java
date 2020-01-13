@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -119,7 +121,10 @@ public class CommentListViewCell extends ListCell<Comment> {
 
     if (empty || comment == null || comment.getComment().trim().equals("")) {
       setText(null);
-      setGraphic(null);
+
+      Platform.runLater(() -> {
+        setGraphic(null);
+      });
 
     } else {
       if (mlLoader == null) {
@@ -133,14 +138,11 @@ public class CommentListViewCell extends ListCell<Comment> {
         }
       }
 
-      music.getMetadata().getRatings().forEach((user,note) -> {
-        if (user.getUuid().equals(comment.getOwner().getUuid())) {
-          ifUserNote = true;
-          setStars(note);
-        }
-      });
+      Integer rating = music.getMetadata().getRatings().get(comment.getOwner());
 
-      if (!ifUserNote) {
+      if (rating != null) {
+        setStars(rating);
+      } else {
         setStars(0);
       }
 
@@ -151,7 +153,9 @@ public class CommentListViewCell extends ListCell<Comment> {
       this.comment.resize(getWidth(), getHeight());
 
       setText(null);
-      setGraphic(anchorPane);
+      Platform.runLater(() -> {
+        setGraphic(anchorPane);
+      });
     }
   }
 }
