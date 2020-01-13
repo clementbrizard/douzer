@@ -26,6 +26,8 @@ public class UpdateMusicsPayload extends Payload {
     this.musics.forEach(dryMusic -> {
       Music music = dryMusic.hydrate(dc);
       dc.addMusic(music);
+      // The reference might have changed
+      music = dc.getMusic(music.getHash());
       dc.ihm.updateMusic(music);
     });
   }
