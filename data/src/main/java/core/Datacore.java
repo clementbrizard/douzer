@@ -201,6 +201,8 @@ public class Datacore {
     if (music1.getMetadata().getTimeStamp().compareTo(music2.getMetadata().getTimeStamp()) < 0) {
       music2.getMetadata().getTags().addAll(music1.getMetadata().getTags());
       music2.getMetadata().getComments().addAll(music1.getMetadata().getComments());
+      // put overwrites => overwrite in m1 then merge
+      music1.getMetadata().getRatings().putAll(music2.getMetadata().getRatings());
       music2.getMetadata().getRatings().putAll(music1.getMetadata().getRatings());
       music1.getMetadata().updateMusicMetadata(music2.getMetadata());
     } else {
