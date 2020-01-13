@@ -97,5 +97,7 @@ public abstract class Login {
       LoginPayload payload = new LoginPayload(user, ipsToShare);
       dc.net.sendToUser(payload, ip);
     }
+    
+    dc.startKeepAlive();
   }
 }

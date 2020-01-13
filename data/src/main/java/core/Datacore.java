@@ -4,6 +4,7 @@ import datamodel.LocalMusic;
 import datamodel.LocalUser;
 import datamodel.Music;
 import datamodel.User;
+import features.Keepalive;
 import interfaces.Ihm;
 import interfaces.Net;
 import java.io.IOException;
@@ -11,20 +12,26 @@ import java.net.InetAddress;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Datacore {
   private static final Logger logger = LogManager.getLogger();
   private static final String LOCAL_USERS_FILENAME = "lo23-users.ser";
+  private static int KEEPALIVE_DELAY = 5000;
+
   public Net net;
   public Ihm ihm;
   private LocalUsersFileHandler localUsersFileHandler;
   private volatile ConcurrentHashMap<UUID, User> users;
   private volatile ConcurrentHashMap<String, Music> musics;
+  private Keepalive keepAlive;
+  private Timer keepAliveTimer; //Use to make periodic calls to keepalive
   private volatile LocalUser currentUser;
   private volatile HashSet<InetAddress> allIps;
 
@@ -39,6 +46,10 @@ public class Datacore {
     } catch (IOException e) {
       logger.error(e);
     }
+  }
+
+  public Keepalive getKeepAlive() {
+    return keepAlive;
   }
 
   public static Logger getLogger() {
@@ -225,6 +236,17 @@ public class Datacore {
     // No else, the user1 is the template
   }
 
+  /**
+   * Start the periodic calls to the keepalive process. Should be called when logging in.
+   */
+  public void startKeepAlive() {
+    if (this.keepAliveTimer == null) {
+      this.keepAliveTimer = new Timer();
+      this.keepAlive = new Keepalive(this);
+      this.keepAliveTimer.schedule(keepAlive, 0, KEEPALIVE_DELAY);
+    }
+  }
+
   public void upgradeMusicToLocal(Music toUpgrade, String mp3Path) {
     LocalMusic newMusic = new LocalMusic(toUpgrade, mp3Path);
     this.musics.remove(toUpgrade.getHash());
@@ -245,5 +267,7 @@ public class Datacore {
     this.musics.clear();
     this.allIps.clear();
     this.currentUser = null;
+    this.keepAliveTimer.cancel();  //Start the periodic calls
+    this.keepAliveTimer = null;
   }
 }
