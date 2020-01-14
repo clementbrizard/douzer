@@ -1,5 +1,11 @@
 image: registry.gitlab.utc.fr/lo23-a19-mardi/development
 
+stages:
+  - build
+  - test
+  - style
+  - deploy
+
 variables:
   # This will supress any download for dependencies and plugins or upload messages which would clutter the console log.
   # `showDateTime` will show the passed time in milliseconds. You need to specify `--batch-mode` to make this work.
@@ -28,5 +34,10 @@ style:
   stage: test
   script: 
     - mvn checkstyle:check $MAVEN_CLI_OPTS
+  tags:
+    - docker
+
+pages:
+  stage: deploy
   tags:
     - docker

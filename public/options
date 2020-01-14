@@ -1,0 +1,24 @@
+-classpath
+'/home/clement/Documents/lo23/development/data/target/classes:/home/clement/Documents/lo23/development/network/target/classes:/home/clement/Documents/lo23/development/ihm/target/classes:/home/clement/Documents/lo23/development/interfaces/target/classes:/home/clement/Documents/lo23/development/data-model/target/classes:/home/clement/Documents/lo23/development/main/target/classes:/home/clement/Documents/lo23/development/resources/target/classes:/home/clement/.m2/repository/org/apache/logging/log4j/log4j-api/2.12.1/log4j-api-2.12.1.jar:/home/clement/.m2/repository/org/apache/logging/log4j/log4j-core/2.12.1/log4j-core-2.12.1.jar:/home/clement/.m2/repository/com/mpatric/mp3agic/0.9.1/mp3agic-0.9.1.jar:/home/clement/.m2/repository/org/controlsfx/controlsfx/8.40.15/controlsfx-8.40.15.jar:/home/clement/.m2/repository/javassist/javassist/3.11.0.GA/javassist-3.11.0.GA.jar:/home/clement/.m2/repository/com/googlecode/soundlibs/mp3spi/1.9.5-1/mp3spi-1.9.5-1.jar:/home/clement/.m2/repository/com/googlecode/soundlibs/jlayer/1.0.1-1/jlayer-1.0.1-1.jar:/home/clement/.m2/repository/junit/junit/3.8.2/junit-3.8.2.jar:/home/clement/.m2/repository/com/googlecode/soundlibs/tritonus-share/0.3.7-1/tritonus-share-0.3.7-1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/clement/Documents/lo23/development/data/src/main/java:/home/clement/Documents/lo23/development/data/target/generated-sources/annotations:/home/clement/Documents/lo23/development/network/src/main/java:/home/clement/Documents/lo23/development/network/target/generated-sources/annotations:/home/clement/Documents/lo23/development/ihm/src/main/java:/home/clement/Documents/lo23/development/ihm/target/generated-sources/annotations:/home/clement/Documents/lo23/development/interfaces/src/main/java:/home/clement/Documents/lo23/development/interfaces/target/generated-sources/annotations:/home/clement/Documents/lo23/development/data-model/src/main/java:/home/clement/Documents/lo23/development/data-model/target/generated-sources/annotations:/home/clement/Documents/lo23/development/main/src/main/java:/home/clement/Documents/lo23/development/main/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2020. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/clement/Documents/lo23/development/public'
+-docencoding
+'UTF-8'
+-doctitle
+'lo23-root 1.0-SNAPSHOT API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/home/clement/Documents/lo23/development/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'lo23-root 1.0-SNAPSHOT API'
